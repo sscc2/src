@@ -19,7 +19,7 @@
 				    <el-radio :label="3">{{pageTxt.label[6]}}</el-radio>
 				</el-radio-group>
 				<label class="txt">{{pageTxt.label[7]}}</label>
-				<el-date-picker v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[8]" 
+				<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[8]" 
 					type="daterange" :start-placeholder="pageTxt.label[9]" :end-placeholder="pageTxt.label[10]">
 				</el-date-picker>
 				<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[11]}}</el-button>
@@ -160,5 +160,4 @@ import observer    from '@/libs/observer.js';
 	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
-	.el-date-editor{width: 260px;}
 </style>

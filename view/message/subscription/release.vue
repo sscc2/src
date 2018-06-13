@@ -10,36 +10,37 @@
 			<label class="txt">{{pageTxt.label[3]}}</label>
 			<el-input placeholder="" v-model="info.zhuti" clearable></el-input>
 			<label class="txt">{{pageTxt.label[4]}}</label>
-			<el-date-picker v-model="info.start" value-format="yyyy年MM月dd日 HH:mm:ss" type="date" :placeholder="pageTxt.label[6]">
+			
+			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[6]" 
+				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
 			</el-date-picker>
-			<label class="txt">{{pageTxt.label[5]}}</label>
-			<el-date-picker v-model="info.end" value-format="yyyy年MM月dd日 HH:mm:ss" type="date" :placeholder="pageTxt.label[6]">
-			</el-date-picker>
-			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[7]}}</el-button>
+			
+			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[8]}}</el-button>
 		</div>
 		<div class="btnBox">
 			<el-button class='btn' @click='add' type='text'>
 				<img src="@/img/theme/add_1.png"/>
-				<span class="btnTxt">{{pageTxt.label[8]}}</span>
+				<span class="btnTxt">{{pageTxt.label[9]}}</span>
 			</el-button><el-button class='btn' @click='editTheme' type='text'>
 				<img src="@/img/theme/edit_1.png"/>
-				<span class="btnTxt">{{pageTxt.label[9]}}</span>
+				<span class="btnTxt">{{pageTxt.label[10]}}</span>
 			</el-button><el-button class='btn' @click='delTheme' type='text'>
 				<img src="@/img/theme/del_1.png"/>
-				<span class="btnTxt">{{pageTxt.label[10]}}</span>
+				<span class="btnTxt">{{pageTxt.label[11]}}</span>
 			</el-button><el-button class='btn' @click='detailTheme' type='text'>
 				<img src="@/img/theme/detail_1.png"/>
-				<span class="btnTxt">{{pageTxt.label[11]}}</span>
+				<span class="btnTxt">{{pageTxt.label[12]}}</span>
 			</el-button>
 		</div>
-		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
+		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
+			highlight-current-row :data="data" border tooltip-effect="dark">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
-			<el-table-column prop="pubUserID" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
+			<el-table-column prop="pubUserID" sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="pubUserName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="topicName" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="pubTime" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="subsUserCount" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="pubTime" sortable='custom' :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="subsUserCount" sortable='custom' :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='120'>
 				<div slot-scope="scope" class="_zero">
 					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
@@ -77,7 +78,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	var lang = {}, pageTxt, _this;
 	lang.cn = {
 		tips: {user: "请在列表中选择一条记录！",del: "是否确认要删除该用记录吗？",},
-		label: ['已发布主题','发布者ID：','发布者名称：','主题名','起始日期：','结束日期：','选择日期',
+		label: ['已发布主题','发布者ID：','发布者名称：','主题名：','日期：','起始日期','至','结束日期',
 			'查询','添加用户主题','修改用户主题','删除用户主题','主题详情'],
 		list: ['发布者ID','发布者名称','主题名','发布时间','订阅个数','操作']
 	},
@@ -86,7 +87,11 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	
 	var data = {
 		pageTxt,
-		info: {id:'',name:'',zhuti:'',start:'',end:''},
+		info: {
+			cmdID: '600042', pubUserID: '', topicName: '',
+			beginDate: '', endDate: '', sortType: '0'
+		},
+		picker: [],
 		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCount:'订阅个数'}*/],
 		row: '',
 		maxData: '2000',
@@ -156,6 +161,24 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 					observer.execute('messDetailTheme',{sync:true, obj: _this.row});
 				}, 0);
 			},
+			sortReq(obj){
+				/*
+				 * 默认0，按发布时间从近到远排序， 1，按发布时间从远到近排序。。2，按发布者用户从小到大排序，
+				 * 3，按发布者用户从大到小培训。。。4，按订阅者个数从大到小培训，5，按订阅者个数从小到大排序
+				 */
+				console.log(this.picker)
+				if(obj.order == 'ascending'){ //从小到大
+					switch (obj.prop){
+						case value:
+							break;
+						default:
+							break;
+					}
+				} else {
+					
+				}
+				console.log(obj)
+			},
 			selectionRow(val){
 		     	this.selects = val;
 		    },
@@ -170,11 +193,11 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		beforeCreate(){},
 		mounted(){
 			_this = this;
-			var param = {
-				cmdID: '600042', pubUserID: '', topicName: '',
-				beginDate: '', endDate: '', sortType: 0
-			};
-			utils.post('mx/pubTopic/queryLists', param, function(data){
+			var info = this.info;
+			this.picker = today();
+			info.beginDate = this.picker[0];
+			info.endDate = this.picker[1];
+			utils.post('mx/pubTopic/queryLists', info, function(data){
 				console.log('已发布主题：',data);
 				if(data.errcode < 0) return utils.weakTips(data.errinfo);
 				_this.data = data.lists;
@@ -182,13 +205,21 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			});
 		},
 		components: {AddTheme, EditTheme, DetailTheme}
+	};
+	function today(){
+		var day = new Date(), str = '', t;
+		str += day.getFullYear() + '-';
+		t = day.getMonth() + 1;
+		str += (t<10 ? '0'+t : t) + '-',
+		str += day.getDate();
+		return [str+' 00:00:00',str+' 23:59:59'];
 	}
 </script>
 
 <style scoped="scoped">
 	.release{padding:0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;}
-	._hr{margin: 0 0 10px;min-width: 1265px;margin-left: -20px;}
+	._hr{margin: 0 0 10px;min-width: 1132px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
 	.el-input{width: 150px;line-height: 30px;}
@@ -197,7 +228,4 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	.btnTxt{color: #5a769e;}
 	._zero{white-space: nowrap;}
 	._zero img{vertical-align: middle;margin-right: 10px;}
-</style>
-<style>
-	.release .el-input__icon{line-height: 30px;left: 5px;}
 </style>

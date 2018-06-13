@@ -24,7 +24,7 @@
 			<el-table-column prop="userName" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="maxPubsCount" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="maxSubsCount" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="maxDaysoftopic" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="maxDaysOfTopic" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='60'>
 				<div slot-scope="scope" class="_zero">
 					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
@@ -63,7 +63,7 @@ import observer  from '@/libs/observer.js';
 		pageTxt,
 		userID: '',
 		userName: '',
-		data: [/*{userID:'49821',userName:'ABC',maxPubsCount:'5',maxSubsCount:'5',maxDaysoftopic:'2020'}*/],
+		data: [/*{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}*/],
 		row: '',
 		selects: [],
 		max: 0

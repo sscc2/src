@@ -1,6 +1,7 @@
 
 var vars = {};
 vars.lang = 'cn';
+vars.loadTime = 2;
 
 (function(){
 	var local = window.location; //localhost
@@ -23,6 +24,6 @@ export default {
 /**
  * lang         语言
  * urlIP        请求的IP地址
- * 
+ * loadTime     全局接口请求的等待时间
  * 
  */

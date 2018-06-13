@@ -73,6 +73,11 @@ textarea{resize: none !important;}
 .el-date-editor{border: 1px solid #d7d8da;border-radius: 0;}
 .el-range-editor.is-active, .el-range-editor.is-active:hover{border: 2px solid #32CCF9;}
 .el-date-editor .el-range-separator{width: auto;}
+.daterange.el-date-editor{height: 30px;padding: 0 10px;width: 260px;}
+.daterange .el-range-separator{line-height: 30px;}
+.daterange .el-input__icon{line-height: 26px;height: 26px;}
+.daterange .el-range-separator{line-height: 26px;height: 26px;}
+
 
 /* 弱提示 */
 #_weakTips{position: fixed;height: 100%;width: 100%;text-align: center;top: 0;left: 0;font-size: 0;z-index: 2001;}

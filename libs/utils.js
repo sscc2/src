@@ -104,9 +104,9 @@ function utils(){
 			vm.$notify(opt);
 			return exp;
 		};
-		this.loadShow = function(option={}){
+		this.loadShow = function(option){
 			if(isLoading) return;
-//			if(typeof(option)!="object") option = {};
+			if(typeof(option)!="object") option = {};
 			isLoading = true;
 			clearTimeout(time);
 			var icon = '';
@@ -119,7 +119,7 @@ function utils(){
 	        	target: option.el,
 	        	background: 'rgba(255, 255, 255, 0.5)'
 			});
-			if(typeof(option.time)!="number") option.time = 15;
+			if(typeof(option.time)!="number") option.time = globalVar.get('loadTime');
 			if(option.time > 0){
 				time = setTimeout(function(){
 					exp.loadClose();
