@@ -40,7 +40,7 @@
 			<el-table-column prop="pubUserName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="topicName" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="pubTime" sortable='custom' :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="subsUserCount" sortable='custom' :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="subsUserCounts" sortable='custom' :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='120'>
 				<div slot-scope="scope" class="_zero">
 					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
@@ -165,19 +165,35 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				/*
 				 * 默认0，按发布时间从近到远排序， 1，按发布时间从远到近排序。。2，按发布者用户从小到大排序，
 				 * 3，按发布者用户从大到小培训。。。4，按订阅者个数从大到小培训，5，按订阅者个数从小到大排序
+				 * {pubUserID:'发布者ID',pubTime:'发布时间',subsUserCount:'订阅个数'}
 				 */
-				console.log(this.picker)
+//				console.log(obj);
 				if(obj.order == 'ascending'){ //从小到大
 					switch (obj.prop){
-						case value:
-							break;
+						case 'pubUserID':
+							this.info = '2';break;
+						case 'subsUserCount':
+							this.info = '5';break;
 						default:
-							break;
+							this.info = '0';break;
 					}
-				} else {
-					
+				} else if(obj.order == 'descending') {
+					switch (obj.prop){
+						case 'pubUserID':
+							this.info = '3';break;
+						case 'subsUserCount':
+							this.info = '4';break;
+						default:
+							this.info = '1';break;
+					}
 				}
-				console.log(obj)
+				var info = this.info;
+				utils.post('mx/pubTopic/queryLists', info, function(data){
+					console.log('已发布主题：',data);
+					if(data.errcode < 0) return utils.weakTips(data.errinfo);
+					_this.data = data.lists;
+					_this.max = data.count;
+				});
 			},
 			selectionRow(val){
 		     	this.selects = val;
