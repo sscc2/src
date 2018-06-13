@@ -5,8 +5,8 @@
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
 			<el-input placeholder="" v-model="info.subUserID" clearable></el-input>
-			<label class="txt">{{pageTxt.label[2]}}</label>
-			<el-input placeholder="" v-model="info.subUserName" clearable></el-input>
+			<!--<label class="txt">{{pageTxt.label[2]}}</label>
+			<el-input placeholder="" v-model="info.subUserName" clearable></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
 			<el-input placeholder="" v-model="info.topicName" clearable></el-input>
 			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[4]}}</el-button>
