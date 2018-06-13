@@ -167,27 +167,31 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				 * 3，按发布者用户从大到小培训。。。4，按订阅者个数从大到小培训，5，按订阅者个数从小到大排序
 				 * {pubUserID:'发布者ID',pubTime:'发布时间',subsUserCount:'订阅个数'}
 				 */
-//				console.log(obj);
+				console.log(obj.prop);
+				var info = this.info;
 				if(obj.order == 'ascending'){ //从小到大
 					switch (obj.prop){
 						case 'pubUserID':
-							this.info = '2';break;
-						case 'subsUserCount':
-							this.info = '5';break;
+							info.sortType = '2';break;
+						case 'subsUserCounts':
+							info.sortType = '5';break;
 						default:
-							this.info = '0';break;
+							info.sortType = '0';break;
 					}
 				} else if(obj.order == 'descending') {
 					switch (obj.prop){
 						case 'pubUserID':
-							this.info = '3';break;
-						case 'subsUserCount':
-							this.info = '4';break;
+							info.sortType = '3';break;
+						case 'subsUserCounts':
+							info.sortType = '4';break;
 						default:
-							this.info = '1';break;
+							info.sortType = '1';break;
 					}
 				}
-				var info = this.info;
+				
+				info.beginDate = this.picker[0];
+				info.endDate = this.picker[1];
+				console.log(info);
 				utils.post('mx/pubTopic/queryLists', info, function(data){
 					console.log('已发布主题：',data);
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
