@@ -119,7 +119,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		mounted(){
 			_this = this;
 			var param = {
-				cmdID: '600050', susbUserID:'', topicName: '',
+				cmdID: '600050', subUserID:'', topicName: '',
 				sortType: 0, type: 0
 			};
 			utils.post('mx/subTopic/queryLists', param, function(data){

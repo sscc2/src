@@ -33,7 +33,7 @@
 			</el-button>
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
-			highlight-current-row :data="data" border tooltip-effect="dark">
+			highlight-current-row :data="data" tooltip-effect="dark">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="pubUserID" sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
