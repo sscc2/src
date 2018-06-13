@@ -218,7 +218,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = data.count;
+			_this.max = parseInt(data.count)||0;
 		});
 	}
 	function today(){

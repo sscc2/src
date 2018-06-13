@@ -102,7 +102,6 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				//默认2   0，按发布时间从近到远排序， 1，按发布时间从远到近排序。。
 				// 2，按订阅者用户从小到大排序，3，按订阅者用户从大到小培训。。
 				var info = this.info;
-				console.log(obj.prop)
 				if(obj.order == 'ascending'){ //从小到大
 					switch (obj.prop){
 						case 'subUserID':
@@ -150,7 +149,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = data.count;
+			_this.max = parseInt(data.count)||0;
 		});
 	}
 </script>
