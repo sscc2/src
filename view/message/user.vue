@@ -1,0 +1,248 @@
+<template>
+  <div>
+    <!-- 头部 -->
+		<div class='header'>
+				<span class='header_txt'>{{pageTxt.userTxt[0]}}</span>
+		</div>
+		<div class="user">
+			<!-- 文本 -->
+			<div class="userH">
+				<span class="txt">{{pageTxt.userTxt[1]}}：</span>
+				<input type="text" v-model="userParam.id">
+				<span class="txt">{{pageTxt.userTxt[2]}}：</span>
+				<input type="text" v-model="userParam.name">
+				<el-button type="primary"  @click='userSearch'>{{pageTxt.userTxt[3]}}</el-button>
+				<span class="txt1">{{pageTxt.userTxt[4]}}：</span>
+				<span class="txt2" >{{userData.count}}</span>
+			</div>
+			<!-- 导航 -->
+			<div class="btnBox">
+				<div  @click="userAdd"><img src="@/img/creatico.png" ><span>{{pageTxt.userTxt[5]}}</span></div>
+				<div  @click="editAll"><img src="@/img/alterico.png" ><span>{{pageTxt.userTxt[6]}}</span></div>
+				<div  @click="delAll"><img src="@/img/deletico.png" ><span>{{pageTxt.userTxt[7]}}</span></div>
+				<div  @click="userEncrypt"><img src="@/img/amendico.png" ><span>{{pageTxt.userTxt[8]}}</span></div>
+				<div  @click="userImports"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[9]}}</span></div>
+        <div  @click="userImports"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[10]}}</span></div>
+        <div  @click="userImports"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[11]}}</span></div>
+			</div>
+			<!-- 表格 -->
+			<el-table ref="multipleTable" @current-change="currentRow" :data="userData.lists.slice((currentPage-1)*pagesize,currentPage*pagesize)" tooltip-effect="dark" @selection-change="selectionRow">
+				<el-table-column type="index" width="55"></el-table-column>
+				<el-table-column type="selection" width="55"></el-table-column>
+				<el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
+				<el-table-column label="操作" width="120" show-overflow-tooltip>
+					<div slot-scope="scope" class="_zero">
+						<div @click='userEdit'><img src="@/img/altericos.png"></div>
+						<div @click="userDel"><img src="@/img/deleticos.png" ></div>
+						<div @click="userEncrypt"><img src="@/img/passwdico.png" ></div>
+					</div>
+				</el-table-column>
+			</el-table>
+			<!-- 分页 -->
+			<div class="_pagination">
+				<el-pagination class="userbottom" @size-change="handleSizeChange" @current-change='handleCurrentChange' :current-page="currentPage" :page-size="20" :total="userData.lists.length" background layout="prev, pager, next"></el-pagination>
+        <div class="rightTxt">共{{userData.lists.length}}条数据</div>
+      </div>        
+			<Password></Password>
+			<Upload></Upload>
+		</div>	
+  </div>
+</template>
+
+<script>
+import kit      from "@/libs/kit.js";
+import observer from "@/libs/observer.js";
+import Password from "@/view/message/user/password.vue";
+import Upload   from "@/view/message/user/upload.vue";
+import utils    from '@/libs/utils.js';
+
+var _this, _keyObj;
+var pageTxt = {
+    userTxt: [
+      "用户",
+      "用户ID",
+      "用户名称",
+      "查询",
+      "用户总数",
+      "创建用户",
+      "修改用户",
+      "删除用户",
+      "修改密码",
+      "批量导入扩展信息",
+      "批量导出拓展信息",
+      "批量导出基础信息"
+    ],
+    listTxt: ["用户ID", "用户名称", "操作"],
+    tips: {
+      user: "请在列表中选择一条记录！",
+      del: "是否确认要删除该用记录吗？",
+      pass: "请在列表中记录!"
+    }
+  }
+
+function userEkeyReady(master, subcode, param) {
+  if (master != "componentInit") return;
+  if (subcode == "userEkey") {
+    observer.execute("messUserEkey", _keyObj);
+    observer.delBinding("componentInit", userEkeyReady);
+  }
+}
+observer.addBinding("componentInit", userEkeyReady);
+
+export default {
+  name: "file_user",
+  data() {
+    return {
+      pageTxt,
+      userParam: { id: "", name: "" },   
+      // userData,  
+      userData:{
+                  count:30,
+                  lists:[
+                      {userID:"A",userName:"123"},
+                      {userID:"A",userName:"123"},
+                      {userID:"A",userName:"123"}
+                  ]
+      },                                
+      selects:[],
+      row: "",
+      currentPage:1,
+      pagesize:20
+    };
+  }, 
+  
+  methods: {  
+    //查询用户ID\名称
+    userSearch: function(e) {
+      var _this=this;
+      utils.post('mx/userinfo/queryLists',{cmdID:600001,userID:_this.userParam.id,userName:_this.userParam.name},
+      function(response){
+        _this.userData = response;
+      });
+    },
+
+    userAdd: function(e) {
+      this.$router.replace({ path: "/message/userAdd/mess" });
+    },
+    userEdit: function(e) {
+      this.$router.replace({ path: "/message/userEdit/mess" });
+      gotoEdit();
+    },
+
+    // 修改数据
+    editAll: function(e) {
+      if (this.selects.length != 1) {
+         utils.confirm({ message: pageTxt.tips.user, type: 2 });
+         return;
+      }
+      gotoEdit(this.selects[0]);
+    },
+    delAll: function(e) {
+      if (this.selects.length != 1)
+        return utils.confirm({ message: pageTxt.tips.user, type: 2 });
+      delItme(this.selects[0]);
+    },
+    // 删除数据
+    userDel: function(e) {
+      delItme();
+    },
+    userEncrypt: function(e) {
+      if (this.selects.length == 0)
+        return utils.confirm({ message: pageTxt.tips.pass, type: 2 });
+      observer.execute("messUserPass", this.row);
+    },
+    userImports: function(e) {
+      observer.execute("messUpload", true);
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    selectionRow(val) {
+      this.selects=val
+    },
+    currentRow: function(e) {
+      this.row = e;
+    },
+    handleSizeChange: function (size) {
+        this.pagesize = size;
+    },
+    handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+    },
+    prev: function(e) {
+      this.$router.replace({ path });
+    },
+    next: function(e) {},
+    imports: function(e) {}
+  },
+  
+  //初始化数据
+  created() {
+   _this=this;
+    utils.post('mx/userinfo/queryLists',{cmdID:600001,userID:"",userName:""},function(response){
+        _this.userData = response;
+    });
+  },
+
+  //更新视图
+  watch: {
+    schfilter: function(val, oldVal) {
+      this.tableData = this.otableData.filter(item => ~item.name.indexOf(val));
+    }
+  },
+  mounted() {},
+  components: { Password, Upload }
+};
+
+function gotoEdit(obj) {
+  setTimeout(function() {
+    _keyObj = obj ? obj : _this.row;
+    observer.execute("messUserEdit", _keyObj);
+    _this.$router.replace({ path: "/message/userEdit/mess" });
+  }, 0);
+}
+function delItme(obj) {
+  utils.confirm({
+    message: pageTxt.tips.del,
+    showCancelButton: true,
+    callback: function(res, vm) {
+      if (res != "confirm") return;
+      obj = obj ? obj : _this.row;
+      console.log(obj);
+      utils.weakTips("操作成功", 1);
+    }
+  });
+}
+</script>
+
+<style scoped="scoped">
+/* 头部 */
+.header{height:47px; border-bottom:1px solid #ccc;}
+.header_txt{font-size:16px; color:#656a73; line-height:47px; margin-left:17px; font-weight: bold;}
+/* 文本 */
+.user{padding:22px; white-space:nowrap;}
+.user *{vertical-align: middle;}
+.user input{width:160px; height:30px; margin-left:10px; border:1px solid #d7d8da; text-indent: 12px;}
+.user .txt{font-size:14px; line-height:30px; height: 30px; color:#666666;}
+.user .el-button{margin-left:35px;}
+.userH > span:nth-child(3){margin-left:35px;}
+.userH > span:nth-child(6){margin-left:10px;}
+.userH > input:focus{border:2px solid #32ccf9;}
+.txt1 {font-size:12px;  color:#999;}
+.txt2 {font-size:13px;  color:#999;}
+/* 导航 */
+.btnBox{font-size: 13px; color:#5c759d; margin-top:18px; margin-bottom: 10px;}
+.btnBox div{margin-left:15px; cursor:pointer; display:inline-block}
+.btnBox > div > span{ margin-left:3px;}
+.btnBox div:nth-child(1){margin-left:0;}
+/* 表格 */
+._zero > div {display:inline-block; margin-right:14px; cursor:pointer;}
+
+</style>
