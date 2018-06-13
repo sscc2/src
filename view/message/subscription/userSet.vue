@@ -35,7 +35,7 @@
 			</el-table-column>
 		</el-table>
 		<div class="_pagination" v-show="max!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='15' :total="max"></el-pagination>
+			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -83,13 +83,7 @@ import observer  from '@/libs/observer.js';
 		},
 		methods: {
 			search(){
-				var param = {
-					id: this.userID,
-					name: this.userName
-				};
-				utils.post('mx/userinfo/add', param, function(res){
-					console.log(res);
-				});
+				search();
 			},
 			currenRow(row){
 				this.row = row;
@@ -107,13 +101,18 @@ import observer  from '@/libs/observer.js';
 		},
 		mounted(){
 			_this = this;
-			utils.post('mx/userPsConfig/query',{cmdID: '600041',userID:''},function(data){
-				console.log('订阅配置：',data);
-				if(data.errcode < 0) return utils.weakTips(data.errinfo);
-				_this.data = data.lists;
-				_this.max = data.count;
-			});
+			search();
 		}
+	};
+	function search(){
+		var info = {cmdID: '600041', userID: _this.userID};
+		utils.post('mx/userPsConfig/query', info, function(data){
+//			console.log('订阅配置：',data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			utils.weakTips(data.errinfo);
+			_this.data = data.lists;
+			_this.max = data.count;
+		});
 	}
 </script>
 

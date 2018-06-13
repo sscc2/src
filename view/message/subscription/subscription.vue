@@ -4,11 +4,11 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-input placeholder="" v-model="info.id" clearable></el-input>
+			<el-input placeholder="" v-model="info.subUserID" clearable></el-input>
 			<label class="txt">{{pageTxt.label[2]}}</label>
-			<el-input placeholder="" v-model="info.name" clearable></el-input>
+			<el-input placeholder="" v-model="info.subUserName" clearable></el-input>
 			<label class="txt">{{pageTxt.label[3]}}</label>
-			<el-input placeholder="" v-model="info.shuti" clearable></el-input>
+			<el-input placeholder="" v-model="info.topicName" clearable></el-input>
 			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[4]}}</el-button>
 		</div>
 		<div class="btnBox">
@@ -17,27 +17,25 @@
 				<span class="btnTxt">{{pageTxt.label[5]}}</span>
 			</el-button>
 		</div>
-		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
+		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow"
+				highlight-current-row :data="data" tooltip-effect="dark">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
-			<el-table-column prop="subUserID" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
+			<el-table-column prop="subUserID"  sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="subUserName" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
-			<el-table-column prop="pubUserID" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="pubUserName" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="topicName" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="subAppID" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="pubUserID" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="pubUserName" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="topicName" :label="pageTxt.list[5]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="pubTime" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="pubTime" sortable='custom' :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
-						<img src="@/img/altericos.png" alt="">
-					</el-button>-->
 					<img @click="see" src="@/img/theme/detail_1.png" alt="">
 				</div>
 			</el-table-column>
 		</el-table>
 		<div class="_pagination" v-show="max!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
+			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -64,8 +62,11 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	
 	var data = {
 		pageTxt,
-		info: {id:'',name:'',shuti:''},
-		data: [/*{subUserID:'订阅者ID',subUserName:'订阅者名',pubUserID:'订阅者AppID',pubUserName:'发布者ID',topicName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}*/],
+		info: {
+			cmdID: '600050', subUserID:'', topicName: '',
+			sortType: '2', type: '0'
+		},
+		data: [/*{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}*/],
 		row: '',
 		selects: [],
 		max: 0
@@ -85,10 +86,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		methods: {
 			search(){
-				var param = this.info;
-//				utils.post('', param, function(res){
-//					console.log(res);
-//				});
+				search();
 			},
 			currenRow(row){
 				this.row = row;
@@ -99,6 +97,29 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		    },
 			currentPage(){
 				
+			},
+			sortReq(obj){
+				//默认2   0，按发布时间从近到远排序， 1，按发布时间从远到近排序。。
+				// 2，按订阅者用户从小到大排序，3，按订阅者用户从大到小培训。。
+				var info = this.info;
+				console.log(obj.prop)
+				if(obj.order == 'ascending'){ //从小到大
+					switch (obj.prop){
+						case 'subUserID':
+							info.sortType = '2';break;
+						default:
+							info.sortType = '0';break;
+					}
+				} else if(obj.order == 'descending') {
+					switch (obj.prop){
+						case 'subUserID':
+							info.sortType = '3';break;
+						default:
+							info.sortType = '1';break;
+					}
+				} else info.sortType = '2';
+				
+				search();
 			},
 			detail(){
 				var row = this.selects;
@@ -118,18 +139,19 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		beforeCreate(){},
 		mounted(){
 			_this = this;
-			var param = {
-				cmdID: '600050', subUserID:'', topicName: '',
-				sortType: 0, type: 0
-			};
-			utils.post('mx/subTopic/queryLists', param, function(data){
-				console.log('已发布主题：',data);
-				if(data.errcode < 0) return utils.weakTips(data.errinfo);
-				_this.data = data.lists;
-				_this.max = data.count;
-			});
+			search();
 		},
 		components: {DetailTheme}
+	};
+	function search(){
+		var info = _this.info;
+		utils.post('mx/subTopic/queryLists', info, function(data){
+//			console.log('已发布主题：',data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			utils.weakTips(data.errinfo);
+			_this.data = data.lists;
+			_this.max = data.count;
+		});
 	}
 </script>
 

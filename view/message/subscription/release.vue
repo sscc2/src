@@ -3,18 +3,18 @@
 		<div class="searchBox">
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
+			cmdID: '600042', pubUserID: '', topicName: '',
+			beginDate: '', endDate: '', sortType: '0'
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-input placeholder="" v-model="info.id" clearable></el-input>
-			<label class="txt">{{pageTxt.label[2]}}</label>
-			<el-input placeholder="" v-model="info.name" clearable></el-input>
+			<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
+			<!--<label class="txt">{{pageTxt.label[2]}}</label>
+			<el-input placeholder="" v-model="info.pubUserName" clearable></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
-			<el-input placeholder="" v-model="info.zhuti" clearable></el-input>
+			<el-input placeholder="" v-model="info.topicName" clearable></el-input>
 			<label class="txt">{{pageTxt.label[4]}}</label>
-			
 			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[6]" 
 				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
 			</el-date-picker>
-			
 			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[8]}}</el-button>
 		</div>
 		<div class="btnBox">
@@ -54,7 +54,7 @@
 			</el-table-column>
 		</el-table>
 		<div class="_pagination" v-show="max!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
+			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -91,7 +91,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			cmdID: '600042', pubUserID: '', topicName: '',
 			beginDate: '', endDate: '', sortType: '0'
 		},
-		picker: [],
+		picker: null,
 		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCount:'订阅个数'}*/],
 		row: '',
 		maxData: '2000',
@@ -111,11 +111,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		methods: {
 			search(){
-				var param = this.info;
-				console.log(param);
-//				utils.post('', param, function(res){
-//					console.log(res);
-//				});
+				search();
 			},
 			add(){
 				observer.execute('messAddTheme',{sync:true, disabled: false});
@@ -167,7 +163,6 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				 * 3，按发布者用户从大到小培训。。。4，按订阅者个数从大到小培训，5，按订阅者个数从小到大排序
 				 * {pubUserID:'发布者ID',pubTime:'发布时间',subsUserCount:'订阅个数'}
 				 */
-				console.log(obj.prop);
 				var info = this.info;
 				if(obj.order == 'ascending'){ //从小到大
 					switch (obj.prop){
@@ -187,17 +182,11 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 						default:
 							info.sortType = '1';break;
 					}
-				}
+				} else info.sortType = '0';
 				
 				info.beginDate = this.picker[0];
 				info.endDate = this.picker[1];
-				console.log(info);
-				utils.post('mx/pubTopic/queryLists', info, function(data){
-					console.log('已发布主题：',data);
-					if(data.errcode < 0) return utils.weakTips(data.errinfo);
-					_this.data = data.lists;
-					_this.max = data.count;
-				});
+				search();
 			},
 			selectionRow(val){
 		     	this.selects = val;
@@ -213,19 +202,25 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		beforeCreate(){},
 		mounted(){
 			_this = this;
-			var info = this.info;
-			this.picker = today();
-			info.beginDate = this.picker[0];
-			info.endDate = this.picker[1];
-			utils.post('mx/pubTopic/queryLists', info, function(data){
-				console.log('已发布主题：',data);
-				if(data.errcode < 0) return utils.weakTips(data.errinfo);
-				_this.data = data.lists;
-				_this.max = data.count;
-			});
+			search();
 		},
 		components: {AddTheme, EditTheme, DetailTheme}
 	};
+	function search(){
+		var picker = _this.picker, info = _this.info;
+		if(!picker){
+			picker = today();
+		}
+		info.beginDate = picker[0];
+		info.endDate = picker[1];
+		utils.post('mx/pubTopic/queryLists', info, function(data){
+//			console.log('已发布主题：',data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			utils.weakTips(data.errinfo);
+			_this.data = data.lists;
+			_this.max = data.count;
+		});
+	}
 	function today(){
 		var day = new Date(), str = '', t;
 		str += day.getFullYear() + '-';
