@@ -64,6 +64,9 @@ export default new Router({
             },{
                 path: '/message/subscription',
                 component: resolve => require(['@/view/message/subscription/subscription.vue'], resolve)
+            },{
+                path: '/message/addTheme',
+                component: resolve => require(['@/view/message/subscription/theme/addTheme.vue'], resolve)
             },
             
             {

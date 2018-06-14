@@ -57,7 +57,7 @@
 				共{{max}}条数据
 			</div>
 		</div>
-		<AddTheme></AddTheme>
+		<!--<AddTheme></AddTheme>-->
 		<EditTheme></EditTheme>
 		<DetailTheme></DetailTheme>
 	</div>
@@ -127,7 +127,8 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				search();
 			},
 			add(){
-				observer.execute('messAddTheme',{sync:true, disabled: false});
+				this.$router.replace({ path: "/message/addTheme" });
+				observer.execute('messAddTheme',{sync:true});
 			},
 			editTheme(){
 				var row = this.selects;

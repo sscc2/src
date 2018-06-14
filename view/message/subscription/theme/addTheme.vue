@@ -1,59 +1,78 @@
 <template>
 	<div class="addTheme">
-		<el-dialog :title="pageTxt.label[0]" :visible.sync="sync" width='1040px'>
+		<!--<el-dialog :title="pageTxt.label[0]" :visible.sync="sync" width='1040px'>-->
+			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<ul class="list">
 				<li>
 					<label class="txt">{{pageTxt.label[1]}}</label>
 					<div class="rightBox">
-						<el-input :disabled='disabled' placeholder="" v-model="info.name" clearable></el-input>
+						<el-input placeholder="" v-model="info.topicName" clearable></el-input>
 					</div>
-				</li><li v-show="disabled">
+				</li><li>
 					<label class="txt">{{pageTxt.label[2]}}</label>
 					<div class="rightBox">
-						<el-input :disabled='disabled' placeholder="" v-model="info.man" clearable></el-input>
+						<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
 					</div>
-				</li><li v-show="disabled">
+				</li><li>
 					<label class="txt">{{pageTxt.label[3]}}</label>
 					<div class="rightBox">
-						<el-input :disabled='disabled' placeholder="" v-model="info.time" clearable></el-input>
+						<el-input placeholder="" v-model="info.pubUserName" clearable></el-input>
 					</div>
 				</li><li>
 					<label class="txt">{{pageTxt.label[4]}}</label>
 					<div class="rightBox">
-						<el-input placeholder="" v-model="info.describe" clearable></el-input>
+						<el-input placeholder="" v-model="info.topicDescr" clearable></el-input>
 					</div>
 				</li><li>
 					<label class="txt">{{pageTxt.label[5]}}</label>
 					<div class="rightBox">
-						<el-input placeholder="" type='textarea' v-model="info.content" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+						<el-input placeholder="" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
 					</div>
 				</li><li>
 					<label class="txt">{{pageTxt.label[6]}}</label>
+					<div class="rightBox">
+						<el-input placeholder="" v-model="info.effectiveDays" clearable></el-input>
+					</div>
+				</li><li>
+					<label class="txt">{{pageTxt.label[7]}}</label>
 					<div class="rightBox">
 						<!--<el-transfer :filter-method="filterMethod" v-model="value" :data="list"
 							filterable filter-placeholder="请输入关键字">
 						</el-transfer>-->
 						<div class="transfer">
 							<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :left-default-checked="allLeft"
-								:right-default-checked="allRight" :titles="[pageTxt.label[7], pageTxt.label[8]]"  @change="handleChange" :data="list"
+								:right-default-checked="allRight" :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
 								:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}"
 								@left-check-change='leftCheck' @right-check-change='rightCheck'>
 								<div slot-scope="{option}">
 									<span class="itemTxt">{{option.id}}</span>
 									<span class="itemTxt">{{option.name}}</span>
 									<!--<span class="itemTxt leIN">{{option.other}}</span>-->
-									<input class="riIN" type="text" placeholder="请输入AppID" />
+									<!--<input class="riIN" type="text" placeholder="请输入AppID" />-->
 								</div>
 							</el-transfer>
 						</div>
 					</div>
+				</li><li>
+					<label class="txt">{{pageTxt.label[8]}}</label>
+					<div class="rightBox">
+						<el-input placeholder="" v-model="info.operator" clearable></el-input>
+					</div>
+				</li><li>
+					<label class="txt">&nbsp;</label>
+					<div class="rightBox">
+						<p class="jg"></p>
+						<el-button @click="back">取 消</el-button>
+						<el-button type="primary" @click="submit">确 定</el-button>
+					</div>
 				</li>
 			</ul>
-			<div slot="footer" class="dialog-footer">
+			<!--<div slot="footer" class="dialog-footer">
 				<el-button @click="sync = false">取 消</el-button>
 				<el-button type="primary" @click="submit">确 定</el-button>
-			</div>
-		</el-dialog>
+			</div>-->
+		<!--</el-dialog>-->
+		<!--穿梭框标题-->
 		<div id="slotTitle">
 			<div class="slotTitle">
 				<div id="all" class="all">
@@ -77,7 +96,8 @@ import observer  from '@/libs/observer.js';
 	var lang = {}, pageTxt, slotTitle, first = false;
 	lang.cn = {
 		tips: {},
-		label: ['添加用户主题','主题名称：','发布者：','发布时间：','主题描述：','主题内容：','接收方：','可订阅用户','已订阅用户'],
+		label: ['添加用户主题','主题名称：','发布者ID：','发布者名称：','主题描述：','主题内容：',
+			'有效天数：','接收方：','操作员：','可订阅用户','已订阅用户'],
 		list: ['用户ID','用户名','AppID','其他']
 	};
 	lang.en = {};
@@ -94,9 +114,11 @@ import observer  from '@/libs/observer.js';
 	var data = {
 		pageTxt,
 		sync: false,
-		disabled: false,
 		obj: null,
-		info: {name:'',man:'',time:'',describe:'',content:''},
+		info: {
+			cmdID: '600044',operator:'admin', topicName:'主题名称', pubUserID:'发布者ID', pubUserName:'发布者名称',
+			topicDescr:'主题描述',topicInfo:'主题内容', effectiveDays: '7', canSubsUserList:[]
+		},
 		list: list,
 		value: [],
 		allLeft: [],
@@ -114,14 +136,6 @@ import observer  from '@/libs/observer.js';
 	observer.addBinding('messAddTheme', function(master, param){
 		if(master != 'messAddTheme') return;
 		data.sync = param.sync;
-		data.disabled = param.disabled;
-		var info = data.info, obj = param.obj;
-		for(var k in info) info[k] = '';
-		if(obj){
-			info.name = obj.theme;
-			info.man = obj.userName;
-			info.time = obj.time;
-		}
 	});
 	
 	export default {
@@ -154,25 +168,53 @@ import observer  from '@/libs/observer.js';
 			rightCheck(arr, i){},
 			submit(e){
 				if(submitList.length==0) return this.sync = false;
+				//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
+				var i, ind, tem = [], info = this.info;
+				for (i = 0; i < submitList.length; i++) {
+					ind = submitList[i];
+					tem.push(this.list[ind]);
+				}
+				info.canSubsUserList = tem;
+				utils.post(info, function(data){
+					console.log('增加主题：',data);
+					if(data.errcode < 0) return utils.weakTips(data.errinfo);
+					_this.list = data.lists;
+				});
+			},
+			back(){
+				this.sync = false;
+				this.$router.replace({ path: "/message/release" });
 			}
 		},
 		mounted(){
 			_this = this;
 			slotTitle = kit('.addTheme #slotTitle').html();
 			first = false;
+			var param = {
+				url: 'mx/userinfo/queryLists',
+				cmdID: "600001",
+				userID: '',
+				userName: ''
+			};
+			utils.post(param, function(data){
+				console.log('可订阅用户：',data);
+				if(data.errcode < 0) return utils.weakTips(data.errinfo);
+				_this.list = data.lists;
+			});
+//			addTitle();
 		},
 		watch: {
 			sync(cur, old){
 //				if(!cur) return;
 				if(!first){
 					first = true;
-					setTimeout(addTitle, 40);
+//					setTimeout(addTitle, 40);
 				}
 			},
 			allLeft(cur){
 				setTimeout(function(){
 					_this.allLeft = [0,1,2,3,4,5,6,7,8,9];
-				},100)
+				},100);
 				
 			}
 		},
@@ -224,11 +266,14 @@ import observer  from '@/libs/observer.js';
 </script>
 
 <style scoped="scoped">
+	.addTheme{min-width: 1016px;}
+	.h2{font-size: 16px;color: #666;line-height: 50px;height: 50px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.list li{margin-bottom: 10px;}
 	.txt{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
 	.rightBox{vertical-align: top;display: inline-block;}
 	.rightBox .el-input{width: 255px;}
 	.rightBox .el-textarea{width: 835px;}
+	.jg{padding-bottom: 30px;}
 	
 	.transfer{text-align: center;}
 	.itemTxt{display: inline-block;width: 100px;font-size: 13px;line-height: 40px;color: #666;vertical-align: middle;}
