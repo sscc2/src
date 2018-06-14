@@ -105,7 +105,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		var row = delTheme.row,
 		param = {
 			url: 'mx/pubTopic/delete',
-			cmdID: '400046',
+			cmdID: '600046',
 			operator: 'admin',
 			pubUserID: row.pubUserID,
 			topicName: row.topicName
