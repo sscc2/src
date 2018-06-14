@@ -44,10 +44,10 @@
 					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
 						<img src="@/img/altericos.png" alt="">
 					</el-button>-->
-					<img @click="add" src="@/img/theme/add_2.png" alt="">
-					<img @click="edit" src="@/img/theme/edit_2.png" alt="">
-					<img @click="del" src="@/img/theme/del_2.png" alt="">
-					<img @click="detail" src="@/img/theme/detail_2.png" alt="">
+					<img @click="add(scope.$index, scope.row, scope)" src="@/img/theme/add_2.png" alt="">
+					<img @click="edit(scope.$index, scope.row, scope)" src="@/img/theme/edit_2.png" alt="">
+					<img @click="del(scope.$index, scope.row, scope)" src="@/img/theme/del_2.png" alt="">
+					<img @click="detail(scope.$index, scope.row, scope)" src="@/img/theme/detail_2.png" alt="">
 				</div>
 			</el-table-column>
 		</el-table>
@@ -75,7 +75,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 	var lang = {}, pageTxt, _this;
 	lang.cn = {
-		tips: {user: "请在列表中选择一条记录！",del: "是否确认要删除该用记录吗？",},
+		tips: {user: "请在列表中选择一条记录！",del: "是否确认要删除该用记录吗？",success:'删除成功！'},
 		label: ['已发布主题','发布者ID：','发布者名称：','主题名：','日期：','起始日期','至','结束日期',
 			'查询','添加用户主题','修改用户主题','删除用户主题','主题详情'],
 		list: ['发布者ID','发布者名称','主题名','发布时间','订阅个数','操作']
@@ -101,7 +101,22 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 //		if(master != 'messUpload') return;
 //		data.obj = param;
 //	});
-	
+	function delTheme(){
+		var row = delTheme.row,
+		param = {
+			url: 'mx/pubTopic/delete',
+			cmdID: '400046',
+			operator: 'admin',
+			pubUserID: row.pubUserID,
+			topicName: row.topicName
+		};
+		utils.post(param, function(data){
+			console.log('删除主题：',data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			utils.weakTips(pageTxt.tips.success);
+			search();
+		});
+	}
 	export default {
 		name: 'message_release',
 		data() {
@@ -123,7 +138,6 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				observer.execute('messEditTheme',{sync:true, disabled: true, obj: row[0]});
 			},
 			edit(){
-				var _this = this;
 				setTimeout(function(){
 					observer.execute('messEditTheme',{sync:true, disabled: true, obj: _this.row});
 				}, 0);
@@ -131,26 +145,22 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			delTheme(){
 				var row = this.selects;
 				if(row.length != 1){
-					utils.confirm({ message: pageTxt.tips.user, type: 2 });
+					utils.weakTips(this.pageTxt.tips.user);
 					return;
 				}
-				utils.confirm({message: pageTxt.tips.del, fn:function(){
-					utils.confirm({message: '删除成功！', type: 1});
-				}, btn: 2});
+				delTheme.row = row[0];
+				utils.hints({txt:pageTxt.tips.del, fn1:delTheme});
 			},
-			del(){
-				var _this = this;
-				setTimeout(function(){
-					utils.confirm({message: pageTxt.tips.del, fn:function(){
-					utils.confirm({message: '删除成功！', type: 1});
-				}, btn: 2});
-				}, 0);
+			del(ind, row){
+//				console.log(ind, row);
+				delTheme.index = ind;
+				delTheme.row = row;
+				utils.hints({txt:pageTxt.tips.del, fn1:delTheme});
 			},
 			detailTheme(){
 				observer.execute('messDetailTheme',{sync:true, obj: this.row});
 			},
 			detail(){
-				var _this = this;
 				setTimeout(function(){
 					observer.execute('messDetailTheme',{sync:true, obj: _this.row});
 				}, 0);

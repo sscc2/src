@@ -152,7 +152,7 @@ function utils(){
 			},
 			time: 0
 		};
-		weakTips.txt = weakTips.el.find('.container')[0];
+		weakTips.txt = weakTips.el.find('._container')[0];
 		weakTips.el.click(function(e){
 			if(e.target == this) weakTips.hide();
 		});
@@ -166,8 +166,8 @@ function utils(){
 			'ZsLcEFZBaPO1iBgjdC5IKdnAJH8AYzUI5EnByxc6LAi2tjkUTJKWgtb1JkLSL67yQc/pFpw4pDnYhEIuKVaU3VmB0fKEXECHkjZT2BWy1H3CRSbvRh67ntT+Bvg4EYVPzmXk'+
 			'xS8n38DZBcCznl0b0ROyI3jI4sdEDL+sJ0pHIRCswH5KGPykV6EYkpcA2QZSQVkRsFMvAIkHWEnO1XgAEAy8ZNZzb9vqAAAAAASUVORK5CYII=" />'+
 			'</div><div class="_messaga"><p id="_ctxt"></p></div>'+
-			'<div><button id="_yes" class="blueBtn">确定</button><button id="_no" class="defBtn">取消</button>'+
-			'</div></div></div>';
+			'<div><button id="_yes" class="blueBtn">确定</button><button id="_now" class="blueBtn">立即下发</button>'+
+			'<button id="_no" class="defBtn">取消</button></div></div></div>';
 		var $hints = kit(hintHtml);
 		var hintsObj = {
 			el: $hints[0],
@@ -175,8 +175,11 @@ function utils(){
 			yes: $hints.find('#_yes'),
 			no: $hints.find('#_no'),
 			ctxt: $hints.find('#_ctxt'),
-			show: function(txt){
-				hintsObj.ctxt[0].innerHTML = txt;
+			now: $hints.find('#_now'),
+			show: function(opt){
+				hintsObj.ctxt[0].innerHTML = opt.txt;
+				if(opt==3) hintsObj.now.show();
+				else hintsObj.now.hide();
 				kit.body().appendChild(this.el);
 			},
 			hide: function(){
@@ -216,7 +219,7 @@ function utils(){
 			if(typeof(opt)!="object") opt = {};
 			hintsObj.yesFn = opt.fn1;
 			hintsObj.noFn = opt.fn2;
-			hintsObj.show(opt.txt||'');
+			hintsObj.show(opt);
 		};
 	};
 	kit.extend(exp, new MessageMask());
@@ -248,10 +251,15 @@ function utils(){
 		 */
 		this.post = function(url, params, fn){
 			exp.loadShow();
-			if(params instanceof Function){
+			if(arguments.length == 2){
 				fn = params;
-				params = '';
+				if(typeof(url)=="object"){
+					params = url;
+					url = params.url;
+					delete params.url;
+				}
 			}
+			
 			axios.post(getUrl(url), params).then(function(response){
 				callback(response, fn);
 			}).catch(function (e) {
@@ -293,7 +301,6 @@ function utils(){
 	    }
 	    return out;
 	};
-	
 	return exp;
 }
 
