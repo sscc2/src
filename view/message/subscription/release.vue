@@ -3,8 +3,6 @@
 		<div class="searchBox">
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
-			cmdID: '600042', pubUserID: '', topicName: '',
-			beginDate: '', endDate: '', sortType: '0'
 			<label class="txt">{{pageTxt.label[1]}}</label>
 			<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
@@ -92,7 +90,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: null,
-		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCount:'订阅个数'}*/],
+		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCount:'订阅个数'}],
 		row: '',
 		maxData: '2000',
 		selects: [],
@@ -216,7 +214,6 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.count)||0;
 		});

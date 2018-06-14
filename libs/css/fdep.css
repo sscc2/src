@@ -50,6 +50,8 @@ textarea{resize: none !important;}
 .el-button--primary{width: 88px;height: 30px;font-size: 12px;line-height: 30px;padding: 0;background: #32ccf9;border-color: #32ccf9;color: #FFF;}
 .el-button--primary:active{background: #66b1ff;border-color: #66b1ff;opacity: 0.8 !important;color: #FFF !important;}
 .el-button--primary:hover, .el-button--primary:focus{background: #32ccf9;border-color: #32ccf9;}
+.blueBtn, .defBtn{display: inline-block;width: 88px;height: 30px;font-size: 12px;line-height: 30px;background: #32CCF9;color: #FFF;border-radius: 4px;}
+.defBtn{background: #FFF;color: #0DB9EB;border: 1px solid #0DB9EB;}
 
 /* 穿梭格 */
 .transfer .el-transfer-panel__filter .el-input__inner{padding-left: 40px;}
@@ -81,7 +83,17 @@ textarea{resize: none !important;}
 
 
 /* 弱提示 */
-#_weakTips{position: fixed;height: 100%;width: 100%;text-align: center;top: 0;left: 0;font-size: 0;z-index: 2001;}
-#_weakTips .panle{min-width: 328px;max-width: 500px;min-height: 132px;background: rgba(38,38,38,0.7);padding: 56px 30px;
+#_weakTips, #_hints{position: fixed;height: 100%;width: 100%;text-align: center;top: 0;left: 0;font-size: 0;z-index: 2001;}
+#_weakTips ._panle{min-width: 328px;max-width: 500px;min-height: 132px;background: rgba(38,38,38,0.7);padding: 56px 30px;
 	display: inline-block;top: 208px;transform: translateY(50%);border-radius: 8px;}
-#_weakTips .container{font-size: 14px;line-height: 20px;color: #FFF;white-space: normal;}
+#_weakTips ._container{font-size: 14px;line-height: 20px;color: #FFF;white-space: normal;}
+/* 带按钮的消息框 */
+#_hints{background: rgba(59,65,75,0.2);}
+#_hints ._panle{display: inline-block;width: 600px;height: 300px;margin-top: 180px;background: #FFF;border-radius: 4px;}
+#_hints #_title{font-size: 16px;color: #656A73;text-align: left;text-indent: 20px;border-bottom: 1px solid #D7D8DA;line-height: 50px;height: 50px;}
+#_hints #_close{position: absolute;top: 17px;right: 17px;cursor: pointer;}
+#_hints ._messaga{min-height: 132px;max-height: 204px;overflow: auto;padding: 56px 200px;}
+#_hints #_ctxt{font-size: 14px;color: #666;line-height: 20px;white-space: normal;}
+#_hints button{margin: 0 20px;}
+
+

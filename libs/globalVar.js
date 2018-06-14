@@ -1,7 +1,7 @@
 
 var vars = {};
 vars.lang = 'cn';
-vars.loadTime = 2;
+vars.loadTime = 0.1;
 
 (function(){
 	var local = window.location; //localhost
@@ -14,7 +14,7 @@ vars.loadTime = 2;
 
 //vars.urlIP = 'http://192.168.22.212:8081/fdep/';  //内网
 //vars.urlIP = 'http://192.168.218.35:8081/fdep/';  //小焕
-vars.urlIP = 'http://192.168.22.110:8081/fdep/';  //曼萍
+//vars.urlIP = 'http://192.168.22.110:8081/fdep/';  //曼萍
 
 
 export default {

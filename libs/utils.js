@@ -135,8 +135,8 @@ function utils(){
 			isLoading = false;
 			return exp;
 		};
-		
-		var weakHtml = '<div id="_weakTips"><div class="panle"><div class="container"></div></div></div>';
+		// 弱提示
+		var weakHtml = '<div id="_weakTips"><div class="_panle"><div class="_container"></div></div></div>';
 		var weakTips = {
 			el: kit(weakHtml),
 			show: function(txt){
@@ -156,13 +156,67 @@ function utils(){
 		weakTips.el.click(function(e){
 			if(e.target == this) weakTips.hide();
 		});
-		
 		this.weakTips = function(txt){
 			weakTips.show(txt);
 		};
-		var hintHtml = "";
-		this.hints = function(txt){
-			
+		// 带按钮的消息框
+		var hintHtml = '<div id="_hints"><div class="_panle">'+
+			'<div><p id="_title">提示</p><img id="_close" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z'+
+			'0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOVJREFUeNqMk90NgjAURmvjCDKFiDsormCI8cUNNO7hgw4hO/ATRxBwC9lBv5vcJtcbKm1yeLA9h2sTJrv9ITLG5OAMni'+
+			'ZsLcEFZBaPO1iBgjdC5IKdnAJH8AYzUI5EnByxc6LAi2tjkUTJKWgtb1JkLSL67yQc/pFpw4pDnYhEIuKVaU3VmB0fKEXECHkjZT2BWy1H3CRSbvRh67ntT+Bvg4EYVPzmXk'+
+			'xS8n38DZBcCznl0b0ROyI3jI4sdEDL+sJ0pHIRCswH5KGPykV6EYkpcA2QZSQVkRsFMvAIkHWEnO1XgAEAy8ZNZzb9vqAAAAAASUVORK5CYII=" />'+
+			'</div><div class="_messaga"><p id="_ctxt"></p></div>'+
+			'<div><button id="_yes" class="blueBtn">确定</button><button id="_no" class="defBtn">取消</button>'+
+			'</div></div></div>';
+		var $hints = kit(hintHtml);
+		var hintsObj = {
+			el: $hints[0],
+			title: $hints.find('#_title'),
+			yes: $hints.find('#_yes'),
+			no: $hints.find('#_no'),
+			ctxt: $hints.find('#_ctxt'),
+			show: function(txt){
+				hintsObj.ctxt[0].innerHTML = txt;
+				kit.body().appendChild(this.el);
+			},
+			hide: function(){
+				var el = hintsObj.el;
+				if(el.parentNode)
+					el.parentNode.removeChild(el);
+			},
+			runNo:function(){
+				if(typeof(this.noFn)=="function") this.noFn();
+			},
+			yesFn: null,
+			noFn: null
+		};
+		if(globalVar.get('lang')!='cn'){
+			hintsObj.title.text('Tips');
+			hintsObj.yes.text('yes');
+			hintsObj.no.text('no');
+		}
+		$hints.click(function(e){
+			if(e.target != this) return;
+			hintsObj.runNo();
+			hintsObj.hide();
+		});
+		hintsObj.yes.click(function(e){
+			if(typeof(hintsObj.yesFn)=="function") hintsObj.yesFn();
+			hintsObj.hide();
+		});
+		hintsObj.no.click(function(e){
+			hintsObj.runNo();
+			hintsObj.hide();
+		});
+		$hints.find('#_close').click(function(e){
+			hintsObj.runNo();
+			hintsObj.hide();
+		});
+		this.hints = function(opt){
+			if(typeof(opt)!="object") opt = {};
+			hintsObj.yesFn = opt.fn1;
+			hintsObj.noFn = opt.fn2;
+			hintsObj.show(opt.txt||'');
 		};
 	};
 	kit.extend(exp, new MessageMask());

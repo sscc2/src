@@ -147,7 +147,6 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		utils.post('mx/subTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.count)||0;
 		});

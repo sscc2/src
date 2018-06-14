@@ -109,7 +109,6 @@ import observer  from '@/libs/observer.js';
 		utils.post('mx/userPsConfig/query', info, function(data){
 //			console.log('订阅配置：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.count)||0;
 		});
