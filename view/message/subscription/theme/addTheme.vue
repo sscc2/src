@@ -45,8 +45,8 @@
 								:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}"
 								@left-check-change='leftCheck' @right-check-change='rightCheck'>
 								<div slot-scope="{option}">
-									<span class="itemTxt">{{option.id}}</span>
-									<span class="itemTxt">{{option.name}}</span>
+									<span class="itemTxt">{{option.userID}}</span>
+									<span class="itemTxt">{{option.userName}}</span>
 									<!--<span class="itemTxt leIN">{{option.other}}</span>-->
 									<!--<input class="riIN" type="text" placeholder="请输入AppID" />-->
 								</div>
@@ -199,6 +199,12 @@ import observer  from '@/libs/observer.js';
 			utils.post(param, function(data){
 				console.log('可订阅用户：',data);
 				if(data.errcode < 0) return utils.weakTips(data.errinfo);
+				var obj, i;
+				for (i = 0; i < data.lists.length; i++) {
+					obj = data.lists[i];
+					obj.key = i;
+					obj.label = obj.userID+obj.userName;
+				}
 				_this.list = data.lists;
 			});
 //			addTitle();
