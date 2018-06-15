@@ -15,7 +15,7 @@
 					<el-col :span="6">
 						<!-- 表单左 -->
 						<ul class="left">
-							<li><p>{{pageTxt.infoTxt[1]}}：</p></li>
+							<!-- <li><p>{{pageTxt.infoTxt[1]}}：</p></li> -->
 							<li><p>{{pageTxt.infoTxt[2]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[3]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
@@ -29,13 +29,14 @@
 							<li><p>{{pageTxt.infoTxt[15]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[16]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[17]}}：</p></li>
+							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
 						</ul>
 					</el-col><el-col :span="18">
 						<!-- 表单右 -->
 						<ul class="right">
-							<li>
+							<!-- <li>
 								<input type="text" v-model="info.operator" placeholder="">
-							</li>
+							</li> -->
 							<li>
 								<input type="text" v-model="info.userID" placeholder="" disabled>
 							</li>
@@ -86,19 +87,23 @@
 								<input type="text" v-model="info.maxPubsCount" placeholder="">
 							</li>
 							<li>
-								<input type="text" v-model="info.maxDaysoftopic" placeholder="">
+								<input type="text" v-model="info.maxSubsCount" placeholder="">
 							</li>							
+							<li>
+								<input type="text" v-model="info.maxDaysoftopic" placeholder="">
+							</li>
+														
 						</ul>
 					</el-col>
 				</el-row>
 				<div class="btn">
-					<el-button type="primary" @click="add($event)">{{pageTxt.infoTxt[20]}}</el-button>
+					<el-button type="primary" @click="Edit($event)">{{pageTxt.infoTxt[20]}}</el-button>
 					<el-button type="primary" @click='del($event)'>{{pageTxt.infoTxt[21]}}</el-button>
 					<el-button type="primary" @click='del($event)'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
 			</el-tab-pane>
 			
-			<el-tab-pane label="Ekey">
+			<el-tab-pane label="Ekey" >
 				<span slot="label">{{pageTxt.tab[1]}}</span>
 				<UserEkey></UserEkey>
 			</el-tab-pane>
@@ -110,7 +115,7 @@
 			
 			<el-tab-pane label="扩展信息">
 				<span slot="label">{{pageTxt.tab[3]}}</span>
-				<ExtendInfo></ExtendInfo>
+				<ExtendInfo :extend="aid" ></ExtendInfo>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -124,6 +129,7 @@ import md5        from '@/libs/md5.js';
 import UserEkey   from '@/view/message/user/userEkey.vue';
 import UserSignal from '@/view/message/user/userSignal.vue';
 import ExtendInfo from '@/view/message/user/extendInfo.vue';
+
 
 	var info = {},
 	def = ['operator','userID', 'userName', 'userType', 'userDistrict', 'speedCtrlKbps', 'configTime', 'userInfo', 'connSuGroupName','isAlarmIfOffLine',  'softEncEndDate' , 'softEncBeginDate', 'allowSendRecvFile', 'maxPubsCount', 'maxSubsCount', 'maxDaysoftopic', 'isModifyDefaultPasswd','userPasswd'],
@@ -183,13 +189,13 @@ import ExtendInfo from '@/view/message/user/extendInfo.vue';
 		connect,
 		online,
 		time: getDate(),
-		obj:[]
+		obj:{},
+		aid:""
 	};
 	
 	observer.addBinding('messUserEdit', function(master, param){
 		if(master != 'messUserEdit') return;
-		this.data.obj = param;
-		console.log(this.data.obj.userID)
+		data.obj = param;
 	});
 	
 	export default {
@@ -197,36 +203,48 @@ import ExtendInfo from '@/view/message/user/extendInfo.vue';
 			return data;
 		},
 		methods: {
-			add: function(e){
-				var info = this.info;
-				for (var i = 0; i < must.length; i++) {
-					if(info[must[i]] == '') break;
-				}
-				if(i != must.length ) return utils.confirm({message:'*号为必填项!',type: 2});
-				var pass = info.userPasswd;
-				info.userPasswd = md5.hex_md5(pass);
-				
-				utils.post('/insert', info, (res)=>{
-					if(res.code < 0){
-						utils.confirm({message:res.msg,type: 2});
-					}else {
-						utils.confirm({message:res.msg,type: 1});
-					}
-				});
+			Edit(){
+				var _this=this;
+    			utils.post('mx/userinfo/modify',{
+					userID:_this.obj.userID,
+					cmdID:600004,
+					operator:_this.info.operator,
+					userName:_this.info.userName,
+					userType:_this.info.userType,
+					userDistrict:_this.info.userDistrict,
+					speedCtrlKbps:_this.info.speedCtrlKbps,
+					userInfo:_this.info.userInfo,
+					connSuGroupName:_this.info.connSuGroupName,
+					isAlarmIfOffLine:_this.info.isAlarmIfOffLine,
+					softEncBeginDate:_this.info.softEncBeginDate,
+					softEncEndDate:_this.info.softEncEndDate,
+					allowSendRecvFile:_this.info.allowSendRecvFile,
+					maxPubsCount:_this.info.maxPubsCount,
+					maxSubsCount:_this.info.maxSubsCount,
+					maxDaysoftopic:_this.info.maxDaysoftopic
+					},
+				function(response){
+					console.log(response)
+    });
 			},
 			del: function(e){
 				this.$router.replace({path:'/message/user'});			}
-
+				
 		},
 		beforeCreate(){
 //			console.log(this);
 		},
+		// 初始化数据
 		created: function(){
+				this.aid=this.obj.userID
 				var _this=this;
-				utils.post('mx/userinfo/modify',{
-				cmdID:600004,
-				userID:this.date.userID,},function(response){
-       				 _this.userData = response;
+				utils.post('mx/userinfo/query',{
+				cmdID:600002,
+				userID:this.obj.userID,
+				type:0},function(response){
+					console.log(response)
+					_this.info=response.lists[0]
+				
     			});
 		},
 		mounted(){},

@@ -16,13 +16,13 @@
 			<!-- 中间 -->
 			<div class='center_list'>
 				<ul>
-					<li><el-input v-model="inputValue.smsAlarmNun" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.leaderTelePhone" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.leaderMobilePhone" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.PerationPerationFax" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.PerationPhone" placeholder="请输入内容"></el-input></li>
+					<li><el-input v-model="inputValue.userAlarmSmsNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input v-model="inputValue.userTelNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input v-model="inputValue.userMobileNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input v-model="inputValue.operationPhoneNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input v-model="inputValue.operationFax" placeholder="请输入内容"></el-input></li>
 					<li><el-input v-model="inputValue.email" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.SSCCAM" placeholder="请输入内容"></el-input></li>
+					<li><el-input v-model="inputValue.ssccManager" placeholder="请输入内容"></el-input></li>
 				</ul>
 			</div>
 			<!-- 右 -->
@@ -47,61 +47,155 @@
 
 <script>
 // import kit      from '@/libs/kit.js';
-// import utils    from '@/libs/utils.js';
-// import observer from '@/libs/observer.js';
-	var pageTxt_cn = {
-		tips:['短信报警号码：','负责人座机号码：','负责人手机号码：','运维传真：','运维电话：','邮箱：','SSCC客户经理：'],
-		lable: ['只能输入数字"、" +" ";"','只能输入数字"、" +" ";"','只能输入数字和";"','只能输入数字"、" +" ";"','只能输入数字"、" +" ";"','只能输入英文字符']},
-	pageTxt_en = {};
-	
-	var pageTxt = pageTxt_cn;
+import utils from "@/libs/utils.js";
+import observer from "@/libs/observer.js";
 
-	var inputValue=['smsAlarmNun','leaderTelePhone','leaderMobilePhone','PerationFax','PerationPhone','email','SSCCAM'];
-	
-	
-	// observer.addBinding('messUserID', function(master, param){
-	// 	if(master != 'messUserID') return;
-	// 	data.userId = param;
-	// });
-	
-	export default {
-		name : 'extendifo',
-		data : function(){
-			 return{
-				pageTxt,
-				inputValue
-			}
-		},
-		methods: {
-			submit : function(){
-				var _this=this;				
-				this.$axios.post('http://localhost/sv.php',{
-					//键值对格式需要传输的数据
-				})
-				.then(function(response){
-				_this.userData=response.data.userData
-				})
-				.catch(function(error){
-				console.log(error);
-				});
-			},
-			goBack : function(){
-				this.$router.replace({ path: "/message/userEdit/mess" });
+var pageTxt_cn = {
+    tips: [
+      "短信报警号码：",
+      "负责人座机号码：",
+      "负责人手机号码：",
+      "运维传真：",
+      "运维电话：",
+      "邮箱：",
+      "SSCC客户经理："
+    ],
+    lable: [
+      '只能输入数字"、" +" ";"',
+      '只能输入数字"、" +" ";"',
+      '只能输入数字和";"',
+      '只能输入数字"、" +" ";"',
+      '只能输入数字"、" +" ";"',
+      "只能输入英文字符"
+    ]
+  },
+  pageTxt_en = {};
+
+var pageTxt = pageTxt_cn;
+
+var inputValue = [
+  "userAlarmSmsNum",
+  "userTelNum",
+  "userMobileNum",
+  "operationPhoneNum",
+  "operationFax",
+  "email",
+  "ssccManager"
+];
+// var inputValue;
+// for(var i=0; i<def.length;i++){
+//   inputValue.def[i]=''
+// }
+
+
+export default {
+  name: "extendifo",
+  data: function() {
+    return {
+      pageTxt,
+      inputValue
+    };
+  },
+  methods: {
+    submit() {
+      var _this = this;
+      utils.post(
+        "mx/userinfoExt/modify",
+        {
+          cmdID: 600012,
+          operator: "admin",
+          userID: _this.extend,
+          userAlarmSmsNum: _this.inputValue.userAlarmSmsNum,
+          userTelNum: _this.inputValue.userTelNum,
+          userMobileNum: _this.inputValue.userMobileNum,
+          operationPhoneNum: _this.inputValue.operationPhoneNum,
+          operationFax: _this.inputValue.operationFax,
+          email: _this.inputValue.email,
+          ssccManager: _this.inputValue.ssccManager
+        },
+        function(response) {
+			if(response.errcode==0){
+				alert(response.errinfo)
 			}
 		}
-	}
+      );
+    },
+    goBack: function() {
+      this.$router.replace({ path: "/message/userEdit/mess" });
+    }
+  },
+  props:["extend"],
+  created(){
+    console.log( "id",this.extend)
+      var _this = this;
+      utils.post(
+        "mx/userinfoExt/query",
+        {
+          cmdID: 600013,
+          userID:this.extend,
+          type: 0
+        },
+        function(response) {
+           this.inputValue=response.lists
+		}
+      );
+  }
+};
 </script>
 
 <style  scoped="scoped">
-.extendInfo{overflow: hidden; margin-top: 10px; font-size: 14px;  color:#666666;}
-.left_list{ float:left; width: 145px; margin-left: 5px;}
-.left_list li{line-height:30px; text-align: right; margin-top: 10px;}
-.center_list{float: left; margin-left: 10px; }
-.center_list li{margin-top: 10px;}
-.right_list{font-size: 14px; float: left; margin-left: 10px;}
-.right_list li{line-height:30px; text-align: left; margin-left: 5px; margin-top: 10px;}
+.extendInfo {
+  overflow: hidden;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666666;
+}
+.left_list {
+  float: left;
+  width: 145px;
+  margin-left: 5px;
+}
+.left_list li {
+  line-height: 30px;
+  text-align: right;
+  margin-top: 10px;
+}
+.center_list {
+  float: left;
+  margin-left: 10px;
+}
+.center_list li {
+  margin-top: 10px;
+}
+.right_list {
+  font-size: 14px;
+  float: left;
+  margin-left: 10px;
+}
+.right_list li {
+  line-height: 30px;
+  text-align: left;
+  margin-left: 5px;
+  margin-top: 10px;
+}
 
-.bottom_btn{margin-left: 160px;}
-.el-button:nth-child(1){width: 90px; height: 30px; background-color:#32CCF9; line-height: 7px; border:1px solid #32CCF9}
-.el-button:nth-child(2){margin:20px; width: 90px; height: 30px; background-color: #fff; border:1px solid #32CCF9;color:#32CCF9;line-height: 7px}
+.bottom_btn {
+  margin-left: 160px;
+}
+.el-button:nth-child(1) {
+  width: 90px;
+  height: 30px;
+  background-color: #32ccf9;
+  line-height: 7px;
+  border: 1px solid #32ccf9;
+}
+.el-button:nth-child(2) {
+  margin: 20px;
+  width: 90px;
+  height: 30px;
+  background-color: #fff;
+  border: 1px solid #32ccf9;
+  color: #32ccf9;
+  line-height: 7px;
+}
 </style>

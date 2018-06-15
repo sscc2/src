@@ -2,9 +2,9 @@
 	<div class="Ekey">
 		<!-- 头部 -->
 		<div class="header_txt">
-			<span>用户id：123</span>
-			<span>用户名称：123</span>
-			<span>Ekey总数：123</span>
+			<span>用户id：{{transmitData.userID}}</span>
+			<span>用户名称：{{transmitData.userName}}</span>
+			<span>Ekey总数：{{transmitData.EkeyCount}}</span>
 		</div>
 		<!-- 导航栏 -->
 		<div class="btnBox">
@@ -24,11 +24,6 @@
 				</div>
 			</el-table-column>
 		</el-table>
-
-		
-		<!-- <div class="_pagination" v-show="list.length!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
-		</div> -->
 		
 		<el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
 			<ul class="_dialog">
@@ -174,8 +169,6 @@ import utils    from '@/libs/utils.js';
 import observer from '@/libs/observer.js';
 import md5      from '@/libs/md5.js';
 
-//console.log(md5.hex_md5('111111'));
-
 	var pageTxt_cn = {
 		tips: {
 			ekey:'请在列表中选择一条记录！',del:'是否确认删除！',
@@ -203,8 +196,8 @@ import md5      from '@/libs/md5.js';
 		eInfo:{id:'',Ekey:'/C=CN/CN=',pass:'111111',notes:'',
         	valid:'',check:true,start:'',end:'',check1:false},
         err1: {id:false,Ekey:false,pass:false,start:false,end:false},
-		err2: {id:false,Ekey:false,pass:false,start:false,end:false}
-		
+		err2: {id:false,Ekey:false,pass:false,start:false,end:false},
+		transmitData:{userID:"123",userName:"31",EkeyCount:"1"}	
 	};
 	
 	observer.addBinding('messUserEkey', function(master, param){
@@ -222,6 +215,9 @@ import md5      from '@/libs/md5.js';
 			return data;
 		},
 		methods: {
+			created(){
+				
+			},
 			showAdd(){
 				var info = this.info, err = this.err1;
 				for(var key in info){

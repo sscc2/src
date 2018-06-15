@@ -14,9 +14,9 @@
 				</el-option>
 			</el-select>
 			<span class="txt">{{pageTxt.signal[1]}}：</span>
-			<el-input :model="searchInfo.ID"></el-input>
+			<el-input v-model="searchInfo.userID1"></el-input>
 			<span class="txt">{{pageTxt.signal[2]}}：</span>
-			<el-input :model="searchInfo.name"></el-input>
+			<el-input v-model="searchInfo.userID2"></el-input>
 			<el-button type="primary" plain @click='search'>{{pageTxt.signal[3]}}</el-button>
 		</div>
 
@@ -28,13 +28,14 @@
 		</div>
 
 		<!-- 表格 -->
-		<el-table :data="list"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row>
+		<el-table :data="list"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
 			<el-table-column width="55" type="index"></el-table-column>
-			<el-table-column prop="type" label="业务类型" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="oId" label="源用户ID" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="oName" label="源用户名" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="nId" label="目的用户ID" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="nName" label="目的用户名" show-overflow-tooltip></el-table-column>
+			<el-table-column type="selection" width="55"></el-table-column>
+			<el-table-column prop="bizType" label="业务类型" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="userName1" label="用户名称" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="userID2" label="用户ID" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="userName2" label="用户名称" show-overflow-tooltip></el-table-column>
 			<el-table-column label="操作" width="70" show-overflow-tooltip>
 				<div slot-scope="scope" class="_zero">
 					<img @click="delUser" src="@/img/deleticos.png">
@@ -47,34 +48,35 @@
 			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
 			<div class="rightTxt">共{{maxData}}条数据</div>
 		</div>
+		
+		<!-- 增加 -->
 		<el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
 			<ul class="_dialog">
 				<li>
 					<div class="leftBox">
 						<p class="txt">{{pageTxt.dialog[1]}}</p>
-					</div><div class="rightBox">
+					</div>
+					<div class="rightBox">
 						<el-select class='sel' v-model="creatInfo.type" placeholder="请选择">
 							<el-option v-for="item in pageTxt.options" :key="item.value" :label="item.label" :value="item.value">
 							</el-option>
 						</el-select>
 					</div>
-				</li><li>
+				</li>
+				<li>
 					<div class="leftBox">
 						<p class="txt">{{pageTxt.dialog[2]}}</p>
-					</div><div class="rightBox">
-						<el-select class='sel' v-model="creatInfo.user" placeholder="请选择">
-							<el-option v-for="item in userOption" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
 					</div>
-				</li><li>
+					<div class="rightBox">
+						 <el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
+					</div>
+				</li>
+				<li>
 					<div class="leftBox">
 						<p class="txt">{{pageTxt.dialog[3]}}</p>
-					</div><div class="rightBox">
-						<el-select class='sel' v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-							<el-option v-for="item in otherOption" :key="item.value" :label="item.label" :value="item.value">
-							</el-option>
-						</el-select>
+					</div>
+					<div class="rightBox">
+						<el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
 						<p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
 					</div>
 				</li>
@@ -89,104 +91,291 @@
 </template>
 
 <script>
-import utils    from '@/libs/utils.js';
+import utils from "@/libs/utils.js";
 
+var pageTxt_cn = {
+    tips: {
+      user: "请在列表中选择一条记录！",
+      del: "确认要删除该记录吗？",
+      err: "请选择用户和对端用户！"
+    },
+    signal: [
+      "业务类型 ",
+      "用户ID",
+      "用户ID",
+      "查询",
+      "创建通信关系",
+      "删除通信关系",
+      "业务类型",
+      "",
+      "",
+      "",
+      "",
+      "操作"
+    ],
+    options: [
+      { value: "0", label: "全部" },
+      { value: "1", label: "三方存管" },
+      { value: "2", label: "银期转账" },
+      { value: "3", label: "银基转账" },
+      { value: "4", label: "资金划拔" },
+      { value: "5", label: "信证报盘" },
+      { value: "6", label: "电子对账" },
+      { value: "7", label: "融资融券" },
+      { value: "8", label: "基金盘后" },
+      { value: "9", label: "转融通" },
+      { value: "10", label: "B转H" },
+      { value: "11", label: "交叉销售" },
+      { value: "12", label: "报价回购" },
+      { value: "13", label: "个股期权" },
+      { value: "14", label: "FISP" },
+      { value: "15", label: "私券报转" },
+      { value: "16", label: "云证通" },
+      { value: "17", label: "基金实时业务" },
+      { value: "18", label: "基金费用对账" }
+    ],
+    dialog: [
+      "创建通信关系",
+      "业务类型 ：",
+      "用户ID ：",
+      "用户ID ：",
+      "",
+      "提交",
+      "返回"
+    ]
+  },
+  pageTxt_en = {};
 
-	var pageTxt_cn = {
-		tips: {user:'请在列表中选择一条记录！',del:'确认要删除该记录吗？',err:'请选择用户和对端用户！'},
-		signal: ['业务类型 ','用户','对端用户','查询','创建通信关系','删除通信关系','业务类型','','','','','操作'],
-		options: [{value: '0',label: '全部'},{value: '1',label: '三方存管'},{value: '2',label: '银期转账'},
-			{value: '3',label: '银基转账'},{value: '4',label: '资金划拔'},{value: '5',label: '信证报盘'},
-			{value: '6',label: '电子对账'},{value: '7',label: '融资融券'},{value: '8',label: '基金盘后'},
-			{value: '9',label: '转融通'},{value: '10',label: 'B转H'},{value: '11',label: '交叉销售'},
-			{value: '12',label: '报价回购'},{value: '13',label: '个股期权'},{value: '14',label: 'FISP'},
-			{value: '15',label: '私券报转'},{value: '16',label: '云证通'},{value: '17',label: '基金实时业务'},
-			{value: '18',label: '基金费用对账'}],
-		dialog: ['创建通信关系','业务类型 ：','用户：','对端用户：','清空对端用户','提交','返回']
+var pageTxt = pageTxt_cn;
+
+export default {
+  name: "mess_signal",
+  data() {
+    return {
+		restaurants: [],
+		state1: '',
+
+      maxData: 478,
+      pageTxt,
+      searchInfo: { bizType: "-1", userID1: "", userID2:"" },
+      list: [
+        {
+          bizType: "电子对账",
+          userID1: "ftcsTest1000",
+          userName1: "王小虎",
+          userID2: "ftcsTest2222",
+          userName2: "王小虎"
+        }
+      ],
+      selects: [],
+      row: "",
+      dialogAdd: false,
+      creatInfo: { type: "0", user: "", other: [] },
+      userOption: [],
+      otherOption: []
+    };
+  },
+  methods: {
+    search() {
+		var _this=this
+	  utils.post("/mx/userComm/query",{
+		  cmdID:600031,
+		  bizType: "-1",
+		  userID1: _this.searchInfo.userID1,
+		  userID2: _this.searchInfo.userID2
+	  } ,function(response){
+		_this.list = response.lists
+	  });
 	},
-	pageTxt_en = {};
+    submit() {
+	var _this=this
+	  utils.post("/mx/userComm/add",{
+		  cmdID:600032,
+		  operator: "admin",		  
+		  bizType: 0,
+		  userID1: 13,
+      lists: ["12","10"],
+
+	  } ,function(response){
+      if(response.errcode==0){
+          alert(response.errinfo)
+      }
+	  });     
+    },	
+    currentRow: function(e) {
+      this.row = e;
+    },
+    currentPage: function(e) {
+    
+	},
+	selectionRow(val){
+	 this.selects=val
+	 console.log(this.selects)
+	},
+    delUser(e) {
+      if (this.selects.length != 1) {
+        utils.confirm({ message: "请在列表中选择一条记录！", type: 2 });
+      } else {
+        utils.post(
+          "mx/userComm/delete",
+          {
+            cmdID: 600033,
+			      operator: "admin",
+			      bizType: -1,
+            userID1: this.selects[0].userID1,
+            userID2: this.selects[0].userID2
+          },
+          function(response) {
+            if (response.errcode == 0) {
+              alert(response.errinfo);
+            } else {
+              alet("删除失败");
+            }
+          }
+        );
+      }		
+    },
+    clear(e) {
+      this.creatInfo.other = [];
+	},
 	
-	var pageTxt = pageTxt_cn;
-	
-	export default {
-		name: 'mess_signal',
-		data() {
-			return {
-				maxData:478,
-				pageTxt,
-				searchInfo: {type:'0',ID:'',name:''},
-	        	list: [{type: '电子对账', oId: 'ftcsTest1000', oName: '王小虎',nId: 'ftcsTest2222',nName: '王小虎'}],
-		        selects: [],
-		        row: '',
-		        dialogAdd: false,
-		        creatInfo: {type:'0',user:'',other: []},
-		        userOption: [],
-		        otherOption: []
-			};
-		},
-		methods: {
-			search(e){
-				utils.post('/info/query', this.searchInfo, function(res){
-					console.log(res)
-				});
-			},
-		    currentRow: function(e){
-		    	this.row = e;
-		    },
-		    currentPage: function(e){
-		    	console.log(e)
-			},
-			delUser(e){
-				var _this = this;
-				setTimeout(function(){
-					var obj = _this.row;
-					if(!obj){
-						utils.confirm({message:pageTxt.tips.user,type:'2'});
-						return;
-					}
-					utils.confirm({message:pageTxt.tips.user, fn:function(vm){
-						utils.post('/info/delete',{},function(res){
-							console.log(res)
-						});
-//						utils.confirm({message:'删除成功！',type:'1'});
-						
-					}, btn: 2});
-				},0);
-			},
-			clear(e){
-				this.creatInfo.other = [];
-			},
-			submit(){
-				console.log(this.creatInfo.other)
-			}
-		}
-	}
+
+	    querySearch(queryString, cb) {
+        var restaurants = this.restaurants;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll() {
+        return [
+          { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
+          { "value": "泷千家(天山西路店)", "address": "天山西路438号" },
+          { "value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
+          { "value": "贡茶", "address": "上海市长宁区金钟路633号" }
+        ];
+      },
+      handleSelect(item) {
+        console.log(item);
+      }
+
+
+
+  },
+
+  mounted() {
+      this.restaurants = this.loadAll();
+    },
+  created() {
+    var _this = this;
+    utils.post(
+      "mx/userComm/query",
+      {
+        cmdID: 600031,
+        bizType: -1,
+        userID1: "",
+        userID2: ""
+      },
+      function(response) {
+        _this.list = response.lists;
+            console.log("this",this)
+      }
+    );
+  }
+};
+
+
 </script>
 
 <style scoped="scoped">
-	/* 头部 */
-	.header{height:47px;  border-bottom:1px solid #ccc;}
-	.header_txt{line-height:47PX;  font-size:16px;  color:#656a73;  line-height:47px;  margin-left:17px;  font-weight:bold;}
+/* 头部 */
+.header {
+  height: 47px;
+  border-bottom: 1px solid #ccc;
+}
+.header_txt {
+  line-height: 47px;
+  font-size: 16px;
+  color: #656a73;
+  line-height: 47px;
+  margin-left: 17px;
+  font-weight: bold;
+}
 
-	/* 文本 */
-	.signal{padding:22px}
-	.user *{vertical-align:middle}
-	.userH .el-input{width:210px;margin-right:10px}
-	.searchSel{width: 120px;margin-right: 20px;line-height: 30px;}
-	.userH >.el-button{margin-left:35px; width:90px; height:30px; background-color: #32ccf9; line-height:0px; border:0; color:white}
-	.txt{font-size:13px; color:#666666;}
+/* 文本 */
+.signal {
+  padding: 22px;
+}
+.user * {
+  vertical-align: middle;
+}
+.userH .el-input {
+  width: 210px;
+  margin-right: 10px;
+}
+.searchSel {
+  width: 120px;
+  margin-right: 20px;
+  line-height: 30px;
+}
+.userH > .el-button {
+  margin-left: 35px;
+  width: 90px;
+  height: 30px;
+  background-color: #32ccf9;
+  line-height: 0px;
+  border: 0;
+  color: white;
+}
+.txt {
+  font-size: 13px;
+  color: #666666;
+}
 
-	/* 导航 */
-	.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color:#5C759D; overflow: hidden;}
-	.btnBox div{float: left; cursor: pointer; margin-left: 30px}
-	.btnBox span{margin-left: 5px;}
-	.btnBox div:nth-child(1){margin-left: 0;}
+/* 导航 */
+.btnBox {
+  margin-bottom: 10px;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #5c759d;
+  overflow: hidden;
+}
+.btnBox div {
+  float: left;
+  cursor: pointer;
+  margin-left: 30px;
+}
+.btnBox span {
+  margin-left: 5px;
+}
+.btnBox div:nth-child(1) {
+  margin-left: 0;
+}
 
-	/* 表格 */
-	._zero > img{cursor: pointer; margin-left: 14px;}
-	
-	/* 分页 */
-	.sel{width: 350px;line-height: 40px;}	
+/* 表格 */
+._zero > img {
+  cursor: pointer;
+  margin-left: 14px;
+}
 
-	.leftBox{height: 30px;  margin-top: 10px;}
+/* 分页 */
+.sel {
+  width: 350px;
+  line-height: 40px;
+}
+
+.leftBox {
+  height: 30px;
+  margin-top: 10px;
+}
+
 </style>
+
+
+
