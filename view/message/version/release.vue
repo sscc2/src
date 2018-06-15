@@ -149,13 +149,13 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 					return;
 				}
 				delTheme.row = row[0];
-				utils.hints({txt:pageTxt.tips.del, fn1:delTheme});
+				utils.hints({txt:pageTxt.tips.del, yes:delTheme});
 			},
 			del(ind, row){
 //				console.log(ind, row);
 				delTheme.index = ind;
 				delTheme.row = row;
-				utils.hints({txt:pageTxt.tips.del, fn1:delTheme});
+				utils.hints({txt:pageTxt.tips.del, yes:delTheme});
 			},
 			detailTheme(){
 				observer.execute('messDetailTheme',{sync:true, obj: this.row});

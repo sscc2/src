@@ -178,7 +178,7 @@ function utils(){
 			now: $hints.find('#_now'),
 			show: function(opt){
 				hintsObj.ctxt[0].innerHTML = opt.txt;
-				if(opt==3) hintsObj.now.show();
+				if(opt.btn==3) hintsObj.now.show('inline-block');
 				else hintsObj.now.hide();
 				kit.body().appendChild(this.el);
 			},
@@ -191,7 +191,8 @@ function utils(){
 				if(typeof(this.noFn)=="function") this.noFn();
 			},
 			yesFn: null,
-			noFn: null
+			noFn: null,
+			nowFn: null
 		};
 		if(globalVar.get('lang')!='cn'){
 			hintsObj.title.text('Tips');
@@ -211,14 +212,19 @@ function utils(){
 			hintsObj.runNo();
 			hintsObj.hide();
 		});
+		hintsObj.now.click(function(e){
+			if(typeof(hintsObj.nowFn)=="function") hintsObj.nowFn();
+			hintsObj.hide();
+		});
 		$hints.find('#_close').click(function(e){
 			hintsObj.runNo();
 			hintsObj.hide();
 		});
 		this.hints = function(opt){
 			if(typeof(opt)!="object") opt = {};
-			hintsObj.yesFn = opt.fn1;
-			hintsObj.noFn = opt.fn2;
+			hintsObj.yesFn = opt.yes;
+			hintsObj.noFn = opt.no;
+			hintsObj.nowFn = opt.now;
 			hintsObj.show(opt);
 		};
 	};

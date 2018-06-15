@@ -4,7 +4,9 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-input placeholder="" v-model="userID" clearable></el-input>
+			<!--<el-input placeholder="" v-model="userID" clearable></el-input>-->
+			<el-autocomplete class="autocomplete" v-model="userID" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect">
+			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="userName" clearable></el-input>-->
 			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[3]}}</el-button>
@@ -121,7 +123,7 @@ import observer  from '@/libs/observer.js';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.el-input{width: 180px;line-height: 30px;}
+	.autocomplete{width: 240px;line-height: 30px;}
 	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}

@@ -18,6 +18,8 @@ import sidebar   from '@/view/sidebar.vue';
 import globalVar from '@/libs/globalVar.js';
 	
 	
+	
+	
 	export default {
 		name: 'home',
 		data() {
