@@ -4,8 +4,11 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<!--<el-input placeholder="" v-model="userID" clearable></el-input>-->
-			<el-autocomplete class="autocomplete" v-model="userID" :fetch-suggestions="querySearch" :trigger-on-focus="false" @select="handleSelect">
+			<el-autocomplete class="autocomplete" v-model="idName" :fetch-suggestions="fetch" :trigger-on-focus="false" @select="idSelect">
+				<div slot-scope="{item}">
+					<span class="name">{{item.userID}}</span>
+				    <span class="addr">({{item.userName}})</span>
+				</div>
 			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="userName" clearable></el-input>-->
@@ -29,9 +32,6 @@
 			<el-table-column prop="maxDaysOfTopic" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
-						<img src="@/img/altericos.png" alt="">
-					</el-button>-->
 					<img @click="edit" src="@/img/theme/edit_2.png" alt="">
 				</div>
 			</el-table-column>
@@ -65,6 +65,7 @@ import observer  from '@/libs/observer.js';
 		pageTxt,
 		userID: '',
 		userName: '',
+		idName: '',
 		data: [/*{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}*/],
 		row: '',
 		selects: [],
@@ -77,6 +78,16 @@ import observer  from '@/libs/observer.js';
 //		if(master != 'messUpload') return;
 //		data.obj = param;
 //	});
+
+
+	var idList = [];
+	for (var i = 0; i < 10; i++) {
+		var obj = {userID:'userID'+i,userName:'userName'+(i+1)};
+		idList.push(obj)
+	}
+
+
+
 	
 	export default {
 		name: 'message_userSet',
@@ -86,6 +97,19 @@ import observer  from '@/libs/observer.js';
 		methods: {
 			search(){
 				search();
+			},
+			fetch(str, cb){
+				var idName,i,len = idList.length,obj,tem=[];
+				for (i = 0; i < len; i++) {
+					obj = idList[i];
+					idName = obj.userID+obj.userName;
+					if(idName.indexOf(str)!=-1) tem.push(obj);
+				}
+				cb(tem);
+			},
+			idSelect(item){
+				this.userID = item.userID;
+				this.idName = item.userID+'('+item.userName+')';
 			},
 			currenRow(row){
 				this.row = row;
@@ -104,6 +128,12 @@ import observer  from '@/libs/observer.js';
 		mounted(){
 			_this = this;
 			search();
+			
+			idList = globalVar.get('useridList');
+			if(!idList.length) observer.addBinding('useridReady', function(master, list){
+				if(master != 'useridReady') return;
+				idList = list;
+			});
 		}
 	};
 	function search(){

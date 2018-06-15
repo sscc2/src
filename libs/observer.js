@@ -32,7 +32,7 @@
 		{
 			var args = arguments, master = args[0],
 				dict = dictionary;
-			if(!dict[master]) return console.warn('execute "'+ master+'" is no Binding!');
+			if(!dict[master]) return /*console.warn('execute "'+ master+'" is no Binding!')*/;
 			dict[master].forEach(function(fn){
 				fn.apply(fn, args);
 			});

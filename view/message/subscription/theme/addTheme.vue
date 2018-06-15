@@ -76,11 +76,11 @@
 		<div id="slotTitle">
 			<div class="slotTitle">
 				<div id="all" class="all">
-					<el-checkbox></el-checkbox>
+					<!--<el-checkbox></el-checkbox>-->
 				</div>
 				<span class="itemTxt">{{pageTxt.list[0]}}</span>
 				<span class="itemTxt">{{pageTxt.list[1]}}</span>
-				<span class="itemTxt">{{pageTxt.list[2]}}</span>
+				<!--<span class="itemTxt">{{pageTxt.list[2]}}</span>-->
 			</div>
 		</div>
 	</div>
@@ -97,7 +97,7 @@ import observer  from '@/libs/observer.js';
 	lang.cn = {
 		tips: {},
 		label: ['添加用户主题','主题名称：','发布者ID：','发布者名称：','主题描述：','主题内容：',
-			'有效天数：','接收方：','操作员：','可订阅用户','已订阅用户'],
+			'有效天数：','接收方：','操作员：','通信关系用户','可订阅用户'],
 		list: ['用户ID','用户名','AppID','其他']
 	};
 	lang.en = {};
@@ -105,10 +105,12 @@ import observer  from '@/libs/observer.js';
 	
 	var list = [];
 	for (var i = 0; i < 10; i++) {
-		list.push({
-			label:'全部的数据'+i, key:i, id: kit.randomNum(10,99),
-			name: '用户'+i,other:'其它'
-		});
+		var obj = {
+			key:i, userID: 'userID'+kit.randomNum(10,99),
+			userName: '用户名'+i
+		};
+		obj.label = obj.userID + obj.userName;
+		list.push(obj);
 	}
 	
 	var data = {
@@ -145,25 +147,23 @@ import observer  from '@/libs/observer.js';
 		},
 		methods: {
 			handleChange(remain, direction, moved){
-				kit('.slotTitle').each(function(el){
-					el.check = true;
-				}).trigger('click');
+//				kit('.slotTitle').each(function(el){
+//					el.check = true;
+//				}).trigger('click');
 //				console.log(remain, moved);
 				submitList = remain;
-//				if(direction == 'left'){}
 			},
 			leftCheck(arr, i){
+				return;
 				var curLen = arr.length, remainLen = submitList.length,
 					listLen = this.list.length, el = kit('.addTheme .slotTitle').eq(0);
-//				console.log(curLen, remainLen, listLen);
+				console.log(curLen, remainLen, listLen);
 				el[0].check = false;
 				if(listLen - remainLen == curLen){
 					el.trigger('click');
 				} else {
 					el.find('.el-checkbox__input')[0].className ='el-checkbox__input';
 				}
-				
-				
 			},
 			rightCheck(arr, i){},
 			submit(e){
@@ -208,7 +208,7 @@ import observer  from '@/libs/observer.js';
 				}
 				_this.list = data.lists;
 			});
-//			addTitle();
+			addTitle();
 		},
 		watch: {
 			sync(cur, old){
@@ -217,12 +217,6 @@ import observer  from '@/libs/observer.js';
 					first = true;
 //					setTimeout(addTitle, 40);
 				}
-			},
-			allLeft(cur){
-				setTimeout(function(){
-					_this.allLeft = [0,1,2,3,4,5,6,7,8,9];
-				},100);
-				
 			}
 		},
 		components: {}
@@ -241,6 +235,7 @@ import observer  from '@/libs/observer.js';
 			
 			
 			function ck(e){
+				return;
 //				e.stopImmediatePropagation();
 //				e.preventDefault();
 //				var qq=document.querySelector('.addTheme .el-checkbox-group .el-checkbox__original');
@@ -283,7 +278,7 @@ import observer  from '@/libs/observer.js';
 	.jg{padding-bottom: 30px;}
 	
 	.transfer{text-align: center;}
-	.itemTxt{display: inline-block;width: 100px;font-size: 13px;line-height: 40px;color: #666;vertical-align: middle;}
+	.itemTxt{display: inline-block;width: 150px;font-size: 13px;line-height: 40px;color: #666;vertical-align: middle;}
 	#slotTitle{display: none;}
 	.slotTitle{background: #F6F6F6;border: 1px solid #D8D8D8;border-width: 1px 0;}
 	.all{font-size: 14px;width: 36px;display: inline-block;padding-left: 15px;pointer-events: none;}

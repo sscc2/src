@@ -1,7 +1,8 @@
 
 var vars = {};
 vars.lang = 'cn';
-vars.loadTime = 0.1;
+vars.useridList = null;
+vars.loadTime = 2;
 
 (function(){
 	var local = window.location; //localhost
@@ -14,7 +15,7 @@ vars.loadTime = 0.1;
 
 //vars.urlIP = 'http://192.168.22.212:8081/fdep/';  //内网
 //vars.urlIP = 'http://192.168.218.35:8081/fdep/';  //小焕
-vars.urlIP = 'http://192.168.22.110:8081/fdep/';  //曼萍
+//vars.urlIP = 'http://192.168.22.110:8081/fdep/';  //曼萍
 
 
 export default {
@@ -25,5 +26,5 @@ export default {
  * lang         语言
  * urlIP        请求的IP地址
  * loadTime     全局接口请求的等待时间
- * 
+ * useridList   初始化用户ID
  */
