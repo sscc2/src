@@ -116,7 +116,7 @@ import observer  from '@/libs/observer.js';
 		sync: false,
 		obj: null,
 		info: {
-			cmdID: '600044',operator:'admin', topicName:'主题名称', pubUserID:'发布者ID', pubUserName:'发布者名称',
+			operator:'admin', topicName:'主题名称', pubUserID:'发布者ID', pubUserName:'发布者名称',
 			topicDescr:'主题描述',topicInfo:'主题内容', effectiveDays: '7', canSubsUserList:[]
 		},
 		list: list,
@@ -175,7 +175,8 @@ import observer  from '@/libs/observer.js';
 					tem.push(this.list[ind]);
 				}
 				info.canSubsUserList = tem;
-				utils.post(info, function(data){
+				info.cmdID = '600044';
+				utils.post('mx/pubTopic/add', info, function(data){
 					console.log('增加主题：',data);
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
 					_this.list = data.lists;

@@ -6,6 +6,7 @@ textarea{resize: none !important;}
 
 ._zero{font-size: 0;line-height: 0;}
 ._iBtn{padding: 6px 10px;font-size: 16px;}
+
 /* 分页 */
 ._pagination{text-align: left;padding: 20px 0px;}
 ._pagination > div{padding:0px;display: inline-block;vertical-align: middle;}
@@ -17,12 +18,14 @@ textarea{resize: none !important;}
 	-webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.2) inset;box-shadow: 0 2px 4px 0 rgba(0,0,0,.2) inset;}
 .el-pagination.is-background .el-pager li:not(.disabled):hover{background: #FFF;color: #7388a7;}
 ._pagination .rightTxt{display: inline-block;vertical-align: middle;padding-left: 10px;font-size: 13px;line-height: 28px;color: #999;}
+
 /* 弹窗 */
 ._dialog {font-size: 0;}
 ._dialog li{margin-bottom: 10px;}
 ._dialog .leftBox{display: inline-block;width: 180px;text-align: right;vertical-align: top;}
 ._dialog .rightBox{display: inline-block;vertical-align: top;padding-left: 10px;}
 ._dialog .checkbox{font-size: 16px;line-height: 40px;}
+
 /* 输入框 */
 .el-input input, .el-select .el-input input{border: 1px solid #D7D8DA;padding: 0 24px 0 12px;height: 30px;border-radius: 0;}
 .el-input input:focus, .el-select .el-input.is-focus .el-input__inner{border:2px solid #32CCF9;}
@@ -31,12 +34,16 @@ textarea{resize: none !important;}
 
 .el-icon-date{line-height: 30px !important;}
 .el-select  span { display: inline;}
+
+.el-input__suffix{line-height: 30px ;}
+
 /* 原dialog弹窗 */
 .el-dialog__body{border-top: 1px solid #D8D8D8;}
 .el-textarea__inner{border-radius: 0;}
 .el-textarea__inner:focus{border: 2px solid #32CCF9;}
 .el-dialog__header{padding: 0 0 0 20px;}
 .el-dialog__title{color: #666;line-height: 50px;}
+
 /* 表格  */
 .el-table{border: 1px solid #EFEFEF;border-width: 1px 1px 0;}
 .el-table td, .el-table th{padding: 0;}
@@ -72,7 +79,7 @@ textarea{resize: none !important;}
 .el-form-item.is-success .el-input__inner:focus{border-color: #32ccf9;}
 
 /* 日期 */
-.el-date-editor{border: 1px solid #d7d8da;border-radius: 0;}
+.el-date-editor{border-color: #d7d8da;border-radius: 0;}
 .el-range-editor.is-active, .el-range-editor.is-active:hover{border: 2px solid #32CCF9;}
 .el-date-editor .el-range-separator{width: auto;}
 .el-picker-panel__icon-btn{z-index: 2;}
@@ -87,6 +94,7 @@ textarea{resize: none !important;}
 #_weakTips ._panle{min-width: 328px;max-width: 500px;min-height: 132px;background: rgba(38,38,38,0.7);padding: 56px 30px;
 	display: inline-block;top: 208px;transform: translateY(50%);border-radius: 8px;}
 #_weakTips ._container{font-size: 14px;line-height: 20px;color: #FFF;white-space: normal;}
+
 /* 带按钮的消息框 */
 #_hints{background: rgba(59,65,75,0.2);}
 #_hints ._panle{display: inline-block;width: 600px;height: 300px;margin-top: 180px;background: #FFF;border-radius: 4px;}
