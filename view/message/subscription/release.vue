@@ -233,9 +233,10 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		var day = new Date(), str = '', t;
 		str += day.getFullYear() + '-';
 		t = day.getMonth() + 1;
-		str += (t<10 ? '0'+t : t) + '-',
-		str += day.getDate();
-		return [str+' 00:00:00',str+' 23:59:59'];
+		str += (t<10 ? '0'+t : t) + '-';
+//		str += day.getDate();
+//		return [str+' 00:00:00',str+' 23:59:59'];
+		return [str+'01 00:00:00',str+'28 23:59:59'];
 	}
 </script>
 
