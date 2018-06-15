@@ -49,7 +49,7 @@ import observer from "@/libs/observer.js";
 import Password from "@/view/message/user/password.vue";
 import Upload from "@/view/message/user/upload.vue";
 import utils from "@/libs/utils.js";
-import bus from "@/libs/bus.js"
+import bus from "@/libs/bus.js";
 
 var _this, _keyObj;
 var pageTxt = {
@@ -75,15 +75,6 @@ var pageTxt = {
   }
 };
 
-function userEkeyReady(master, subcode, param) {
-  if (master != "componentInit") return;
-  if (subcode == "userEkey"){
-    observer.execute("messUserEkey", _keyObj);
-    observer.delBinding("componentInit", userEkeyReady);
-  }
-}
-observer.addBinding("componentInit", userEkeyReady);
-
 export default {
   name: "file_user",
   data() {
@@ -99,8 +90,8 @@ export default {
           { userID: "A", userName: "123" }
         ]
       },
-      selects:[],
-      b:"",
+      selects: [],
+      b: "",
       row: "",
       currentPage: 1,
       pagesize: 20
@@ -108,7 +99,8 @@ export default {
   },
 
   methods: {
-    // 查询用户ID\名称
+
+    // 查询用户
     userSearch: function(e) {
       var _this = this;
       utils.post(
@@ -125,25 +117,21 @@ export default {
     },
 
     // 增加用户
-    userAdd: function(e) {
+    userAdd: function() {
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
 
     // 修改用户
-    userEdit: function(e) {
-      this.$router.replace({ path: "/message/userEdit/mess" });
-      gotoEdit();
-    },
-
-    // 修改数据
-    editAll: function(e) {
+    editAll: function() {
       if (this.selects.length != 1) {
         utils.confirm({ message: pageTxt.tips.user, type: 2 });
       } else {
-        gotoEdit(this.selects[0]);
+        this.$router.replace({ path: "/message/userEdit/mess" });
+        bus.$emit("msg", this.selects[0].userID);
       }
     },
-    // 删除数据
+
+    // 删除用户
     delAll: function() {
       if (this.selects.length != 1) {
         utils.confirm({ message: pageTxt.tips.user, type: 2 });
@@ -167,23 +155,34 @@ export default {
         );
       }
     },
+
     // 修改密码
     userEncrypt: function(e) {
       if (this.selects.length != 1) {
         utils.confirm({ message: pageTxt.tips.pass, type: 2 });
       } else {
-        this.b=this.selects[0].userID
+        this.b = this.selects[0].userID;
         observer.execute("messUserPass", this.row);
       }
+    },
+
+    // 导入拓展
+    userImports: function(e) {
+      // observer.execute("messUpload", true);
     },    
 
+    // 修改用户（表）
+    userEdit: function(e) {
+      this.$router.replace({ path: "/message/userEdit/mess" });
+      gotoEdit();
+    },
+
+    // 删除用户（表）
     userDel: function(index, rows) {
       rows.splice(index, 1);
     },
 
-    userImports: function(e) {
-      observer.execute("messUpload", true);
-    },
+
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -209,19 +208,19 @@ export default {
       this.$router.replace({ path });
     },
     next: function(e) {},
-    imports: function(e) {},
-
-
-
-    
+    imports: function(e) {}
   },
 
   //初始化数据
   created() {
-    _this = this;
+    var _this = this;
     utils.post(
       "mx/userinfo/queryLists",
-      { cmdID: 600001, userID: "", userName: "" },
+      {
+        cmdID: 600001,
+        userID: "",
+        userName: ""
+      },
       function(response) {
         _this.userData = response;
       }
@@ -237,14 +236,6 @@ export default {
   mounted() {},
   components: { Password, Upload }
 };
-
-function gotoEdit(obj) {
-  setTimeout(function() {
-    _keyObj = obj ? obj : _this.row;
-    observer.execute("messUserEdit", _keyObj);
-    _this.$router.replace({ path: "/message/userEdit/mess" });
-  }, 0);
-}
 </script>
 
 <style scoped="scoped">

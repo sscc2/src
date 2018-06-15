@@ -164,167 +164,255 @@
 </template>
 
 <script>
-import kit      from '@/libs/kit.js';
-import utils    from '@/libs/utils.js';
-import observer from '@/libs/observer.js';
-import md5      from '@/libs/md5.js';
+import kit from "@/libs/kit.js";
+import utils from "@/libs/utils.js";
+import observer from "@/libs/observer.js";
+import md5 from "@/libs/md5.js";
 
-	var pageTxt_cn = {
-		tips: {
-			ekey:'请在列表中选择一条记录！',del:'是否确认删除！',
-			id:'请输入用户ID',Ekey:'请输入Ekey名称',pass:'请输入软加密密码',
-			start:'请选择软加密开始时间',end:'束时间不能小于开始时间'
-		},
-		lable: ['创建Ekey','修改Ekey','删除Ekey','提交','返回','Ekey主题名','操作'],
-		dialog: ['创建Ekey','修改Ekey','用户ID：','Ekey名称：','软加密密码：','注释：','Ekey有效期：',
-		'启用软加密：','软加密开始时间：','软加密结束时间：','修改软加密密码','提 交','返 回','必填项...']
-	},
-	pageTxt_en = {};
-	
-	var pageTxt = pageTxt_cn;
-	var data = {
-		pageTxt,
-		userID: {},
-		list: [{ekeyName:'/C=CN/CN=ABC'}],
-		selects: [],
-		addEkey: false,
-		editEkdy: false,
-		info:{id:'',Ekey:'/C=CN/CN=',pass:'111111',notes:'',
-        	valid:'',check:false,start:'',end:''},
-		addEkey: false,
-		editEkdy: false,
-		eInfo:{id:'',Ekey:'/C=CN/CN=',pass:'111111',notes:'',
-        	valid:'',check:true,start:'',end:'',check1:false},
-        err1: {id:false,Ekey:false,pass:false,start:false,end:false},
-		err2: {id:false,Ekey:false,pass:false,start:false,end:false},
-		transmitData:{userID:"123",userName:"31",EkeyCount:"1"}	
-	};
-	
-	observer.addBinding('messUserEkey', function(master, param){
-		if(master != 'messUserEkey') return;
-		if(param){
-			data.userID = param;
-			data.info.id = data.eInfo.id = param.id;
-		}
-		console.log('messUserEkey',param)
-	});
-	
-	export default {
-		name: 'user-Ekey',
-		data() {
-			return data;
-		},
-		methods: {
-			created(){
-				
-			},
-			showAdd(){
-				var info = this.info, err = this.err1;
-				for(var key in info){
-					info[key] = '';
-					err[key] = false;
-				}
-				info.id = data.userID.id;
-				info.Ekey = '/C=CN/CN=';
-				info.pass = '111111';
-				info.check = false;
-				this.addEkey = true;
-			},
-			showEdit(){
-				var info = this.eInfo, err = this.err2;
-				for(var key in info){
-					info[key] = '';
-					err[key] = false;
-				}
-				info.check = true;
-				info.id = data.userID.id;
-				info.Ekey = '/C=CN/CN=';
-				info.pass = '111111';
-				info.check1 = false;
-				this.editEkdy = true;
-			},
-			del(){},
-			back(){
-				this.$router.replace({path: '/message/user'});
-			},
-			currentRow: function(e){
-		    	console.log(e);
-			},
-		    currentPage: function(e){
-		    	console.log(e);
-			},
-			checkAdd(e){
-				var key, el;
-				el = e.type=='blur' ? e.target : e.$el.children[0];
-				key = el.name;
-				console.log(key)
-				if(!this.info[key]){
-					this.err1[key] = true;
-				} else this.err1[key] = false;
-				
-			},
-			checkEdit(e){
-				var key, el;
-				el = e.type=='blur' ? e.target : e.$el.children[0];
-				key = el.name;
-				console.log(key);
-				if(!this.eInfo[key]){
-					this.err2[key] = true;
-				} else this.err[key] = false;
-				
-			},
-			submitAdd(){
-				this.$axios;
-				var info = this.info, err = this.err1, flag = false,
-				must= ('id,Ekey,pass,start,end').split(',');
-				for(var i=0; i<must.length;i++){
-					if(!info[must[i]]){
-						err[must[i]] = true;
-						flag = true;
-					}
-				}
-				if(flag) return;
-			},
-			submitEdit(){
-				var info = this.eInfo, err = this.err2, flag = false,
-				must= ('id,Ekey,pass,start,end').split(',');
-				for(var i=0; i<must.length;i++){
-					if(!info[must[i]]){
-						err[must[i]] = true;
-						flag = true;
-					}
-				}
-				if(flag) return;
-			}
-		}
-	};
-	observer.execute('componentInit', 'userEkey', true);
+var pageTxt_cn = {
+    tips: {
+      ekey: "请在列表中选择一条记录！",
+      del: "是否确认删除！",
+      id: "请输入用户ID",
+      Ekey: "请输入Ekey名称",
+      pass: "请输入软加密密码",
+      start: "请选择软加密开始时间",
+      end: "束时间不能小于开始时间"
+    },
+    lable: [
+      "创建Ekey",
+      "修改Ekey",
+      "删除Ekey",
+      "提交",
+      "返回",
+      "Ekey主题名",
+      "操作"
+    ],
+    dialog: [
+      "创建Ekey",
+      "修改Ekey",
+      "用户ID：",
+      "Ekey名称：",
+      "软加密密码：",
+      "注释：",
+      "Ekey有效期：",
+      "启用软加密：",
+      "软加密开始时间：",
+      "软加密结束时间：",
+      "修改软加密密码",
+      "提 交",
+      "返 回",
+      "必填项..."
+    ]
+  },
+  pageTxt_en = {};
+
+var pageTxt = pageTxt_cn;
+var data = {
+  pageTxt,
+  userID: {},
+  list: [{ ekeyName: "/C=CN/CN=ABC" }],
+  selects: [],
+  addEkey: false,
+  editEkdy: false,
+  info: {
+    id: "",
+    Ekey: "/C=CN/CN=",
+    pass: "111111",
+    notes: "",
+    valid: "",
+    check: false,
+    start: "",
+    end: ""
+  },
+  addEkey: false,
+  editEkdy: false,
+  eInfo: {
+    id: "",
+    Ekey: "/C=CN/CN=",
+    pass: "111111",
+    notes: "",
+    valid: "",
+    check: true,
+    start: "",
+    end: "",
+    check1: false
+  },
+  err1: { id: false, Ekey: false, pass: false, start: false, end: false },
+  err2: { id: false, Ekey: false, pass: false, start: false, end: false },
+  transmitData: { userID: "123", userName: "31", EkeyCount: "1" }
+};
+
+// observer.addBinding("messUserEkey", function(master, param) {
+//   if (master != "messUserEkey") return;
+//   if (param) {
+//     data.userID = param;
+//     data.info.id = data.eInfo.id = param.id;
+//   }
+//   console.log("messUserEkey", param);
+// });
+
+export default {
+  name: "user-Ekey",
+  data() {
+    return data;
+  },
+  methods: {
+    created() {},
+    showAdd() {
+      var info = this.info,
+        err = this.err1;
+      for (var key in info) {
+        info[key] = "";
+        err[key] = false;
+      }
+      info.id = data.userID.id;
+      info.Ekey = "/C=CN/CN=";
+      info.pass = "111111";
+      info.check = false;
+      this.addEkey = true;
+    },
+    showEdit() {
+      var info = this.eInfo,
+        err = this.err2;
+      for (var key in info) {
+        info[key] = "";
+        err[key] = false;
+      }
+      info.check = true;
+      info.id = data.userID.id;
+      info.Ekey = "/C=CN/CN=";
+      info.pass = "111111";
+      info.check1 = false;
+      this.editEkdy = true;
+    },
+    del() {},
+    back() {
+      this.$router.replace({ path: "/message/user" });
+    },
+    currentRow: function(e) {
+      console.log(e);
+    },
+    currentPage: function(e) {
+      console.log(e);
+    },
+    checkAdd(e) {
+      var key, el;
+      el = e.type == "blur" ? e.target : e.$el.children[0];
+      key = el.name;
+      console.log(key);
+      if (!this.info[key]) {
+        this.err1[key] = true;
+      } else this.err1[key] = false;
+    },
+    checkEdit(e) {
+      var key, el;
+      el = e.type == "blur" ? e.target : e.$el.children[0];
+      key = el.name;
+      console.log(key);
+      if (!this.eInfo[key]) {
+        this.err2[key] = true;
+      } else this.err[key] = false;
+    },
+    submitAdd() {
+      this.$axios;
+      var info = this.info,
+        err = this.err1,
+        flag = false,
+        must = "id,Ekey,pass,start,end".split(",");
+      for (var i = 0; i < must.length; i++) {
+        if (!info[must[i]]) {
+          err[must[i]] = true;
+          flag = true;
+        }
+      }
+      if (flag) return;
+    },
+    submitEdit() {
+      var info = this.eInfo,
+        err = this.err2,
+        flag = false,
+        must = "id,Ekey,pass,start,end".split(",");
+      for (var i = 0; i < must.length; i++) {
+        if (!info[must[i]]) {
+          err[must[i]] = true;
+          flag = true;
+        }
+      }
+      if (flag) return;
+    }
+  }
+};
+// observer.execute("componentInit", "userEkey", true);
 </script>
 
 <style scoped="scoped">
-	/* 头部 */
-	.header_txt{font-size: 14px ;color: #666666; margin-bottom: 27px;  margin-top: 10px;}
-	.header_txt > span:nth-child(2),.header_txt > span:nth-child(3){margin-left: 55px;}
-	
-	/* 导航栏 */
-	.btnBox{margin-bottom: 12px; font-size: 13px; color:#5C759D; overflow: hidden;}
-	.btnBox div{float: left; cursor: pointer}
-	.btnBox div:nth-child(2){margin-left: 32px;}
-	.btnBox div:nth-child(3){margin-left: 32px;}
-	.btnBox div span {margin-left: 5px; }
+/* 头部 */
+.header_txt {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 27px;
+  margin-top: 10px;
+}
+.header_txt > span:nth-child(2),
+.header_txt > span:nth-child(3) {
+  margin-left: 55px;
+}
 
-	.picker{width: 200px;}
-	.red{color: #F56C6C;margin-left: 10px;}
-	.txt{font-size: 16px;line-height: 40px;}
+/* 导航栏 */
+.btnBox {
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #5c759d;
+  overflow: hidden;
+}
+.btnBox div {
+  float: left;
+  cursor: pointer;
+}
+.btnBox div:nth-child(2) {
+  margin-left: 32px;
+}
+.btnBox div:nth-child(3) {
+  margin-left: 32px;
+}
+.btnBox div span {
+  margin-left: 5px;
+}
 
-	/* 表格 */
-	._zero div{overflow: hidden;float: left;cursor: pointer}
-	._zero div:nth-child(2),._zero div:nth-child(3){margin-left: 15px;}
+.picker {
+  width: 200px;
+}
+.red {
+  color: #f56c6c;
+  margin-left: 10px;
+}
+.txt {
+  font-size: 16px;
+  line-height: 40px;
+}
 
+/* 表格 */
+._zero div {
+  overflow: hidden;
+  float: left;
+  cursor: pointer;
+}
+._zero div:nth-child(2),
+._zero div:nth-child(3) {
+  margin-left: 15px;
+}
 
-	._dialog li{margin-bottom: 10px;}
-	.txt[data-v-43ebc1a0] {line-height: 30px;}
-	.txt[data-v-43ebc1a0] {top:-3px}
-	._dialog .checkbox{line-height: 25px;}
-
+._dialog li {
+  margin-bottom: 10px;
+}
+.txt[data-v-43ebc1a0] {
+  line-height: 30px;
+}
+.txt[data-v-43ebc1a0] {
+  top: -3px;
+}
+._dialog .checkbox {
+  line-height: 25px;
+}
 </style>

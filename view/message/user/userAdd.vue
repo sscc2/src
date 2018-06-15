@@ -52,7 +52,7 @@
   								<el-radio v-model="info.isModifyDefaultPasswd" :label="1">不启用</el-radio>
 							</li>
 							<li>
-								<el-form-item  prop="userPasswd" :rules="info.isModifyDefaultPasswd?[{ required: true, message: '密码不能为空'},{ pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]:[]">
+								<el-form-item  prop="userPasswd" :rules="info.isModifyDefaultPasswd?[{ pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]:[]">
 									<el-input  v-model="info.userPasswd" :disabled="info.isModifyDefaultPasswd==0"></el-input>
 								</el-form-item>	
 							</li>
@@ -135,12 +135,10 @@
 <script>
 import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
 import md5 from "@/libs/md5.js";
-import Bus from "@/libs/bus.js";
+import bus from "@/libs/bus.js";
 
 var info = {},
-  _this,
   def = [
     "operator",
     "userID",
@@ -160,14 +158,8 @@ var info = {},
     "maxDaysoftopic",
     "isModifyDefaultPasswd",
     "userPasswd"
-  ],
-  must = [
-    "userId",
-    "userName",
-    "userPasswd",
-    "speedCtrlKbps",
-    "connSuGroupName"
   ];
+ 
 for (var i = 0; i < def.length; i++) {
   info[def[i]] = "";
 }
@@ -243,13 +235,14 @@ export default {
     };
   },
   methods: {
+
     // 表单验证
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.add();
         } else {
-          this.open()
+          this.open();
         }
       });
     },
@@ -281,7 +274,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            this.open2(response.errinfo);
+           alert(response.errinfo)
           }
         }
       );
@@ -289,30 +282,27 @@ export default {
 
     open() {
       this.$alert("内容不能为空", "提示", {
-        confirmButtonText: "确定",
+        confirmButtonText: "确定"
       });
     },
 
-    open2(msg) {
-      this.$confirm("msg", "提示", {
+    open2() {
+      this.$confirm("即将跳转至Ekey", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.$router.replace({ path: "'/message/userEdit/:id" });
+          this.$router.replace({ path: "/message/userEdit/a2" });
         })
         .catch(() => {
-           this.$router.replace({ path: "'/message/userEdit/:id" });
+          this.$router.replace({ path: "/message/userEdit/a2" });
         });
     },
 
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
     }
-  },
-  beforeCreate() {
-    _this = this;
   },
   created: function() {
     info.isModifyDefaultPasswd = 0;
@@ -329,8 +319,6 @@ export default {
     info.maxSubsCount = "0";
     info.maxDaysoftopic = "0";
   },
-  mounted() {},
-  updated() {}
 };
 function getDate() {
   var d = new Date(),

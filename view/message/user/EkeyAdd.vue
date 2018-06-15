@@ -13,7 +13,7 @@
 import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
-import observer  from '@/libs/observer.js';
+// import observer  from '@/libs/observer.js';
 
 
 
@@ -25,9 +25,8 @@ import observer  from '@/libs/observer.js';
         },
         methods:{
             del(){
-            	console.log('aasfda')
                 this.$router.replace({ path: "/message/userEdit/mess" });
-                observer.execute('messUserEdit',{type:'b'});
+                // observer.execute('messUserEdit',{type:'b'});
             }
            
         }

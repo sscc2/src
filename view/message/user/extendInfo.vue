@@ -48,7 +48,7 @@
 <script>
 // import kit      from '@/libs/kit.js';
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
+// import observer from "@/libs/observer.js";
 
 var pageTxt_cn = {
     tips: [
@@ -73,7 +73,7 @@ var pageTxt_cn = {
 
 var pageTxt = pageTxt_cn;
 
-var inputValue = [
+var def = [
   "userAlarmSmsNum",
   "userTelNum",
   "userMobileNum",
@@ -81,11 +81,11 @@ var inputValue = [
   "operationFax",
   "email",
   "ssccManager"
-];
-// var inputValue;
-// for(var i=0; i<def.length;i++){
-//   inputValue.def[i]=''
-// }
+],inputValue={};
+
+for(var i=0; i<def.length;i++){
+  inputValue[def[i]]=''
+}
 
 
 export default {
@@ -121,12 +121,11 @@ export default {
       );
     },
     goBack: function() {
-      this.$router.replace({ path: "/message/userEdit/mess" });
+      this.$router.replace({ path: "/message/user" });
     }
   },
   props:["extend"],
   created(){
-    console.log( "id",this.extend)
       var _this = this;
       utils.post(
         "mx/userinfoExt/query",
