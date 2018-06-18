@@ -1,7 +1,7 @@
 
 var vars = {};
 vars.lang = 'cn';
-vars.useridList = null;
+vars.useridList = [];
 vars.loadTime = 2;
 
 (function(){

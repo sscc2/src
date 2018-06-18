@@ -1,52 +1,52 @@
 <template>
 	<div class="detailTheme">
-		<el-dialog :title="pageTxt.label[0]" :visible.sync="sync" width='1040px'>
-			<ul class="list">
-				<li>
-					<label class="txt">{{pageTxt.label[1]}}</label>
-					<div class="rightBox">
-						<el-input :disabled='disabled' placeholder="" v-model="info.name" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[2]}}</label>
-					<div class="rightBox">
-						<el-input :disabled='disabled' placeholder="" v-model="info.man" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[3]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" type='textarea' v-model="info.content" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[4]}}</label>
-					<div class="rightBox">
-						<!--<p class="txt1">{{pageTxt.label[5]}}</p>
+		<h2 class="h2">{{pageTxt.label[0]}}</h2>
+		<ul class="list">
+			<li>
+				<label class="txt">{{pageTxt.label[1]}}</label>
+				<div class="rightBox">
+					<el-input :disabled='disabled' placeholder="" v-model="info.name" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[2]}}</label>
+				<div class="rightBox">
+					<el-input :disabled='disabled' placeholder="" v-model="info.man" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[3]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" type='textarea' v-model="info.content" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[4]}}</label>
+				<div class="rightBox">
+					<!--<p class="txt1">{{pageTxt.label[5]}}</p>-->
+					<div class="tableWrap">
 						<el-table class='table' ref="multipleTable" :data="list" border tooltip-effect="dark">
 							<el-table-column type="index" width="55"></el-table-column>
-							<el-table-column type="selection" width="55"></el-table-column>
+							<!--<el-table-column type="selection" width="55"></el-table-column>-->
 							<el-table-column prop="id" label="用户ID" show-overflow-tooltip></el-table-column>
 							<el-table-column prop="name" label="用户名" show-overflow-tooltip></el-table-column>
-							<el-table-column prop="other" label="其他" show-overflow-tooltip></el-table-column>
-						</el-table>-->
-						<div class="transfer">
-							<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :left-default-checked="[]"
-								:right-default-checked="[]" :titles="[pageTxt.label[5], pageTxt.label[6]]"  @change="handleChange" :data="list"
-								:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}">
-								<div slot-scope="{option}">
-									<span class="itemTxt">{{option.id}}</span>
-									<span class="itemTxt">{{option.name}}</span>
-									<span class="itemTxt">{{option.other}}</span>
-								</div>
-							</el-transfer>
-						</div>
+						</el-table>
+					</div><div class="tableWrap">
+						<el-table class='table' ref="multipleTable" :data="list" border tooltip-effect="dark">
+							<el-table-column type="index" width="55"></el-table-column>
+							<!--<el-table-column type="selection" width="55"></el-table-column>-->
+							<el-table-column prop="id" label="用户ID" show-overflow-tooltip></el-table-column>
+							<el-table-column prop="name" label="用户名" show-overflow-tooltip></el-table-column>
+							<el-table-column prop="other" label="APPID" show-overflow-tooltip>
+								
+							</el-table-column>
+						</el-table>
 					</div>
-				</li>
-			</ul>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="sync = false">返 回</el-button>
-			</div>
-		</el-dialog>
-		
+				</div>
+			</li><li>
+				<label class="txt">&nbsp;</label>
+				<div class="rightBox">
+					<el-button @click="back" class='back'>返 回</el-button>
+				</div>
+			</li>
+		</ul>
 	</div>
 </template>
 
@@ -108,23 +108,17 @@ import observer  from '@/libs/observer.js';
 					
 				}
 			},
-			down(){
-				
-			}
+			back(){
+				this.$router.replace({ path: "/message/release" });
+			},
+			
 		},
 		mounted(){
 			slotTitle = kit('#slotTitle').html();
 			first = false;
+			console.log(this.$route.params.id);
 		},
-		watch: {
-			sync(cur,old){
-				if(!cur) return;
-				if(!first){
-					first = true;
-					setTimeout(addTitle, 40);
-				}
-			}
-		},
+		watch: {},
 		components: {}
 	};
 	
@@ -140,15 +134,14 @@ import observer  from '@/libs/observer.js';
 
 <style scoped="scoped">
 	.list li{margin-bottom: 10px;}
+	.h2{font-size: 16px;color: #666;line-height: 50px;height: 50px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.txt,.txt1{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
 	.txt1{text-align: left;}
 	.rightBox{vertical-align: top;display: inline-block;}
 	.rightBox .el-input{width: 255px;}
 	.rightBox .el-textarea{width: 835px;}
-	.table{width: 815px;height: 268px;overflow-y: auto;}
-	
-	.transfer{text-align: center;}
-	.itemTxt{display: inline-block;width: 102px;font-size: 13px;line-height: 40px;color: #666;vertical-align: top;}
-	#slotTitle{display: none;}
-	.slotTitle{padding-left: 39px;background: #F6F6F6;border: 1px solid #D8D8D8;border-width: 1px 0;}
+	/*.table{width: 815px;height: 268px;overflow-y: auto;}*/
+	.tableWrap{width: 370px;display: inline-block;vertical-align: top;max-height: 400px;overflow-y: auto;}
+	.tableWrap:first-child{margin-right: 40px;}
+	.back{margin-top: 30px;}
 </style>

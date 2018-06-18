@@ -59,7 +59,7 @@
 		</div>
 		<!--<AddTheme></AddTheme>-->
 		<EditTheme></EditTheme>
-		<DetailTheme></DetailTheme>
+		<!--<DetailTheme></DetailTheme>-->
 	</div>
 </template>
 
@@ -159,9 +159,12 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
 			},
 			detailTheme(){
+				this.$router.replace({ path: "/message/detailTheme/release" });
 				observer.execute('messDetailTheme',{sync:true, obj: this.row});
 			},
-			detail(){
+			detail(ind, row){
+				this.$router.replace({ path: "/message/detailTheme/release" });
+				
 				setTimeout(function(){
 					observer.execute('messDetailTheme',{sync:true, obj: _this.row});
 				}, 0);
