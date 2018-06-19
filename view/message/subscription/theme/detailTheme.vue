@@ -155,12 +155,16 @@ import observer  from '@/libs/observer.js';
 		utils.post('mx/pubTopic/query', param, function(data){
 			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			var info = _this.info, subs, arr = [];
-			info.topicName = data.topicName;
-			info.pubUserID = data.pubUserID;
-			info.topicDescr = data.topicDescr;
-			info.topicInfo = data.topicInfo;
-			subs = data.subsUserList;
+			var res = data.lists[0],  info = _this.info, subs, arr = [];
+			info.topicName = res.topicName;
+			info.pubUserName = res.pubUserName;
+			info.pubUserID = res.pubUserID;
+			info.topicDescr = res.topicDescr;
+			info.topicInfo = res.topicInfo;
+			info.effectiveDays = res.effectiveDays;
+			info.pubTime = res.pubTime;
+			subs = res.subsUserList;
+			if(!subs||subs.length==0)return;
 			_this.list = subs.concat(data.canSubUserID);
 			for (var i = 0; i < subs.length; i++) {
 				arr.push(i);
