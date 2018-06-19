@@ -152,7 +152,7 @@ import observer  from '@/libs/observer.js';
 				cmdID: '600043', pubUserID: userid.pubUserID,
 				topicName: userid.topicName, type: '0'
 			};
-		utils.post('mx/userPsConfig/query', param, function(data){
+		utils.post('mx/pubTopic/query', param, function(data){
 			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			var info = _this.info, subs, arr = [];
