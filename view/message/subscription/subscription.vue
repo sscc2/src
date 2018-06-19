@@ -4,11 +4,17 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-input placeholder="" v-model="info.subUserID" clearable></el-input>
+			<!--<el-input placeholder="" v-model="info.subUserID"></el-input>-->
+			<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+				<div slot-scope="{item}">
+					<span class="name">{{item.userID}}</span>
+				    <span class="addr">({{item.userName}})</span>
+				</div>
+			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
-			<el-input placeholder="" v-model="info.subUserName" clearable></el-input>-->
+			<el-input placeholder="" v-model="info.subUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
-			<el-input placeholder="" v-model="info.topicName" clearable></el-input>
+			<el-input class='elInput' placeholder="" v-model="info.topicName"></el-input>
 			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[4]}}</el-button>
 		</div>
 		<div class="btnBox">
@@ -40,7 +46,7 @@
 				共{{max}}条数据
 			</div>
 		</div>
-		<DetailTheme></DetailTheme>
+		<!--<DetailTheme></DetailTheme>-->
 	</div>
 </template>
 
@@ -62,8 +68,9 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	
 	var data = {
 		pageTxt,
+		idName: '',
 		info: {
-			cmdID: '600050', subUserID:'', topicName: '',
+			subUserID:'', topicName: '',
 			sortType: '2', type: '0'
 		},
 		data: [/*{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}*/],
@@ -85,6 +92,19 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			return data;
 		},
 		methods: {
+			fetch(str, cb){
+				var idName,i,len = idList.length,obj,tem=[];
+				for (i = 0; i < len; i++) {
+					obj = idList[i];
+					idName = obj.userID+obj.userName;
+					if(idName.indexOf(str)!=-1) tem.push(obj);
+				}
+				cb(tem);
+			},
+			idSelect(item){
+				this.info.subUserID = item.userID;
+				this.idName = item.userID+'('+item.userName+')';
+			},
 			search(){
 				search();
 			},
@@ -139,17 +159,29 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		mounted(){
 			_this = this;
 			search();
+			useridList();
 		},
 		components: {DetailTheme}
 	};
 	function search(){
 		var info = _this.info;
+		info.cmdID = '600044'
 		utils.post('mx/subTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.count)||0;
 		});
+	}
+	var idList = [];
+	function useridList(){
+		idList = globalVar.get('useridList');
+		var call = function(master, list){
+			if(master != 'useridReady') return;
+			observer.delBinding('useridReady', call);
+			idList = list; call = null;
+		}
+		if(!idList.length) observer.addBinding('useridReady', call);
 	}
 </script>
 
@@ -159,7 +191,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.el-input{width: 180px;line-height: 30px;}
+	.elInput{width: 240px;line-height: 30px;}
 	.red{color: red;}
 	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
 	.btnTxt{color: #5a769e;}

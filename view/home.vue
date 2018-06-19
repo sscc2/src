@@ -19,23 +19,27 @@ import observer  from '@/libs/observer.js';
 import navhead   from '@/view/navHead.vue';
 import sidebar   from '@/view/sidebar.vue';
 	
-	var param = {
-		url: 'mx/userinfo/queryLists',
-		cmdID: "600001",
-		userID: '',
-		userName: ''
-	};
-	utils.post(param, function(data){
-		console.log('全部用户ID：',data);
-		if(data.errcode < 0) return utils.weakTips(data.errinfo);
-		//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
-		globalVar.set('useridList', data.lists);
-		observer.execute('useridReady', data.lists);
-	});
-	observer.addBinding('updataUserid',function(master, list){
-		if(master != 'updataUserid') return;
-		globalVar.set('useridList', list);
-	});
+	
+	!function (){
+		var param = {
+			url: 'mx/userinfo/queryLists',
+			cmdID: "600001",
+			userID: '',
+			userName: ''
+		};
+		utils.post(param, function(data){
+			console.log('useridList：',data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			var obj, i;
+			for (i = 0; i < data.lists.length; i++) {
+				obj = data.lists[i];
+				obj.words = obj.userID+obj.userName;
+			}
+			globalVar.set('useridList', data.lists);
+			observer.execute('useridReady');
+		});
+	}();
+	
 	
 	export default {
 		name: 'home',

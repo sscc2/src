@@ -67,8 +67,8 @@ textarea{resize: none !important;}
 .transfer .el-transfer-panel__item .el-checkbox__input{top: 13px;}
 .transfer .el-transfer-panel{width: 370px;}
 .transfer .el-transfer-panel__header .el-checkbox__label span{display: none;}
-.transfer .el-transfer-panel__body{height: 315px;}
-.transfer .el-transfer-panel__list.is-filterable{height: 268px;padding-bottom: 40px;}
+.transfer .el-transfer-panel__body{height: 369px;}
+.transfer .el-transfer-panel__list.is-filterable{height: 319px;padding-bottom: 40px;}
 .transfer .el-transfer__button.is-disabled{width: 36px;height: 36px;border-radius: 5px;}
 .transfer .el-transfer__button{width: 36px;height: 36px;border-radius: 5px;background: #FFF;border-color: #5e7297;}
 .transfer .el-transfer__button i{color: #5e7297;font-weight: 900;font-size: 18px;line-height: 36px;}

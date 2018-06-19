@@ -11,7 +11,7 @@
 				</div>
 			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
-			<el-input placeholder="" v-model="userName" clearable></el-input>-->
+			<el-input placeholder="" v-model="userName"></el-input>-->
 			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[3]}}</el-button>
 			<label class="txt">{{pageTxt.label[4]}}</label>
 			<span class="txt">{{max}}</span>
@@ -78,16 +78,6 @@ import observer  from '@/libs/observer.js';
 //		if(master != 'messUpload') return;
 //		data.obj = param;
 //	});
-
-
-	var idList = [];
-	for (var i = 0; i < 10; i++) {
-		var obj = {userID:'userID'+i,userName:'userName'+(i+1)};
-		idList.push(obj)
-	}
-
-
-
 	
 	export default {
 		name: 'message_userSet',
@@ -95,9 +85,6 @@ import observer  from '@/libs/observer.js';
 			return data;
 		},
 		methods: {
-			search(){
-				search();
-			},
 			fetch(str, cb){
 				var idName,i,len = idList.length,obj,tem=[];
 				for (i = 0; i < len; i++) {
@@ -110,6 +97,9 @@ import observer  from '@/libs/observer.js';
 			idSelect(item){
 				this.userID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
+			},
+			search(){
+				search();
 			},
 			currenRow(row){
 				this.row = row;
@@ -128,12 +118,7 @@ import observer  from '@/libs/observer.js';
 		mounted(){
 			_this = this;
 			search();
-			
-			idList = globalVar.get('useridList');
-			if(!idList.length) observer.addBinding('useridReady', function(master, list){
-				if(master != 'useridReady') return;
-				idList = list;
-			});
+			useridList();
 		}
 	};
 	function search(){
@@ -144,6 +129,16 @@ import observer  from '@/libs/observer.js';
 			_this.data = data.lists;
 			_this.max = parseInt(data.count)||0;
 		});
+	}
+	var idList = [];
+	function useridList(){
+		idList = globalVar.useridList();
+		var call = function(master){
+			if(master != 'useridReady') return;
+			observer.delBinding('useridReady', call);
+			idList = globalVar.useridList(); call = null;
+		}
+		if(!idList.length) observer.addBinding('useridReady', call);
 	}
 </script>
 

@@ -36,9 +36,6 @@
 				</li><li>
 					<label class="txt">{{pageTxt.label[7]}}</label>
 					<div class="rightBox">
-						<!--<el-transfer :filter-method="filterMethod" v-model="value" :data="list"
-							filterable filter-placeholder="请输入关键字">
-						</el-transfer>-->
 						<div class="transfer">
 							<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :left-default-checked="allLeft"
 								:right-default-checked="allRight" :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
@@ -175,7 +172,7 @@ import observer  from '@/libs/observer.js';
 					tem.push(this.list[ind]);
 				}
 				info.canSubsUserList = tem;
-				info.cmdID = '600044';
+				info.cmdID = '600045';
 				utils.post('mx/pubTopic/add', info, function(data){
 					console.log('增加主题：',data);
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
@@ -191,23 +188,7 @@ import observer  from '@/libs/observer.js';
 			_this = this;
 			slotTitle = kit('.addTheme #slotTitle').html();
 			first = false;
-			var param = {
-				url: 'mx/userinfo/queryLists',
-				cmdID: "600001",
-				userID: '',
-				userName: ''
-			};
-			utils.post(param, function(data){
-				console.log('可订阅用户：',data);
-				if(data.errcode < 0) return utils.weakTips(data.errinfo);
-				var obj, i;
-				for (i = 0; i < data.lists.length; i++) {
-					obj = data.lists[i];
-					obj.key = i;
-					obj.label = obj.userID+obj.userName;
-				}
-				_this.list = data.lists;
-			});
+			useridList();
 			addTitle();
 		},
 		watch: {
@@ -221,6 +202,16 @@ import observer  from '@/libs/observer.js';
 		},
 		components: {}
 	};
+	var idList = [];
+	function useridList(){
+		idList = globalVar.useridList();
+		var call = function(master){
+			if(master != 'useridReady') return;
+			observer.delBinding('useridReady', call);
+			idList = globalVar.useridList(); call = null;
+		}
+		if(!idList.length) observer.addBinding('useridReady', call);
+	}
 	var _this;
 	function addTitle(){
 		kit('.addTheme .el-checkbox-group').each(function(el, i){

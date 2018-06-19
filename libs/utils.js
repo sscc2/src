@@ -1,7 +1,8 @@
-import Vue from 'vue'
-import axios from 'axios'
-import kit from '@/libs/kit.js'
-import globalVar from '@/libs/globalVar.js'
+import Vue        from 'vue';
+import axios      from 'axios';
+import kit        from '@/libs/kit.js';
+import globalVar  from '@/libs/globalVar.js';
+import observer   from '@/libs/observer.js';
 	
 	
 function utils(){

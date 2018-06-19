@@ -4,11 +4,17 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
+			<!--<el-input placeholder="" v-model="info.pubUserID"></el-input>-->
+			<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+				<div slot-scope="{item}">
+					<span class="name">{{item.userID}}</span>
+				    <span class="addr">({{item.userName}})</span>
+				</div>
+			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
-			<el-input placeholder="" v-model="info.pubUserName" clearable></el-input>-->
+			<el-input placeholder="" v-model="info.pubUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
-			<el-input placeholder="" v-model="info.topicName" clearable></el-input>
+			<el-input class='elInput' placeholder="" v-model="info.topicName"></el-input>
 			<label class="txt">{{pageTxt.label[4]}}</label>
 			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[6]" 
 				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
@@ -85,6 +91,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	
 	var data = {
 		pageTxt,
+		idName: '',
 		info: {
 			cmdID: '600042', pubUserID: '', topicName: '',
 			beginDate: '', endDate: '', sortType: '0'
@@ -123,6 +130,19 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			return data;
 		},
 		methods: {
+			fetch(str, cb){
+				var idName,i,len = idList.length,obj,tem=[];
+				for (i = 0; i < len; i++) {
+					obj = idList[i];
+					idName = obj.userID+obj.userName;
+					if(idName.indexOf(str)!=-1) tem.push(obj);
+				}
+				cb(tem);
+			},
+			idSelect(item){
+				this.info.pubUserID = item.userID;
+				this.idName = item.userID+'('+item.userName+')';
+			},
 			search(){
 				search();
 			},
@@ -159,15 +179,13 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
 			},
 			detailTheme(){
+				globalVar.set('userid', this.selects[0]);
 				this.$router.replace({ path: "/message/detailTheme/release" });
-				observer.execute('messDetailTheme',{sync:true, obj: this.row});
+//				observer.execute('messDetailTheme',{sync:true, obj: this.row});
 			},
 			detail(ind, row){
+				globalVar.set('userid', row);
 				this.$router.replace({ path: "/message/detailTheme/release" });
-				
-				setTimeout(function(){
-					observer.execute('messDetailTheme',{sync:true, obj: _this.row});
-				}, 0);
 			},
 			sortReq(obj){
 				/*
@@ -205,7 +223,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		    },
 			currenRow(row){
 				this.row = row;
-				console.log(row)
+//				console.log(row)
 			},
 			currentPage(){
 				
@@ -215,6 +233,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		mounted(){
 			_this = this;
 			search();
+			useridList();
 		},
 		components: {AddTheme, EditTheme, DetailTheme}
 	};
@@ -241,6 +260,16 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 //		return [str+' 00:00:00',str+' 23:59:59'];
 		return [str+'01 00:00:00',str+'28 23:59:59'];
 	}
+	var idList = [];
+	function useridList(){
+		idList = globalVar.get('useridList');
+		var call = function(master, list){
+			if(master != 'useridReady') return;
+			observer.delBinding('useridReady', call);
+			idList = list; call = null;
+		}
+		if(!idList.length) observer.addBinding('useridReady', call);
+	}
 </script>
 
 <style scoped="scoped">
@@ -249,7 +278,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	._hr{margin: 0 0 10px;min-width: 1132px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.el-input{width: 150px;line-height: 30px;}
+	.elInput{width: 200px;line-height: 30px;}
 	.el-button *{vertical-align: middle;}
 	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
 	.btnTxt{color: #5a769e;}

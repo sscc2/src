@@ -14,6 +14,7 @@
 			if(!dict[master]) dict[master] = [];
 			if(dict[master].inArray(fn)) return console.warn('Binding has existed!');
 			dict[master].push(fn);
+			if(dict['useridReady']) console.log('useridReady',dict['useridReady'].length);
 			return this;
 		};
 		//解绑
