@@ -30,9 +30,9 @@
 						<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
 							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}">
 							<div slot-scope="{option}">
-								<span class="itemTxt">{{option.userID}}</span>
-								<span class="itemTxt">{{option.userName}}</span>
-								<span class="itemTxt hide">{{option.subUserppid}}</span>
+								<span class="itemTxt">{{option.subUserID}}</span>
+								<span class="itemTxt">{{option.subUserName}}</span>
+								<span class="itemTxt hide">{{option.subUserAppid}}</span>
 							</div>
 						</el-transfer>
 					</div>
@@ -81,7 +81,7 @@ import observer  from '@/libs/observer.js';
 			userName: '用户名'+i, subUserppid:'appid'+i
 		};
 		obj.label = obj.userID + obj.userName;
-		list.push(obj);
+//		list.push(obj);
 	}
 	
 	var data = {
@@ -164,12 +164,23 @@ import observer  from '@/libs/observer.js';
 			info.effectiveDays = res.effectiveDays;
 			info.pubTime = res.pubTime;
 			subs = res.subsUserList;
-			if(!subs||subs.length==0)return;
-			_this.list = subs.concat(data.canSubUserID);
-			for (var i = 0; i < subs.length; i++) {
-				arr.push(i);
+			arr = arr.concat(subs, res.canSubsUserList);
+			if(subs&&subs.length>0){
+				_this.value = [];
+				for (var i = 0; i < subs.length; i++)
+					_this.value.push(i);
 			}
-			_this.value = arr;
+			var obj, temp = [];
+			for (i = 0; i < arr.length; i++) {
+				obj = arr[i];
+				temp.push({
+					key:i, subUserID: obj.subUserID,
+					subUserName: obj.subUserName,
+					subUserAppid: obj.subUserAppid,
+					label: obj.subUserID + obj.subUserName
+				});
+			}
+			_this.list = temp;
 		});
 	}
 </script>
