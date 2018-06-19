@@ -1,19 +1,19 @@
 <template>
 	<div class="component">
-		<!-- 头部 -->
+	
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
 				<span class="header_txt1" @click="del($event)">返回</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{pageTxt.infoTxt[0]}}</span>
 		</div>
-		<!-- 选项卡 -->
+
 		<el-tabs type="card">
 			<el-tab-pane label="基本信息">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
 				<el-row class='info'>
 					<el-col :span="6">
-						<!-- 表单左 -->
+
 						<ul class="left">
 							<li><p>{{pageTxt.infoTxt[2]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[3]}}：</p></li>
@@ -22,7 +22,6 @@
 							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[7]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[8]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[9]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[10]}}：</p></li>							
 							<li><p>{{pageTxt.infoTxt[11]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[12]}}：</p></li>							
@@ -34,7 +33,7 @@
 							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
 						</ul>
 					</el-col><el-col :span="18">
-						<!-- 表单右 -->
+
 						<ul class="right">
 							<el-form :model="info" ref="info">
 							<li>
@@ -52,7 +51,7 @@
   								<el-radio v-model="info.isModifyDefaultPasswd" :label="1">不启用</el-radio>
 							</li>
 							<li>
-								<el-form-item  prop="userPasswd" :rules="info.isModifyDefaultPasswd?[{ pattern: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]:[]">
+								<el-form-item  prop="userPasswd" :rules="info.isModifyDefaultPasswd?judge:[]">
 									<el-input  v-model="info.userPasswd" :disabled="info.isModifyDefaultPasswd==0"></el-input>
 								</el-form-item>	
 							</li>
@@ -71,9 +70,6 @@
 								<span class="kbit">{{pageTxt.infoTxt[19]}}</span>
 							</li>
 							<li>
-								<input id="" type="text" v-model="info.configTim" placeholder="" readonly>
-							</li>	
-							<li>
 								<input type="text" v-model="info.userInfo" placeholder="">
 							</li>							
 							<li>
@@ -88,8 +84,10 @@
 							</li>
 							<li>
 								<el-date-picker v-model="info.softEncBeginDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
-							</li><li>
-								<el-date-picker v-model="info.softEncEndDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+							</li>
+              
+              <li>
+								  <el-date-picker v-model="info.softEncEndDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
 							</li>
 							<li>
 								<el-select v-model="info.allowSendRecvFile" placeholder="">
@@ -109,7 +107,7 @@
 						</ul>
 					</el-col>
 				</el-row>
-				<!-- 按钮 -->
+
 				<div class="btn">
 					<el-button type="primary" @click="submitForm('info')">{{pageTxt.infoTxt[20]}}</el-button>
 					<el-button type="primary" @click='cancelFieldValidate($event)'>{{pageTxt.infoTxt[21]}}</el-button>
@@ -136,7 +134,7 @@
 import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
-import bus from "@/libs/bus.js";
+
 
 var info = {},
   def = [
@@ -159,7 +157,7 @@ var info = {},
     "isModifyDefaultPasswd",
     "userPasswd"
   ];
- 
+
 for (var i = 0; i < def.length; i++) {
   info[def[i]] = "";
 }
@@ -231,18 +229,18 @@ export default {
       cities,
       connect,
       online,
-      time: getDate()
+      time: getDate(),
+      judge:[{ required: true, message: '密码不能为空'},{ pattern:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]
     };
   },
   methods: {
-
     // 表单验证
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.add();
         } else {
-          this.open();
+          
         }
       });
     },
@@ -274,31 +272,28 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-           alert(response.errinfo)
+            open6(response.errinfo)
+          }else{
+            // open6(response)
           }
         }
       );
     },
 
-    open() {
-      this.$alert("内容不能为空", "提示", {
-        confirmButtonText: "确定"
-      });
-    },
+    open6(msg) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+          this.$store.state.tabv="v2"
+          this.$router.replace({ path: "/message/userEdit/mess" });
 
-    open2() {
-      this.$confirm("即将跳转至Ekey", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$router.replace({ path: "/message/userEdit/a2" });
-        })
-        .catch(() => {
-          this.$router.replace({ path: "/message/userEdit/a2" });
+        }).catch(() => {
+          this.$store.state.tabv="v1"
+          this.$router.replace({ path: "/message/userEdit/mess" });
         });
-    },
+      },
 
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
@@ -318,7 +313,7 @@ export default {
     info.maxPubsCount = "0";
     info.maxSubsCount = "0";
     info.maxDaysoftopic = "0";
-  },
+  }
 };
 function getDate() {
   var d = new Date(),

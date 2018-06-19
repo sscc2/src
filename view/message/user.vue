@@ -13,9 +13,9 @@
 			</div>
 			<div class="btnBox">
 				<div  @click="userAdd"><img src="@/img/creatico.png" ><span>{{pageTxt.userTxt[5]}}</span></div>
-				<div  @click="editAll"><img src="@/img/alterico.png" ><span>{{pageTxt.userTxt[6]}}</span></div>
+				<!-- <div  @click="editAll"><img src="@/img/alterico.png" ><span>{{pageTxt.userTxt[6]}}</span></div> -->
 				<div  @click="delAll"><img src="@/img/deletico.png" ><span>{{pageTxt.userTxt[7]}}</span></div>
-				<div  @click="userEncrypt"><img src="@/img/amendico.png" ><span>{{pageTxt.userTxt[8]}}</span></div>
+				<!-- <div  @click="userEncrypt"><img src="@/img/amendico.png" ><span>{{pageTxt.userTxt[8]}}</span></div> -->
 				<div  @click="userImports"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[9]}}</span></div>
         <div  @click="userImports"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[10]}}</span></div>
         <div  @click="userImports"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[11]}}</span></div>
@@ -29,15 +29,17 @@
 					<div slot-scope="scope" class="_zero">
 						<div @click='userEdit'><img src="@/img/altericos.png"></div>
 						<div @click="userDel(scope.$index, userData.lists)"><img src="@/img/deleticos.png" ></div>
-						<div @click="userEncrypt"><img src="@/img/passwdico.png" ></div>
+						<div @click="eidtPasswd"><img src="@/img/passwdico.png" ></div>
 					</div>
 				</el-table-column>
 			</el-table>
-			<div class="_pagination">
+
+			<div class="_pagination" v-show="userData.lists.length !=0">
 				<el-pagination class="userbottom" @size-change="handleSizeChange" @current-change='handleCurrentChange' :current-page="currentPage" :page-size="20" :total="userData.lists.length" background layout="prev, pager, next"></el-pagination>
         <div class="rightTxt">共{{userData.lists.length}}条数据</div>
-      </div>        
-			<Password :abc="b"></Password>
+      </div>  
+
+			<Password></Password>
 			<Upload></Upload>
 		</div>	
   </div>
@@ -49,7 +51,6 @@ import observer from "@/libs/observer.js";
 import Password from "@/view/message/user/password.vue";
 import Upload from "@/view/message/user/upload.vue";
 import utils from "@/libs/utils.js";
-import bus from "@/libs/bus.js";
 
 var _this, _keyObj;
 var pageTxt = {
@@ -85,21 +86,18 @@ export default {
       userData: {
         count: 30,
         lists: [
-          { userID: "A", userName: "123" },
-          { userID: "A", userName: "123" },
-          { userID: "A", userName: "123" }
+          { userID: "A1", userName: "123" },
+          { userID: "A2", userName: "123" },
+          { userID: "A3", userName: "123" }
         ]
       },
       selects: [],
-      b: "",
-      row: "",
       currentPage: 1,
       pagesize: 20
     };
   },
 
   methods: {
-
     // 查询用户
     userSearch: function(e) {
       var _this = this;
@@ -121,16 +119,6 @@ export default {
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
 
-    // 修改用户
-    editAll: function() {
-      if (this.selects.length != 1) {
-        utils.confirm({ message: pageTxt.tips.user, type: 2 });
-      } else {
-        this.$router.replace({ path: "/message/userEdit/mess" });
-        bus.$emit("msg", this.selects[0].userID);
-      }
-    },
-
     // 删除用户
     delAll: function() {
       if (this.selects.length != 1) {
@@ -142,7 +130,7 @@ export default {
           {
             cmdID: 600005,
             operator: "admin",
-            userID: this.selects[0].userID
+            userID: _this.$store.state.transferEditID
           },
           function(response) {
             if (response.errcode == 0) {
@@ -156,32 +144,38 @@ export default {
       }
     },
 
-    // 修改密码
-    userEncrypt: function(e) {
-      if (this.selects.length != 1) {
-        utils.confirm({ message: pageTxt.tips.pass, type: 2 });
-      } else {
-        this.b = this.selects[0].userID;
-        observer.execute("messUserPass", this.row);
-      }
-    },
-
     // 导入拓展
     userImports: function(e) {
       // observer.execute("messUpload", true);
-    },    
+    },
 
-    // 修改用户（表）
+    // 修改用户
     userEdit: function(e) {
+      this.$store.state.tabv = "v1";
       this.$router.replace({ path: "/message/userEdit/mess" });
-      gotoEdit();
     },
 
-    // 删除用户（表）
+    // 删除用户
     userDel: function(index, rows) {
-      rows.splice(index, 1);
+      var _this = this;
+      utils.post(
+        "mx/userinfo/delete",
+        {
+          cmdID: 600005,
+          operator: "admin",
+          userID: _this.$store.state.transferEditID
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            rows.splice(index, 1);
+          }
+        }
+      );
     },
+    // 修改密码
+    eidtPasswd() {
 
+    },
 
     toggleSelection(rows) {
       if (rows) {
@@ -196,7 +190,7 @@ export default {
       this.selects = val;
     },
     currentRow: function(e) {
-      this.row = e;
+      this.$store.state.transferEditID = e.userID;
     },
     handleSizeChange: function(size) {
       this.pagesize = size;
@@ -208,6 +202,7 @@ export default {
       this.$router.replace({ path });
     },
     next: function(e) {},
+
     imports: function(e) {}
   },
 
@@ -226,6 +221,9 @@ export default {
       }
     );
   },
+  beforeDestory() {
+    console.log("before");
+  },
 
   //更新视图
   watch: {
@@ -233,7 +231,6 @@ export default {
       this.tableData = this.otableData.filter(item => ~item.name.indexOf(val));
     }
   },
-  mounted() {},
   components: { Password, Upload }
 };
 </script>

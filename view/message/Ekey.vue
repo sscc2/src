@@ -18,7 +18,7 @@
 
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
-			<div id='Edit' @click="showEdit" ><img src="@/img/alterico.png" ><span>{{pageTxt.Ekey[6]}}</span></div>
+			<!-- <div id='Edit' @click="showEdit" ><img src="@/img/alterico.png" ><span>{{pageTxt.Ekey[6]}}</span></div> -->
 			<div @click="del"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
 			<div @click="fn"><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
 		</div>
@@ -33,7 +33,7 @@
 			<el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
 			<el-table-column label="操作" width="110">
 				<div slot-scope="scope" class="_zero">
-					<div><img src="@/img/altericos.png"> </div>
+					<div  id='Edit'  @click="showEdit"><img src="@/img/altericos.png"> </div>
 					<div><img src="@/img/deleticos.png" ></div>
 				</div>
 			</el-table-column>
@@ -128,7 +128,7 @@
 		<!-- 分页 -->
 		<div class="_pagination" v-show="EkeyData.length!=0">
 			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
-			<!-- <div class="rightTxt">共{{maxData}}条数据</div> -->
+			<div class="rightTxt">共{{EkeyData.length}}条数据</div>
 		</div>
 
 	</div>
@@ -287,10 +287,8 @@ export default {
     },
 
     showEdit() {
-      if (this.selects.length != 1) {
-        utils.confirm({ message: "请在列表中选择一条记录！", type: 2 });
-      } else {
-        this.oldEkeyName=this.selects[0].ekeyName
+      
+        // this.oldEkeyName=this.selects[0].ekeyName
         console.log(this.oldEkeyName)
         this.editEkdy = true;
         var _this = this;
@@ -305,8 +303,7 @@ export default {
           function(response) {
             _this.binfo = response.lists[0];
           }
-        );
-      }
+        );  
     },
 
     submitEdit() {

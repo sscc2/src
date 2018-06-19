@@ -1,21 +1,19 @@
 <template>
 	<div class="component">
-		<!-- 头部 -->
+
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
 				<span class="header_txt1" @click="del($event)">返回</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>修改用户</span>
 		</div>
-		<!-- 选项卡 -->
-		<el-tabs type="card">
-			<el-tab-pane label="基本信息">
+
+		<el-tabs type="card" :value="tabv">
+			<el-tab-pane label="基本信息" name="v1">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
 				<el-row class='info'>
-					<el-col :span="6">
-						<!-- 表单左 -->
+					<el-col :span="6">			
 						<ul class="left">
-							<!-- <li><p>{{pageTxt.infoTxt[1]}}：</p></li> -->
 							<li><p>{{pageTxt.infoTxt[2]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[3]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
@@ -32,10 +30,10 @@
 							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
 						</ul>
 					</el-col><el-col :span="18">
-						<!-- 表单右 -->
+				
 						<ul class="right">
 							<li>
-								<input type="text" v-model="aid" placeholder="" disabled>
+								<input type="text" v-model="info.userID" disabled>
 							</li>
 							<li>
 								<input type="text" v-model="info.userName" placeholder="">
@@ -100,19 +98,19 @@
 				</div>
 			</el-tab-pane>
 			
-			<el-tab-pane label="Ekey" name="a1">
+			<el-tab-pane label="Ekey" name="v2">
 				<span slot="label">{{pageTxt.tab[1]}}</span>
 				<UserEkey></UserEkey>
 			</el-tab-pane>
 			
-			<el-tab-pane label="通信关系" name="a2">
+			<el-tab-pane label="通信关系" name="v3">
 				<span slot="label">{{pageTxt.tab[2]}}</span>
 				<UserSignal></UserSignal>
 			</el-tab-pane>
 			
 			<el-tab-pane label="扩展信息">
 				<span slot="label">{{pageTxt.tab[3]}}</span>
-				<ExtendInfo :extend="aid"></ExtendInfo>
+				<ExtendInfo></ExtendInfo>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -125,13 +123,11 @@ import md5 from "@/libs/md5.js";
 import UserEkey from "@/view/message/user/userEkey.vue";
 import UserSignal from "@/view/message/user/userSignal.vue";
 import ExtendInfo from "@/view/message/user/extendInfo.vue";
-import bus from "@/libs/bus.js";
-
 
 var info = {},
   def = [
     "operator",
-    "uid",
+    "userID",
     "userName",
     "userType",
     "userDistrict",
@@ -227,7 +223,7 @@ var data = {
   online,
   time: getDate(),
   obj: {},
-  aid:''
+  tabv: ""
 };
 
 export default {
@@ -240,8 +236,8 @@ export default {
       utils.post(
         "mx/userinfo/modify",
         {
-          userID: this.aid,
           cmdID: 600004,
+          userID: _this.$stroe.state.transferEditID,
           operator: _this.info.operator,
           userName: _this.info.userName,
           userType: _this.info.userType,
@@ -257,27 +253,46 @@ export default {
           maxSubsCount: _this.info.maxSubsCount,
           maxDaysoftopic: _this.info.maxDaysoftopic
         },
-        function(response) {}
+        function(response) {
+          if (response.errcode == 0) {
+            open6(response.errinfo)
+          } else {
+            
+          }
+        }
       );
     },
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
+    },
+
+    open6(msg) {
+      this.$confirm(msg, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        center: true
+      })
+        .then(() => {
+          this.$store.state.tabv = "v2";
+          this.$router.replace({ path: "/message/userEdit/mess" });
+        })
+        .catch(() => {
+          this.$store.state.tabv = "v1";
+          this.$router.replace({ path: "/message/userEdit/mess" });
+        });
     }
   },
 
   // 初始化数据
   created: function() {
-    var _this=this
-    bus.$on("msg",(e)=>{
-      _this.aid=e
-       console.log("aid",_this.aid)
-    });
-    _this.uid= _this.aid
+    var _this = this;
+    _this.info.userID = _this.$store.state.transferEditID;
+    _this.tabv = _this.$store.state.tabv;
     utils.post(
       "mx/userinfo/query",
       {
         cmdID: 600002,
-        userID: this.aid ,
+        userID: _this.$store.state.transferEditID,
         type: 0
       },
       function(response) {
@@ -287,6 +302,7 @@ export default {
   },
   components: { UserEkey, UserSignal, ExtendInfo }
 };
+
 function getDate() {
   var d = new Date(),
     t = d.getFullYear() + "-";
@@ -297,6 +313,7 @@ function getDate() {
   t += dbNum(d.getSeconds());
   return t;
 }
+
 function dbNum(num) {
   return num < 10 ? "0" + num : num;
 }

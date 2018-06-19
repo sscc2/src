@@ -6,7 +6,7 @@
 					<!-- <p class="txt">{{pageTxt.lable[1]}}</p> -->
 					<p class="txt">{{pageTxt.lable[1]}}</p>
 				</div><div class="rightBox">
-					<el-input  v-model="this.abc"  :placeholder="pageTxt.lable[8]" disabled=""></el-input>
+					<el-input  v-model="this.$store.state.transferEditID"  :placeholder="pageTxt.lable[8]" disabled=""></el-input>
 					<span class="txt red" v-show="err.id">{{pageTxt.tips.id}}</span>
 				</div>
 			</li>
@@ -61,10 +61,10 @@
 </template>
 
 <script>
-import kit 		from "@/libs/kit.js";
-import utils 	from "@/libs/utils.js";
+import kit from "@/libs/kit.js";
+import utils from "@/libs/utils.js";
 import observer from "@/libs/observer.js";
-import md5 		from "@/libs/md5.js";
+import md5 from "@/libs/md5.js";
 
 var pageTxt_cn = {
     tips: {
@@ -94,14 +94,13 @@ var pageTxt_cn = {
       "请填写复核操作员",
       "请填写复核密码"
     ]
-  },
-  pageTxt_en = {};
+  }
 
 var pageTxt = pageTxt_cn;
 
 var data = {
   pageTxt,
-  isShow: false,
+  isShow: true,
   msg: "",
   info: { id: "", npasswd: "", isModifyDefaultPasswd: 0 },
   err: {
@@ -114,47 +113,28 @@ var data = {
   }
 };
 
-observer.addBinding("messUserPass", function(master, param) {
-  if (master != "messUserPass") return;
-  var id = "",
-    i;
-  for (i in data.err) {
-    data.err[i] = false;
-    data.info[i] = "";
-  }
-  for (i = 0; i < param.length; i++) {
-    id += "," + param[i].id;
-  }
-  data.info.id = id.replace(/,/, "");
-  data.isShow = true;
-});
-
 export default {
   name: "mess_userPass",
   data() {
     return data;
   },
-  props: ["abc"],
   methods: {
     submit() {
-		
-	  var _this = this;
-	  if(_this.info.isModifyDefaultPasswd==0){
-		  _this.info.npasswd=(md5.hex_md5("111111")).substr(8,16)
-	  }else{
-		   _this.info.npasswd=(md5.hex_md5(_this.info.npasswd)).substr(8, 16)  
-	  }
+      if (this.info.isModifyDefaultPasswd == 0) {
+        this.info.npasswd = md5.hex_md5("111111").substr(8, 16);
+      } else {
+        this.info.npasswd = md5.hex_md5(this.info.npasswd).substr(8, 16);
+      }
+      var _this = this;
       utils.post(
         "mx/userpasswd/modify",
         {
           cmdID: 600009,
           operator: "admin",
-          userID: _this.abc,
+          userID: _this.$store.state.transferEditID,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
-		  userPasswd:_this.info.npasswd
-		//   
-		// (md5.hex_md5(111111)).substr(8, 16)
-		// (md5.hex_md5(_this.info.npasswd)).substr(8, 16)
+          userPasswd: _this.info.npasswd
+
         },
         function(response) {
           if (response.errcode == 0) {
@@ -176,16 +156,8 @@ export default {
     }
   },
   created() {
-    this.info.id = this.abc;
+    this.info.id = this.$store.state.transferEditID;
   }
-  //		watch: {
-  //			info: {
-  //				handler(cur, old){
-  //					console.log(cur, cur);
-  //　　　　　　　　　　},
-  //　　　　　　　　　　deep:true
-  //			}
-  //		}
 };
 </script>
 
