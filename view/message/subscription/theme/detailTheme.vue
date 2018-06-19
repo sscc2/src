@@ -5,22 +5,22 @@
 			<li>
 				<label class="txt">{{pageTxt.label[1]}}</label>
 				<div class="rightBox">
-					<span v-model="info.topicName" class="txt1"></span>
+					<span class="txt1">{{info.topicName}}</span>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[7]}}</label>
 				<div class="rightBox">
-					<span v-model="info.pubUserID" class="txt1"></span>
+					<span class="txt1">{{info.pubUserID}}</span>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
-					<span v-model="info.topicDescr" class="txt1"></span>
+					<span class="txt1">{{info.topicDescr}}</span>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[3]}}</label>
 				<div class="rightBox">
-					<p v-model="info.topicInfo" class="txt2"></p>
+					<p class="txt2">{{info.topicInfo}}</p>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[4]}}</label>
@@ -30,9 +30,9 @@
 						<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
 							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}">
 							<div slot-scope="{option}">
-								<span class="itemTxt">{{option.subUserID}}</span>
-								<span class="itemTxt">{{option.subUserName}}</span>
-								<span class="itemTxt hide">{{option.subUserAppid}}</span>
+								<span class="itemTxt">{{option.userID}}</span>
+								<span class="itemTxt">{{option.userName}}</span>
+								<span class="itemTxt hide">{{option.userAppid}}</span>
 							</div>
 						</el-transfer>
 					</div>
@@ -81,7 +81,7 @@ import observer  from '@/libs/observer.js';
 			userName: '用户名'+i, subUserppid:'appid'+i
 		};
 		obj.label = obj.userID + obj.userName;
-//		list.push(obj);
+		list.push(obj);
 	}
 	
 	var data = {
@@ -155,7 +155,7 @@ import observer  from '@/libs/observer.js';
 		utils.post('mx/pubTopic/query', param, function(data){
 			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			var res = data.lists[0],  info = _this.info, subs, arr = [];
+			var res = data.lists[0],  info = _this.info;
 			info.topicName = res.topicName;
 			info.pubUserName = res.pubUserName;
 			info.pubUserID = res.pubUserID;
@@ -163,21 +163,25 @@ import observer  from '@/libs/observer.js';
 			info.topicInfo = res.topicInfo;
 			info.effectiveDays = res.effectiveDays;
 			info.pubTime = res.pubTime;
+			var subs, can, arr = [];
 			subs = res.subsUserList;
-			arr = arr.concat(subs, res.canSubsUserList);
+			can = res.canSubsUserList;
+			_this.value = [];
 			if(subs&&subs.length>0){
-				_this.value = [];
+				arr = arr.concat(subs);
 				for (var i = 0; i < subs.length; i++)
 					_this.value.push(i);
 			}
+			if(can&&can.length>0) arr = arr.concat(can);
+		
 			var obj, temp = [];
 			for (i = 0; i < arr.length; i++) {
 				obj = arr[i];
 				temp.push({
-					key:i, subUserID: obj.subUserID,
-					subUserName: obj.subUserName,
-					subUserAppid: obj.subUserAppid,
-					label: obj.subUserID + obj.subUserName
+					key:i, userID: obj.userID,
+					userName: obj.userName,
+					userAppid: obj.userAppid,
+					label: obj.userID + obj.userName
 				});
 			}
 			_this.list = temp;
@@ -190,7 +194,7 @@ import observer  from '@/libs/observer.js';
 	.h2{width: 1020px;font-size: 16px;color: #666;line-height: 50px;height: 50px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.txt,.txt1,.txt2{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
 	.txt1,.txt2{text-align: left;width: auto;}
-	.txt2{line-height: 20px;white-space: normal;max-width: 800px;}
+	.txt2{line-height: 20px;white-space: normal;max-width: 800px;padding: 5px 0;}
 	.rightBox{vertical-align: top;display: inline-block;}
 	.rightBox .el-input{width: 255px;}
 	.rightBox .el-textarea{width: 835px;}

@@ -20,11 +20,11 @@ function creatID(){
 	}
 	console.log('creatID', vars.useridList);
 }
-//creatID();
+creatID();
 
 //vars.urlIP = 'http://192.168.22.212:8081/fdep/';  //内网
 // vars.urlIP = 'http://192.168.218.35:8081/fdep/';  //小焕
-vars.urlIP = 'http://192.168.22.22:8081/fdep/';  //曼萍
+//vars.urlIP = 'http://192.168.22.22:8081/fdep/';  //曼萍
 
 
 export default {
