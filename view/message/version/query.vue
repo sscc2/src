@@ -57,21 +57,14 @@
 </template>
 
 <script>
-import utils       from '@/libs/utils.js';
-import globalVar   from '@/libs/globalVar.js';
-import observer    from '@/libs/observer.js';
+import utils     from '@/libs/utils.js';
+import globalVar from '@/libs/globalVar.js';
+import lang      from '@/language/lang.js';
+import observer  from '@/libs/observer.js';
 
 
-	var lang = {}, pageTxt;
-	lang.cn = {
-		tips: {user: "请在列表中选择一条记录！"},
-		label: ['查询','配置文件：','查询时间：','今天','近一周','近一个月','指定时间段','指定时间段：','至','开始日期','结束日期','查 询'],
-		list: ['版本类型','版本号','版本路径','下发时间','下发人员','审核人员','下发类型','操作'],
-		option:[{c: '0',t: '全部'},{c: '1',t: '系统动态配置'},{c: '2',t: '系统静态配置'},
-			{c: '3',t: '用户主题关联信息表'},{c: '4',t: '用户密码信息表'}]
-	};
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
+	var pageTxt;
+	pageTxt = lang.versionQuery;
 	
 	var data = {
 		pageTxt,

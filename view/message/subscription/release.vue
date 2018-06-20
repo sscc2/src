@@ -70,25 +70,17 @@
 </template>
 
 <script>
-import kit         from '@/libs/kit.js';
 import utils       from '@/libs/utils.js';
 import globalVar   from '@/libs/globalVar.js';
+import lang        from '@/language/lang.js';
 import observer    from '@/libs/observer.js';
 import AddTheme    from '@/view/message/subscription/theme/addTheme.vue';
 import EditTheme   from '@/view/message/subscription/theme/editTheme.vue';
 import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
-	var lang = {}, pageTxt, _this;
-	lang.cn = {
-		tips: {user: "请在列表中选择一条记录！",del: "是否确认要删除该用记录吗？",success:'删除成功！'},
-		label: ['已发布主题','发布者ID：','发布者名称：','主题名：','日期：','起始日期','至','结束日期',
-			'查询','添加用户主题','修改用户主题','删除用户主题','主题详情'],
-		list: ['发布者ID','发布者名称','主题名','发布时间','订阅个数','操作']
-	},
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
-	
+	var pageTxt, _this;
+	pageTxt = lang.themeRelease;
 	var data = {
 		pageTxt,
 		idName: '',

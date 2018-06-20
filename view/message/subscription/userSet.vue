@@ -46,20 +46,14 @@
 </template>
 
 <script>
-import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
+import lang      from '@/language/lang.js';
 import observer  from '@/libs/observer.js';
 
 
-	var lang = {}, pageTxt, _this;
-	lang.cn = {
-		tips: {},
-		label: ['用户配置','用户ID：','用户名称：','查询','用户总数：','修改配置信息'],
-		list: ['用户ID','用户名称','允许发布主题个数','允许订阅主题个数','发布主题有效天数','操作']
-	};
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
+	var pageTxt, _this;
+	pageTxt = lang.themeUserSet;
 	
 	var data = {
 		pageTxt,

@@ -67,17 +67,12 @@
 import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
+import lang      from '@/language/lang.js';
 import observer  from '@/libs/observer.js';
 
 
-	var lang = {}, pageTxt, slotTitle, first = false;
-	lang.cn = {
-		tips: {},
-		label: ['修改用户主题','主题名称：','发布者：','发布时间：','主题描述：','主题内容：','接收方：','可订阅用户','已订阅用户'],
-		list: ['用户ID','用户名','其他']
-	};
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
+	var pageTxt, slotTitle, first = false;
+	pageTxt = lang.themeEditTheme;
 	
 	var list = [];
 	for (var i = 0; i < 10; i++) {

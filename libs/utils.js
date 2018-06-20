@@ -50,7 +50,7 @@ function utils(){
 			if(typeof(opt)!="object") opt = {message: opt};
 			opt.dangerouslyUseHTMLString = true;
 			opt.showCancelButton = (opt.btn == 2);
-			if(talk == 'cn'){
+			if(talk != 'en'){
 				opt.title = opt.title || '提示';
 				opt.message = opt.message ||'您确定要进行以下操作？';
 			} else {
@@ -195,7 +195,7 @@ function utils(){
 			noFn: null,
 			nowFn: null
 		};
-		if(globalVar.get('lang')!='cn'){
+		if(globalVar.get('lang')=='en'){
 			hintsObj.title.text('Tips');
 			hintsObj.yes.text('yes');
 			hintsObj.no.text('no');

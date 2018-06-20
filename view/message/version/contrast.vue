@@ -40,20 +40,14 @@
 </template>
 
 <script>
-import utils       from '@/libs/utils.js';
-import globalVar   from '@/libs/globalVar.js';
-import observer    from '@/libs/observer.js';
+import utils     from '@/libs/utils.js';
+import globalVar from '@/libs/globalVar.js';
+import lang      from '@/language/lang.js';
+import observer  from '@/libs/observer.js';
 
 
-	var lang = {}, pageTxt;
-	lang.cn = {
-		tips: {user: "请在列表中选择一条记录！"},
-		label: ['对比','配置文件：','版本1：','请输入版本号','版本2：','请输入对比版本号','对 比'],
-		list: ['操作类型','详情'],
-		option:[{c: '0',t: '用户主题关联信息表'},{c: '1',t: '用户密码信息表'}]
-	};
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
+	var pageTxt;
+	pageTxt = lang.versionContrast;
 	
 	var data = {
 		pageTxt,

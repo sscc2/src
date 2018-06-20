@@ -80,20 +80,12 @@
 
 <script>
 import kit       from '@/libs/kit.js';
-import utils     from '@/libs/utils.js';
-import globalVar from '@/libs/globalVar.js'
+import globalVar from '@/libs/globalVar.js';
+import lang      from '@/language/lang.js';
 
-	
-	var lang = {};
-	lang.cn = {
-		tips: {},
-		tabs: ['用户','Ekey','通信关系','配置','主机配置','运维','分发','稽核','任务','订阅发布','用户配置','已发布主题','已订阅主题',
-			'版本','查询','对比']
-	},
-	lang.en = {};
-	
+
 	var data = {
-		pageTxt: lang[globalVar.get('lang')],
+		pageTxt: lang.sidebar,
 		model: '1'
 	};
 	

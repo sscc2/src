@@ -53,18 +53,13 @@
 <script>
 import utils       from '@/libs/utils.js';
 import globalVar   from '@/libs/globalVar.js';
+import lang        from '@/language/lang.js';
 import observer    from '@/libs/observer.js';
 import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
-	var lang = {}, pageTxt, _this;
-	lang.cn = {
-		tips: {user: "请在列表中选择一条记录！"},
-		label: ['已订阅主题','订阅者ID：','订阅者名：','主题名：','查询','主题详情'],
-		list: ['订阅者ID','订阅者名','订阅者AppID','发布者ID','发布者名称','主题名','发布时间','操作']
-	};
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
+	var pageTxt, _this;
+	pageTxt = lang.themeSubscription;
 	
 	var data = {
 		pageTxt,

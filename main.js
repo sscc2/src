@@ -15,16 +15,15 @@ import store from './libs/store.js'
 //Mock.init();
 
 Vue.config.productionTip = false;
-Vue.use(Vuex)
+Vue.use(Vuex);
 Vue.use(ElementUI, { size: 'big' });
 Vue.prototype.$axios = axios;
 
-
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-//i18n,
-  render: h => h(App)
-})
+	el: '#app',
+	router,
+	store,
+	//i18n,
+	render: h => h(App)
+});

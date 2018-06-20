@@ -86,19 +86,13 @@
 <script>
 import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
+import lang      from '@/language/lang.js';
 import globalVar from '@/libs/globalVar.js';
 import observer  from '@/libs/observer.js';
 
 
-	var lang = {}, pageTxt, slotTitle, first = false;
-	lang.cn = {
-		tips: {},
-		label: ['添加用户主题','主题名称：','发布者ID：','发布者名称：','主题描述：','主题内容：',
-			'有效天数：','接收方：','操作员：','通信关系用户','可订阅用户'],
-		list: ['用户ID','用户名','AppID','其他']
-	};
-	lang.en = {};
-	pageTxt = lang[globalVar.get('lang')];
+	var pageTxt, slotTitle, first = false;
+	pageTxt = lang.themeAddTheme;
 	
 	var list = [];
 	for (var i = 0; i < 10; i++) {
