@@ -37,7 +37,7 @@
 			</el-button>
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
-			highlight-current-row :data="data" tooltip-effect="dark">
+			highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 960px">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="pubUserID" sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		<!--<AddTheme></AddTheme>-->
-		<EditTheme></EditTheme>
+		<!--<EditTheme></EditTheme>-->
 		<!--<DetailTheme></DetailTheme>-->
 	</div>
 </template>
@@ -89,7 +89,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: null,
-		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCount:'订阅个数'}],
+		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
 		row: '',
 		maxData: '2000',
 		selects: [],
@@ -145,15 +145,13 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			editTheme(){
 				var row = this.selects;
 				if(row.length != 1){
-					utils.confirm({ message: pageTxt.tips.user, type: 2 });
+					utils.weakTips(pageTxt.tips.user);
 					return;
 				}
-				observer.execute('messEditTheme',{sync:true, disabled: true, obj: row[0]});
+				utils.goto('/message/editTheme','userid',row[0]);
 			},
-			edit(){
-				setTimeout(function(){
-					observer.execute('messEditTheme',{sync:true, disabled: true, obj: _this.row});
-				}, 0);
+			edit(ind, row){
+				utils.goto('/message/editTheme','userid',row);
 			},
 			delTheme(){
 				var row = this.selects;
@@ -162,13 +160,13 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 					return;
 				}
 				delTheme.row = row[0];
-				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
+				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:2});
 			},
 			del(ind, row){
 //				console.log(ind, row);
 				delTheme.index = ind;
 				delTheme.row = row;
-				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
+				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:2});
 			},
 			detailTheme(){
 				globalVar.set('userid', this.selects[0]);
@@ -215,7 +213,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		    },
 			currenRow(row){
 				this.row = row;
-//				console.log(row)
+//				console.log(row);
 			},
 			currentPage(){
 				
@@ -223,6 +221,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		beforeCreate(){},
 		mounted(){
+			this.selects = [];
 			_this = this;
 			search();
 			useridList();
@@ -267,7 +266,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 <style scoped="scoped">
 	.release{padding:0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;}
-	._hr{margin: 0 0 10px;min-width: 1132px;margin-left: -20px;}
+	._hr{margin: 0 0 10px;min-width: 1000px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
 	.elInput{width: 200px;line-height: 30px;}

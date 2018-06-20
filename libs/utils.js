@@ -7,8 +7,8 @@ import observer   from '@/libs/observer.js';
 	
 function utils(){
 	
-	var exp = {}, vm = new Vue(), ip = globalVar.get('urlIP');
-	var lang = {};
+	var exp = {}, vm = new Vue(), ip = globalVar.get('urlIP'),
+		app = globalVar.get('vm'), lang = {};
 	lang.en = {
 		title:'Reminder', message:'You are sure to do the following?',
 		okBtn: 'Yes', cBtn: 'No'
@@ -308,6 +308,18 @@ function utils(){
 	    }
 	    return out;
 	};
+	var router = app.$router;
+	exp.goto = function (url, key, val, fn, abort){
+		var obj;
+		if(typeof(url)=="object"){
+			obj = url; key = obj.key;
+			val = obj.val; fn = obj.fn;
+			abort = obj.abort;
+		}
+		if(key) globalVar.set(key, val);
+		router.replace({ path: url }, fn, abort);
+	};
+	exp.route = function(){return app.$route.params;};
 	
 	return exp;
 }

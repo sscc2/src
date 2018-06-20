@@ -36,7 +36,7 @@
 			<el-table-column prop="pubTime" sortable='custom' :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<img @click="see" src="@/img/theme/detail_1.png" alt="">
+					<img @click="see(scope.$index, scope.row, scope)" src="@/img/theme/detail_1.png" alt="">
 				</div>
 			</el-table-column>
 		</el-table>
@@ -68,7 +68,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			subUserID:'', topicName: '',
 			sortType: '2', type: '0'
 		},
-		data: [/*{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}*/],
+		data: [{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}],
 		row: '',
 		selects: [],
 		max: 0
@@ -138,20 +138,18 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			detail(){
 				var row = this.selects;
 				if(row.length != 1){
-					utils.confirm({ message: pageTxt.tips.user, type: 2 });
+					utils.weakTips(pageTxt.tips.user);
 					return;
 				}
-				observer.execute('messDetailTheme',{sync:true, obj: row[0]});
+				utils.goto('/message/detailTheme/subscription','userid',row[0]);
 			},
-			see(){
-				var _this = this;
-				setTimeout(function(){
-					observer.execute('messDetailTheme',{sync:true, obj: _this.row});
-				}, 0);
+			see(ind, row){
+				utils.goto('/message/detailTheme/subscription','userid',row);
 			}
 		},
 		beforeCreate(){},
 		mounted(){
+			this.selects = [];
 			_this = this;
 			search();
 			useridList();

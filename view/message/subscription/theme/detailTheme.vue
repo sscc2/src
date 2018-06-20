@@ -47,7 +47,7 @@
 		<!--穿梭框标题-->
 		<div id="slotTitle">
 			<div class="slotTitle">
-				<div id="all" class="all">
+				<div class="all">
 					<!--<el-checkbox></el-checkbox>-->
 				</div>
 				<span class="itemTxt">{{pageTxt.list[0]}}</span>
@@ -101,8 +101,7 @@ import observer  from '@/libs/observer.js';
 				}
 			},
 			back(){
-				
-				this.$router.replace({ path: "/message/release" });
+				utils.goto('/message/' + utils.route().id);
 			},
 			
 		},
@@ -135,7 +134,7 @@ import observer  from '@/libs/observer.js';
 			parent.insertBefore(kit(slotTitle)[0], el);
 		});
 		kit('.detailTheme .el-transfer-panel').each(function(el, i){
-			el.className += ' wrap' + i
+			el.className += ' wrap' + i;
 		});
 //		kit('.detailTheme .transfer .el-transfer__buttons').css('visibility','hidden');
 //		kit('.detailTheme .transfer .el-checkbox__input').css('display','none');
@@ -185,8 +184,8 @@ import observer  from '@/libs/observer.js';
 </script>
 
 <style scoped="scoped">
-	.list li{margin-bottom: 10px;}
 	.h2{width: 1020px;font-size: 16px;color: #666;line-height: 50px;height: 50px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
+	.list li{margin-bottom: 10px;}
 	.txt,.txt1,.txt2{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
 	.txt1,.txt2{text-align: left;width: auto;}
 	.txt2{line-height: 20px;white-space: normal;max-width: 800px;padding: 5px 0;}
@@ -208,4 +207,8 @@ import observer  from '@/libs/observer.js';
 	.transfer .wrap0 .itemTxt{width: 150px;}
 	.transfer .wrap1 .itemTxt{width: 100px;}
 	.transfer .wrap1 .hide{display: inline-block;}
+</style>
+<style>
+	.detailTheme .transfer .el-checkbox__input{display: none;}
+	.detailTheme .el-transfer__buttons button{display: none;}
 </style>

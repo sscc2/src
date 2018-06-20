@@ -1,74 +1,67 @@
 <template>
 	<div class="addTheme">
-		<!--<el-dialog :title="pageTxt.label[0]" :visible.sync="sync" width='1040px'>-->
-			<h2 class="h2">{{pageTxt.label[0]}}</h2>
-			<ul class="list">
-				<li>
-					<label class="txt">{{pageTxt.label[1]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" v-model="info.topicName" clearable></el-input>
+		<h2 class="h2">{{pageTxt.label[0]}}</h2>
+		<ul class="list">
+			<li>
+				<label class="txt">{{pageTxt.label[1]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" v-model="info.topicName" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[2]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[3]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" v-model="info.pubUserName" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[4]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" v-model="info.topicDescr" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[5]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[6]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" v-model="info.effectiveDays" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[7]}}</label>
+				<div class="rightBox">
+					<div class="transfer">
+						<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :left-default-checked="allLeft"
+							:right-default-checked="allRight" :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
+							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}"
+							@left-check-change='leftCheck' @right-check-change='rightCheck'>
+							<div slot-scope="{option}">
+								<span class="itemTxt">{{option.userID}}</span>
+								<span class="itemTxt">{{option.userName}}</span>
+							</div>
+						</el-transfer>
 					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[2]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[3]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" v-model="info.pubUserName" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[4]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" v-model="info.topicDescr" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[5]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[6]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" v-model="info.effectiveDays" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[7]}}</label>
-					<div class="rightBox">
-						<div class="transfer">
-							<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :left-default-checked="allLeft"
-								:right-default-checked="allRight" :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
-								:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}"
-								@left-check-change='leftCheck' @right-check-change='rightCheck'>
-								<div slot-scope="{option}">
-									<span class="itemTxt">{{option.userID}}</span>
-									<span class="itemTxt">{{option.userName}}</span>
-									<!--<span class="itemTxt leIN">{{option.other}}</span>-->
-									<!--<input class="riIN" type="text" placeholder="请输入AppID" />-->
-								</div>
-							</el-transfer>
-						</div>
-					</div>
-				</li><li>
-					<label class="txt">{{pageTxt.label[8]}}</label>
-					<div class="rightBox">
-						<el-input placeholder="" v-model="info.operator" clearable></el-input>
-					</div>
-				</li><li>
-					<label class="txt">&nbsp;</label>
-					<div class="rightBox">
-						<p class="jg"></p>
-						<el-button @click="back">取 消</el-button>
-						<el-button type="primary" @click="submit">确 定</el-button>
-					</div>
-				</li>
-			</ul>
-			<!--<div slot="footer" class="dialog-footer">
-				<el-button @click="sync = false">取 消</el-button>
-				<el-button type="primary" @click="submit">确 定</el-button>
-			</div>-->
-		<!--</el-dialog>-->
+				</div>
+			</li><li>
+				<label class="txt">{{pageTxt.label[8]}}</label>
+				<div class="rightBox">
+					<el-input placeholder="" v-model="info.operator" clearable></el-input>
+				</div>
+			</li><li>
+				<label class="txt">&nbsp;</label>
+				<div class="rightBox">
+					<p class="jg"></p>
+					<el-button type="primary" @click="submit">{{pageTxt.label[11]}}</el-button>
+					<el-button @click="back">{{pageTxt.label[12]}}</el-button>
+					<p class="jg"></p>
+				</div>
+			</li>
+		</ul>
 		<!--穿梭框标题-->
 		<div id="slotTitle">
 			<div class="slotTitle">
@@ -77,7 +70,6 @@
 				</div>
 				<span class="itemTxt">{{pageTxt.list[0]}}</span>
 				<span class="itemTxt">{{pageTxt.list[1]}}</span>
-				<!--<span class="itemTxt">{{pageTxt.list[2]}}</span>-->
 			</div>
 		</div>
 	</div>
@@ -117,12 +109,7 @@ import observer  from '@/libs/observer.js';
 		allLeft: [],
 		allRight: [],
 		check_0: false,
-		check_1: false,
-		filterMethod(a, b){
-//			console.log(a);
-//			console.log(b);
-//			return true
-		}
+		check_1: false
 	};
 	var submitList = [];
 	
@@ -267,9 +254,4 @@ import observer  from '@/libs/observer.js';
 	#slotTitle{display: none;}
 	.slotTitle{background: #F6F6F6;border: 1px solid #D8D8D8;border-width: 1px 0;}
 	.all{font-size: 14px;width: 36px;display: inline-block;padding-left: 15px;pointer-events: none;}
-	._transfer_group_0 .leIN{display: inline-block;}
-	._transfer_group_0 .riIN{display: none;}
-	._transfer_group_1 .leIN{display: none;}
-	._transfer_group_1 .riIN{display: inline-block;}
-	.riIN{width: 104px;vertical-align: middle;height: 25px;color: #666;font-size: 12px;}
 </style>
