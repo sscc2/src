@@ -183,6 +183,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				 * 3，按发布者用户从大到小培训。。。4，按订阅者个数从大到小培训，5，按订阅者个数从小到大排序
 				 * {pubUserID:'发布者ID',pubTime:'发布时间',subsUserCount:'订阅个数'}
 				 */
+				
 				var info = this.info;
 				if(obj.order == 'ascending'){ //从小到大
 					switch (obj.prop){
