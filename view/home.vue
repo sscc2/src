@@ -25,7 +25,10 @@ import sidebar   from '@/view/sidebar.vue';
 			url: 'mx/userinfo/queryLists',
 			cmdID: "600001",
 			userID: '',
-			userName: ''
+			userName: '',
+			pageSize: 500,
+			currentPage: 1
+			
 		};
 		utils.post(param, function(data){
 			console.log('useridList：',data);

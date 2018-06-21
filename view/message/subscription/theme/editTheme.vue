@@ -261,7 +261,7 @@ import observer  from '@/libs/observer.js';
 	
 	function isSelectUser(){
 		var sel = _this.info.canSubsUserList, len = sel.length;
-//		if(len == _cans.length) return false;
+		if(len != _cans.length) return true;
 		var i, k, id;
 		for (i = 0; i < len; i++) {
 			id = sel[i].userID;

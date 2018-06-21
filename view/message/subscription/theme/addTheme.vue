@@ -172,6 +172,7 @@ import observer  from '@/libs/observer.js';
 			var info = this.info;
 			for(var k in info) info[k] = '';
 			info.canSubsUserList = [];
+			this.value = [];
 			useridList();
 			addTitle();
 		},
