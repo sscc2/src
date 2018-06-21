@@ -96,7 +96,7 @@
 									<el-table-column prop="userName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
 									<el-table-column :label="pageTxt.list[2]" width='120'>
 										<div slot-scope="scope" class="_zero">
-											<input @click="inck(this)" />
+											<input class="appInput" @click="inck(this)" />
 										</div>
 									</el-table-column>
 								</el-table>
@@ -215,7 +215,7 @@ import observer  from '@/libs/observer.js';
 				}
 			},
 			inck(e){
-				console.log(e)
+//				console.log(e)
 			},
 			now(){
 				utils.weakTips('开发中...');
@@ -224,6 +224,18 @@ import observer  from '@/libs/observer.js';
 				var info = this.info;
 				info.cmdID = '600050';
 				info.operator = 'admin';
+				var sub = info.subsUserList, flag = true;
+				kit('.editTheme #appid .appInput').each(function(el, i){
+					if(el.value==''){
+						return flag = false;
+					}
+					sub[i].userAppid = el.value;
+				});
+				if(!flag){
+					utils.weakTips('AppId 不能为空！');
+					return;
+				}
+				
 				utils.post('mx/pubTopic/modifyAll', info, function(data){
 					console.log('修改主题2：',data);
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
@@ -387,6 +399,7 @@ import observer  from '@/libs/observer.js';
 	.table{width: 370px;margin-right: 40px;}
 	.h3{font-size: 14px;color: #606266;background: #f5f7fa;line-height: 40px;padding-left: 30px;
 		border: 1px solid #EFEFEF;border-bottom: none;}
+	.appInput{width: 100%;}
 </style>
 <style>
 	.editTheme .el-tabs__item{color: #5a6e93;}
