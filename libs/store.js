@@ -4,7 +4,7 @@ Vue.use(Vuex);
 
 const store=new Vuex.Store({
     state:{
-        tabv:"",
+        tabv:"v1",
         transferEditID:"123"
     } 
 })

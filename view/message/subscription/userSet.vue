@@ -22,7 +22,7 @@
 				<span class="btnTxt">{{pageTxt.label[5]}}</span>
 			</el-button>
 		</div>
-		<el-table highlight-current-row  @current-change="currenRow" :data="data" tooltip-effect="dark">
+		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="userID" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
@@ -32,7 +32,7 @@
 			<el-table-column prop="maxDaysOfTopic" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<img @click="edit" src="@/img/theme/edit_2.png" alt="">
+					<img @click="edit(scope.row)" src="@/img/theme/edit_2.png" alt="">
 				</div>
 			</el-table-column>
 		</el-table>
@@ -60,7 +60,7 @@ import observer  from '@/libs/observer.js';
 		userID: '',
 		userName: '',
 		idName: '',
-		data: [/*{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}*/],
+		data: [{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}],
 		row: '',
 		selects: [],
 		max: 0
@@ -99,13 +99,23 @@ import observer  from '@/libs/observer.js';
 				this.row = row;
 				console.log(row)
 			},
+			selectionRow(val){
+		     	this.selects = val;
+		    },
 			currentPage(){
 				
 			},
 			editAll(){
+				var row = this.selects;
+				if(row.length != 1){
+					utils.weakTips(this.pageTxt.tips.user);
+					return;
+				}
+				this.$store.state.transferEditID = row[0].userID;
 				this.$router.replace({ path: "/message/userEdit/mess_userSet" });
 			},
-			edit(){
+			edit(row){
+				this.$store.state.transferEditID = row.userID;
 				this.$router.replace({ path: "/message/userEdit/mess_userSet" });
 			}
 		},

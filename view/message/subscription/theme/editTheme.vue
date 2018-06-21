@@ -187,6 +187,7 @@ import observer  from '@/libs/observer.js';
 				} else {
 					var info = this.info;
 					info.cmdID = '600051';
+					info.operator = 'admin';
 					utils.post('mx/pubTopic/modifyTopic', info, function(data){
 						console.log('修改主题1：',data);
 						if(data.errcode < 0) return utils.weakTips(data.errinfo);
@@ -221,6 +222,7 @@ import observer  from '@/libs/observer.js';
 			submit(){
 				var info = this.info;
 				info.cmdID = '600050';
+				info.operator = 'admin';
 				utils.post('mx/pubTopic/modifyAll', info, function(data){
 					console.log('修改主题2：',data);
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
