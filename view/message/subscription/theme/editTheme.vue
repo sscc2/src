@@ -255,7 +255,14 @@ import observer  from '@/libs/observer.js';
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
 		},
-		watch: {},
+		watch: {
+			active(cur, old){
+				var sub = this.info.subsUserList;
+				kit('.editTheme #appid .appInput').each(function(el, i){
+					el.value = sub[i].userAppid;
+				});
+			}
+		},
 		components: {}
 	};
 	
