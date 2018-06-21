@@ -169,6 +169,9 @@ import observer  from '@/libs/observer.js';
 			_this = this;
 			slotTitle = kit('.addTheme #slotTitle').html();
 			first = false;
+			var info = this.info;
+			for(var k in info) info[k] = '';
+			info.canSubsUserList = [];
 			useridList();
 			addTitle();
 		},
