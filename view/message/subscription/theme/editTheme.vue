@@ -185,7 +185,14 @@ import observer  from '@/libs/observer.js';
 				if( isSelectUser() ){
 					this.active = 'second';
 				} else {
-					utils.goto('/message/release');
+					var info = this.info;
+					info.cmdID = '600051';
+					utils.post('mx/pubTopic/modifyTopic', info, function(data){
+						console.log('修改主题1：',data);
+						if(data.errcode < 0) return utils.weakTips(data.errinfo);
+						utils.weakTips(data.errinfo);
+						utils.goto('/message/release');
+					});
 				}
 			},
 			addAppid(row){
@@ -209,11 +216,17 @@ import observer  from '@/libs/observer.js';
 				console.log(e)
 			},
 			now(){
-				
+				utils.weakTips('开发中...');
 			},
 			submit(){
-				
-				
+				var info = this.info;
+				info.cmdID = '600050';
+				utils.post('mx/pubTopic/modifyAll', info, function(data){
+					console.log('修改主题2：',data);
+					if(data.errcode < 0) return utils.weakTips(data.errinfo);
+					utils.weakTips(data.errinfo);
+					utils.goto('/message/release');
+				});
 			},
 		},
 		mounted(){
