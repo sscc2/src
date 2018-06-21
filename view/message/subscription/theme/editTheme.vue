@@ -338,6 +338,7 @@ import observer  from '@/libs/observer.js';
 	var _cans = [];
 	function cans(){
 		var can = _this.info.canSubsUserList, len=can.length;
+		_cans = [];
 		for (var i = 0; i < len; i++)
 			_cans.push(can[i]);
 	}
