@@ -22,7 +22,7 @@ function creatID(){
 		obj.words = obj.userID + obj.userName;
 		vars.useridList.push(obj);
 	}
-	console.log('creatID', vars.useridList);
+//	console.log('creatID', vars.useridList);
 }
 creatID();
 
@@ -38,9 +38,10 @@ export default {
 		for (i = 0; i < len; i++) {
 			obj = vars.useridList[i];
 			arr.push({
+				key: i,
 				userID: obj.userID,
 				userName: obj.userName,
-				words: obj.userID+obj.userName
+				label: obj.userID+obj.userName
 			});
 		}
 		return arr;

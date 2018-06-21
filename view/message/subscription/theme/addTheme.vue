@@ -36,7 +36,7 @@
 				<label class="txt">{{pageTxt.label[7]}}</label>
 				<div class="rightBox">
 					<div class="transfer">
-						<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :left-default-checked="allLeft"
+						<el-transfer v-model="value" filterable :left-default-checked="allLeft"
 							:right-default-checked="allRight" :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
 							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}"
 							@left-check-change='leftCheck' @right-check-change='rightCheck'>
@@ -183,15 +183,14 @@ import observer  from '@/libs/observer.js';
 		},
 		components: {}
 	};
-	var idList = [];
 	function useridList(){
-		idList = globalVar.useridList();
+		_this.list = globalVar.useridList();
 		var call = function(master){
 			if(master != 'useridReady') return;
 			observer.delBinding('useridReady', call);
-			idList = globalVar.useridList(); call = null;
+			_this.list = globalVar.useridList(); call = null;
 		}
-		if(!idList.length) observer.addBinding('useridReady', call);
+		if(!_this.list.length) observer.addBinding('useridReady', call);
 	}
 	var _this;
 	function addTitle(){
@@ -250,6 +249,7 @@ import observer  from '@/libs/observer.js';
 	.jg{padding-bottom: 30px;}
 	
 	.transfer{text-align: center;}
+	.el-transfer{text-align: left; display: inline-block;}
 	.itemTxt{display: inline-block;width: 150px;font-size: 13px;line-height: 40px;color: #666;vertical-align: middle;}
 	#slotTitle{display: none;}
 	.slotTitle{background: #F6F6F6;border: 1px solid #D8D8D8;border-width: 1px 0;}

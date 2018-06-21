@@ -27,7 +27,7 @@
 				<div class="rightBox">
 					<!--<p class="txt1">{{pageTxt.label[5]}}</p>-->
 					<div class="transfer">
-						<el-transfer style="text-align: left; display: inline-block" v-model="value" filterable :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
+						<el-transfer v-model="keys" filterable :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
 							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}">
 							<div slot-scope="{option}">
 								<span class="itemTxt">{{option.userID}}</span>
@@ -84,7 +84,7 @@ import observer  from '@/libs/observer.js';
 		data: false,
 		info: {topicName:'',pubUserID:'',topicDescr:'',topicInfo:''},
 		list: list,
-		value: [],
+		keys: [],
 	};
 	
 	export default {
@@ -94,11 +94,8 @@ import observer  from '@/libs/observer.js';
 		},
 		methods: {
 			handleChange(remain, direction, moved){
-				if(direction == 'right'){
-					
-				} else {
-					
-				}
+				console.log(remain);
+				console.log(this.keys);
 			},
 			back(){
 				utils.goto('/message/' + utils.route().id);
@@ -157,14 +154,14 @@ import observer  from '@/libs/observer.js';
 			info.topicInfo = res.topicInfo;
 			info.effectiveDays = res.effectiveDays;
 			info.pubTime = res.pubTime;
-			var subs, can, arr = [];
+			var subs, can, arr = [], val = [];
 			subs = res.subsUserList;
 			can = res.canSubsUserList;
-			_this.value = [];
+			val = [];
 			if(subs&&subs.length>0){
 				arr = arr.concat(subs);
 				for (var i = 0; i < subs.length; i++)
-					_this.value.push(i);
+					val.push(i);
 			}
 			if(can&&can.length>0) arr = arr.concat(can);
 		
@@ -179,6 +176,7 @@ import observer  from '@/libs/observer.js';
 				});
 			}
 			_this.list = temp;
+			_this.keys = val;
 		});
 	}
 </script>
@@ -199,6 +197,7 @@ import observer  from '@/libs/observer.js';
 	.back{margin-top: 30px;}
 	
 	.transfer{text-align: center;}
+	.el-transfer{text-align: left; display: inline-block;}
 	.itemTxt{display: inline-block;font-size: 13px;line-height: 40px;color: #666;vertical-align: middle;}
 	#slotTitle{display: none;}
 	.slotTitle{background: #F6F6F6;border: 1px solid #D8D8D8;border-width: 1px 0;}
