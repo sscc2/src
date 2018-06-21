@@ -84,22 +84,23 @@
 									<el-table-column prop="userName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
 								</el-table>
 							</div>
-							
-							<h3 class="h3">{{pageTxt.label[9]}}</h3>
-							<el-table id='appid' highlight-current-row :data="info.subsUserList" tooltip-effect="dark">
-								<el-table-column width="55">
-									<div slot-scope="scope" class="_zero">
-										<img @click="delAppid(scope.row)" src="@/img/theme/del_1.png" alt="">
-									</div>
-								</el-table-column>
-								<el-table-column prop="userID" :label="pageTxt.list[0]" show-overflow-tooltip></el-table-column>
-								<el-table-column prop="userName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
-								<el-table-column :label="pageTxt.list[2]" width='120'>
-									<div slot-scope="scope" class="_zero">
-										<input @click="inck(this)" />
-									</div>
-								</el-table-column>
-							</el-table>
+							<div class="table">
+								<h3 class="h3">{{pageTxt.label[9]}}</h3>
+								<el-table id='appid' highlight-current-row :data="info.subsUserList" tooltip-effect="dark">
+									<el-table-column width="55">
+										<div slot-scope="scope" class="_zero">
+											<img @click="delAppid(scope.row)" src="@/img/theme/del_1.png" alt="">
+										</div>
+									</el-table-column>
+									<el-table-column prop="userID" :label="pageTxt.list[0]" show-overflow-tooltip></el-table-column>
+									<el-table-column prop="userName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
+									<el-table-column :label="pageTxt.list[2]" width='120'>
+										<div slot-scope="scope" class="_zero">
+											<input @click="inck(this)" />
+										</div>
+									</el-table-column>
+								</el-table>
+							</div>
 						</div>
 					</li><li>
 						<label class="txt">&nbsp;</label>
@@ -337,7 +338,7 @@ import observer  from '@/libs/observer.js';
 			obj = list[i];
 			obj.key = i;
 			obj.label = obj.userID + obj.userName;
-			for (var k = 0; i < can.length; k++) {
+			for (var k = 0; k < can.length; k++) {
 				if(can[k].userID==obj.userID){
 					key.push(i);
 					break;
@@ -383,8 +384,9 @@ import observer  from '@/libs/observer.js';
 	
 	.box{white-space: nowrap;}
 	.box > *{display: inline-block;vertical-align: top;}
-	.box .el-table{width: 370px;margin-right: 40px;}
-	.h3{font-size: 14px;color: #909399;}
+	.table{width: 370px;margin-right: 40px;}
+	.h3{font-size: 14px;color: #606266;background: #f5f7fa;line-height: 40px;padding-left: 30px;
+		border: 1px solid #EFEFEF;border-bottom: none;}
 </style>
 <style>
 	.editTheme .el-tabs__item{color: #5a6e93;}
