@@ -26,7 +26,7 @@ import sidebar   from '@/view/sidebar.vue';
 			cmdID: "600001",
 			userID: '',
 			userName: '',
-			pageSize: 500,
+			pageSize: 200,
 			currentPage: 1
 			
 		};

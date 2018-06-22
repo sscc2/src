@@ -36,8 +36,9 @@
 				</div>
 			</el-table-column>
 		</el-table>
-		<div class="_pagination" v-show="max!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="max"></el-pagination>
+		<div class="_pagination">
+			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="100" 
+				layout="total, sizes, prev, pager, next, jumper" background></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -63,6 +64,7 @@ import observer  from '@/libs/observer.js';
 		data: [{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}],
 		row: '',
 		selects: [],
+		size: 20,
 		max: 0
 	};
 //	for (var i = 0; i < 30; i++) {
@@ -102,8 +104,12 @@ import observer  from '@/libs/observer.js';
 			selectionRow(val){
 		     	this.selects = val;
 		    },
-			currentPage(){
-				
+		    pageSize(val){
+		    	this.size = val;
+//		    	console.log(`每页 ${val} 条`);
+		    },
+			currentPage(val){
+				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
 			},
 			editAll(){
 				var row = this.selects;

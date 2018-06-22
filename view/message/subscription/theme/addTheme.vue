@@ -10,14 +10,22 @@
 			</li><li>
 				<label class="txt">{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>
+					<!--<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>-->
+					<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+						<div slot-scope="{item}">
+							<span class="name">{{item.userID}}</span>
+						    <span class="addr">({{item.userName}})</span>
+						</div>
+					</el-autocomplete>
 				</div>
-			</li><li>
+			</li>
+			<!--<li>
 				<label class="txt">{{pageTxt.label[3]}}</label>
 				<div class="rightBox">
 					<el-input placeholder="" v-model="info.pubUserName" clearable></el-input>
 				</div>
-			</li><li>
+			</li>-->
+			<li>
 				<label class="txt">{{pageTxt.label[4]}}</label>
 				<div class="rightBox">
 					<el-input placeholder="" v-model="info.topicDescr" clearable></el-input>
@@ -83,7 +91,7 @@ import globalVar from '@/libs/globalVar.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, slotTitle, first = false;
+	var pageTxt, slotTitle, idList = [];
 	pageTxt = lang.themeAddTheme;
 	
 	var list = [];
@@ -98,8 +106,7 @@ import observer  from '@/libs/observer.js';
 	
 	var data = {
 		pageTxt,
-		sync: false,
-		obj: null,
+		idName: '',
 		info: {
 			operator:'admin', topicName:'主题名称', pubUserID:'发布者ID', pubUserName:'发布者名称',
 			topicDescr:'主题描述',topicInfo:'主题内容', effectiveDays: '7', canSubsUserList:[]
@@ -107,9 +114,7 @@ import observer  from '@/libs/observer.js';
 		list: list,
 		value: [],
 		allLeft: [],
-		allRight: [],
-		check_0: false,
-		check_1: false
+		allRight: []
 	};
 	var submitList = [];
 	
@@ -124,6 +129,19 @@ import observer  from '@/libs/observer.js';
 			return data;
 		},
 		methods: {
+			fetch(str, cb){
+				var idName,i,len = idList.length,obj,tem=[];
+				for (i = 0; i < len; i++) {
+					obj = idList[i];
+					idName = obj.userID+obj.userName;
+					if(idName.indexOf(str)!=-1) tem.push(obj);
+				}
+				cb(tem);
+			},
+			idSelect(item){
+				this.info.pubUserID = item.userID;
+				this.idName = item.userID+'('+item.userName+')';
+			},
 			handleChange(remain, direction, moved){
 //				kit('.slotTitle').each(function(el){
 //					el.check = true;
@@ -145,7 +163,7 @@ import observer  from '@/libs/observer.js';
 			},
 			rightCheck(arr, i){},
 			submit(e){
-				if(submitList.length==0) return this.sync = false;
+				if(submitList.length==0) return;
 				//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
 				var i, ind, tem = [], info = this.info;
 				for (i = 0; i < submitList.length; i++) {
@@ -161,14 +179,12 @@ import observer  from '@/libs/observer.js';
 				});
 			},
 			back(){
-				this.sync = false;
 				this.$router.replace({ path: "/message/release" });
 			}
 		},
 		mounted(){
 			_this = this;
 			slotTitle = kit('.addTheme #slotTitle').html();
-			first = false;
 			var info = this.info;
 			for(var k in info) info[k] = '';
 			info.canSubsUserList = [];
@@ -176,15 +192,7 @@ import observer  from '@/libs/observer.js';
 			useridList();
 			addTitle();
 		},
-		watch: {
-			sync(cur, old){
-//				if(!cur) return;
-				if(!first){
-					first = true;
-//					setTimeout(addTitle, 40);
-				}
-			}
-		},
+		watch: {},
 		components: {}
 	};
 	function useridList(){
