@@ -75,12 +75,20 @@ import observer  from '@/libs/observer.js';
 //		if(master != 'messUpload') return;
 //		data.obj = param;
 //	});
-	function autoInput(str){
+	function autoInput(str,cb){
 		if(!str) return;
 		console.time('请求开始...');
 		utils.getUserid(str, function(obj){
 			idList = obj;
-			console.endTime('请求开始...');
+			console.timeEnd('请求开始...');
+			var idName,i,len = idList.length,obj,tem=[];
+			for (i = 0; i < len; i++) {
+				obj = idList[i];
+				idName = obj.userID+obj.userName;
+				if(idName.indexOf(str)!=-1) tem.push(obj);
+			}
+			cb(tem);
+			console.log('渲染中...');
 		});
 	}
 	export default {
@@ -90,22 +98,33 @@ import observer  from '@/libs/observer.js';
 		},
 		methods: {
 			fetch(str, cb){
-				var idName,i,len = idList.length,obj,tem=[];
-				for (i = 0; i < len; i++) {
-					obj = idList[i];
-					idName = obj.userID+obj.userName;
-					if(idName.indexOf(str)!=-1) tem.push(obj);
-				}
-				cb(tem);
-				console.log('渲染中...');
+				
+				clearTimeout(autoTime);
+				autoTime = setTimeout(autoInput, 300, str,cb);
+				
+				
+				
+				
+//				var idName,i,len = idList.length,obj,tem=[];
+//				for (i = 0; i < len; i++) {
+//					obj = idList[i];
+//					idName = obj.userID+obj.userName;
+//					if(idName.indexOf(str)!=-1) tem.push(obj);
+//				}
+//				cb(tem);
+//				console.log('渲染中...');
+				
+				
+				
+				
 			},
 			idSelect(item){
 				this.userID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
 			},
 			autoInput(str){
-				clearTimeout(autoTime);
-				autoTime = setTimeout(autoInput, 300, str);
+//				clearTimeout(autoTime);
+//				autoTime = setTimeout(autoInput, 300, str);
 			},
 			search(){
 				search();
