@@ -56,12 +56,14 @@
 						</el-transfer>
 					</div>
 				</div>
-			</li><li>
+			</li>
+			<!--<li>
 				<label class="txt">{{pageTxt.label[8]}}</label>
 				<div class="rightBox">
 					<el-input placeholder="" v-model="info.operator" ></el-input>
 				</div>
-			</li><li>
+			</li>-->
+			<li>
 				<label class="txt">&nbsp;</label>
 				<div class="rightBox">
 					<p class="jg"></p>
