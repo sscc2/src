@@ -4,13 +4,13 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<!--<el-input placeholder="" v-model="info.subUserID"></el-input>-->
-			<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+			<el-input class='elInput' placeholder="" v-model="info.subUserID"></el-input>
+			<!--<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
 				</div>
-			</el-autocomplete>
+			</el-autocomplete>-->
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="info.subUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>

@@ -189,11 +189,16 @@ import observer  from '@/libs/observer.js';
 					var info = this.info;
 					info.cmdID = '600051';
 					info.operator = 'admin';
-					utils.post('mx/pubTopic/modifyTopic', info, function(data){
-						console.log('修改主题1：',data);
-						if(data.errcode < 0) return utils.weakTips(data.errinfo);
-						utils.weakTips(data.errinfo);
-						utils.goto('/message/release');
+					utils.hints({
+						txt: '是否要提交!',
+						yes: function(){
+							utils.post('mx/pubTopic/modifyTopic', info, function(data){
+								console.log('修改主题1：',data);
+								if(data.errcode < 0) return utils.weakTips(data.errinfo);
+								utils.weakTips(data.errinfo);
+								utils.goto('/message/release');
+							});
+						}
 					});
 				}
 			},
@@ -235,12 +240,16 @@ import observer  from '@/libs/observer.js';
 					utils.weakTips('AppId 不能为空！');
 					return;
 				}
-				
-				utils.post('mx/pubTopic/modifyAll', info, function(data){
-					console.log('修改主题2：',data);
-					if(data.errcode < 0) return utils.weakTips(data.errinfo);
-					utils.weakTips(data.errinfo);
-					utils.goto('/message/release');
+				utils.hints({
+					txt: '是否要提交!',
+					yes: function(){
+						utils.post('mx/pubTopic/modifyAll', info, function(data){
+							console.log('修改主题2：',data);
+							if(data.errcode < 0) return utils.weakTips(data.errinfo);
+							utils.weakTips(data.errinfo);
+							utils.goto('/message/release');
+						});
+					}
 				});
 			},
 		},

@@ -39,7 +39,7 @@
 			</li><li>
 				<label class="txt">{{pageTxt.label[6]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.effectiveDays" ></el-input>
+					<el-input  type="number" placeholder="" v-model="info.effectiveDays" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[7]}}</label>
@@ -180,21 +180,27 @@ import observer  from '@/libs/observer.js';
 			},
 			rightCheck(arr, i){},
 			submit(e){
-				if(submitList.length==0) return;
+//				if(submitList.length==0) return;
 				//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
 				var i, ind, tem = [], info = this.info;
 				for (i = 0; i < submitList.length; i++) {
 					ind = submitList[i];
 					tem.push(this.list[ind]);
 				}
-				info.canSubsUserList = tem;
-				info.cmdID = '600045';
-				utils.post('mx/pubTopic/add', info, function(data){
-					console.log('增加主题：',data);
-					if(data.errcode < 0) return utils.weakTips(data.errinfo);
-					this.$router.replace({ path: "/message/release" });
-//					_this.list = data.lists;
+				utils.hints({
+					txt:'是否要提交！',
+					yes: function(){
+						info.canSubsUserList = tem;
+						info.cmdID = '600045';
+						utils.post('mx/pubTopic/add', info, function(data){
+							console.log('增加主题：',data);
+							if(data.errcode < 0) return utils.weakTips(data.errinfo);
+							_this.$router.replace({ path: "/message/release" });
+		//					_this.list = data.lists;
+						});
+					}
 				});
+				
 			},
 			back(){
 				this.$router.replace({ path: "/message/release" });
