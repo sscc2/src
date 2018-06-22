@@ -119,7 +119,7 @@ import observer  from '@/libs/observer.js';
 		    pageSize(val){
 //		    	console.log(`每页 ${val} 条`);
 		    	this.size = val;
-		    	search(val, this.size);
+		    	search(currentPage, this.size);
 		    },
 			currentPage(val){
 //				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
@@ -149,7 +149,7 @@ import observer  from '@/libs/observer.js';
 		}
 	};
 	function search(num, size){
-		var userID = isInput ? _this.idName:_this.userID;
+		var userID = isInput ? _this.idName : _this.userID;
 		var info = {
 			cmdID: '600041', userID: userID,
 			pageSize: size||20, currentPage: num||1,

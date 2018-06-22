@@ -5,7 +5,7 @@
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
 			<!--<el-input placeholder="" v-model="info.pubUserID"></el-input>-->
-			<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+			<el-autocomplete @input='autoInput' class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
@@ -79,11 +79,12 @@ import EditTheme   from '@/view/message/subscription/theme/editTheme.vue';
 import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
-	var pageTxt, _this;
+	var pageTxt, _this, autoTime, isInput = false, currentPage=1;
 	pageTxt = lang.themeRelease;
 	var data = {
 		pageTxt,
 		idName: '',
+		userID:'',
 		info: {
 			cmdID: '600042', pubUserID: '', topicName: '',
 			beginDate: '', endDate: '', sortType: '0'
@@ -116,6 +117,18 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			search();
 		});
 	}
+	
+	function autoInput(str, cb){
+		if(!str) return;
+		utils.getUserid(str, function(data){
+			var i,len = data.length,tem=[];
+			for (i = 0; i < len; i++) {
+				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+			}
+			cb(tem);
+		});
+	}
+	
 	export default {
 		name: 'message_release',
 		data() {
@@ -123,20 +136,19 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		methods: {
 			fetch(str, cb){
-				var idName,i,len = idList.length,obj,tem=[];
-				for (i = 0; i < len; i++) {
-					obj = idList[i];
-					idName = obj.userID+obj.userName;
-					if(idName.indexOf(str)!=-1) tem.push(obj);
-				}
-				cb(tem);
+				clearTimeout(autoTime);
+				autoTime = setTimeout(autoInput, 300, str, cb);
 			},
 			idSelect(item){
-				this.info.pubUserID = item.userID;
+				isInput = false;
+				this.userID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
 			},
+			autoInput(){
+				isInput = true;
+			},
 			search(){
-				search();
+				search(1, 20);
 			},
 			add(){
 				this.$router.replace({ path: "/message/addTheme" });
@@ -231,11 +243,13 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	};
 	function search(){
 		var picker = _this.picker, info = _this.info;
+		var userID = isInput ? _this.idName : _this.userID;
 		if(!picker){
 			picker = today();
 		}
 		info.beginDate = picker[0];
 		info.endDate = picker[1];
+		info.pubUserID = userID;
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
