@@ -143,7 +143,7 @@ import observer  from '@/libs/observer.js';
 		mounted(){
 			_this = this;
 			search(1, 20);
-			useridList();
+//			useridList();
 		}
 	};
 	function search(num, size){

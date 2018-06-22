@@ -5,13 +5,14 @@
 			<li>
 				<label class="txt">{{pageTxt.label[1]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.topicName" clearable></el-input>
+					<el-input placeholder="" v-model="info.topicName" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
 					<!--<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>-->
-					<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" 
+						:fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
 						<div slot-scope="{item}">
 							<span class="name">{{item.userID}}</span>
 						    <span class="addr">({{item.userName}})</span>
@@ -28,7 +29,7 @@
 			<li>
 				<label class="txt">{{pageTxt.label[4]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.topicDescr" clearable></el-input>
+					<el-input placeholder="" v-model="info.topicDescr" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[5]}}</label>
@@ -38,7 +39,7 @@
 			</li><li>
 				<label class="txt">{{pageTxt.label[6]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.effectiveDays" clearable></el-input>
+					<el-input placeholder="" v-model="info.effectiveDays" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[7]}}</label>
@@ -58,7 +59,7 @@
 			</li><li>
 				<label class="txt">{{pageTxt.label[8]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.operator" clearable></el-input>
+					<el-input placeholder="" v-model="info.operator" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt">&nbsp;</label>
@@ -91,7 +92,7 @@ import globalVar from '@/libs/globalVar.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, slotTitle, idList = [];
+	var pageTxt, _this, slotTitle, idList = [], autoTime, isInput=false;
 	pageTxt = lang.themeAddTheme;
 	
 	var list = [];
@@ -118,10 +119,22 @@ import observer  from '@/libs/observer.js';
 	};
 	var submitList = [];
 	
-	observer.addBinding('messAddTheme', function(master, param){
-		if(master != 'messAddTheme') return;
-		data.sync = param.sync;
-	});
+//	observer.addBinding('messAddTheme', function(master, param){
+//		if(master != 'messAddTheme') return;
+//		data.sync = param.sync;
+//	});
+	
+	function autoInput(str, cb){
+		if(!str) return;
+//		console.time('请求用户ID...');
+		utils.getUserid(str, function(data){
+			var i,len = data.length,tem=[];
+			for (i = 0; i < len; i++) {
+				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+			}
+			cb(tem);
+		});
+	}
 	
 	export default {
 		name: 'message_addTheme',
@@ -130,17 +143,18 @@ import observer  from '@/libs/observer.js';
 		},
 		methods: {
 			fetch(str, cb){
-				var idName,i,len = idList.length,obj,tem=[];
-				for (i = 0; i < len; i++) {
-					obj = idList[i];
-					idName = obj.userID+obj.userName;
-					if(idName.indexOf(str)!=-1) tem.push(obj);
-				}
-				cb(tem);
+				clearTimeout(autoTime);
+				autoTime = setTimeout(autoInput, 300, str, cb);
 			},
 			idSelect(item){
 				this.info.pubUserID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
+			},
+			autoInput(){
+				isInput = true;
+			},
+			blur(){
+				blurID();
 			},
 			handleChange(remain, direction, moved){
 //				kit('.slotTitle').each(function(el){
@@ -175,7 +189,8 @@ import observer  from '@/libs/observer.js';
 				utils.post('mx/pubTopic/add', info, function(data){
 					console.log('增加主题：',data);
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
-					_this.list = data.lists;
+					this.$router.replace({ path: "/message/release" });
+//					_this.list = data.lists;
 				});
 			},
 			back(){
@@ -189,12 +204,13 @@ import observer  from '@/libs/observer.js';
 			for(var k in info) info[k] = '';
 			info.canSubsUserList = [];
 			this.value = [];
-			useridList();
+//			useridList();
 			addTitle();
 		},
 		watch: {},
 		components: {}
 	};
+	
 	function useridList(){
 		_this.list = globalVar.useridList();
 		var call = function(master){
@@ -204,7 +220,22 @@ import observer  from '@/libs/observer.js';
 		}
 		if(!_this.list.length) observer.addBinding('useridReady', call);
 	}
-	var _this;
+	
+	function blurID(){
+		var id = isInput ? _this.idName : _this.info.pubUserID;
+		console.log(id)
+		var param = {
+			url: 'mx/userComm/querySpcificUser',
+			cmdID: '600035',
+			userID: id
+		};
+		utils.post(param, function(data){
+			console.log('通信关系用户：', data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			this.list
+		});
+	}
+	
 	function addTitle(){
 		kit('.addTheme .el-checkbox-group').each(function(el, i){
 			el.className += ' _transfer_group_' + i;
@@ -259,6 +290,7 @@ import observer  from '@/libs/observer.js';
 	.rightBox .el-input{width: 255px;}
 	.rightBox .el-textarea{width: 835px;}
 	.jg{padding-bottom: 30px;}
+	.autocomplete{width: 255px;}
 	
 	.transfer{text-align: center;}
 	.el-transfer{text-align: left; display: inline-block;}
