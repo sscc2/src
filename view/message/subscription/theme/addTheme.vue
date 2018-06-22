@@ -232,7 +232,7 @@ import observer  from '@/libs/observer.js';
 		utils.post(param, function(data){
 			console.log('通信关系用户：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			this.list = data.lists;
+			_this.list = data.lists;
 		});
 	}
 	
