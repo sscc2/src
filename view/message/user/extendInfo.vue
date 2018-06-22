@@ -98,7 +98,7 @@ export default {
         {
           cmdID: 600012,
           operator: "admin",
-          userID: _this.extend,
+          userID: _this.$store.state.transferEditID,
           userAlarmSmsNum: _this.inputValue.userAlarmSmsNum,
           userTelNum: _this.inputValue.userTelNum,
           userMobileNum: _this.inputValue.userMobileNum,

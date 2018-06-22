@@ -475,7 +475,7 @@ export default {
 
   //初始化数据
   created() {
-    ainfo.userID = this.$store.state.createdID;
+    ainfo.userID = this.$store.state.transferEditID;
     ainfo.type = 0;
     // ainfo.ekeyName = "";
     var _this = this;

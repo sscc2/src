@@ -127,7 +127,8 @@ export default {
           userID: _this.userParam.id,
           userName: _this.userParam.name,
           pageSize: _this.pageSize,
-          currentPage: _this.currentPage
+          currentPage: _this.currentPage,
+          type: "0"
         },
         function(response) {
           _this.userData = response;
@@ -144,9 +145,6 @@ export default {
     deleteUser() {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！") ;
-        setTimeout(() => {
-          this.errInfo = false;
-        }, 2000);
       } else {
         this.promptBoxShow1 = true;
       }
@@ -241,10 +239,10 @@ export default {
       this.$store.state.transferEditID = e.userID;
     },
 
+    // 分页
     handleSizeChange: function(size) {
-      this.pagesize = size;
+      this.pageSize = size;
     },
-
     handleCurrentChange: function(currentPage) {
       this.currentPage = currentPage;
       var _this = this;
@@ -255,7 +253,8 @@ export default {
           userID: "",
           userName: "",
           pageSize: _this.pageSize,
-          currentPage: _this.currentPage
+          currentPage: _this.currentPage,
+          type: "0"
         },
         function(response) {
           _this.userData = response;
@@ -287,7 +286,8 @@ export default {
         userID: "",
         userName: "",
         pageSize: _this.pageSize,
-        currentPage: _this.currentPage
+        currentPage: _this.currentPage,
+        type: "0"
       },
       function(response) {
         _this.userData = response;
@@ -299,17 +299,6 @@ export default {
 </script>
 
 <style scoped="scoped">
-.header {
-  height: 47px;
-  border-bottom: 1px solid #ccc;
-}
-.header_txt {
-  font-size: 16px;
-  color: #656a73;
-  line-height: 47px;
-  margin-left: 17px;
-  font-weight: bold;
-}
 .user {
   padding: 22px;
   white-space: nowrap;

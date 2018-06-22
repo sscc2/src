@@ -82,5 +82,5 @@ import Statist from '@/view/message/statist.vue';
 	.container .el-tabs__content{height: 100%;}
 	.container .el-tab-pane{overflow-y: auto;height: 100%;}
 	/*选卡*/
-	.el-select .el-input .el-select__caret{line-height: 40px;}
+	/* .el-select .el-input .el-select__caret{line-height: 40px;} */
 </style>

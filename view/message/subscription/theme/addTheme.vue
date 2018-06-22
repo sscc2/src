@@ -45,7 +45,7 @@
 				<label class="txt">{{pageTxt.label[7]}}</label>
 				<div class="rightBox">
 					<div class="transfer">
-						<el-transfer v-model="value" filterable :left-default-checked="allLeft"
+						<el-transfer v-model="keys" filterable :left-default-checked="allLeft"
 							:right-default-checked="allRight" :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
 							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}"
 							@left-check-change='leftCheck' @right-check-change='rightCheck'>
@@ -102,7 +102,7 @@ import observer  from '@/libs/observer.js';
 			userName: '用户名'+i
 		};
 		obj.label = obj.userID + obj.userName;
-		list.push(obj);
+//		list.push(obj);
 	}
 	
 	var data = {
@@ -113,7 +113,7 @@ import observer  from '@/libs/observer.js';
 			topicDescr:'主题描述',topicInfo:'主题内容', effectiveDays: '7', canSubsUserList:[]
 		},
 		list: list,
-		value: [],
+		keys: [],
 		allLeft: [],
 		allRight: []
 	};
@@ -147,14 +147,17 @@ import observer  from '@/libs/observer.js';
 				autoTime = setTimeout(autoInput, 300, str, cb);
 			},
 			idSelect(item){
+				isInput = false;
 				this.info.pubUserID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
+				blurID(item.userID);
 			},
 			autoInput(){
 				isInput = true;
 			},
 			blur(){
-				setTimeout(blurID, 40);
+//				console.log(isInput,this.info.pubUserID)
+				if(isInput) blurID(this.idName);
 			},
 			handleChange(remain, direction, moved){
 //				kit('.slotTitle').each(function(el){
@@ -203,9 +206,12 @@ import observer  from '@/libs/observer.js';
 			var info = this.info;
 			for(var k in info) info[k] = '';
 			info.canSubsUserList = [];
-			this.value = [];
+			this.keys = [];
 //			useridList();
 			addTitle();
+			kit('.el-autocomplete-suggestion').off().down(function(){
+				isInput = false;
+			}).up(function(){isInput = true;});
 		},
 		watch: {},
 		components: {}
@@ -221,18 +227,29 @@ import observer  from '@/libs/observer.js';
 		if(!_this.list.length) observer.addBinding('useridReady', call);
 	}
 	
-	function blurID(){
-		var id = isInput ? _this.idName : _this.info.pubUserID;
-		console.log(id);
+	function blurID(id){
+//		var id = isInput ? _this.idName : _this.info.pubUserID;
 		var param = {
 			url: 'mx/userComm/querySpcificUser',
 			cmdID: '600035',
 			userID: id
 		};
 		utils.post(param, function(data){
-			console.log('通信关系用户：', data);
+//			console.log('通信关系用户：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			_this.list = data.lists;
+			var arr = data.lists, i, len = arr.length, obj;
+			for (var i = 0; i < len; i++) {
+				obj = arr[i];
+				if(obj.userID){
+					obj.key = i;
+					obj.label = obj.userID + obj.userName;
+				} else {
+					arr.splice(i, 1);
+					--i;
+				}
+			}
+			_this.keys = [];
+			_this.list = arr;
 		});
 	}
 	
@@ -253,7 +270,7 @@ import observer  from '@/libs/observer.js';
 //				e.stopImmediatePropagation();
 //				e.preventDefault();
 //				var qq=document.querySelector('.addTheme .el-checkbox-group .el-checkbox__original');
-				console.log(_this)
+				console.log(_this);
 				tiel.check = !tiel.check;
 //				debugger;
 				if(tiel.check){

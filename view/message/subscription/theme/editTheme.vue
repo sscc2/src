@@ -136,7 +136,7 @@ import observer  from '@/libs/observer.js';
 			userName: '用户名'+i, userAppid:'appid'+i
 		};
 		obj.label = obj.userID + obj.userName;
-		list.push(obj);
+//		list.push(obj);
 	}
 	
 	var data = {
@@ -250,7 +250,7 @@ import observer  from '@/libs/observer.js';
 			this.keys = [];
 			this.info.canSubsUserList = [];
 			this.info.subsUserList = [];
-			
+//			getDetail();
 			useridList();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
@@ -266,18 +266,20 @@ import observer  from '@/libs/observer.js';
 		components: {}
 	};
 	
-	function isSelectUser(){
-		var sel = _this.info.canSubsUserList, len = sel.length;
-		if(len != _cans.length) return true;
-		var i, k, id;
+	function isSelectUser(){//true为跳转
+		var i, len = _cans.length;
 		for (i = 0; i < len; i++) {
-			id = sel[i].userID;
-			for (k = 0; k < _cans.length; k++) {
-				if(id == _cans[k].userID) break;
-			}
-			if(k==_cans.length) return true 
+			if(isOut(_cans[i].userID))
+				return true;
 		}
 		return false;
+	}
+	function isOut(obj){
+		var sel = _this.info.canSubsUserList, len = sel.length;
+		for (i = 0; i < len; i++) {
+			if(sel[i].userID == obj) break;
+		}
+		return (i==len);
 	}
 	
 	function useridList(){
@@ -293,13 +295,14 @@ import observer  from '@/libs/observer.js';
 	}
 	
 	function getDetail(){
-		var userid = globalVar.get('userid'),
-			param = {
+		var userid = globalVar.get('userid');
+		if(!userid) return;
+		var param = {
 				cmdID: '600043', pubUserID: userid.pubUserID,
 				topicName: userid.topicName, type: '0'
 			};
 		utils.post('mx/pubTopic/query', param, function(data){
-			console.log('订阅详情：',data);
+//			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			var res = data.lists[0];
 			_this.info = res;

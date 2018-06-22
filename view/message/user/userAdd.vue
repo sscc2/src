@@ -55,12 +55,12 @@
 							</li>
 							<li>
 								<el-select v-model="info.userType" placeholder="">
-									<el-option v-for="item in userType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in userType" :labei="item.name" :key="item.id" :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
 								<el-select v-model="info.userDistrict" placeholder="">
-									<el-option v-for="item in cities" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in cities" :key="item.name" :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -72,12 +72,12 @@
 							</li>							
 							<li>
 								<el-select v-model="info.connSuGroupName" placeholder="">
-									<el-option v-for="item in connect" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in connect" :key="item.id" :label="item.name" :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
 								<el-select v-model="info.isAlarmIfOffLine" placeholder="">
-									<el-option v-for="item in online" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in online" :key="item.userTypeId" :label="item.name" :value="item.userTypeId"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -99,7 +99,7 @@
 								<input type="text" v-model="info.maxSubsCount" placeholder="">
 							</li>
 							<li>
-								<input type="text" v-model="info.maxDaysoftTopic" placeholder="">
+								<input type="text" v-model="info.maxDaysOfTopic" placeholder="">
 							</li>
 							</el-form>							
 						</ul>
@@ -151,7 +151,7 @@ var info = {},
     "allowSendRecvFile",
     "maxPubsCount",
     "maxSubsCount",
-    "maxDaysoftTopic",
+    "maxDaysOfTopic",
     "isModifyDefaultPasswd",
     "userPasswd"
   ];
@@ -188,25 +188,7 @@ var pageTxt = {
       "返回"
     ]
   },
-  userType = [
-    { value: "0", label: "银行" },
-    { value: "2", label: "券商" },
-    { value: "3", label: "基金" },
-    { value: "4", label: "期货" },
-    { value: "5", label: "保险" },
-    { value: "6", label: "信托" },
-    { value: "7", label: "监管机构" },
-    { value: "8", label: "测试" },
-    { value: "9", label: "其他" }
-  ],
-  cities = [
-    { value: "BJ", label: "北京" },
-    { value: "SH", label: "上海" },
-    { value: "NJ", label: "南京" },
-    { value: "CD", label: "成都" },
-    { value: "SZ", label: "深圳" },
-    { value: "GZ", label: "广州" }
-  ],
+
   connect = [
     { value: "0", label: "Group0" },
     { value: "1", label: "Group1" },
@@ -223,8 +205,8 @@ export default {
     return {
       info,
       pageTxt,
-      userType,
-      cities,
+      userType:[],
+      cities:[],
       connect,
       online,
       time: getDate(),
@@ -274,7 +256,7 @@ export default {
           allowSendRecvFile: _this.info.allowSendRecvFile,
           maxPubsCount: _this.info.maxPubsCount,
           maxSubsCount: _this.info.maxSubsCount,
-          maxDaysOfTopic: _this.info.maxDaysoftTopic,
+          maxDaysOfTopic: _this.info.maxDaysOfTopic,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
           userPasswd: _this.info.userPasswd
         },
@@ -345,7 +327,7 @@ export default {
     info.allowSendRecvFile = "0";
     info.maxPubsCount = "0";
     info.maxSubsCount = "0";
-    info.maxDaysoftTopic = "0";
+    info.maxDaysOfTopic = "0";
   }
 };
 function getDate() {

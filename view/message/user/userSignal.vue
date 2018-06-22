@@ -4,7 +4,7 @@
 		<div class="userH">
 			<span class="txt">{{pageTxt.signal[0]}}：</span>
 			<el-select class='searchSel' v-model="searchInfo.type" placeholder="请选择">
-				<el-option v-for="item in pageTxt.options" :key="item.value" :label="item.label" :value="item.value">
+				<el-option v-for="item in pageTxt.options" :key="item.name"  :value="item.id">
 				</el-option>
 			</el-select>
 			<span class="txt">{{pageTxt.signal[1]}}：</span>
@@ -131,27 +131,6 @@ var pageTxt= {
       "",
       "操作"
     ],
-    options: [
-      { value: "0", label: "全部" },
-      { value: "1", label: "三方存管" },
-      { value: "2", label: "银期转账" },
-      { value: "3", label: "银基转账" },
-      { value: "4", label: "资金划拔" },
-      { value: "5", label: "信证报盘" },
-      { value: "6", label: "电子对账" },
-      { value: "7", label: "融资融券" },
-      { value: "8", label: "基金盘后" },
-      { value: "9", label: "转融通" },
-      { value: "10", label: "B转H" },
-      { value: "11", label: "交叉销售" },
-      { value: "12", label: "报价回购" },
-      { value: "13", label: "个股期权" },
-      { value: "14", label: "FISP" },
-      { value: "15", label: "私券报转" },
-      { value: "16", label: "云证通" },
-      { value: "17", label: "基金实时业务" },
-      { value: "18", label: "基金费用对账" }
-    ],
     dialog: [
       "创建通信关系",
       "业务类型 ：",
@@ -167,6 +146,7 @@ export default {
   name: "mess_signal",
   data() {
     return {
+      options:[],
       options5: [
         {
           value: "HTML",
@@ -430,11 +410,11 @@ export default {
   width: 210px;
   margin-right: 10px;
 }
-.searchSel {
+/* .searchSel {
   width: 120px;
   margin-right: 20px;
   line-height: 30px;
-}
+} */
 .userH > .el-button {
   margin-left: 35px;
   width: 90px;
