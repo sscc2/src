@@ -1,11 +1,9 @@
 <template>
 <div>
-	<!-- 头部 -->
 	<div class='header'>
 		<span class='header_txt'>{{pageTxt.tabs[0]}}</span>
 	</div>
 	
-	<!-- 文本 -->
 	<div class="statist">
 		<div>
 			<header>
@@ -36,7 +34,6 @@
 			</header>
 
 			<el-table highlight-current-row  @current-change="currentRow2" :data="data3"  tooltip-effect="dark">
-				<el-table-column width="50" type="index"></el-table-column>
 				<el-table-column prop="name" :label="pageTxt.list3[0]" width="120" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="type" :label="pageTxt.list3[1]" width="120" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="detail" :label="pageTxt.list3[2]" width="300" show-overflow-tooltip></el-table-column>

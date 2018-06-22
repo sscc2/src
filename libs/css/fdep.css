@@ -19,6 +19,7 @@ textarea{resize: none !important;}
 	-webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.2) inset;box-shadow: 0 2px 4px 0 rgba(0,0,0,.2) inset;}
 .el-pagination.is-background .el-pager li:not(.disabled):hover{background: #FFF;color: #7388a7;}
 ._pagination .rightTxt{display: inline-block;vertical-align: middle;padding-left: 10px;font-size: 13px;line-height: 28px;color: #999;}
+._pagination .el-pagination__jump{margin-right:24px}
 
 /* 弹窗 */
 ._dialog {font-size: 0;}
@@ -105,3 +106,4 @@ textarea{resize: none !important;}
 #_hints button{margin: 0 20px;}
 
 
+.bottom_btn{margin-top: 30px !important; width: 200px; margin: 0 auto;}

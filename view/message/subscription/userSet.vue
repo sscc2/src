@@ -66,7 +66,7 @@ import observer  from '@/libs/observer.js';
 		max: 0
 	};
 //	for (var i = 0; i < 30; i++) {
-//		data.data.push({userID:'49821',userName:'ABC',maxPubsCount:'5',maxSubsCount:'5',maxDaysoftopic:'2020'});
+//		data.data.push({userID:'49821',userName:'ABC',maxPubsCount:'5',maxSubsCount:'5',maxDaysoftTopic:'2020'});
 //	}
 //	observer.addBinding('messUpload', function(master, param){
 //		if(master != 'messUpload') return;

@@ -1,11 +1,9 @@
 <template>
 <div>
-	<!-- 头部 -->
 	<div class='header'>
 			<span class='header_txt'>通信关系</span>
 	</div>
 
-	<!-- 文本 -->
 	<div class="signal">
 		<div class="userH">
 			<span class="txt">{{pageTxt.signal[0]}}：</span>
@@ -20,16 +18,13 @@
 			<el-button type="primary" plain @click='search'>{{pageTxt.signal[3]}}</el-button>
 		</div>
 
-		<!-- 导航 -->
 		<div class="btnBox">
 			<div @click="dialogAdd=true"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
 			<div @click="delUser"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div>
-			<div @click=""><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
+			<div @click="delUser"><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
 		</div>
 
-		<!-- 表格 -->
 		<el-table :data="list"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
-			<el-table-column width="55" type="index"></el-table-column>
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="bizType" label="业务类型" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
@@ -38,18 +33,16 @@
 			<el-table-column prop="userName2" label="用户名称" show-overflow-tooltip></el-table-column>
 			<el-table-column label="操作" width="70" show-overflow-tooltip>
 				<div slot-scope="scope" class="_zero">
-					<img @click="delUser" src="@/img/deleticos.png">
+					<img @click="delUser1(scope.$index,list)" src="@/img/deleticos.png">
 				</div>
 			</el-table-column>
 		</el-table>
 
-		<!-- 分页 -->
-		<div class="_pagination" v-show="list.length!=0">
+		<div class="_pagination" >
 			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
-			<div class="rightTxt">共{{maxData}}条数据</div>
+			<div class="rightTxt">共{{list.lenght}}条数据</div>
 		</div>
 		
-		<!-- 增加 -->
 		<el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
 			<ul class="_dialog">
 				<li>
@@ -68,8 +61,9 @@
 						<p class="txt">{{pageTxt.dialog[2]}}</p>
 					</div>
 					<div class="rightBox">
-						 <!-- <el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect"></el-autocomplete> -->
-             <el-input  placeholder="请输入内容"></el-input>
+						  <el-select v-model="value10" multiple filterable allow-create default-first-option placeholder="请选择文章标签">
+                <el-option v-for="item in options5" :key="item.value" :label="item.label" :value="item.value"></el-option>  
+              </el-select>
 					</div>
 				</li>
 				<li>
@@ -77,7 +71,9 @@
 						<p class="txt">{{pageTxt.dialog[3]}}</p>
 					</div>
 					<div class="rightBox">
-						<el-autocomplete class="inline-input" v-model="state1" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
+						  <el-select v-model="value10" multiple filterable allow-create default-first-option placeholder="请选择文章标签">
+                <el-option v-for="item in options5" :key="item.value" :label="item.label" :value="item.value"></el-option>  
+              </el-select>
 						<p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
 					</div>
 				</li>
@@ -153,12 +149,27 @@ export default {
   name: "mess_signal",
   data() {
     return {
-		restaurants: [],
-		state1: '',
+      options5: [
+        {
+          value: "HTML",
+          label: "HTML"
+        },
+        {
+          value: "CSS",
+          label: "CSS"
+        },
+        {
+          value: "JavaScript",
+          label: "JavaScript"
+        }
+      ],
+      value10: [],
 
-      maxData: 478,
+      restaurants: [],
+      state1: "",
+
       pageTxt,
-      searchInfo: { bizType: "-1", userID1: "", userID2:"" },
+      searchInfo: { bizType: "-1", userID1: "", userID2: "" },
       list: [
         {
           bizType: "电子对账",
@@ -177,102 +188,156 @@ export default {
     };
   },
   methods: {
+    // 查询通信关系
     search() {
-		var _this=this
-	  utils.post("/mx/userComm/query",{
-		  cmdID:600031,
-		  bizType: "-1",
-		  userID1: _this.searchInfo.userID1,
-		  userID2: _this.searchInfo.userID2
-	  } ,function(response){
-		_this.list = response.lists
-	  });
-	},
-    submit() {
-	var _this=this
-	  utils.post("/mx/userComm/add",{
-		  cmdID:600032,
-		  operator: "admin",		  
-		  bizType: 0,
-		  userID1: 1,
-      lists: ["2","3","4","5"],
-
-	  } ,function(response){
-      if(response.errcode==0){
-          alert(response.errinfo)
-      }
-	  });     
-    },	
-    currentRow: function(e) {
-      this.row = e;
+      var _this = this;
+      utils.post(
+        "/mx/userComm/query",
+        {
+          cmdID: 600031,
+          bizType: _this.searchInfo.type,
+          userID1: _this.searchInfo.userID1,
+          userID2: _this.searchInfo.userID2
+        },
+        function(response) {
+          _this.list = response.lists;
+        }
+      );
     },
-    currentPage: function(e) {
-    
-	},
-	selectionRow(val){
-	 this.selects=val
-	 console.log(this.selects)
-	},
+
+    // 创建通信关系
+    submit() {
+      var _this = this;
+    utils.post(
+      "mx/userinfo/queryLists",
+      {
+        cmdID: 600001,
+        userID: "",
+        userName: ""
+      },
+      function(response) {
+        _this.options5 = response.lists;
+      }
+    );      
+      utils.post(
+        "/mx/userComm/add",
+        {
+          cmdID: 600032,
+          operator: "admin",
+          bizType: _this.creatInfo.type,
+          userID1: _this.value10,
+          lists: _this.value11
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            alert(response.errinfo);
+          }
+        }
+      );
+    },
+
+    // 删除通信关系
     delUser(e) {
       if (this.selects.length != 1) {
         utils.confirm({ message: "请在列表中选择一条记录！", type: 2 });
       } else {
+        var _this=this;
         utils.post(
           "mx/userComm/delete",
           {
             cmdID: 600033,
-			      operator: "admin",
-			      bizType: -1,
-            userID1: this.selects[0].userID1,
-            userID2: this.selects[0].userID2
+            operator: "admin",
+            bizType: -1,
+            userID1: _this.selects[0].userID1,
+            userID2: _this.selects[0].userID2
           },
           function(response) {
             if (response.errcode == 0) {
-              alert(response.errinfo);
+              var index = _this.list.indexOf(_this.selects[0]);
+              if (index > -1) {
+                _this.list.splice(index, 1);
+              }
             } else {
-              alet("删除失败");
+             
             }
           }
         );
-      }		
+      }
     },
+
+    // 删除通信关系(row)
+    delUser1(index, rows) {
+      var _this = this;
+      utils.post(
+        "mx/userComm/delete",
+        {
+          cmdID: 600033,
+          operator: "admin",
+          bizType: -1,
+          userID1: _this.row.userID1,
+          userID2: _this.row.userID2
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            rows.splice(index, 1);
+          } else {
+          }
+        }
+      );
+    },
+
     clear(e) {
       this.creatInfo.other = [];
-	},
-	
+    },
 
-	    querySearch(queryString, cb) {
-        var restaurants = this.restaurants;
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        cb(results);
-      },
-      createFilter(queryString) {
-        return (restaurant) => {
-          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
-      loadAll() {
-        return [
-          { "value": "user1" },
-          { "value": "user2" },
-          { "value": "user3" },
-          { "value": "user4" },
-          { "value": "user5" },
-          { "value": "user6" }
-        ];
-      },
-      handleSelect(item) {
-        console.log(item);
-      }
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return restaurant => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+    loadAll() {
+      return [
+        { value: "user1" },
+        { value: "user2" },
+        { value: "user3" },
+        { value: "user4" },
+        { value: "user5" },
+        { value: "user6" }
+      ];
+    },
 
+    currentRow: function(e) {
+      this.row = e;
+    },
 
+    currentPage: function(e) {},
 
+    selectionRow(val) {
+      this.selects = val;
+      console.log(this.selects);
+    },
+
+    handleSelect(item) {
+      console.log(item);
+    }
   },
 
   mounted() {
-      this.restaurants = this.loadAll();
-    },
+    this.restaurants = this.loadAll();
+  },
+
+  // 初始化数据
   created() {
     var _this = this;
     utils.post(
@@ -285,17 +350,13 @@ export default {
       },
       function(response) {
         _this.list = response.lists;
-            console.log("this",this)
       }
     );
   }
 };
-
-
 </script>
 
 <style scoped="scoped">
-/* 头部 */
 .header {
   height: 47px;
   border-bottom: 1px solid #ccc;
@@ -308,8 +369,6 @@ export default {
   margin-left: 17px;
   font-weight: bold;
 }
-
-/* 文本 */
 .signal {
   padding: 22px;
 }
@@ -338,8 +397,6 @@ export default {
   font-size: 13px;
   color: #666666;
 }
-
-/* 导航 */
 .btnBox {
   margin-bottom: 10px;
   margin-top: 18px;
@@ -358,27 +415,21 @@ export default {
 .btnBox div:nth-child(1) {
   margin-left: 0;
 }
-
-/* 表格 */
 ._zero > img {
   cursor: pointer;
   margin-left: 14px;
 }
-
-/* 分页 */
 .sel {
   width: 350px;
   line-height: 40px;
 }
-
 .leftBox {
   height: 30px;
   margin-top: 10px;
 }
-.sel[data-v-50d0771e]{
+.sel[data-v-50d0771e] {
   width: 202px;
 }
-
 </style>
 
 

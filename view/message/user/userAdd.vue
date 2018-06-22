@@ -47,13 +47,11 @@
 								</el-form-item>	
 							</li>
 							<li class="default_radio">
-								<el-radio v-model="info.isModifyDefaultPasswd" :label="0">启用</el-radio>
-  								<el-radio v-model="info.isModifyDefaultPasswd" :label="1">不启用</el-radio>
+								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">启用</el-radio>
+  								<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="judge">不启用</el-radio>
 							</li>
 							<li>
-								<el-form-item  prop="userPasswd" :rules="info.isModifyDefaultPasswd?judge:[]">
-									<el-input  v-model="info.userPasswd" :disabled="info.isModifyDefaultPasswd==0"></el-input>
-								</el-form-item>	
+									<el-input  v-model="info.userPasswd"  :disabled="info.isModifyDefaultPasswd==0"></el-input>					              
 							</li>
 							<li>
 								<el-select v-model="info.userType" placeholder="">
@@ -101,7 +99,7 @@
 								<input type="text" v-model="info.maxSubsCount" placeholder="">
 							</li>
 							<li>
-								<input type="text" v-model="info.maxDaysoftopic" placeholder="">
+								<input type="text" v-model="info.maxDaysoftTopic" placeholder="">
 							</li>
 							</el-form>							
 						</ul>
@@ -153,7 +151,7 @@ var info = {},
     "allowSendRecvFile",
     "maxPubsCount",
     "maxSubsCount",
-    "maxDaysoftopic",
+    "maxDaysoftTopic",
     "isModifyDefaultPasswd",
     "userPasswd"
   ];
@@ -230,7 +228,7 @@ export default {
       connect,
       online,
       time: getDate(),
-      judge:[{ required: true, message: '密码不能为空'},{ pattern:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]
+      judgment:[]
     };
   },
   methods: {
@@ -244,14 +242,24 @@ export default {
         }
       });
     },
+    judge(){
+        if(info.isModifyDefaultPasswd==0){
+          this.judgment=[]
+        }else{
+          this.judgment=[{ required: true, message: '密码不能为空'},{ pattern:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]
+        }
+        console.log(info.isModifyDefaultPasswd,this.judgment)
+    },
 
+    // 创建用户
     add: function() {
+      this.$store.state.transferEditID=this.info.userID;  
       var _this = this;
       utils.post(
         "mx/userinfo/add",
         {
           cmdId: 600003,
-          operator: _this.info.operator,
+          operator: "admin",
           userID: _this.info.userID,
           userName: _this.info.userName,
           userType: _this.info.userType,
@@ -266,15 +274,13 @@ export default {
           allowSendRecvFile: _this.info.allowSendRecvFile,
           maxPubsCount: _this.info.maxPubsCount,
           maxSubsCount: _this.info.maxSubsCount,
-          maxDaysoftopic: _this.info.maxDaysoftopic,
+          maxDaysOfTopic: _this.info.maxDaysoftTopic,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
           userPasswd: _this.info.userPasswd
         },
         function(response) {
-          if (response.errcode == 0) {
-            open6(response.errinfo)
-          }else{
-            // open6(response)
+          if(response.errcode == 0){
+            _this.open6(response.errinfo)
           }
         }
       );
@@ -299,11 +305,38 @@ export default {
       this.$router.replace({ path: "/message/user" });
     }
   },
+  // 初始化数据
   created: function() {
+    var _this=this;
+     utils.post(
+      "mx/dict/query",
+      {
+        cmdID: 600000,
+        language: 0,
+        type: 1
+      },
+      function(response) {
+        _this.userType = response.lists;
+      }
+    );
+    
+     utils.post(
+      "mx/dict/query",
+      {
+        cmdID: 600000,
+        language: 0,
+        type: 2
+      },
+      function(response) {
+        _this.cities = response.lists;
+      }
+    );
+    info.userID="";
+    info.userName="";
     info.isModifyDefaultPasswd = 0;
     info.userPasswd = "111111";
     info.userType = "0";
-    info.userDistrict = "0";
+    info.userDistrict = "BJ";
     info.speedCtrlKbps = "-1";
     info.connSuGroupName = "0";
     info.isAlarmIfOffLine = "0";
@@ -312,7 +345,7 @@ export default {
     info.allowSendRecvFile = "0";
     info.maxPubsCount = "0";
     info.maxSubsCount = "0";
-    info.maxDaysoftopic = "0";
+    info.maxDaysoftTopic = "0";
   }
 };
 function getDate() {
@@ -336,7 +369,6 @@ function dbNum(num) {
   min-width: 1000px;
   min-height: 630px;
 }
-/* 头部 */
 .header {
   height: 47px;
   border-bottom: 1px solid #ccc;
@@ -369,14 +401,12 @@ function dbNum(num) {
   margin-left: 20px;
   font-weight: bold;
 }
-/* 选项卡 */
 .el-tabs {
   padding: 22px;
 }
 .info {
   white-space: nowrap;
 }
-/* 表单左 */
 .el-col-6 {
   width: 140px;
   font-size: 14px;
@@ -390,7 +420,6 @@ function dbNum(num) {
   margin-top: 10px;
   height: 36px;
 }
-/* 表单右 */
 .right {
   margin-left: 15px;
   line-height: 40px;
@@ -430,9 +459,11 @@ input:focus {
 .default_radio {
   line-height: 50px;
 }
-/* 按钮 */
 .btn {
   margin-left: 140px;
   margin-top: 30px;
+}
+._zero > img[data-v-d09b1104]{
+  margin-left: 0 !important;
 }
 </style>

@@ -8,7 +8,7 @@
 				<span class='header_txt2'>修改用户</span>
 		</div>
 
-		<el-tabs type="card" :value="tabv">
+		<el-tabs type="card" v-model="$store.state.tabv">
 			<el-tab-pane label="基本信息" name="v1">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
 				<el-row class='info'>
@@ -33,7 +33,7 @@
 				
 						<ul class="right">
 							<li>
-								<input type="text" v-model="info.userID" disabled>
+								<input type="text" v-model="$store.state.transferEditID" disabled>
 							</li>
 							<li>
 								<input type="text" v-model="info.userName" placeholder="">
@@ -85,7 +85,7 @@
 								<input type="text" v-model="info.maxSubsCount" placeholder="">
 							</li>							
 							<li>
-								<input type="text" v-model="info.maxDaysoftopic" placeholder="">
+								<input type="text" v-model="info.maxDaysoftTopic" placeholder="">
 							</li>
 														
 						</ul>
@@ -108,7 +108,7 @@
 				<UserSignal></UserSignal>
 			</el-tab-pane>
 			
-			<el-tab-pane label="扩展信息">
+			<el-tab-pane label="扩展信息" name="v4">
 				<span slot="label">{{pageTxt.tab[3]}}</span>
 				<ExtendInfo></ExtendInfo>
 			</el-tab-pane>
@@ -127,7 +127,6 @@ import ExtendInfo from "@/view/message/user/extendInfo.vue";
 var info = {},
   def = [
     "operator",
-    "userID",
     "userName",
     "userType",
     "userDistrict",
@@ -141,17 +140,10 @@ var info = {},
     "allowSendRecvFile",
     "maxPubsCount",
     "maxSubsCount",
-    "maxDaysoftopic",
+    "maxDaysoftTopic",
     "isModifyDefaultPasswd",
     "userPasswd"
-  ],
-  must = [
-    "userId",
-    "userName",
-    "userPasswd",
-    "speedCtrlKbps",
-    "connSuGroupName"
-  ];
+  ]
 for (var i = 0; i < def.length; i++) {
   info[def[i]] = "";
 }
@@ -222,8 +214,6 @@ var data = {
   connect,
   online,
   time: getDate(),
-  obj: {},
-  tabv: ""
 };
 
 export default {
@@ -232,13 +222,14 @@ export default {
   },
   methods: {
     Edit() {
+      this.open6("response.errinfo")
       var _this = this;
       utils.post(
         "mx/userinfo/modify",
         {
           cmdID: 600004,
-          userID: _this.$stroe.state.transferEditID,
-          operator: _this.info.operator,
+          userID: _this.$store.state.transferEditID,
+          operator: "admin",
           userName: _this.info.userName,
           userType: _this.info.userType,
           userDistrict: _this.info.userDistrict,
@@ -251,7 +242,7 @@ export default {
           allowSendRecvFile: _this.info.allowSendRecvFile,
           maxPubsCount: _this.info.maxPubsCount,
           maxSubsCount: _this.info.maxSubsCount,
-          maxDaysoftopic: _this.info.maxDaysoftopic
+          maxDaysoftTopic: _this.info.maxDaysoftTopic
         },
         function(response) {
           if (response.errcode == 0) {
@@ -285,9 +276,8 @@ export default {
 
   // 初始化数据
   created: function() {
+    this.tabv = this.$store.state.tabv;
     var _this = this;
-    _this.info.userID = _this.$store.state.transferEditID;
-    _this.tabv = _this.$store.state.tabv;
     utils.post(
       "mx/userinfo/query",
       {
@@ -296,7 +286,32 @@ export default {
         type: 0
       },
       function(response) {
-        _this.info = response.lists[0];
+        // _this.info = response.lists[0];
+        // console.log(_this.info)
+        console.log(response.lists)
+      }
+    );
+     utils.post(
+      "mx/dict/query",
+      {
+        cmdID: 600000,
+        language: 0,
+        type: 1
+      },
+      function(response) {
+        _this.userType = response.lists;
+      }
+    );
+    
+     utils.post(
+      "mx/dict/query",
+      {
+        cmdID: 600000,
+        language: 0,
+        type: 2
+      },
+      function(response) {
+        _this.cities = response.lists;
       }
     );
   },

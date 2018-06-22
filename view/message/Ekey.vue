@@ -9,7 +9,7 @@
 			<span class="txt">{{pageTxt.Ekey[0]}}：</span>
 			<el-radio v-model="ainfo.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
   		<el-radio v-model="ainfo.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-			<span v-show='ainfo.type==0' class="txt">{{pageTxt.Ekey[3]}}：</span>
+			<span v-show='ainfo.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
 			<el-input v-show='ainfo.type==0' v-model="ainfo.ekeyName" placeholder="" ></el-input>
 			<span v-show='ainfo.type==1' class="txt">用户：</span>
 			<el-input v-show='ainfo.type==1' v-model="ainfo.userID" placeholder=""></el-input>
@@ -18,13 +18,11 @@
 
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
-			<!-- <div id='Edit' @click="showEdit" ><img src="@/img/alterico.png" ><span>{{pageTxt.Ekey[6]}}</span></div> -->
 			<div @click="del"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
-			<div @click="fn"><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
+			<div @click="del"><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
 		</div>
 	
 		<el-table  :data="EkeyData"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
-			<el-table-column width="55" type="index"></el-table-column>
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
@@ -83,7 +81,7 @@
 		</el-dialog>
 		
 
-		<!-- 修改Ekey -->
+	
 		<el-dialog :title="pageTxt.dialog[1]" :visible.sync="editEkdy" width='620px'>
 			<ul class="_dialog">
 				<li>
@@ -125,8 +123,8 @@
 			    <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
 			</div>
 		</el-dialog>
-		<!-- 分页 -->
-		<div class="_pagination" v-show="EkeyData.length!=0">
+
+		<div class="_pagination" >
 			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
 			<div class="rightTxt">共{{EkeyData.length}}条数据</div>
 		</div>
@@ -217,7 +215,7 @@ export default {
       radio: 1,
       info: {
         id: "",
-        Ekey: "/C=CN/CN=",
+        Ekey: "",
         pass: "111111",
         notes: "",
         valid: "",
@@ -229,7 +227,7 @@ export default {
       editEkdy: false,
       eInfo: {
         id: "",
-        Ekey: "/C=CN/CN=",
+        Ekey: "",
         pass: "111111",
         notes: "",
         valid: "",
@@ -245,9 +243,8 @@ export default {
     };
   },
   methods: {
-    fn() {
-      var _this = this;
-    },
+
+    //查询Ekey
     search() {
       var _this = this;
       utils.post(
@@ -264,6 +261,7 @@ export default {
       );
     },
 
+    // 创建Ekey
     submitAdd() {
       var _this = this;
       utils.post(
@@ -278,16 +276,16 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            alert(response.errinfo);
+             _this.editEkdy = false
+             _this.open6(response.errinfo)
           } else {
-            alert("创建失败");
+             _this.open6(response.errinfo)
           }
         }
       );
     },
 
-    showEdit() {
-      
+    showEdit() {      
         // this.oldEkeyName=this.selects[0].ekeyName
         console.log(this.oldEkeyName)
         this.editEkdy = true;
@@ -329,6 +327,7 @@ export default {
       );
     },
 
+    // 删除Ekey
     del() {
       if (this.selects.length != 1) {
         utils.confirm({ message: "请在列表中选择一条记录！", type: 2 });
@@ -343,14 +342,28 @@ export default {
           },
           function(response) {
             if (response.errcode == 0) {
-              alert(response.errinfo);
+             
             } else {
-              alet("删除失败");
+             
             }
           }
         );
       }
     },
+
+    open6(msg) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+          this.$store.state.tabv="v3"
+          this.$router.replace({ path: "/message/userEdit/mess" });
+
+        }).catch(() => {
+    
+        });
+      },    
 
     selectionRow(val) {
       this.selects = val;
@@ -395,9 +408,11 @@ export default {
       } else this.err[key] = false;
     }
   },
+
+  //初始化数据
   created() {
     ainfo.type = 0;
-    ainfo.ekeyName = "/C=CN/CN=";
+    // ainfo.ekeyName = "";
     var _this = this;
     utils.post(
       "mx/userEkey/query",
@@ -416,7 +431,6 @@ export default {
 </script>
 
 <style scoped="scoped">
-/* 头部 */
 .header {
   height: 47px;
   border-bottom: 1px solid #ccc;
@@ -429,7 +443,6 @@ export default {
   font-weight: bold;
 }
 
-/* 文本 */
 .Ekey * {
   vertical-align: middle;
 }
@@ -449,6 +462,7 @@ export default {
 .txt {
   font-size: 14px;
   color: #666666;
+  margin-left: 20px;
 }
 .user > .el-button {
   margin-left: 35px;
@@ -460,7 +474,6 @@ export default {
   color: white;
 }
 
-/* 导航 */
 .btnBox {
   overflow: hidden;
   margin-bottom: 10px;
@@ -477,7 +490,6 @@ export default {
   margin-left: 0;
 }
 
-/* 表格 */
 .Ekey {
   padding: 22px;
 }
@@ -505,5 +517,7 @@ export default {
 .el-input {
   margin-left: 10px;
 }
-
+.user > span:nth-child(1){
+  margin-left: 0;
+}
 </style>

@@ -271,7 +271,7 @@ function utils(){
 				callback(response, fn);
 			}).catch(function (e) {
 				exp.loadClose();
-				console.log(e.message+'\nURL: ', e.config.url);
+				// console.log(e.message+'\nURL: ', e.config.url);
 			});
 		};
 		//同上

@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<div class='extendInfo'>
-			<!-- 左列表 -->
 			<div class='left_list'>
 				<ul>
 					<li>{{this.pageTxt.tips[0]}}</li>
@@ -13,7 +12,6 @@
 					<li>{{this.pageTxt.tips[6]}}</li>
 				</ul>
 			</div>
-			<!-- 中间 -->
 			<div class='center_list'>
 				<ul>
 					<li><el-input v-model="inputValue.userAlarmSmsNum" placeholder="请输入内容"></el-input></li>
@@ -25,7 +23,6 @@
 					<li><el-input v-model="inputValue.ssccManager" placeholder="请输入内容"></el-input></li>
 				</ul>
 			</div>
-			<!-- 右 -->
 			<div class='right_list'>
 				<ul>
 					<li>{{this.pageTxt.lable[0]}}</li>
@@ -46,47 +43,44 @@
 
 
 <script>
-// import kit      from '@/libs/kit.js';
 import utils from "@/libs/utils.js";
-// import observer from "@/libs/observer.js";
 
 var pageTxt_cn = {
-    tips: [
-      "短信报警号码：",
-      "负责人座机号码：",
-      "负责人手机号码：",
-      "运维传真：",
-      "运维电话：",
-      "邮箱：",
-      "SSCC客户经理："
-    ],
-    lable: [
-      '只能输入数字"、" +" ";"',
-      '只能输入数字"、" +" ";"',
-      '只能输入数字和";"',
-      '只能输入数字"、" +" ";"',
-      '只能输入数字"、" +" ";"',
-      "只能输入英文字符"
-    ]
-  },
-  pageTxt_en = {};
+  tips: [
+    "短信报警号码：",
+    "负责人座机号码：",
+    "负责人手机号码：",
+    "运维传真：",
+    "运维电话：",
+    "邮箱：",
+    "SSCC客户经理："
+  ],
+  lable: [
+    '只能输入数字"、" +" ";"',
+    '只能输入数字"、" +" ";"',
+    '只能输入数字和";"',
+    '只能输入数字"、" +" ";"',
+    '只能输入数字"、" +" ";"',
+    "只能输入英文字符"
+  ]
+};
 
 var pageTxt = pageTxt_cn;
 
 var def = [
-  "userAlarmSmsNum",
-  "userTelNum",
-  "userMobileNum",
-  "operationPhoneNum",
-  "operationFax",
-  "email",
-  "ssccManager"
-],inputValue={};
+    "userAlarmSmsNum",
+    "userTelNum",
+    "userMobileNum",
+    "operationPhoneNum",
+    "operationFax",
+    "email",
+    "ssccManager"
+  ],
+  inputValue = {};
 
-for(var i=0; i<def.length;i++){
-  inputValue[def[i]]=''
+for (var i = 0; i < def.length; i++) {
+  inputValue[def[i]] = "";
 }
-
 
 export default {
   name: "extendifo",
@@ -114,30 +108,30 @@ export default {
           ssccManager: _this.inputValue.ssccManager
         },
         function(response) {
-			if(response.errcode==0){
-				alert(response.errinfo)
-			}
-		}
+          if (response.errcode == 0) {
+          }
+        }
       );
     },
     goBack: function() {
       this.$router.replace({ path: "/message/user" });
-    }
+    },
+
+
   },
-  props:["extend"],
-  created(){
-      var _this = this;
-      utils.post(
-        "mx/userinfoExt/query",
-        {
-          cmdID: 600013,
-          userID:this.extend,
-          type: 0
-        },
-        function(response) {
-           this.inputValue=response.lists
-		}
-      );
+  created() {
+    var _this = this;
+    utils.post(
+      "mx/userinfoExt/query",
+      {
+        cmdID: 600013,
+        userID: this.extend,
+        type: 0
+      },
+      function(response) {
+        this.inputValue = response.lists;
+      }
+    );
   }
 };
 </script>

@@ -209,7 +209,7 @@
 			}
 		},
 		beforeCreate(){
-			console.log(this);
+	
 		},
 		created: function(){
 			info.iSpeedCtrl = '-1';

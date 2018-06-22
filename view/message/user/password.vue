@@ -1,11 +1,11 @@
 <template>
-	<el-dialog :title="pageTxt.lable[0]" width='620px' :visible.sync="isShow">
+	<el-dialog :title="pageTxt.lable[0]" width='620px' :visible.sync="$store.state.passShow">
 		<ul class="_dialog">
 			<li>
 				<div class="leftBox">
-					<!-- <p class="txt">{{pageTxt.lable[1]}}</p> -->
 					<p class="txt">{{pageTxt.lable[1]}}</p>
-				</div><div class="rightBox">
+				</div>
+        <div class="rightBox">
 					<el-input  v-model="this.$store.state.transferEditID"  :placeholder="pageTxt.lable[8]" disabled=""></el-input>
 					<span class="txt red" v-show="err.id">{{pageTxt.tips.id}}</span>
 				</div>
@@ -14,7 +14,6 @@
 				<div class="leftBox">
 					<p class="txt">{{pageTxt.lable[2]}}</p>
 				</div>
-				
 				
 				<div class="rightBox">
 						<el-radio v-model="info.isModifyDefaultPasswd" :label="0">重置</el-radio>
@@ -33,28 +32,33 @@
 			<li>
 				<div class="leftBox">
 					<p class="txt">{{pageTxt.lable[10]}}</p>
-				</div><div class="rightBox">
+				</div>
+        <div class="rightBox">
 					<el-input v-model="info.again"  name='again' :placeholder="info.isModifyDefaultPasswd?pageTxt.lable[8]:'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
 					<span class="txt red" v-show="err.again">{{pageTxt.tips.again}}</span>
 				</div>
-			</li><li>
+			</li>
+      <li>
 				<div class="leftBox">
 					<p class="txt">{{pageTxt.lable[4]}}</p>
-				</div><div class="rightBox">
+				</div>
+        <div class="rightBox">
 					<el-input  name='assessor' v-model="info.assessor" :placeholder="pageTxt.lable[8]"></el-input>
 					<span class="txt red" v-show="err.assessor">{{pageTxt.tips.assessor}}</span>
 				</div>
-			</li><li>
+			</li>
+      <li>
 				<div class="leftBox">
 					<p class="txt">{{pageTxt.lable[5]}}</p>
-				</div><div class="rightBox">
+				</div>
+        <div class="rightBox">
 					<el-input name='pass' v-model="info.pass" :placeholder="pageTxt.lable[8]"></el-input>
 					<span class="txt red" v-show="err.pass">{{pageTxt.tips.pass}}</span>
 				</div>
 			</li>
 		</ul>
-		<div slot="footer" class="dialog-footer">
-		    <el-button @click="isShow = false">{{pageTxt.lable[7]}}</el-button>
+		<div class="bottom_btn">
+		    <el-button @click="$store.state.passShow = false">{{pageTxt.lable[7]}}</el-button>
 		    <el-button type="primary" @click="submit">{{pageTxt.lable[6]}}</el-button>
 		</div>
 	</el-dialog>
@@ -63,7 +67,6 @@
 <script>
 import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
 import md5 from "@/libs/md5.js";
 
 var pageTxt_cn = {
@@ -100,7 +103,6 @@ var pageTxt = pageTxt_cn;
 
 var data = {
   pageTxt,
-  isShow: true,
   msg: "",
   info: { id: "", npasswd: "", isModifyDefaultPasswd: 0 },
   err: {
@@ -114,7 +116,6 @@ var data = {
 };
 
 export default {
-  name: "mess_userPass",
   data() {
     return data;
   },
@@ -140,20 +141,20 @@ export default {
           if (response.errcode == 0) {
             alert(response.errinfo);
           } else {
-            alert("失败");
+           
           }
         }
       );
     },
-    check(e) {
-      var key, el;
-      el = e.type == "blur" ? e.target : e.$el.children[0];
-      key = el.name;
-      console.log();
-      if (!this.info[key]) {
-        this.err[key] = true;
-      } else this.err[key] = false;
-    }
+    // check(e) {
+    //   var key, el;
+    //   el = e.type == "blur" ? e.target : e.$el.children[0];
+    //   key = el.name;
+    //   console.log();
+    //   if (!this.info[key]) {
+    //     this.err[key] = true;
+    //   } else this.err[key] = false;
+    // }
   },
   created() {
     this.info.id = this.$store.state.transferEditID;
@@ -164,8 +165,8 @@ export default {
 <style scoped="scoped">
 .txt {
   font-size: 16px;
-  line-height: 40px;
-  height: 40px;
+  line-height: 30px;
+  height: 30px;
 }
 .userPass {
   width: 600px;
@@ -179,4 +180,5 @@ export default {
   color: #f56c6c;
   margin-left: 10px;
 }
+
 </style>
