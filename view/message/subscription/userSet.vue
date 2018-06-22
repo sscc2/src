@@ -39,7 +39,7 @@
 		</el-table>
 		<div class="_pagination">
 			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="max" 
-				layout="total, sizes, prev, pager, next, jumper" background></el-pagination>
+				layout="prev, pager, next, jumper" background></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -132,10 +132,12 @@ import observer  from '@/libs/observer.js';
 					utils.weakTips(this.pageTxt.tips.user);
 					return;
 				}
+				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row[0].userID;
 				this.$router.replace({ path: "/message/userEdit/mess_userSet" });
 			},
 			edit(row){
+				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row.userID;
 				this.$router.replace({ path: "/message/userEdit/mess_userSet" });
 			}
