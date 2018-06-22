@@ -332,7 +332,7 @@ function utils(){
 			type: 1
 		};
 		exp.post(param, function(data){
-			console.log('getUserid：',data);
+//			console.log('getUserid：',data);
 			if(data.errcode < 0) return console.log(data.errinfo);
 			var obj, i;
 			for (i = 0; i < data.lists.length; i++) {
@@ -341,7 +341,7 @@ function utils(){
 				obj.label = obj.userID+obj.userName;
 			}
 			globalVar.set('useridList', data.lists);
-			call(obj)
+			call(data.lists);
 			observer.execute('useridReady');
 		});
 	};
