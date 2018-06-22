@@ -18,31 +18,7 @@ import globalVar from '@/libs/globalVar.js';
 import observer  from '@/libs/observer.js';
 import navhead   from '@/view/navHead.vue';
 import sidebar   from '@/view/sidebar.vue';
-	
-	
-	!function (){
-		var param = {
-			url: 'mx/userinfo/queryLists',
-			cmdID: "600001",
-			userID: '',
-			userName: '',
-			pageSize: 200,
-			currentPage: 1
-			
-		};
-		utils.post(param, function(data){
-			console.log('useridList：',data);
-			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			var obj, i;
-			for (i = 0; i < data.lists.length; i++) {
-				obj = data.lists[i];
-				obj.words = obj.userID+obj.userName;
-			}
-			globalVar.set('useridList', data.lists);
-			observer.execute('useridReady');
-		});
-	}();
-	
+
 	
 	export default {
 		name: 'home',

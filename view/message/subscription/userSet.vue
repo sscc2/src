@@ -54,7 +54,7 @@ import lang      from '@/language/lang.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, _this, autoTime;
+	var pageTxt, _this, autoTime,currentPage=1,isInput=false;
 	pageTxt = lang.themeUserSet;
 	
 	var data = {
@@ -99,29 +99,32 @@ import observer  from '@/libs/observer.js';
 				autoTime = setTimeout(autoInput, 300, str, cb);
 			},
 			idSelect(item){
+				isInput = false;
 				this.userID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
 			},
-			autoInput(str){
-//				clearTimeout(autoTime);
-//				autoTime = setTimeout(autoInput, 300, str);
+			autoInput(){
+				isInput = true;
 			},
 			search(){
-				search();
+				search(1, 20);
 			},
 			currenRow(row){
 				this.row = row;
-				console.log(row)
+//				console.log(row)
 			},
 			selectionRow(val){
 		     	this.selects = val;
 		    },
 		    pageSize(val){
+		    	console.log(`每页 ${val} 条`);
 		    	this.size = val;
-//		    	console.log(`每页 ${val} 条`);
+		    	search(val, this.size);
 		    },
 			currentPage(val){
 				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
+				currentPage = val;
+				search(val, this.size);
 			},
 			editAll(){
 				var row = this.selects;
@@ -139,12 +142,16 @@ import observer  from '@/libs/observer.js';
 		},
 		mounted(){
 			_this = this;
-			search();
+			search(1, 20);
 			useridList();
 		}
 	};
-	function search(){
-		var info = {cmdID: '600041', userID: _this.userID};
+	function search(num, size){
+		var userID = isInput ? _this.idName:_this.userID;
+		var info = {
+			cmdID: '600041', userID: userID,
+			pageSize: size||20, currentPage: num||1,
+		};
 		utils.post('mx/userPsConfig/query', info, function(data){
 //			console.log('订阅配置：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);

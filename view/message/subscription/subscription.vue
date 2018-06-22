@@ -105,7 +105,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			},
 			currenRow(row){
 				this.row = row;
-				console.log(row)
+//				console.log(row)
 			},
 			selectionRow(val){
 		     	this.selects = val;

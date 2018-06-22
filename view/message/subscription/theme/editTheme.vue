@@ -303,6 +303,7 @@ import observer  from '@/libs/observer.js';
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			var res = data.lists[0];
 			_this.info = res;
+			_this.info.pubUserID = res.pubUserID;
 			_this.info.canSubsUserList = res.canSubsUserList||[],
 			_this.info.subsUserList = res.subsUserList||[];
 			getKey();
