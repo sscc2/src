@@ -78,7 +78,7 @@ import observer  from '@/libs/observer.js';
 	function autoInput(str){
 		if(!str) return;
 		console.time('请求开始...');
-		utils.getUserid(function(obj){
+		utils.getUserid(str, function(obj){
 			idList = obj;
 			console.endTime('请求开始...');
 		});
