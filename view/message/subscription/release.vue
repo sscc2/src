@@ -248,7 +248,8 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			picker = today();
 		}
 		info.beginDate = picker[0];
-		info.endDate = picker[1];
+		info.endDate = picker[1].split(' ',1)[0];
+		info.endDate += ' 23:59:59';
 		info.pubUserID = userID;
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
