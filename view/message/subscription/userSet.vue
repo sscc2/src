@@ -38,7 +38,7 @@
 			</el-table-column>
 		</el-table>
 		<div class="_pagination">
-			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="100" 
+			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="max" 
 				layout="total, sizes, prev, pager, next, jumper" background></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
@@ -117,12 +117,12 @@ import observer  from '@/libs/observer.js';
 		     	this.selects = val;
 		    },
 		    pageSize(val){
-		    	console.log(`每页 ${val} 条`);
+//		    	console.log(`每页 ${val} 条`);
 		    	this.size = val;
 		    	search(val, this.size);
 		    },
 			currentPage(val){
-				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
+//				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
 				currentPage = val;
 				search(val, this.size);
 			},
@@ -156,7 +156,7 @@ import observer  from '@/libs/observer.js';
 //			console.log('订阅配置：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = parseInt(data.count)||0;
+			_this.max = parseInt(data.totalSize)||0;
 		});
 	}
 	var idList = [];
