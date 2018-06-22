@@ -156,9 +156,11 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		components: {DetailTheme}
 	};
-	function search(){
+	function search(num, size){
 		var info = _this.info;
-		info.cmdID = '600044'
+		info.cmdID = '600044';
+		info.currentPage = num||1;
+		info.pageSize = size||20;
 		utils.post('mx/subTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);

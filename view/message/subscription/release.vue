@@ -241,7 +241,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		components: {AddTheme, EditTheme, DetailTheme}
 	};
-	function search(){
+	function search(num, size){
 		var picker = _this.picker, info = _this.info;
 		var userID = isInput ? _this.idName : _this.userID;
 		if(!picker){
@@ -251,6 +251,8 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		info.endDate = picker[1].split(' ',1)[0];
 		info.endDate += ' 23:59:59';
 		info.pubUserID = userID;
+		info.currentPage = num||1;
+		info.pageSize = size||20;
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);

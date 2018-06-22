@@ -86,10 +86,10 @@
 							</div>
 							<div class="table">
 								<h3 class="h3">{{pageTxt.label[9]}}</h3>
-								<el-table id='appid' highlight-current-row :data="info.subsUserList" tooltip-effect="dark">
+								<el-table ref="delTable" id='appid' highlight-current-row :data="info.subsUserList" tooltip-effect="dark">
 									<el-table-column width="55">
 										<div slot-scope="scope" class="_zero">
-											<img @click="delAppid(scope.row)" src="@/img/theme/del_1.png" alt="">
+											<img @click="delAppid(scope.row,scope.$index)" src="@/img/theme/del_1.png" alt="">
 										</div>
 									</el-table-column>
 									<el-table-column prop="userID" :label="pageTxt.list[0]" show-overflow-tooltip></el-table-column>
@@ -212,12 +212,17 @@ import observer  from '@/libs/observer.js';
 				this.info.subsUserList.unshift(obj);
 				
 			},
-			delAppid(row){
-				var sub = this.info.subsUserList, id = row.userID;
-				for (var i = 0; i < sub.length; i++) {
-					if(sub[i].userID==id) sub.splice(i,1);
-					break;
-				}
+			delAppid(row, index){
+				var sub = this.info.subsUserList;
+				sub.splice(index, 1);
+				
+				
+//				var sub = this.info.subsUserList, id = row.userID;
+//				for (var i = 0; i < sub.length; i++) {
+//					if(sub[i].userID==id) sub.splice(i,1);
+//					break;
+//				}
+//				_this.$refs.delTable.setCurrentRow(undefined);
 			},
 			inck(e){
 //				console.log(e)
