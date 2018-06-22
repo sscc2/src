@@ -154,7 +154,7 @@ import observer  from '@/libs/observer.js';
 				isInput = true;
 			},
 			blur(){
-				blurID();
+				setTimeout(blurID, 40);
 			},
 			handleChange(remain, direction, moved){
 //				kit('.slotTitle').each(function(el){
@@ -223,7 +223,7 @@ import observer  from '@/libs/observer.js';
 	
 	function blurID(){
 		var id = isInput ? _this.idName : _this.info.pubUserID;
-		console.log(id)
+		console.log(id);
 		var param = {
 			url: 'mx/userComm/querySpcificUser',
 			cmdID: '600035',
@@ -232,7 +232,7 @@ import observer  from '@/libs/observer.js';
 		utils.post(param, function(data){
 			console.log('通信关系用户：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			this.list
+			this.list = data.lists;
 		});
 	}
 	
