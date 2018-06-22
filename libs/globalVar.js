@@ -13,13 +13,13 @@ vars.loadTime = 2;
 }());
 
 //vars.urlIP = 'http://192.168.22.212:8081/fdep/';  //内网
-// vars.urlIP = 'http://192.168.218.35:8081/fdep/';  //小焕
+//vars.urlIP = 'http://192.168.218.35:8081/fdep/';  //小焕
 vars.urlIP = 'http://192.168.22.22:8081/fdep/';  //曼萍
 
 function creatID(){
 	for (var i = 0; i < 10; i++) {
 		var obj = {userID:'userID'+i,userName:'userName'+(i+1)};
-		obj.words = obj.userID + obj.userName;
+		obj.label = obj.userID + obj.userName;
 		vars.useridList.push(obj);
 	}
 //	console.log('creatID', vars.useridList);

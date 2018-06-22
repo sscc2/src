@@ -115,7 +115,7 @@ function utils(){
 			else if(option.icon) icon = option.icon;
 			load = vm.$loading({
 				lock: true,
-	        	text: option.txt||'waiting...',
+	        	text: option.txt||'',
 	      		spinner: icon,
 	        	target: option.el,
 	        	background: 'rgba(255, 255, 255, 0.5)'
@@ -257,7 +257,7 @@ function utils(){
 		 * @param fn： 请求成功回调函数；
 		 */
 		this.post = function(url, params, fn){
-			exp.loadShow();
+			exp.loadShow({icon:'none'});
 			if(arguments.length == 2){
 				fn = params;
 				if(typeof(url)=="object"){
@@ -271,7 +271,7 @@ function utils(){
 				callback(response, fn);
 			}).catch(function (e) {
 				exp.loadClose();
-				// console.log(e.message+'\nURL: ', e.config.url);
+				 console.log(e.message+'\nURL: ', e.config.url);
 			});
 		};
 		//同上
@@ -320,6 +320,31 @@ function utils(){
 		router.replace({ path: url }, fn, abort);
 	};
 	exp.route = function(){return app.$route.params;};
+	
+	exp.getUserid = function(str, call){
+		var param = {
+			url: 'mx/userinfo/queryLists',
+			cmdID: "600001",
+			userID: str,
+			userName: str,
+			pageSize: 200,
+			currentPage: 1,
+			type: 1
+		};
+		exp.post(param, function(data){
+			console.log('getUserid：',data);
+			if(data.errcode < 0) return console.log(data.errinfo);
+			var obj, i;
+			for (i = 0; i < data.lists.length; i++) {
+				obj = data.lists[i];
+				obj.key = i;
+				obj.label = obj.userID+obj.userName;
+			}
+			globalVar.set('useridList', data.lists);
+			call(obj)
+			observer.execute('useridReady');
+		});
+	};
 	
 	return exp;
 }

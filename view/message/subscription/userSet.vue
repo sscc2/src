@@ -4,7 +4,8 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-autocomplete class="autocomplete" v-model="idName" :fetch-suggestions="fetch" :trigger-on-focus="false" @select="idSelect">
+			<el-autocomplete @input='autoInput' class="autocomplete" v-model="idName" :fetch-suggestions="fetch" 
+				:trigger-on-focus="false" @select="idSelect">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
@@ -53,7 +54,7 @@ import lang      from '@/language/lang.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, _this;
+	var pageTxt, _this, autoTime;
 	pageTxt = lang.themeUserSet;
 	
 	var data = {
@@ -74,7 +75,14 @@ import observer  from '@/libs/observer.js';
 //		if(master != 'messUpload') return;
 //		data.obj = param;
 //	});
-	
+	function autoInput(str){
+		if(!str) return;
+		console.time('请求开始...');
+		utils.getUserid(function(obj){
+			idList = obj;
+			console.endTime('请求开始...');
+		});
+	}
 	export default {
 		name: 'message_userSet',
 		data() {
@@ -89,10 +97,15 @@ import observer  from '@/libs/observer.js';
 					if(idName.indexOf(str)!=-1) tem.push(obj);
 				}
 				cb(tem);
+				console.log('渲染中...');
 			},
 			idSelect(item){
 				this.userID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
+			},
+			autoInput(str){
+				clearTimeout(autoTime);
+				autoTime = setTimeout(autoInput, 300, str);
 			},
 			search(){
 				search();
