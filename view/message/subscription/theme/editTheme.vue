@@ -264,8 +264,8 @@ import observer  from '@/libs/observer.js';
 			this.keys = [];
 			this.info.canSubsUserList = [];
 			this.info.subsUserList = [];
-//			getDetail();
-			useridList();
+			getDetail();
+//			useridList();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
 		},
@@ -308,9 +308,35 @@ import observer  from '@/libs/observer.js';
 		else observer.addBinding('useridReady', call);
 	}
 	
+	function getAllUser(){
+		var id = globalVar.get('userid').pubUserID;
+		var param = {
+			url: 'mx/userComm/querySpcificUser',
+			cmdID: '600035',
+			userID: id
+		};
+		utils.post(param, function(data){
+//			console.log('通信关系用户：', data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			var arr = data.lists, i, len = arr.length, obj;
+			for (var i = 0; i < len; i++) {
+				obj = arr[i];
+				if(obj.userID){
+					obj.key = i;
+					obj.label = obj.userID + obj.userName;
+				} else {
+					arr.splice(i, 1);
+					--i;
+				}
+			}
+			_this.keys = [];
+			_this.list = arr;
+			getKey(arr);
+		});
+	}
+	
 	function getDetail(){
 		var userid = globalVar.get('userid');
-		if(!userid) return;
 		var param = {
 				cmdID: '600043', pubUserID: userid.pubUserID,
 				topicName: userid.topicName, type: '0'
@@ -319,45 +345,18 @@ import observer  from '@/libs/observer.js';
 //			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			var res = data.lists[0];
-			_this.info = res;
-			_this.info.pubUserID = res.pubUserID;
+//			_this.info = res;
 			_this.info.canSubsUserList = res.canSubsUserList||[],
 			_this.info.subsUserList = res.subsUserList||[];
-			getKey();
-			
-/*			info.topicName = res.topicName;
+			info.topicName = res.topicName;
 			info.pubUserName = res.pubUserName;
 			info.pubUserID = res.pubUserID;
 			info.topicDescr = res.topicDescr;
 			info.topicInfo = res.topicInfo;
 			info.effectiveDays = res.effectiveDays;
 			info.pubTime = res.pubTime;
-			var subs, can, arr = [], val = [];
-			subs = res.subsUserList;
-			can = res.canSubsUserList;
-			val = [];
-			if(subs&&subs.length>0){
-				arr = arr.concat(subs);
-				info.mid = ''
-				for (var i = 0; i < subs.length; i++)
-					val.push(i);
-			}
-			if(can&&can.length>0){
-				arr = arr.concat(can);
-			} else {}
-		
-			var obj, temp = [];
-			for (i = 0; i < arr.length; i++) {
-				obj = arr[i];
-				temp.push({
-					key:i, userID: obj.userID,
-					userName: obj.userName,
-					userAppid: obj.userAppid,
-					label: obj.userID + obj.userName
-				});
-			}
-			_this.list = temp;
-			_this.keys = val;*/
+			cans();
+			getAllUser();
 		});
 	}
 	var _cans = [];
@@ -367,23 +366,14 @@ import observer  from '@/libs/observer.js';
 		for (var i = 0; i < len; i++)
 			_cans.push(can[i]);
 	}
-	function getKey(){
-		var i, len = list.length, obj, key=[],
+	function getKey(arr){
+		var i, len = arr.length, obj, key=[],
 			can = _this.info.canSubsUserList;
-			cans();
 		
 		for (i = 0; i < len; i++) {
-			obj = list[i];
-			obj.key = i;
-			obj.label = obj.userID + obj.userName;
-			for (var k = 0; k < can.length; k++) {
-				if(can[k].userID==obj.userID){
-					key.push(i);
-					break;
-				}
-			}
+			obj = arr[i];
+			if(obj.userID == can.userID) key.push(i);
 		}
-		_this.list = list;
 		_this.keys = key;
 	}
 	
