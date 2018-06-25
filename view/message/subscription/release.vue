@@ -58,7 +58,7 @@
 			</el-table-column>
 		</el-table>
 		<div class="_pagination" v-show="max!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="max"></el-pagination>
+			<el-pagination @current-change='currentPage' background layout="prev, pager, next, jumper" @size-change="pageSize" :page-size='size' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -84,16 +84,16 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 	var data = {
 		pageTxt,
 		idName: '',
-		userID:'',
+		userID: '',
 		info: {
-			cmdID: '600042', pubUserID: '', topicName: '',
+			pubUserID: '', topicName: '',
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: null,
 		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
 		row: '',
-		maxData: '2000',
 		selects: [],
+		size: 20,
 		max: 0
 	};
 	
@@ -219,7 +219,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				
 				info.beginDate = this.picker[0];
 				info.endDate = this.picker[1];
-				search();
+				search(1, 20);
 			},
 			selectionRow(val){
 		     	this.selects = val;
@@ -228,16 +228,25 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				this.row = row;
 //				console.log(row);
 			},
-			currentPage(){
-				
+			pageSize(val){
+//		    	console.log(`每页 ${val} 条`);
+		    	this.size = val;
+		    	search(currentPage, this.size);
+		    },
+			currentPage(val){
+//				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
+				currentPage = val;
+				search(val, this.size);
 			},
 		},
 		beforeCreate(){},
 		mounted(){
-			this.selects = [];
 			_this = this;
+			this.selects = [];
+			this.idName = '';
+			this.info.topicName = '';
 			search();
-			useridList();
+//			useridList();
 		},
 		components: {AddTheme, EditTheme, DetailTheme}
 	};
@@ -247,6 +256,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		if(!picker){
 			picker = today();
 		}
+		info.cmdID = '600042';
 		info.beginDate = picker[0];
 		info.endDate = picker[1].split(' ',1)[0];
 		info.endDate += ' 23:59:59';

@@ -37,7 +37,7 @@
 				</div>
 			</el-table-column>
 		</el-table>
-		<div class="_pagination">
+		<div class="_pagination" v-show="max!=0">
 			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="max" 
 				layout="prev, pager, next, jumper" background></el-pagination>
 			<div class="rightTxt">
@@ -54,7 +54,7 @@ import lang      from '@/language/lang.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, _this, autoTime,currentPage=1,isInput=false;
+	var pageTxt, _this, autoTime, currentPage=1, isInput=false;
 	pageTxt = lang.themeUserSet;
 	
 	var data = {
@@ -144,6 +144,7 @@ import observer  from '@/libs/observer.js';
 		},
 		mounted(){
 			_this = this;
+			this.idName = '';
 			search(1, 20);
 //			useridList();
 		}

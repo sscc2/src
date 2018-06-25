@@ -4,13 +4,13 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-input class='elInput' placeholder="" v-model="info.subUserID"></el-input>
-			<!--<el-autocomplete class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+			<!--<el-input class='elInput' placeholder="" v-model="info.subUserID"></el-input>-->
+			<el-autocomplete @input='autoInput' class="elInput" v-model="idName" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
 				</div>
-			</el-autocomplete>-->
+			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="info.subUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
@@ -41,7 +41,7 @@
 			</el-table-column>
 		</el-table>
 		<div class="_pagination" v-show="max!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="max"></el-pagination>
+			<el-pagination @current-change='currentPage' background layout="prev, pager, next, jumper" :page-size='size' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
@@ -58,7 +58,7 @@ import observer    from '@/libs/observer.js';
 import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
-	var pageTxt, _this;
+	var pageTxt, _this, autoTime, currentPage=1, isInput=false;
 	pageTxt = lang.themeSubscription;
 	
 	var data = {
@@ -71,6 +71,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		data: [{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}],
 		row: '',
 		selects: [],
+		size: 20,
 		max: 0
 	};
 //	for (var i = 0; i < 30; i++) {
@@ -80,6 +81,18 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 //		if(master != 'messUpload') return;
 //		data.obj = param;
 //	});
+
+	function autoInput(str, cb){
+		if(!str) return;
+		utils.getUserid(str, function(data){
+//			console.log('用户ID data',data);
+			var i,len = data.length,tem=[];
+			for (i = 0; i < len; i++) {
+				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+			}
+			cb(tem);
+		});
+	}
 	
 	export default {
 		name: 'message_subscription',
@@ -88,30 +101,36 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		methods: {
 			fetch(str, cb){
-				var idName,i,len = idList.length,obj,tem=[];
-				for (i = 0; i < len; i++) {
-					obj = idList[i];
-					idName = obj.userID+obj.userName;
-					if(idName.indexOf(str)!=-1) tem.push(obj);
-				}
-				cb(tem);
+				clearTimeout(autoTime);
+				autoTime = setTimeout(autoInput, 300, str, cb);
 			},
 			idSelect(item){
+				isInput = false;
 				this.info.subUserID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
 			},
+			autoInput(){
+				isInput = true;
+			},
 			search(){
-				search();
+				search(1, 20);
 			},
 			currenRow(row){
 				this.row = row;
-//				console.log(row)
+				search(val, this.size);
 			},
 			selectionRow(val){
 		     	this.selects = val;
+			},
+			pageSize(val){
+//		    	console.log(`每页 ${val} 条`);
+		    	this.size = val;
+		    	search(currentPage, this.size);
 		    },
-			currentPage(){
-				
+			currentPage(val){
+//				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
+				currentPage = val;
+				search(val, this.size);
 			},
 			sortReq(obj){
 				//默认2   0，按发布时间从近到远排序， 1，按发布时间从远到近排序。。
@@ -149,10 +168,12 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		},
 		beforeCreate(){},
 		mounted(){
-			this.selects = [];
 			_this = this;
-			search();
-			useridList();
+			this.selects = [];
+			this.idName = '';
+			this.info.topicName = '';
+			search(1, 20);
+//			useridList();
 		},
 		components: {DetailTheme}
 	};
@@ -165,7 +186,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = parseInt(data.count)||0;
+			_this.max = parseInt(data.totalSize)||0;
 		});
 	}
 	var idList = [];
