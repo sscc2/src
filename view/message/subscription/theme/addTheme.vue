@@ -197,6 +197,7 @@ import observer  from '@/libs/observer.js';
 						utils.post('mx/pubTopic/add', info, function(data){
 							console.log('增加主题：',data);
 							if(data.errcode < 0) return utils.weakTips(data.errinfo);
+							utils.weakTips(data.errinfo);
 							_this.$router.replace({ path: "/message/release" });
 		//					_this.list = data.lists;
 						});

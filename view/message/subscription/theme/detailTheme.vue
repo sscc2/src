@@ -144,7 +144,7 @@ import observer  from '@/libs/observer.js';
 				topicName: userid.topicName, type: '0'
 			};
 		utils.post('mx/pubTopic/query', param, function(data){
-			console.log('订阅详情：',data);
+//			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			var res = data.lists[0],  info = _this.info;
 			info.topicName = res.topicName;
