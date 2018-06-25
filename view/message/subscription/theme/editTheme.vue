@@ -342,9 +342,9 @@ import observer  from '@/libs/observer.js';
 				topicName: userid.topicName, type: '0'
 			};
 		utils.post('mx/pubTopic/query', param, function(data){
-//			console.log('订阅详情：',data);
+			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			var res = data.lists[0];
+			var res = data.lists[0], info = _this.info;
 //			_this.info = res;
 			_this.info.canSubsUserList = res.canSubsUserList||[],
 			_this.info.subsUserList = res.subsUserList||[];
@@ -367,12 +367,13 @@ import observer  from '@/libs/observer.js';
 			_cans.push(can[i]);
 	}
 	function getKey(arr){
-		var i, len = arr.length, obj, key=[],
-			can = _this.info.canSubsUserList;
-		
-		for (i = 0; i < len; i++) {
-			obj = arr[i];
-			if(obj.userID == can.userID) key.push(i);
+		var i, k, len2 = arr.length, key=[],
+			can = _this.info.canSubsUserList, len1 = can.length;
+		for (i = 0; i < len1; i++) {
+			var id1 = can[i].userID;
+			for (k = 0; k < len2; k++) {
+				if(id1 == arr[k].userID) key.push(k);
+			}
 		}
 		_this.keys = key;
 	}
