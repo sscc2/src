@@ -265,7 +265,6 @@ import observer  from '@/libs/observer.js';
 			this.info.canSubsUserList = [];
 			this.info.subsUserList = [];
 			getDetail();
-//			useridList();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
 		},
@@ -294,18 +293,6 @@ import observer  from '@/libs/observer.js';
 			if(sel[i].userID == obj) break;
 		}
 		return (i==len);
-	}
-	
-	function useridList(){
-		list = globalVar.useridList();
-		var call = function(master){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			list = globalVar.useridList(); call = null;
-			getDetail();
-		}
-		if(list.length > 0) getDetail();
-		else observer.addBinding('useridReady', call);
 	}
 	
 	function getAllUser(){

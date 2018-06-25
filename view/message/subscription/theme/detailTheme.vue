@@ -109,22 +109,11 @@ import observer  from '@/libs/observer.js';
 		mounted(){
 			getDetail();
 			slotTitle = kit('#slotTitle').html();
-			useridList();
 			addTitle();
 		},
 		watch: {},
 		components: {}
 	};
-	var idList = [];
-	function useridList(){
-		idList = globalVar.useridList();
-		var call = function(master){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			idList = globalVar.useridList(); call = null;
-		}
-		if(!idList.length) observer.addBinding('useridReady', call);
-	}
 	function addTitle(){
 		kit('.detailTheme .el-checkbox-group').each(function(el){
 			var parent = el.parentNode;
@@ -138,8 +127,9 @@ import observer  from '@/libs/observer.js';
 	}
 	var _this;
 	function getDetail(){
-		var userid = globalVar.get('userid'),
-			param = {
+		var userid = globalVar.get('userid');
+		if(!userid) return;
+		var	param = {
 				cmdID: '600043', pubUserID: userid.pubUserID,
 				topicName: userid.topicName, type: '0'
 			};

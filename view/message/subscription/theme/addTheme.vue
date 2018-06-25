@@ -94,7 +94,7 @@ import globalVar from '@/libs/globalVar.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, _this, slotTitle, idList = [], autoTime, isInput=false;
+	var pageTxt, _this, slotTitle, autoTime, isInput=false;
 	pageTxt = lang.themeAddTheme;
 	
 	var list = [];
@@ -120,11 +120,6 @@ import observer  from '@/libs/observer.js';
 		allRight: []
 	};
 	var submitList = [];
-	
-//	observer.addBinding('messAddTheme', function(master, param){
-//		if(master != 'messAddTheme') return;
-//		data.sync = param.sync;
-//	});
 	
 	function autoInput(str, cb){
 		if(!str) return;
@@ -198,15 +193,14 @@ import observer  from '@/libs/observer.js';
 							console.log('增加主题：',data);
 							if(data.errcode < 0) return utils.weakTips(data.errinfo);
 							utils.weakTips(data.errinfo);
-							_this.$router.replace({ path: "/message/release" });
-		//					_this.list = data.lists;
+							utils.goto('/message/release');
 						});
 					}
 				});
 				
 			},
 			back(){
-				this.$router.replace({ path: "/message/release" });
+				utils.goto('/message/release');
 			}
 		},
 		mounted(){
@@ -214,9 +208,9 @@ import observer  from '@/libs/observer.js';
 			slotTitle = kit('.addTheme #slotTitle').html();
 			var info = this.info;
 			for(var k in info) info[k] = '';
+			this.idName = '';
 			info.canSubsUserList = [];
 			this.keys = [];
-//			useridList();
 			addTitle();
 			kit('.el-autocomplete-suggestion').off().down(function(){
 				isInput = false;
@@ -225,16 +219,6 @@ import observer  from '@/libs/observer.js';
 		watch: {},
 		components: {}
 	};
-	
-	function useridList(){
-		_this.list = globalVar.useridList();
-		var call = function(master){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			_this.list = globalVar.useridList(); call = null;
-		}
-		if(!_this.list.length) observer.addBinding('useridReady', call);
-	}
 	
 	function blurID(id){
 //		var id = isInput ? _this.idName : _this.info.pubUserID;

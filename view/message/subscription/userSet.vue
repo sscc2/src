@@ -54,7 +54,7 @@ import lang      from '@/language/lang.js';
 import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, _this, autoTime, currentPage=1, isInput=false;
+	var pageTxt, _this, autoTime, _currentPage=1, isInput=false;
 	pageTxt = lang.themeUserSet;
 	
 	var data = {
@@ -107,7 +107,7 @@ import observer  from '@/libs/observer.js';
 				isInput = true;
 			},
 			search(){
-				search(1, 20);
+				search(_currentPage=1);
 			},
 			currenRow(row){
 				this.row = row;
@@ -119,12 +119,12 @@ import observer  from '@/libs/observer.js';
 		    pageSize(val){
 //		    	console.log(`每页 ${val} 条`);
 		    	this.size = val;
-		    	search(currentPage, this.size);
+		    	search();
 		    },
 			currentPage(val){
 //				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
-				currentPage = val;
-				search(val, this.size);
+				_currentPage = val;
+				search();
 			},
 			editAll(){
 				var row = this.selects;
@@ -134,43 +134,34 @@ import observer  from '@/libs/observer.js';
 				}
 				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row[0].userID;
-				this.$router.replace({ path: "/message/userEdit/mess_userSet" });
+				utils.goto('/message/userEdit/mess_userSet');
 			},
 			edit(row){
 				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row.userID;
-				this.$router.replace({ path: "/message/userEdit/mess_userSet" });
+				utils.goto('/message/userEdit/mess_userSet');
 			}
 		},
 		mounted(){
 			_this = this;
-			this.idName = '';
-			search(1, 20);
-//			useridList();
+			this.idName = this.userID = '';
+			this.size = 20;
+			search(_currentPage = 1);
 		}
 	};
 	function search(num, size){
 		var userID = isInput ? _this.idName : _this.userID;
 		var info = {
 			cmdID: '600041', userID: userID,
-			pageSize: size||20, currentPage: num||1,
+			pageSize: size||_this.size,
+			currentPage: num||_currentPage,
 		};
 		utils.post('mx/userPsConfig/query', info, function(data){
 //			console.log('订阅配置：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = parseInt(data.totalSize)||0;
+			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});
-	}
-	var idList = [];
-	function useridList(){
-		idList = globalVar.useridList();
-		var call = function(master){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			idList = globalVar.useridList(); call = null;
-		}
-		if(!idList.length) observer.addBinding('useridReady', call);
 	}
 </script>
 

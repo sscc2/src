@@ -25,7 +25,7 @@ function creatID(){
 	}
 //	console.log('creatID', vars.useridList);
 }
-creatID();
+//creatID();
 
 
 export default {
@@ -33,19 +33,6 @@ export default {
 	get(key){
 //		if(key == 'useridList') return console.warn('请用useridList()方法!');
 		return vars[key];
-	},
-	useridList(){
-		var arr = [], i, len = vars.useridList.length,obj;
-		for (i = 0; i < len; i++) {
-			obj = vars.useridList[i];
-			arr.push({
-				key: i,
-				userID: obj.userID,
-				userName: obj.userName,
-				label: obj.userID+obj.userName
-			});
-		}
-		return arr;
 	}
 };
 /**

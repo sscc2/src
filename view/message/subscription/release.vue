@@ -74,17 +74,16 @@ import utils       from '@/libs/utils.js';
 import globalVar   from '@/libs/globalVar.js';
 import lang        from '@/language/lang.js';
 import observer    from '@/libs/observer.js';
-import AddTheme    from '@/view/message/subscription/theme/addTheme.vue';
-import EditTheme   from '@/view/message/subscription/theme/editTheme.vue';
-import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
+//import AddTheme    from '@/view/message/subscription/theme/addTheme.vue';
+//import EditTheme   from '@/view/message/subscription/theme/editTheme.vue';
+//import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
-	var pageTxt, _this, autoTime, isInput = false, currentPage=1;
+	var pageTxt, _this, autoTime, isInput = false, _currentPage=1;
 	pageTxt = lang.themeRelease;
 	var data = {
 		pageTxt,
 		idName: '',
-		userID: '',
 		info: {
 			pubUserID: '', topicName: '',
 			beginDate: '', endDate: '', sortType: '0'
@@ -113,7 +112,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		utils.post(param, function(data){
 			console.log('删除主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			utils.weakTips(pageTxt.tips.success);
+			utils.weakTips(data.errinfo);
 			search();
 		});
 	}
@@ -141,25 +140,21 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			},
 			idSelect(item){
 				isInput = false;
-				this.userID = item.userID;
+				this.info.pubUserID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
 			},
 			autoInput(){
 				isInput = true;
 			},
 			search(){
-				search(1, 20);
+				search(_currentPage = 1);
 			},
 			add(){
-				this.$router.replace({ path: "/message/addTheme" });
-				observer.execute('messAddTheme',{sync:true});
+				utils.goto('/message/addTheme')
 			},
 			editTheme(){
 				var row = this.selects;
-				if(row.length != 1){
-					utils.weakTips(pageTxt.tips.user);
-					return;
-				}
+				if(isError(row)) return;
 				utils.goto('/message/editTheme','userid',row[0]);
 			},
 			edit(ind, row){
@@ -167,10 +162,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			},
 			delTheme(){
 				var row = this.selects;
-				if(row.length != 1){
-					utils.weakTips(this.pageTxt.tips.user);
-					return;
-				}
+				if(isError(row)) return;
 				delTheme.row = row[0];
 				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:2});
 			},
@@ -181,13 +173,12 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:2});
 			},
 			detailTheme(){
-				globalVar.set('userid', this.selects[0]);
-				this.$router.replace({ path: "/message/detailTheme/release" });
-//				observer.execute('messDetailTheme',{sync:true, obj: this.row});
+				var row = this.selects;
+				if(isError(row)) return;
+				utils.goto('/message/detailTheme/release','userid', this.selects[0]);
 			},
 			detail(ind, row){
-				globalVar.set('userid', row);
-				this.$router.replace({ path: "/message/detailTheme/release" });
+				utils.goto('/message/detailTheme/release','userid', row);
 			},
 			sortReq(obj){
 				/*
@@ -219,7 +210,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				
 				info.beginDate = this.picker[0];
 				info.endDate = this.picker[1];
-				search(1, 20);
+				search(_currentPage = 1);
 			},
 			selectionRow(val){
 		     	this.selects = val;
@@ -231,45 +222,46 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			pageSize(val){
 //		    	console.log(`每页 ${val} 条`);
 		    	this.size = val;
-		    	search(currentPage, this.size);
+		    	search();
 		    },
 			currentPage(val){
 //				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
-				currentPage = val;
-				search(val, this.size);
+				_currentPage = val;
+				search();
 			},
 		},
 		beforeCreate(){},
 		mounted(){
 			_this = this;
 			this.selects = [];
-			this.idName = '';
-			this.info.topicName = '';
+			this.idName = this.info.pubUserID = this.info.topicName = '';
+			this.size = 20;
 			search();
-//			useridList();
 		},
-		components: {AddTheme, EditTheme, DetailTheme}
+//		components: {AddTheme, EditTheme, DetailTheme}
 	};
+	
 	function search(num, size){
 		var picker = _this.picker, info = _this.info;
-		var userID = isInput ? _this.idName : _this.userID;
+		var userID = isInput ? _this.idName : info.pubUserID;
 		if(!picker){
-			picker = today();
+			picker = _this.picker = today();
 		}
 		info.cmdID = '600042';
 		info.beginDate = picker[0];
 		info.endDate = picker[1].split(' ',1)[0];
 		info.endDate += ' 23:59:59';
 		info.pubUserID = userID;
-		info.currentPage = num||1;
-		info.pageSize = size||20;
+		info.currentPage = num||_currentPage;
+		info.pageSize = size||_this.size;
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = parseInt(data.count)||0;
+			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});
 	}
+	
 	function today(){
 		var day = new Date(), str = '', t;
 		str += day.getFullYear() + '-';
@@ -279,15 +271,13 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 //		return [str+' 00:00:00',str+' 23:59:59'];
 		return [str+'01 00:00:00',str+'28 23:59:59'];
 	}
-	var idList = [];
-	function useridList(){
-		idList = globalVar.get('useridList');
-		var call = function(master, list){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			idList = list; call = null;
+	
+	function isError(arr){
+		if(arr.length != 1){
+			utils.weakTips(pageTxt.tips.user);
+			return true;
 		}
-		if(!idList.length) observer.addBinding('useridReady', call);
+		return false;
 	}
 </script>
 

@@ -55,10 +55,10 @@ import utils       from '@/libs/utils.js';
 import globalVar   from '@/libs/globalVar.js';
 import lang        from '@/language/lang.js';
 import observer    from '@/libs/observer.js';
-import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
+//import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
-	var pageTxt, _this, autoTime, currentPage=1, isInput=false;
+	var pageTxt, _this, autoTime, _currentPage=1, isInput=false;
 	pageTxt = lang.themeSubscription;
 	
 	var data = {
@@ -113,11 +113,10 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 				isInput = true;
 			},
 			search(){
-				search(1, 20);
+				search(_currentPage = 1);
 			},
 			currenRow(row){
 				this.row = row;
-				search(val, this.size);
 			},
 			selectionRow(val){
 		     	this.selects = val;
@@ -125,12 +124,12 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 			pageSize(val){
 //		    	console.log(`每页 ${val} 条`);
 		    	this.size = val;
-		    	search(currentPage, this.size);
+		    	search();
 		    },
 			currentPage(val){
 //				console.log(`当前页: ${val}`,`每页 ${this.size} 条`);
-				currentPage = val;
-				search(val, this.size);
+				_currentPage = val;
+				search();
 			},
 			sortReq(obj){
 				//默认2   0，按发布时间从近到远排序， 1，按发布时间从远到近排序。。
@@ -152,7 +151,7 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 					}
 				} else info.sortType = '2';
 				
-				search();
+				search(_currentPage = 1);
 			},
 			detail(){
 				var row = this.selects;
@@ -170,34 +169,25 @@ import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 		mounted(){
 			_this = this;
 			this.selects = [];
-			this.idName = '';
-			this.info.topicName = '';
-			search(1, 20);
-//			useridList();
+			this.idName = this.info.subUserID = this.info.topicName = '';
+			this.size = 20;
+			search(_currentPage = 1);
 		},
-		components: {DetailTheme}
+//		components: {DetailTheme}
 	};
 	function search(num, size){
 		var info = _this.info;
+		var userID = isInput ? _this.idName : info.subUserID;
 		info.cmdID = '600044';
-		info.currentPage = num||1;
-		info.pageSize = size||20;
+		info.currentPage = num||_currentPage;
+		info.pageSize = size||_this.size;
+		info.subUserID = userID;
 		utils.post('mx/subTopic/queryLists', info, function(data){
-//			console.log('已发布主题：',data);
+//			console.log('已订阅主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
-			_this.max = parseInt(data.totalSize)||0;
+			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});
-	}
-	var idList = [];
-	function useridList(){
-		idList = globalVar.get('useridList');
-		var call = function(master, list){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			idList = list; call = null;
-		}
-		if(!idList.length) observer.addBinding('useridReady', call);
 	}
 </script>
 
