@@ -40,12 +40,12 @@
 							</li>
 							<li>
 								<el-select v-model="info.userType" placeholder="">
-									<el-option v-for="item in userType" :key="item.name" :label="item.id" :value="item.value"></el-option>
+									<el-option v-for="item in userType" :label="item.name" :key="item.id" :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
 								<el-select v-model="info.userDistrict" placeholder="">
-									<el-option v-for="item in cities" :key="item.name" :value="item.id"></el-option>
+									<el-option v-for="item in cities" :label="item.name" :key="item.id" :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -188,10 +188,10 @@ var pageTxt = {
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
 var data = {
+  userType:[{id:'0',name:'1aaa'},{id:'1',name:'2aaa'}],
+  cities:[{id:'BJ',name:'1aaa'},{id:'1',name:'2aaa'}],
   info,
   pageTxt,
-  userType:[],
-  cities:[],
   connect,
   online,
   time: getDate(),
@@ -203,12 +203,11 @@ export default {
   },
   methods: {
     Edit() {
-      this.open6("response.errinfo")
       var _this = this;
       utils.post(
         "mx/userinfo/modify",
         {
-          cmdID: 600004,
+          cmdID: "600004",
           userID: _this.$store.state.transferEditID,
           operator: "admin",
           userName: _this.info.userName,
@@ -229,15 +228,11 @@ export default {
           if (response.errcode == 0) {
             open6(response.errinfo)
           } else {
-            
+            utils.weakTips(response.errinfo);
           }
         }
       );
     },
-    del: function(e) {
-      this.$router.replace({ path: "/message/user" });
-    },
-
     open6(msg) {
       this.$confirm(msg, "提示", {
         confirmButtonText: "确定",
@@ -252,7 +247,11 @@ export default {
           this.$store.state.tabv = "v1";
           this.$router.replace({ path: "/message/userEdit/mess" });
         });
-    }
+    },
+    
+    del: function(e) {
+      this.$router.replace({ path: "/message/user" });
+    },
   },
 
   // 初始化数据
@@ -262,9 +261,9 @@ export default {
     utils.post(
       "mx/userinfo/query",
       {
-        cmdID: 600002,
+        cmdID: "600002",
         userID: _this.$store.state.transferEditID,
-        type: 0
+        type: "0"
       },
       function(response) {
         _this.info.userName = response.lists[0].userName;
@@ -274,8 +273,8 @@ export default {
         _this.info.userInfo = response.lists[0].userInfo;
         _this.info.connSuGroupName = response.lists[0].connSuGroupName;
         _this.info.isAlarmIfOffLine = response.lists[0].isAlarmIfOffLine;
-        _this.info.softEncBeginDate = response.lists[0].softEncBeginDate;
-        _this.info.softEncEndDate = response.lists[0].softEncEndDate;
+        _this.info.softEncBeginDate = response.lists[0].softEncBeginDate.toString();
+        _this.info.softEncEndDate = response.lists[0].softEncEndDate.toString();
         _this.info.allowSendRecvFile = response.lists[0].allowSendRecvFile;
         _this.info.maxPubsCount = response.lists[0].maxPubsCount;
         _this.info.maxSubsCount = response.lists[0].maxSubsCount;
@@ -285,9 +284,9 @@ export default {
      utils.post(
       "mx/dict/query",
       {
-        cmdID: 600000,
-        language: 0,
-        type: 1
+        cmdID: "600000",
+        language: "0",
+        type: "1"
       },
       function(response) {
         _this.userType = response.lists;
@@ -297,9 +296,9 @@ export default {
      utils.post(
       "mx/dict/query",
       {
-        cmdID: 600000,
-        language: 0,
-        type: 2
+        cmdID: "600000",
+        language: "0",
+        type: "2"
       },
       function(response) {
         _this.cities = response.lists;

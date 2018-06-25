@@ -14,13 +14,13 @@
 			</div>
 			<div class='center_list'>
 				<ul>
-					<li><el-input v-model="inputValue.userAlarmSmsNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.userTelNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.userMobileNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.operationPhoneNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.operationFax" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.email" placeholder="请输入内容"></el-input></li>
-					<li><el-input v-model="inputValue.ssccManager" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.userAlarmSmsNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.userTelNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.userMobileNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.operationPhoneNum" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.operationFax" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.email" placeholder="请输入内容"></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.ssccManager" placeholder="请输入内容"></el-input></li>
 				</ul>
 			</div>
 			<div class='right_list'>
@@ -96,7 +96,7 @@ export default {
       utils.post(
         "mx/userinfoExt/modify",
         {
-          cmdID: 600012,
+          cmdID: "600012",
           operator: "admin",
           userID: _this.$store.state.transferEditID,
           userAlarmSmsNum: _this.inputValue.userAlarmSmsNum,
@@ -109,6 +109,9 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
+            utils.weakTips(response.errinfo);
+          }else{
+            utils.weakTips(response.msg);
           }
         }
       );
@@ -116,8 +119,6 @@ export default {
     goBack: function() {
       this.$router.replace({ path: "/message/user" });
     },
-
-
   },
   created() {
     var _this = this;
@@ -125,11 +126,17 @@ export default {
       "mx/userinfoExt/query",
       {
         cmdID: 600013,
-        userID: this.extend,
+        userID: _this.$store.state.transferEditID,
         type: 0
       },
       function(response) {
-        this.inputValue = response.lists;
+          _this.inputValue.userAlarmSmsNum=response.lists[0].userAlarmSmsNum,
+          _this.inputValue.userTelNum=response.lists[0].userTelNum,
+          _this.inputValue.userMobileNum=response.lists[0].userMobileNum,
+          _this.inputValue.operationPhoneNum=response.lists[0].operationPhoneNum,
+          _this.inputValue.operationFax=response.lists[0].operationFax,
+          _this.inputValue.email=response.lists[0].email,
+          _this.inputValue.ssccManager=response.lists[0].ssccManager      
       }
     );
   }

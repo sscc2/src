@@ -7,9 +7,9 @@
 		<div class="user">
 			<div class="userH">
 				<span class="txt">{{pageTxt.userTxt[1]}}：</span>
-				<input type="text" v-model="userParam.id">
+				<input class="input_normal" type="text" v-model="userParam.id">
 				<span class="txt">{{pageTxt.userTxt[2]}}：</span>
-				<input type="text" v-model="userParam.name">
+				<input class="input_normal" type="text" v-model="userParam.name">
 				<el-button type="primary"  @click='userSearch'>{{pageTxt.userTxt[3]}}</el-button>
 			</div>
 
@@ -35,7 +35,7 @@
 			</el-table>
 
 			<div class="_pagination">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="userData.totalPage"></el-pagination>
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="userData.totalPage" :page-size="20"></el-pagination>
       </div>  
 			<Password></Password>
 			<Upload></Upload>
@@ -47,18 +47,14 @@
             <el-button type="primary" @click="delAll">确定</el-button>
           </div>
       </el-dialog>
-    
+
       <el-dialog title="提示" :visible.sync="promptBoxShow" width="600px">
           <span class="promptBox_content_txt">是否删除此用户信息？</span>
           <div class="promptBox_btn" >
             <el-button @click="promptBoxShow=false">取消</el-button>
             <el-button type="primary" @click="userDel">确定</el-button>
           </div>
-      </el-dialog>
-      
-      <div class="delInfo" v-show="errInfo">
-        <span class="delInfo_txt">{{$store.state.errInfo}}</span>
-      </div>
+      </el-dialog> 
 
 		</div>	
   </div>
@@ -100,17 +96,14 @@ export default {
       userData: {
         count: 30,
         lists: [
-          { userID: "A1", userName: "123" },
-          { userID: "A1", userName: "123" },
           { userID: "A1", userName: "123" }
         ]
       },
-      errInfo: false,
       selects: [],
       currentPage: 1,
       pageSize: 20,
-      promptBoxShow: false,
       promptBoxShow1: false,
+      promptBoxShow: false,
       index: "",
       rows: ""
     };
@@ -123,7 +116,7 @@ export default {
       utils.post(
         "mx/userinfo/queryLists",
         {
-          cmdID: 600001,
+          cmdID: "600001",
           userID: _this.userParam.id,
           userName: _this.userParam.name,
           pageSize: _this.pageSize,
@@ -135,16 +128,14 @@ export default {
         }
       );
     },
-
     // 增加用户
     createUser: function() {
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
-
     // 删除用户
     deleteUser() {
       if (this.selects.length != 1) {
-        utils.weakTips("请在列表中选择一条记录！") ;
+        utils.weakTips("请在列表中选择一条记录！");
       } else {
         this.promptBoxShow1 = true;
       }
@@ -155,7 +146,7 @@ export default {
       utils.post(
         "mx/userinfo/delete",
         {
-          cmdID: 600005,
+          cmdID: "600005",
           operator: "admin",
           userID: _this.selects[0].userID
         },
@@ -164,34 +155,23 @@ export default {
             var index = _this.userData.lists.indexOf(_this.selects[0]);
             if (index > -1) {
               _this.userData.lists.splice(index, 1);
-              _this.errInfo = true;
-              _this.$store.state.errInfo= '"已删除'+_this.selects[0].userID+'的信息"'
-              setTimeout(function() {
-                _this.errInfo = false;
-              }, 2000);
             }
-          }else{
-              _this.errInfo = true;
-              _this.$store.state.errInfo= response.error
-              setTimeout(function() {
-                _this.errInfo = false;
-              }, 2000);
+            utils.weakTips(response.errinfo);
+          } else {
+            utils.weakTips(response.errInfo);
           }
         }
       );
     },
-
     // 导入扩展信息
     importExtInfo: function() {
       // observer.execute("messUpload", true);
     },
-
     // 修改用户(row)
     userEdit: function(e) {
       this.$store.state.tabv = "v1";
       this.$router.replace({ path: "/message/userEdit/mess" });
     },
-
     // 删除用户(row)
     showPromptBox(index, rows) {
       this.promptBoxShow = true;
@@ -211,17 +191,9 @@ export default {
         function(response) {
           if (response.errcode == 0) {
             _this.rows.splice(_this.index, 1);
-            _this.$store.stae.errInfo='"已删除'+_this.$store.state.transferEditID+'的信息"'
-            _this.errInfo = true;
-            setTimeout(function() {
-              _this.errInfo = false;
-            }, 2000);
-          }else{
-              _this.errInfo = true;
-              _this.$store.state.errInfo= response.error
-              setTimeout(function() {
-                _this.errInfo = false;
-              }, 2000);
+            utils.weakTips(response.errinfo);
+          } else {
+            utils.weakTips(response.errinfo);
           }
         }
       );
@@ -230,15 +202,6 @@ export default {
     eidtPasswd() {
       this.$store.state.passShow = true;
     },
-
-    selectionRow(val) {
-      this.selects = val;
-    },
-
-    currentRow: function(e) {
-      this.$store.state.transferEditID = e.userID;
-    },
-
     // 分页
     handleSizeChange: function(size) {
       this.pageSize = size;
@@ -249,7 +212,7 @@ export default {
       utils.post(
         "mx/userinfo/queryLists",
         {
-          cmdID: 600001,
+          cmdID: "600001",
           userID: "",
           userName: "",
           pageSize: _this.pageSize,
@@ -260,14 +223,14 @@ export default {
           _this.userData = response;
         }
       );
-    },
-    prev: function(e) {
-      this.$router.replace({ path });
-    },
-    next: function(e) {},
+    },    
 
-    imports: function(e) {},
-
+    selectionRow(val) {
+      this.selects = val;
+    },
+    currentRow: function(e) {
+      this.$store.state.transferEditID = e.userID;
+    },
     closePromptBox() {
       this.promptBoxShow = false;
     },
@@ -275,14 +238,13 @@ export default {
       this.promptBoxShow1 = false;
     }
   },
-
   //初始化数据
   created() {
     var _this = this;
     utils.post(
       "mx/userinfo/queryLists",
       {
-        cmdID: 600001,
+        cmdID: "600001",
         userID: "",
         userName: "",
         pageSize: _this.pageSize,
@@ -299,92 +261,25 @@ export default {
 </script>
 
 <style scoped="scoped">
-.user {
-  padding: 22px;
-  white-space: nowrap;
-}
-.user * {
-  vertical-align: middle;
-}
-.user input {
-  width: 160px;
-  height: 30px;
-  margin-left: 10px;
-  border: 1px solid #d7d8da;
-  text-indent: 12px;
-}
-.user .txt {
-  font-size: 14px;
-  line-height: 30px;
-  height: 30px;
-  color: #666666;
-}
-.user .el-button {
-  margin-left: 35px;
-}
-.userH > span:nth-child(3) {
-  margin-left: 35px;
-}
-.userH > span:nth-child(6) {
-  margin-left: 10px;
-}
-.userH > input:focus {
-  border: 2px solid #32ccf9;
-}
-.btnBox {
-  font-size: 13px;
-  color: #5c759d;
-  margin-top: 18px;
-  margin-bottom: 10px;
-}
-.btnBox div {
-  margin-left: 15px;
-  cursor: pointer;
-  display: inline-block;
-}
-.btnBox > div > span {
-  margin-left: 3px;
-}
-.btnBox div:nth-child(1) {
-  margin-left: 0;
-}
-._zero > div {
-  display: inline-block;
-  margin-right: 14px;
-  cursor: pointer;
-}
-.promptBox_content_txt {
-  font-size: 14px;
-  color: #666;
-  text-align: center;
-  display: block;
-  margin-top: 60px;
-}
-.promptBox_btn {
-  text-align: center;
-  margin-top: 60px;
-  margin-bottom: 50px;
-}
-.promptBox_btn button:nth-child(1) {
-  margin-left: 0;
-}
-.delInfo {
-  width: 328px;
-  height: 132px;
-  background-color: #262626;
-  border-radius: 8px;
-  margin: 0 auto;
-  opacity: 0.7;
-  position: relative;
-  margin-top: 10px;
-  z-index: 101;
-}
-.delInfo_txt {
-  font-size: 14px;
-  color: #fff;
-  display: block;
-  text-align: center;
-  line-height: 132px;
-}
+.user{padding: 22px; white-space: nowrap;}
+.user *{vertical-align: middle;}
+.user input{margin-left: 10px; border: 1px solid #d7d8da; text-indent: 12px;}
+.user .txt{font-size: 14px; line-height: 30px; height: 30px; color: #666666;}
+.user .el-button{margin-left: 35px;}
+.userH > span:nth-child(3){margin-left: 35px;}
+.userH > span:nth-child(6){margin-left: 10px;}
+.userH > input:focus{border: 2px solid #32ccf9;}
+.btnBox{font-size: 13px; color: #5c759d; margin-top: 18px; margin-bottom: 10px;}
+.btnBox div{margin-left: 15px; cursor: pointer; display: inline-block;}
+.btnBox > div > span{margin-left: 3px;}
+.btnBox div:nth-child(1){margin-left: 0;}
+._zero > div{display: inline-block; margin-right: 14px; cursor: pointer;}
+.promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
+.promptBox_btn button:nth-child(1){margin-left: 0;}
+.delInfo{width: 328px; height: 132px; background-color: #262626; border-radius: 8px; margin: 0 auto; opacity: 0.7; position: relative; margin-top: 10px; z-index: 101;}
+.delInfo_txt{font-size: 14px; color: #fff; display: block; text-align: center; line-height: 132px;}
+.promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
+.promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
+.promptBox_btn button:nth-child(1){margin-left: 0;}
 </style>
 

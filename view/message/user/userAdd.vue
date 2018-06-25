@@ -55,12 +55,12 @@
 							</li>
 							<li>
 								<el-select v-model="info.userType" placeholder="">
-									<el-option v-for="item in userType" :labei="item.name" :key="item.id" :value="item.id"></el-option>
+									<el-option v-for="item in userType" :label="item.name" :key="item.id"  :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
 								<el-select v-model="info.userDistrict" placeholder="">
-									<el-option v-for="item in cities" :key="item.name" :value="item.id"></el-option>
+									<el-option v-for="item in cities" :label="item.name" :key="item.id"  :value="item.id"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -203,10 +203,13 @@ var pageTxt = {
 export default {
   data() {
     return {
+      userType:[{id:'0',name:'1aaa'},{id:'1',name:'2aaa'}],
+      cities:[{id:'BJ',name:'1aaa'},{id:'1',name:'2aaa'}],
+
+
       info,
       pageTxt,
-      userType:[],
-      cities:[],
+      
       connect,
       online,
       time: getDate(),
@@ -240,7 +243,7 @@ export default {
       utils.post(
         "mx/userinfo/add",
         {
-          cmdId: 600003,
+          cmdId: "600003",
           operator: "admin",
           userID: _this.info.userID,
           userName: _this.info.userName,
@@ -263,6 +266,8 @@ export default {
         function(response) {
           if(response.errcode == 0){
             _this.open6(response.errinfo)
+          }else{
+            utils.weakTips(response.errifo);
           }
         }
       );
@@ -289,13 +294,13 @@ export default {
   },
   // 初始化数据
   created: function() {
-    var _this=this;
+     var _this=this;
      utils.post(
       "mx/dict/query",
       {
-        cmdID: 600000,
-        language: 0,
-        type: 1
+        cmdID: "600000",
+        language: "0",
+        type: "1"
       },
       function(response) {
         _this.userType = response.lists;
@@ -305,9 +310,9 @@ export default {
      utils.post(
       "mx/dict/query",
       {
-        cmdID: 600000,
-        language: 0,
-        type: 2
+        cmdID: "600000",
+        language: "0",
+        type: "2"
       },
       function(response) {
         _this.cities = response.lists;
@@ -315,7 +320,7 @@ export default {
     );
     info.userID="";
     info.userName="";
-    info.isModifyDefaultPasswd = 0;
+    info.isModifyDefaultPasswd = "0";
     info.userPasswd = "111111";
     info.userType = "0";
     info.userDistrict = "BJ";

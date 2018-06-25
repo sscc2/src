@@ -10,19 +10,34 @@
 			<el-radio v-model="ainfo.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
   		<el-radio v-model="ainfo.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
 			<span v-show='ainfo.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
-			<el-input v-show='ainfo.type==0' v-model="ainfo.ekeyName" placeholder="" ></el-input>
+
+			<el-autocomplete v-show='ainfo.type==0' class="input_normal" v-model="aaa" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+				<div slot-scope="{item}">
+					<span class="name">{{item.userID}}</span>
+				    <span class="addr">({{item.userName}})</span>
+				</div>
+			</el-autocomplete>
+
 			<span v-show='ainfo.type==1' class="txt">用户：</span>
-			<el-input v-show='ainfo.type==1' v-model="ainfo.userID" placeholder=""></el-input>
+
+			<el-autocomplete v-show='ainfo.type==1' class="input_normal" v-model="aaa" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+				<div slot-scope="{item}">
+					<span class="name">{{item.userID}}</span>
+				    <span class="addr">({{item.userName}})</span>
+				</div>
+			</el-autocomplete>
+
+
 			<el-button type="primary" plain @click='search'>{{pageTxt.Ekey[4]}}</el-button>
 		</div>
 
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
-			<div @click="del"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
-			<div @click="del"><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
+			<div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
+			<div @click=""><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
 		</div>
 	
-		<el-table  :data="EkeyData"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
+		<el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
@@ -32,7 +47,7 @@
 			<el-table-column label="操作" width="110">
 				<div slot-scope="scope" class="_zero">
 					<div  id='Edit'  @click="showEdit"><img src="@/img/altericos.png"> </div>
-					<div><img src="@/img/deleticos.png" ></div>
+					<div @click="showDel(scope.$index,EkeyData.lists)"><img src="@/img/deleticos.png" ></div>
 				</div>
 			</el-table-column>
 		</el-table>
@@ -44,7 +59,7 @@
 						<p class="txt">{{pageTxt.dialog[2]}}</p>
 					</div>
 					<div class="rightBox">
-						<el-input class='picker' v-model="ainfo.userID" :placeholder="pageTxt.dialog[13]"></el-input>
+						<el-input class='picker' v-model="ainfo.userID" disabled></el-input>
 						<span class="txt red" v-show="err1.id">{{pageTxt.tips.id}}</span>
 					</div>
 				</li>
@@ -80,8 +95,6 @@
 			</div>
 		</el-dialog>
 		
-
-	
 		<el-dialog :title="pageTxt.dialog[1]" :visible.sync="editEkdy" width='620px'>
 			<ul class="_dialog">
 				<li>
@@ -89,7 +102,7 @@
 						<p class="txt">{{pageTxt.dialog[2]}}</p>
 					</div>
 					<div class="rightBox">
-						<el-input   class='picker' readonly="true" v-model="binfo.userID" :placeholder="pageTxt.dialog[13]"></el-input>
+						<el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.dialog[13]"></el-input>
 					</div>
 				</li>
 				<li>
@@ -116,7 +129,6 @@
 						<el-input class='picker' v-model="binfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
 					</div>
 				</li>
-
 			</ul>
 			<div slot="footer" class="dialog-footer">
 			    <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
@@ -124,18 +136,34 @@
 			</div>
 		</el-dialog>
 
-		<div class="_pagination" >
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
-			<div class="rightTxt">共{{EkeyData.length}}条数据</div>
-		</div>
+		<div class="_pagination">
+      <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="EkeyData.totalPage" :page-size="20"></el-pagination>
+    </div> 
+
+    <el-dialog title="提示" :visible.sync="promptBoxShow1" width="600px">
+        <span class="promptBox_content_txt">是否删除此用户信息？</span>
+        <div class="promptBox_btn" >
+          <el-button @click="promptBoxShow1=false">取消</el-button>
+          <el-button type="primary" @click="del">确定</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog title="提示" :visible.sync="promptBoxShow" width="600px">
+        <span class="promptBox_content_txt">是否删除此用户信息？</span>
+        <div class="promptBox_btn" >
+          <el-button @click="promptBoxShow=false">取消</el-button>
+          <el-button type="primary" @click="ekeyDel">确定</el-button>
+        </div>
+    </el-dialog>
 
 	</div>
 </div>	
 </template>
 
 <script>
-import kit from "@/libs/kit.js";
-import utils from "@/libs/utils.js";
+import utils       from "@/libs/utils.js";
+import observer    from '@/libs/observer.js';
+import globalVar   from '@/libs/globalVar.js';
 
 var ainfo = {},
   def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
@@ -194,20 +222,10 @@ var pageTxt = pageTxt_cn;
 export default {
   data() {
     return {
+      aaa:'',
       ainfo,
       binfo,
-      EkeyData: [
-        {
-          userID: "AAA",
-          userName: "2016-05-02",
-          ekeyName: "王小虎"
-        },
-        {
-          userID: "AAA",
-          userName: "2016-05-02",
-          ekeyName: "王小虎"
-        }
-      ],
+      EkeyData: [],
       selects: [],
       oldEkeyName:'',
 
@@ -236,14 +254,19 @@ export default {
         end: "",
         check1: false
       },
-      row1: {},
+      row: {},
       data2: [{ Ekey: "AAA" }],
       err1: { id: false, Ekey: false, pass: false, start: false, end: false },
-      err2: { id: false, Ekey: false, pass: false, start: false, end: false }
+      err2: { id: false, Ekey: false, pass: false, start: false, end: false },
+      currentPage1: 1,
+      pageSize: 20,
+      promptBoxShow1: false,
+      promptBoxShow:false,
+      index:'',
+      rows:'',
     };
   },
   methods: {
-
     //查询Ekey
     search() {
       var _this = this;
@@ -253,15 +276,21 @@ export default {
           cmdID: 600021,
           userID: _this.ainfo.userID,
           ekeyName: _this.ainfo.ekeyName,
-          type: _this.ainfo.type
+          type: _this.ainfo.type,
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage1,
         },
         function(response) {
-          _this.EkeyData = response.lists;
+          _this.EkeyData = response;
         }
       );
     },
 
     // 创建Ekey
+    showAdd() {
+      this.addEkey=true;
+      this.ainfo.userID = this.$store.state.transferEditID;
+    },
     submitAdd() {
       var _this = this;
       utils.post(
@@ -269,47 +298,98 @@ export default {
         {
           cmdID: 600022,
           operator: "admin",
-          userID: _this.ainfo.userID,
+          userID: _this.$store.state.transferEditID,
           ekeyName: _this.ainfo.ekeyName,
           ekeyValidDate: _this.ainfo.ekeyValidDate,
           comment: _this.ainfo.comment
         },
         function(response) {
           if (response.errcode == 0) {
-             _this.editEkdy = false
-             _this.open6(response.errinfo)
+             _this.addEkey = false;
+            //  utils.weakTips(response.errinfo);
           } else {
-             _this.open6(response.errinfo)
+             utils.weakTips(response.errinfo);             
           }
         }
       );
     },
 
+    // 删除Ekey
+    fn(){
+      if (this.selects.length != 1) {
+        utils.weakTips("请在列表中选择一条记录！");
+      } else {
+        this.promptBoxShow1 = true;
+      }
+    },
+    del() {
+        this.promptBoxShow1 = false;
+        var _this=this;
+        utils.post(
+          "mx/userEkey/delete",
+          {
+            cmdID: 600024,
+            operator: "admin",
+            userID: _this.selects[0].userID,
+            ekeyName: _this.selects[0].ekeyName
+          },
+          function(response) {
+            if (response.errcode == 0) {
+              var index = _this.EkeyData.lists.indexOf(_this.selects[0]);
+              if (index > -1) {
+                _this.EkeyData.lists.splice(index, 1);
+              }
+              utils.weakTips(response.errinfo);            
+            } else {
+              utils.weakTips(response.errinfo);
+            }
+          }
+        );
+      },
+
+    open6(msg) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+
+        }).catch(() => {
+    
+        });
+      },  
+
+    // 修改
     showEdit() {      
-        // this.oldEkeyName=this.selects[0].ekeyName
-        console.log(this.oldEkeyName)
-        this.editEkdy = true;
+        this.oldEkeyName=this.row.ekeyName
         var _this = this;
         utils.post(
           "mx/userEkey/query",
           {
             cmdID: 600021,
-            userID: this.selects[0].userID,
-            ekeyName: this.selects[0].ekeyName,
-            type: 2
+            userID: this.row.userID,
+            ekeyName: this.row.ekeyName,
+            type: 2,
+            pageSize:_this.pageSize,
+            currentPage:_this.currentPage1,
           },
           function(response) {
-            _this.binfo = response.lists[0];
+            _this.binfo.userID=response.lists[0].userID;
+            _this.binfo.userName=response.lists[0].userName;
+            _this.binfo.ekeyName=response.lists[0].ekeyName;
+            _this.binfo.ekeyValidDate=response.lists[0].ekeyValidDate;
+            _this.binfo.comment=response.lists[0].comment;          
           }
-        );  
+        );
+          _this.editEkdy = true;     
     },
-
     submitEdit() {
+      this.editEkdy = false;
       var _this = this;
       utils.post(
         "mx/userEkey/modify",
         {
-          cmdID: 600023,
+          cmdID: '600023',
           operator: "admin",
           userID: _this.binfo.userID,
           oldEkeyName:_this.oldEkeyName,
@@ -319,205 +399,168 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            alert(response.errinfo);
+            utils.weakTips(response.errinfo);
           } else {
-            alert("提交失败");
+            utils.weakTips(response.errinfo);            
           }
         }
       );
     },
-
-    // 删除Ekey
-    del() {
-      if (this.selects.length != 1) {
-        utils.confirm({ message: "请在列表中选择一条记录！", type: 2 });
-      } else {
+    //删除(row)
+    showDel(index, rows){
+        this.promptBoxShow = true;
+        this.index = index;
+        this.rows = rows;    
+    },
+    ekeyDel(){
+      this.promptBoxShow = false;
+      var _this=this;
         utils.post(
           "mx/userEkey/delete",
           {
             cmdID: 600024,
             operator: "admin",
-            userID: this.selects[0].userID,
-            ekeyName: this.selects[0].ekeyName
+            userID: _this.row.userID,
+            ekeyName: _this.row.ekeyName
           },
           function(response) {
-            if (response.errcode == 0) {
-             
+              if (response.errcode == 0) {
+              _this.rows.splice(_this.index, 1);
+              utils.weakTips(response.errinfo);
             } else {
-             
+              utils.weakTips(response.errinfo);
             }
           }
         );
-      }
-    },
-
-    open6(msg) {
-        this.$confirm(msg, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          center: true
-        }).then(() => {
-          this.$store.state.tabv="v3"
-          this.$router.replace({ path: "/message/userEdit/mess" });
-
-        }).catch(() => {
-    
-        });
-      },    
+      },
 
     selectionRow(val) {
       this.selects = val;
-      // console.log(this.selects);
-    },
-
-    showAdd() {
-      var info = this.info,
-        err = this.err1;
-      for (var key in info) {
-        info[key] = "";
-        err[key] = false;
-      }
-      info.Ekey = "/C=CN/CN=";
-      info.pass = "111111";
-      info.check = false;
-      this.addEkey = true;
     },
 
     currentRow: function(e) {
-      console.log(e);
+      this.row=e
     },
     currentPage: function(e) {
       console.log(e);
     },
-    checkAdd(e) {
-      var key, el;
-      el = e.type == "blur" ? e.target : e.$el.children[0];
-      key = el.name;
-      console.log(key);
-      if (!this.info[key]) {
-        this.err1[key] = true;
-      } else this.err1[key] = false;
+    // checkAdd(e) {
+    //   var key, el;
+    //   el = e.type == "blur" ? e.target : e.$el.children[0];
+    //   key = el.name;
+    //   console.log(key);
+    //   if (!this.info[key]) {
+    //     this.err1[key] = true;
+    //   } else this.err1[key] = false;
+    // },
+    // checkEdit(e) {
+    //   var key, el;
+    //   el = e.type == "blur" ? e.target : e.$el.children[0];
+    //   key = el.name;
+    //   console.log(key);
+    //   if (!this.eInfo[key]) {
+    //     this.err2[key] = true;
+    //   } else this.err[key] = false;
+    // },
+    // 分页
+    handleSizeChange: function(size) {
+      this.pageSize = size;
     },
-    checkEdit(e) {
-      var key, el;
-      el = e.type == "blur" ? e.target : e.$el.children[0];
-      key = el.name;
-      console.log(key);
-      if (!this.eInfo[key]) {
-        this.err2[key] = true;
-      } else this.err[key] = false;
-    }
+    handleCurrentChange: function(currentPage) {
+      this.currentPage1 = currentPage;
+      var _this = this;
+      utils.post(
+        "mx/userinfo/queryLists",
+        {
+          cmdID: "600001",
+          userID: "",
+          userName: "",
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage1,
+          type: "0"
+        },
+        function(response) {
+          _this.userData = response;
+        }
+      );
+    },
+    closePromptBox1() {
+      this.promptBoxShow1 = false;
+    },
+    			idSelect(item){
+        this.EkeyData.lists.userID = item.userID;
+				this.aaa = item.userID+'('+item.userName+')';
+      },
+      			fetch(str, cb){
+				var aaa,i,len = idList.length,obj,tem=[];
+				for (i = 0; i < len; i++) {
+					obj = idList[i];
+					aaa = obj.userID+obj.userName;
+					if(aaa.indexOf(str)!=-1) tem.push(obj);
+				}
+				cb(tem);
+			},
   },
-
-  //初始化数据
+    //初始化数据
   created() {
     ainfo.type = 0;
     // ainfo.ekeyName = "";
     var _this = this;
-    utils.post(
-      "mx/userEkey/query",
-      {
-        cmdID: 600021,
-        userID: "",
-        ekeyName: "",
-        type: 3
-      },
-      function(response) {
-        _this.EkeyData = response.lists;
-      }
-    );
-  }
-};
+      var _this = this;
+      utils.post(
+        "mx/userEkey/query",
+        {
+          cmdID: 600021,
+          userID: _this.ainfo.userID,
+          ekeyName: _this.ainfo.ekeyName,
+          type: _this.ainfo.type,
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage1,
+        },
+        function(response) {
+          _this.EkeyData = response;
+        }
+      );
+    },
+    mounted(){
+			useridList();
+		},
+    
+}
+var idList = [];
+	function useridList(){
+		idList = globalVar.get('useridList');
+		var call = function(master, list){
+			if(master != 'useridReady') return;
+			observer.delBinding('useridReady', call);
+			idList = list; call = null;
+		}
+		if(!idList.length) observer.addBinding('useridReady', call);
+	}
 </script>
 
 <style scoped="scoped">
-.header {
-  height: 47px;
-  border-bottom: 1px solid #ccc;
-}
-.header_txt {
-  font-size: 16px;
-  color: #656a73;
-  line-height: 47px;
-  margin-left: 17px;
-  font-weight: bold;
-}
-
-.Ekey * {
-  vertical-align: middle;
-}
-.user .el-input {
-  width: 210px;
-  margin-right: 10px;
-}
-.user .el-button {
-  margin-left: 35px;
-  width: 90px;
-  height: 30px;
-  line-height: 0;
-}
-.user .red {
-  color: #f56c6c;
-}
-.txt {
-  font-size: 14px;
-  color: #666666;
-  margin-left: 20px;
-}
-.user > .el-button {
-  margin-left: 35px;
-  width: 90px;
-  height: 30px;
-  background-color: #32ccf9;
-  line-height: 0px;
-  border: 0;
-  color: white;
-}
-
-.btnBox {
-  overflow: hidden;
-  margin-bottom: 10px;
-  margin-top: 18px;
-}
-.btnBox div {
-  font-size: 13px;
-  color: #5c759d;
-  float: left;
-  cursor: pointer;
-  margin-left: 30px;
-}
-.btnBox div:nth-child(1) {
-  margin-left: 0;
-}
-
-.Ekey {
-  padding: 22px;
-}
-.Ekey .eRadio {
-  margin-right: 30px;
-}
-.Ekey .el-radio__label {
-  font-size: 16px;
-}
-.picker {
-  width: 200px;
-}
-.red {
-  color: #f56c6c;
-  margin-left: 10px;
-}
-._zero div {
-  float: left;
-  margin-left: 14px;
-  cursor: pointer;
-}
-._zero {
-  overflow: hidden;
-}
-.el-input {
-  margin-left: 10px;
-}
-.user > span:nth-child(1){
-  margin-left: 0;
-}
+.header{height: 47px; border-bottom: 1px solid #ccc;}
+.header_txt{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 17px; font-weight: bold;}
+.Ekey *{vertical-align: middle;}
+.user .el-input{width: 210px; margin-right: 10px;}
+.user .el-button{margin-left: 35px; width: 90px; height: 30px; line-height: 0;}
+.user .red{color: #f56c6c;}
+.txt{font-size: 14px; color: #666666; margin-left: 20px;}
+.user > .el-button{margin-left: 35px; width: 90px; height: 30px; background-color: #32ccf9; line-height: 0px; border: 0; color: white;}
+.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 18px;}
+.btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
+.btnBox div:nth-child(1){margin-left: 0;}
+.Ekey{padding: 22px;}
+.Ekey .eRadio{margin-right: 30px;}
+.Ekey .el-radio__label{font-size: 16px;}
+.picker{width: 200px;}
+.red{color: #f56c6c; margin-left: 10px;}
+._zero div{float: left; margin-left: 14px; cursor: pointer;}
+._zero{overflow: hidden;}
+.el-input{margin-left: 10px;}
+.user > span:nth-child(1){margin-left: 0;}
+.promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
+.promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
+.promptBox_btn button:nth-child(1){margin-left: 0;}
 </style>
