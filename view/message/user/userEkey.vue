@@ -1,7 +1,7 @@
 <template>
 <div>	
 	<div class="Ekey">
-		<div class="user">
+		<!-- <div class="user">
 			<span class="txt">{{pageTxt.Ekey[0]}}：</span>
 			<el-radio v-model="ainfo.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
   		<el-radio v-model="ainfo.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
@@ -10,7 +10,7 @@
 			<span v-show='ainfo.type==1' class="txt">用户：</span>
 			<el-input v-show='ainfo.type==1' v-model="ainfo.userID" placeholder=""></el-input>
 			<el-button type="primary" plain @click='search'>{{pageTxt.Ekey[4]}}</el-button>
-		</div>
+		</div> -->
 
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
@@ -311,11 +311,15 @@ export default {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！");
       } else {
-        this.promptBoxShow1 = true;
+         var _this=this
+          utils.hints({
+          txt:"123",
+          yes:_this.del,
+          btn: 2
+        })
       }
     },
     del() {
-        this.promptBoxShow1 = false;
         var _this=this;
         utils.post(
           "mx/userEkey/delete",
@@ -376,7 +380,7 @@ export default {
           userID: _this.binfo.userID,
           oldEkeyName:_this.oldEkeyName,
           ekeyName: _this.binfo.ekeyName,
-          ekeyValidDate: _this.ekeyValidDate,
+          ekeyValidDate: _this.binfo.ekeyValidDate,
           comment: _this.binfo.comment
         },
         function(response) {
@@ -390,12 +394,16 @@ export default {
     },
     //删除(row)
     showDel(index, rows){
-        this.promptBoxShow = true;
         this.index = index;
-        this.rows = rows;    
+        this.rows = rows;
+         var _this=this
+          utils.hints({
+          txt:"123",
+          yes:_this.ekeyDel,
+          btn: 2
+        })    
     },
     ekeyDel(){
-      this.promptBoxShow = false;
       var _this=this;
         utils.post(
           "mx/userEkey/delete",
@@ -501,7 +509,7 @@ export default {
 .user .red{color: #f56c6c;}
 .txt{font-size: 14px; color: #666666; margin-left: 20px;}
 .user > .el-button{margin-left: 35px; width: 90px; height: 30px; background-color: #32ccf9; line-height: 0px; border: 0; color: white;}
-.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 18px;}
+.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 5px;}
 .btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
 .btnBox div:nth-child(1){margin-left: 0;}
 .Ekey .eRadio{margin-right: 30px;}

@@ -7,20 +7,13 @@
 	<div class="Ekey">
 		<div class="user">
 			<span class="txt">{{pageTxt.Ekey[0]}}：</span>
-			<el-radio v-model="ainfo.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
-  		<el-radio v-model="ainfo.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-			<span v-show='ainfo.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
+			<el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
+  		<el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
+			<span v-show='search.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
+			<el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
 
-			<el-autocomplete v-show='ainfo.type==0' class="input_normal" v-model="aaa" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
-				<div slot-scope="{item}">
-					<span class="name">{{item.userID}}</span>
-				    <span class="addr">({{item.userName}})</span>
-				</div>
-			</el-autocomplete>
-
-			<span v-show='ainfo.type==1' class="txt">用户：</span>
-
-			<el-autocomplete v-show='ainfo.type==1' class="input_normal" v-model="aaa" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+      <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
+			<el-autocomplete v-show='search.type==1'  class="input_normal" v-model="search.userID" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
@@ -46,7 +39,7 @@
 			<el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
 			<el-table-column label="操作" width="110">
 				<div slot-scope="scope" class="_zero">
-					<div  id='Edit'  @click="showEdit"><img src="@/img/altericos.png"> </div>
+					<div  id='Edit'  @click="showEdit(scope.row)"><img src="@/img/altericos.png"> </div>
 					<div @click="showDel(scope.$index,EkeyData.lists)"><img src="@/img/deleticos.png" ></div>
 				</div>
 			</el-table-column>
@@ -59,7 +52,10 @@
 						<p class="txt">{{pageTxt.dialog[2]}}</p>
 					</div>
 					<div class="rightBox">
-						<el-input class='picker' v-model="ainfo.userID" disabled></el-input>
+            <el-select v-model="ainfo.userID" placeholder="请选择">
+              <el-option  v-for="item in EkeyData.lists" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
+            </el-select>
+						
 						<span class="txt red" v-show="err1.id">{{pageTxt.tips.id}}</span>
 					</div>
 				</li>
@@ -140,7 +136,7 @@
       <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="EkeyData.totalPage" :page-size="20"></el-pagination>
     </div> 
 
-    <el-dialog title="提示" :visible.sync="promptBoxShow1" width="600px">
+    <!-- <el-dialog title="提示" :visible.sync="promptBoxShow1" width="600px">
         <span class="promptBox_content_txt">是否删除此用户信息？</span>
         <div class="promptBox_btn" >
           <el-button @click="promptBoxShow1=false">取消</el-button>
@@ -154,7 +150,7 @@
           <el-button @click="promptBoxShow=false">取消</el-button>
           <el-button type="primary" @click="ekeyDel">确定</el-button>
         </div>
-    </el-dialog>
+    </el-dialog> -->
 
 	</div>
 </div>	
@@ -222,7 +218,7 @@ var pageTxt = pageTxt_cn;
 export default {
   data() {
     return {
-      aaa:'',
+      search:{userID:"",type:"",ekeyName:""},
       ainfo,
       binfo,
       EkeyData: [],
@@ -274,9 +270,9 @@ export default {
         "mx/userEkey/query",
         {
           cmdID: 600021,
-          userID: _this.ainfo.userID,
-          ekeyName: _this.ainfo.ekeyName,
-          type: _this.ainfo.type,
+          userID: _this.search.userID,
+          ekeyName: _this.search.ekeyName,
+          type: _this.search.type,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1,
         },
@@ -319,11 +315,15 @@ export default {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！");
       } else {
-        this.promptBoxShow1 = true;
+          var _this=this
+          utils.hints({
+          txt:"123",
+          yes:_this.del,
+          btn: 2
+        })
       }
     },
     del() {
-        this.promptBoxShow1 = false;
         var _this=this;
         utils.post(
           "mx/userEkey/delete",
@@ -360,28 +360,30 @@ export default {
       },  
 
     // 修改
-    showEdit() {      
+    showEdit(row) {
+      console.log("1",row)
+        this.editEkdy = true;   
         this.oldEkeyName=this.row.ekeyName
         var _this = this;
-        utils.post(
-          "mx/userEkey/query",
-          {
-            cmdID: 600021,
-            userID: this.row.userID,
-            ekeyName: this.row.ekeyName,
-            type: 2,
-            pageSize:_this.pageSize,
-            currentPage:_this.currentPage1,
-          },
-          function(response) {
-            _this.binfo.userID=response.lists[0].userID;
-            _this.binfo.userName=response.lists[0].userName;
-            _this.binfo.ekeyName=response.lists[0].ekeyName;
-            _this.binfo.ekeyValidDate=response.lists[0].ekeyValidDate;
-            _this.binfo.comment=response.lists[0].comment;          
-          }
-        );
-          _this.editEkdy = true;     
+        // utils.post(
+        //   "mx/userEkey/query",
+        //   {
+        //     cmdID: 600021,
+        //     userID: row.userID,
+        //     ekeyName: row.ekeyName,
+        //     type: 2,
+        //     pageSize:_this.pageSize,
+        //     currentPage:_this.currentPage1,
+        //   },
+        //   function(response) {
+
+        //   }
+        // );
+            _this.binfo.userID=row.userID;
+            _this.binfo.userName=row.userName;
+            _this.binfo.ekeyName=row.ekeyName;
+            _this.binfo.ekeyValidDate=row.ekeyValidDate;
+            _this.binfo.comment=row.comment;               
     },
     submitEdit() {
       this.editEkdy = false;
@@ -394,7 +396,7 @@ export default {
           userID: _this.binfo.userID,
           oldEkeyName:_this.oldEkeyName,
           ekeyName: _this.binfo.ekeyName,
-          ekeyValidDate: _this.ekeyValidDate,
+          ekeyValidDate: _this.binfo.ekeyValidDate,
           comment: _this.binfo.comment
         },
         function(response) {
@@ -408,12 +410,16 @@ export default {
     },
     //删除(row)
     showDel(index, rows){
-        this.promptBoxShow = true;
         this.index = index;
-        this.rows = rows;    
+        this.rows = rows;
+        var _this=this
+        utils.hints({
+          txt:"123",
+          yes:_this.ekeyDel,
+          btn: 2
+        })
     },
     ekeyDel(){
-      this.promptBoxShow = false;
       var _this=this;
         utils.post(
           "mx/userEkey/delete",
@@ -439,8 +445,14 @@ export default {
     },
 
     currentRow: function(e) {
+      console.log(e)
       this.row=e
     },
+    // changeVal:function(index){
+    //        this.contents[index].name="change";
+    //    Vue.set(this.contents, index, this.contents[index]);
+    //    },
+
     currentPage: function(e) {
       console.log(e);
     },

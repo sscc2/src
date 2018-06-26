@@ -224,11 +224,15 @@ export default {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！") ;    
       } else {
-        this.promptBoxShow1 = true;
+        var _this=this
+          utils.hints({
+          txt:"123",
+          yes:_this.delUser,
+          btn: 2
+        })    
       }
     }, 
     delUser() {
-        this.promptBoxShow1 = false;
         var _this = this;
         utils.post(
           "mx/userComm/delete",
@@ -255,12 +259,16 @@ export default {
 
     // 刪除通信关系(row)
     showPromptBox(index, rows) {
-      this.promptBoxShow = true;
       this.index = index;
       this.rows = rows;
+      var _this=this
+          utils.hints({
+          txt:"123",
+          yes:_this.delUser,
+          btn: 2
+        })    
     },
     delUser1(index, rows) {
-      this.promptBoxShow = false;
       var _this = this;
       utils.post(
         "mx/userComm/delete",

@@ -321,14 +321,14 @@ export default {
     info.userID="";
     info.userName="";
     info.isModifyDefaultPasswd = "0";
-    info.userPasswd = "111111";
+    info.userPasswd = md5.hex_md5("111111").substr(8, 16);
     info.userType = "0";
     info.userDistrict = "BJ";
     info.speedCtrlKbps = "-1";
     info.connSuGroupName = "0";
     info.isAlarmIfOffLine = "0";
-    info.softEncBeginDate = "0";
-    info.softEncEndDate = "0";
+    info.softEncBeginDate = "";
+    info.softEncEndDate = "";
     info.allowSendRecvFile = "0";
     info.maxPubsCount = "0";
     info.maxSubsCount = "0";

@@ -137,11 +137,15 @@ export default {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！");
       } else {
-        this.promptBoxShow1 = true;
+          var _this=this
+          utils.hints({
+          txt:"123",
+          yes:_this.delAll,
+          btn: 2
+        })
       }
     },
     delAll: function() {
-      this.promptBoxShow1 = false;
       var _this = this;
       utils.post(
         "mx/userinfo/delete",
@@ -174,12 +178,16 @@ export default {
     },
     // 删除用户(row)
     showPromptBox(index, rows) {
-      this.promptBoxShow = true;
       this.index = index;
       this.rows = rows;
+      var _this=this
+        utils.hints({
+          txt:"123",
+          yes:_this.userDel,
+          btn: 2
+        })
     },
     userDel() {
-      this.promptBoxShow = false;
       var _this = this;
       utils.post(
         "mx/userinfo/delete",
