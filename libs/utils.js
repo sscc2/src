@@ -266,14 +266,17 @@ function utils(){
 					delete params.url;
 				}
 			}
-			
 			axios.post(getUrl(url), params).then(function(response){
 				callback(response, fn);
-			}).catch(function (e) {
-				exp.loadClose();
-				console.warn(e);
-			});
+			}).catch(function (e) { error(e); });
 		};
+		function error(e){
+			exp.loadClose();
+			for(var k in e){
+				console.log(k); console.log(e[k]);
+			}
+//			console.log(e);
+		}
 		//同上
 		this.get = function(url, params, fn){
 			exp.loadShow();
@@ -283,10 +286,7 @@ function utils(){
 			}
 			axios.get(getUrl(url), {params}).then(function(response){
 				callback(response, fn);
-			}).catch(function (e) {
-				exp.loadClose();
-				console.log(e.message+'\nURL: ', e.config.url);
-			});
+			}).catch(function (e) { error(); });
 		};
 	}
 	kit.extend(exp, new ReqHttp());
