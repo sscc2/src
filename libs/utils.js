@@ -272,10 +272,12 @@ function utils(){
 		};
 		function error(e){
 			exp.loadClose();
-			for(var k in e){
-				console.log(k); console.log(e[k]);
-			}
-//			console.log(e);
+			if(e.response){
+				var res = e.response;
+				if(res.status == 404) return;
+				console.warn(res.config.data);
+				console.warn(res.data);
+			} else  console.warn(e);
 		}
 		//同上
 		this.get = function(url, params, fn){
