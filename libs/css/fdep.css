@@ -1,7 +1,8 @@
 @charset "utf-8";
-.el-message{top: 40%;transform: translate(-50%,-50%);}
+/*.el-message{top: 40%;transform: translate(-50%,-50%);}*/
+.el-message__icon{font-size: 14px;}
 .el-loading-mask{background: transparent !important;}
-
+.el-menu{border: none;}
 ._hr{margin: 15px 0;border: none;height: 1px;background: #D8D8D8;}
 textarea{resize: none !important;}
 
@@ -56,10 +57,12 @@ textarea{resize: none !important;}
 .el-button--default{width: 88px;height: 30px;font-size: 12px;line-height: 30px;padding: 0;background: #FFF;border-color: #0DB9EB; color: #0DB9EB;}
 .el-button--default:active{background: #66b1ff;border-color: #66b1ff;opacity: 0.8 !important;}
 .el-button--default:hover, .el-button--default:focus{background: #FFF;border-color: #0DB9EB;}
-.el-button--primary{width: 88px;height: 30px;font-size: 12px;line-height: 30px;padding: 0;background: #32ccf9;border-color: #32ccf9;color: #FFF;}
-.el-button--primary:active{background: #66b1ff;border-color: #66b1ff;opacity: 0.8 !important;color: #FFF !important;}
-.el-button--primary:hover, .el-button--primary:focus{background: #32ccf9;border-color: #32ccf9;}
+.el-button--primary{width: 88px;height: 30px;font-size: 12px;line-height: 30px;padding: 0;background: #32CCF9;border-color: #32CCF9;color: #FFF;}
+.el-button--primary:active{background: #28C3F1;border-color: #28C3F1;color: #FFF !important;}
+.el-button--primary:hover, .el-button--primary:focus{background: #4BD6FF;border-color: #4BD6FF;}
 .blueBtn, .defBtn{display: inline-block;width: 88px;height: 30px;font-size: 12px;line-height: 30px;background: #32CCF9;color: #FFF;border-radius: 4px;}
+.blueBtn:hover{background: #4BD6FF;}
+.blueBtn:active{background: #28C3F1;}
 .defBtn{background: #FFF;color: #0DB9EB;border: 1px solid #0DB9EB;}
 
 /* 穿梭格 */

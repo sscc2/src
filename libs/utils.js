@@ -22,16 +22,17 @@ function utils(){
 			switch (type){
 				case 1: type = 'success'; break;
 				case 2: type = 'error'; break;
-				case 3: type = 'info'; break;
+				case 3: type = 'warning'; break;
 				case 4: type = ''; break;
-				default: type = 'warning'; break;
+				default: type = 'info'; break;
 			}
 			vm.$message({
 				dangerouslyUseHTMLString: true,
 		        message: txt,
 		        type: type,
-		        center: true,
-		        showClose: true
+//		        center: true,
+//		        showClose: true,
+//				duration: 0
 	        });
 	        return exp;
 		};
@@ -157,8 +158,9 @@ function utils(){
 		weakTips.el.click(function(e){
 			if(e.target == this) weakTips.hide();
 		});
-		this.weakTips = function(txt){
-			weakTips.show(txt);
+		this.weakTips = function(txt, type){
+			this.weakEl(txt, type);
+//			weakTips.show(txt);
 		};
 		// 带按钮的消息框
 		var hintHtml = '<div id="_hints"><div class="_panle">'+
