@@ -93,6 +93,7 @@ textarea{resize: none !important;}
 .daterange .el-range-separator{line-height: 30px;}
 .daterange .el-input__icon{line-height: 26px;height: 26px;}
 .daterange .el-range-separator{line-height: 26px;height: 26px;}
+.el-date-editor .el-range__close-icon{display: none;pointer-events: none;}
 
 /* 弱提示 */
 #_weakTips, #_hints{position: fixed;height: 100%;width: 100%;text-align: center;top: 0;left: 0;font-size: 0;z-index: 2015;}

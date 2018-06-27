@@ -62,7 +62,7 @@ import lang      from '@/language/lang.js';
 		idName1: '',
 		idName2: '',
 		info: {config:'3', ver1:'', ver2:''},
-		data: [{type:'verType',detail:'detail'}],
+		data: [/*{type:'verType',detail:'detail'}*/],
 		row: {},
 		selects: [],
 		size: 20,

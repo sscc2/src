@@ -28,13 +28,13 @@
 		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
 			<el-table-column width="50" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
-			<el-table-column prop="type" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
+			<el-table-column prop="typeTxt" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="version" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="versionPath" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="operationTime" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="operation" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="reviewer" :label="pageTxt.list[5]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="operationType" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="send" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
 				<div slot-scope="scope" class="_zero">
 					<img @click="roolback(scope.row, scope.$index, scope)" src="@/img/theme/version.png" alt="">
@@ -73,8 +73,8 @@ import lang      from '@/language/lang.js';
 		config: '0',
 		radio: 1,
 		picker: [],
-		data: [{type:'verType',version:'version',versionPath:'url',operationTime:'time',
-			operation:'send',reviewer:'sh',operationType:'sendType'}],
+		data: [/*{type:'num',version:'version',versionPath:'url',operationTime:'time',
+			operation:'send',reviewer:'sh',operationType:'sendType'}*/],
 		row: {},
 		selects: [],
 		size: 20,
@@ -92,9 +92,20 @@ import lang      from '@/language/lang.js';
 		utils.post('mx/version/queryLists', param, function(data){
 			console.log('版本信息列表：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			_this.data = data.lists;
+			_this.data = verType(data.lists);
 			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});
+	}
+	function verType(arr){
+		//'dcfg','scfg','pscomm','passwd','rdcfg','rscfg','rpscomm','rpasswd' 12345678
+		var txt = ['','dcfg','scfg','pscomm','passwd','rdcfg','rscfg','rpscomm','rpasswd'];
+		var i, len = arr.length, obj, oper = ['','全量下发','增量下发'];
+		for (i = 0; i < len; i++) {
+			obj = arr[i];
+			obj.typeTxt = txt[obj.type];
+			obj.send = oper[obj.operationType];
+		}
+		return arr;
 	}
 	
 	export default {
@@ -121,12 +132,13 @@ import lang      from '@/language/lang.js';
 				search();
 			},
 			roolback(row){
+				console.log(row)
 				utils.hints({
 					txt: pageTxt.tips.roolback,
 					yes: function(){
 						var param = {
 							url: 'mx/version/rollback',
-							cmdId: '600063',
+							cmdID: '600063',
 							type: row.type,
 							version: row.version
 						};
@@ -146,6 +158,7 @@ import lang      from '@/language/lang.js';
 		mounted(){
 			_this = this;
 			getDay(this.radio = 1);
+			search(_currentPage = 1);
 		},
 		watch:{
 			radio(cur){

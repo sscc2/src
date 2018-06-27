@@ -34,7 +34,11 @@
 			</el-button><el-button class='btn' @click='detailTheme' type='text'>
 				<img src="@/img/theme/detail_1.png"/>
 				<span class="btnTxt">{{pageTxt.label[12]}}</span>
+			</el-button><el-button class='btn' @click='download' type='text'>
+				<img src="@/img/importico.png"/>
+				<span class="btnTxt">{{pageTxt.label[13]}}</span>
 			</el-button>
+			
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
 			highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 960px">
@@ -232,6 +236,12 @@ import observer    from '@/libs/observer.js';
 				_currentPage = val;
 				search();
 			},
+			download(){
+				utils.post('mx/pubTopic/exportCsv',{cmdID:'600053'},function(data){
+					console.log(data);
+				})
+//				window.open("htpp://127.0.0.1/test.rar");
+			}
 		},
 		beforeCreate(){},
 		mounted(){
