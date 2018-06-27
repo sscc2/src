@@ -19,35 +19,38 @@
 				    <el-radio :label="3">{{pageTxt.label[6]}}</el-radio>
 				</el-radio-group>
 				<label class="txt">{{pageTxt.label[7]}}</label>
-				<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[8]" 
-					type="daterange" :start-placeholder="pageTxt.label[9]" :end-placeholder="pageTxt.label[10]">
+				<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd" type="daterange" 
+					:start-placeholder="pageTxt.label[9]" :range-separator="pageTxt.label[8]" :end-placeholder="pageTxt.label[10]">
 				</el-date-picker>
-				<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[11]}}</el-button>
+				<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[11]}}</button>
 			</div>
 		</div>
-		<el-table highlight-current-row @row-dblclick="table"  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
+		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
 			<el-table-column width="50" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
-			<el-table-column prop="verType" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
+			<el-table-column prop="type" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="version" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
-			<el-table-column prop="url" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="time" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="send" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="sh" :label="pageTxt.list[5]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="sendType" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="versionPath" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="operationTime" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="operation" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="reviewer" :label="pageTxt.list[5]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="operationType" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<img @click="see(scope.$index, scope.row, scope)" src="@/img/theme/version.png" alt="">
+					<img @click="roolback(scope.row, scope.$index, scope)" src="@/img/theme/version.png" alt="">
 				</div>
 			</el-table-column>
 		</el-table>
-		<div class="_pagination" v-show="max.length!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='pageSize' :total="max.length"></el-pagination>
+		<div class="_pagination" v-if="max>size">
+			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="max" 
+				layout="prev, pager, next, jumper" background></el-pagination>
 			<div class="rightTxt">
-				共{{data.length}}条数据
+				共{{max}}条数据
 			</div>
 		</div>
-		
+		<div class="onePage" v-else-if="max>0&&max<=size">
+			已显示全部{{max}}个数据
+		</div>
 		<!--<div id="_weakTips">
 			<div class="panle">
 				<div class="container"></div>
@@ -60,32 +63,40 @@
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
-import observer  from '@/libs/observer.js';
 
 
-	var pageTxt;
+	var pageTxt, _this, _currentPage = 1;
 	pageTxt = lang.versionQuery;
 	
 	var data = {
 		pageTxt,
 		config: '0',
 		radio: 1,
-		picker: '',
-		info: {id:'',name:'',shuti:''},
-		data: [{verType:'verType',version:'version',url:'url',time:'time',send:'send',sh:'sh',sendType:'sendType'}],
-		row: '',
+		picker: [],
+		data: [{type:'verType',version:'version',versionPath:'url',operationTime:'time',
+			operation:'send',reviewer:'sh',operationType:'sendType'}],
+		row: {},
 		selects: [],
-		pageSize: 10,
-		max: []
+		size: 20,
+		max: 0
 	};
-//	for (var i = 0; i < 30; i++) {
-//		data.data.push({userId:'49821',userName:'ABC',reNum:'5',subNum:'5',time:'2020'});
-//	}
-//	observer.addBinding('messUpload', function(master, param){
-//		if(master != 'messUpload') return;
-//		data.obj = param;
-//	});
-	var currentPage = 1;
+
+	function search(num, size){
+		var param = {
+			cmdID: '600061', type: _this.config,
+			pageSize: size||_this.size,
+			currentPage: num||_currentPage,
+		};
+		param.beginDate = _this.picker[0] + ' 00:00:00';
+		param.endDate = _this.picker[1] + ' 23:59:59';
+		utils.post('mx/version/queryLists', param, function(data){
+			console.log('版本信息列表：', data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			_this.data = data.lists;
+			_this.max = parseInt(data.totalSize)||_this.data.length;
+		});
+	}
+	
 	export default {
 		name: 'message_query',
 		data() {
@@ -93,51 +104,77 @@ import observer  from '@/libs/observer.js';
 		},
 		methods: {
 			search(){
-				var param = this.info;
-				console.log('picker',this.picker);
-				var tem = [],n=5;
-				if(this.radio==2) n=100; 
-				for (var i = 0; i < n; i++) {
-					var obj = {verType:'verType',version:'version',url:'url',time:'time',send:'send',sh:'sh',sendType:'sendType'};
-					obj.version = i
-					tem.push(obj);
-				}
-				this.max = tem;
-				var size = this.pageSize;
-				this.data = tem.slice((currentPage-1)*size, currentPage*size);
-				utils.weakTips('查询成功！');
-//				utils.post('', param, function(res){
-//					console.log(res);
-//				});
+				search(_currentPage = 1);
 			},
 			currenRow(row){
 				this.row = row;
-//				console.log(row)
 			},
 			selectionRow(val){
 		     	this.selects = val;
 		    },
-			currentPage(val){
-				currentPage = val;
-				var max = this.max;
-				var size = this.pageSize;
-				this.data = max.slice((currentPage-1)*size, currentPage*size);
+		    pageSize(val){ //`每页 ${val} 条`
+		    	this.size = val;
+		    	search();
+		    },
+			currentPage(val){ //`当前页: ${val}`
+				_currentPage = val;
+				search();
 			},
-			see(ind, row){
-				console.log(ind, row);
+			roolback(row){
+				utils.hints({
+					txt: pageTxt.tips.roolback,
+					yes: function(){
+						var param = {
+							url: 'mx/version/rollback',
+							cmdId: '600063',
+							type: row.type,
+							version: row.version
+						};
+						utils.post(param, function(data){
+							console.log('版本回退：', data);
+							utils.weakTips(data.errinfo);
+							if(data.errcode >= 0) search(_currentPage = 1);
+						});
+					}
+				});
 			},
-			table(info, e){
-				console.log(info, e)
+			dbl(info, e){
+//				console.log(info, e)
 			}
 		},
 		beforeCreate(){},
-		mounted(){},
+		mounted(){
+			_this = this;
+			getDay(this.radio = 1);
+		},
 		watch:{
-			data(cur){
-				
+			radio(cur){
+				getDay(cur);
 			}
 		},
 		components: {}
+	};
+	function getDay(radio){
+		if(radio > 2) return;
+		var begin, end, time = 24 * 3600 * 1000;
+		end = getTime(0);
+		switch (radio){
+			case 0: time = 0;break;
+			case 1: time *= 7;break;
+			case 2: time *= 30;break;
+			default: break;
+		}
+		begin = getTime(time);
+		_this.picker = [begin, end];
+	}
+	function getTime(t){
+		var day = new Date(Date.now()-t), str = '', t;
+		str += day.getFullYear() + '-';
+		t = day.getMonth() + 1;
+		str += (t<10 ? '0'+t : t) + '-';
+		t = day.getDate();
+		str += (t<10 ? '0'+t : t);
+		return str;
 	}
 </script>
 
@@ -150,7 +187,8 @@ import observer  from '@/libs/observer.js';
 	.select{width: 180px;}
 	.el-input{width: 180px;line-height: 30px;}
 	.ver{margin: 10px 0;}
-	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
+	.blueBtn{margin-left: 10px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
+	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

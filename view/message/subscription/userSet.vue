@@ -4,7 +4,7 @@
 			<h2 class="h2">{{pageTxt.label[0]}}</h2>
 			<hr class="_hr" />
 			<label class="txt">{{pageTxt.label[1]}}</label>
-			<el-autocomplete @input='autoInput' class="autocomplete" v-model="idName" :fetch-suggestions="fetch" 
+			<el-autocomplete @input='autoInput' class="elInput" v-model="idName" :fetch-suggestions="fetch" 
 				:trigger-on-focus="false" @select="idSelect">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
@@ -13,7 +13,7 @@
 			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="userName"></el-input>-->
-			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[3]}}</el-button>
+			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[3]}}</button>
 			<label class="txt">{{pageTxt.label[4]}}</label>
 			<span class="txt">{{max}}</span>
 		</div>
@@ -37,12 +37,15 @@
 				</div>
 			</el-table-column>
 		</el-table>
-		<div class="_pagination" v-show="max!=0">
+		<div class="_pagination" v-if="max>size">
 			<el-pagination @current-change='currentPage' @size-change="pageSize" :page-size='size' :total="max" 
 				layout="prev, pager, next, jumper" background></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
+		</div>
+		<div class="onePage" v-else-if="max>0&&max<=size">
+			已显示全部{{max}}个数据
 		</div>
 	</div>
 </template>
@@ -51,10 +54,9 @@
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
-import observer  from '@/libs/observer.js';
 
 
-	var pageTxt, _this, autoTime, _currentPage=1, isInput=false;
+	var pageTxt, _this, autoTime, _currentPage = 1, isInput = false;
 	pageTxt = lang.themeUserSet;
 	
 	var data = {
@@ -62,19 +64,13 @@ import observer  from '@/libs/observer.js';
 		userID: '',
 		userName: '',
 		idName: '',
-		data: [{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}],
+		data: [/*{userID:'用户ID',userName:'用户名称',maxPubsCount:'允许发布主题个数',maxSubsCount:'允许订阅主题个数',maxDaysOfTopic:'发布主题有效天数'}*/],
 		row: '',
 		selects: [],
 		size: 20,
 		max: 0
 	};
-//	for (var i = 0; i < 30; i++) {
-//		data.data.push({userID:'49821',userName:'ABC',maxPubsCount:'5',maxSubsCount:'5',maxDaysoftTopic:'2020'});
-//	}
-//	observer.addBinding('messUpload', function(master, param){
-//		if(master != 'messUpload') return;
-//		data.obj = param;
-//	});
+
 	function autoInput(str, cb){
 		if(!str) return;
 //		console.time('请求用户ID...');
@@ -88,6 +84,7 @@ import observer  from '@/libs/observer.js';
 //			console.timeEnd('请求用户ID...');
 		});
 	}
+	
 	export default {
 		name: 'message_userSet',
 		data() {
@@ -171,8 +168,9 @@ import observer  from '@/libs/observer.js';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.autocomplete{width: 240px;line-height: 30px;}
-	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
+	.elInput{width: 240px;line-height: 1;}
+	.blueBtn{margin-left: 10px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
+	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

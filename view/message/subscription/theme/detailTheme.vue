@@ -40,7 +40,7 @@
 			</li><li>
 				<label class="txt">&nbsp;</label>
 				<div class="rightBox">
-					<el-button @click="back" class='back'>返 回</el-button>
+					<button class="defBtn" @click="back">返 回</button>
 				</div>
 			</li>
 		</ul>
@@ -184,7 +184,7 @@ import observer  from '@/libs/observer.js';
 	/*.tableWrap{width: 370px;display: inline-block;vertical-align: top;max-height: 400px;overflow-y: auto;}
 	.tableWrap:first-child{margin-right: 40px;}*/
 	
-	.back{margin-top: 30px;}
+	.defBtn{margin-top: 30px;}
 	
 	.transfer{text-align: center;}
 	.el-transfer{text-align: left; display: inline-block;}

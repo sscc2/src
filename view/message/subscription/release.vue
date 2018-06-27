@@ -19,7 +19,7 @@
 			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[6]" 
 				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
 			</el-date-picker>
-			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[8]}}</el-button>
+			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[8]}}</button>
 		</div>
 		<div class="btnBox">
 			<el-button class='btn' @click='add' type='text'>
@@ -57,11 +57,14 @@
 				</div>
 			</el-table-column>
 		</el-table>
-		<div class="_pagination" v-show="max!=0">
+		<div class="_pagination" v-if="max>size">
 			<el-pagination @current-change='currentPage' background layout="prev, pager, next, jumper" @size-change="pageSize" :page-size='size' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
+		</div>
+		<div class="onePage" v-else-if="max>0&&max<=size">
+			已显示全部{{max}}个数据
 		</div>
 		<!--<AddTheme></AddTheme>-->
 		<!--<EditTheme></EditTheme>-->
@@ -89,7 +92,7 @@ import observer    from '@/libs/observer.js';
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: null,
-		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
+		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}*/],
 		row: '',
 		selects: [],
 		size: 20,
@@ -287,10 +290,11 @@ import observer    from '@/libs/observer.js';
 	._hr{margin: 0 0 10px;min-width: 1000px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.elInput{width: 200px;line-height: 30px;}
+	.elInput{width: 200px;line-height: 1;}
 	.el-button *{vertical-align: middle;}
-	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
+	.blueBtn{margin-left: 10px;}
 	.btnTxt{color: #5a769e;}
 	._zero{white-space: nowrap;}
 	._zero img{vertical-align: middle;margin-right: 10px;}
+	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

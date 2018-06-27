@@ -60,7 +60,8 @@ textarea{resize: none !important;}
 .el-button--primary{width: 88px;height: 30px;font-size: 12px;line-height: 30px;padding: 0;background: #32CCF9;border-color: #32CCF9;color: #FFF;}
 .el-button--primary:active{background: #28C3F1;border-color: #28C3F1;color: #FFF !important;}
 .el-button--primary:hover, .el-button--primary:focus{background: #4BD6FF;border-color: #4BD6FF;}
-.blueBtn, .defBtn{display: inline-block;width: 88px;height: 30px;font-size: 12px;line-height: 30px;background: #32CCF9;color: #FFF;border-radius: 4px;}
+.blueBtn, .defBtn{display: inline-block;width: 88px;height: 30px;font-size: 12px;line-height: 30px;vertical-align: middle;
+	background: #32CCF9;color: #FFF;border-radius: 4px;}
 .blueBtn:hover{background: #4BD6FF;}
 .blueBtn:active{background: #28C3F1;}
 .defBtn{background: #FFF;color: #0DB9EB;border: 1px solid #0DB9EB;}

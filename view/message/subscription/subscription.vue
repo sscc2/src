@@ -15,7 +15,7 @@
 			<el-input placeholder="" v-model="info.subUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
 			<el-input class='elInput' placeholder="" v-model="info.topicName"></el-input>
-			<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[4]}}</el-button>
+			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[4]}}</button>
 		</div>
 		<div class="btnBox">
 			<el-button @click='detail' class='btn' type='text'>
@@ -40,11 +40,14 @@
 				</div>
 			</el-table-column>
 		</el-table>
-		<div class="_pagination" v-show="max!=0">
+		<div class="_pagination" v-if="max>size">
 			<el-pagination @current-change='currentPage' background layout="prev, pager, next, jumper" :page-size='size' :total="max"></el-pagination>
 			<div class="rightTxt">
 				共{{max}}条数据
 			</div>
+		</div>
+		<div class="onePage" v-else-if="max>0&&max<=size">
+			已显示全部{{max}}个数据
 		</div>
 		<!--<DetailTheme></DetailTheme>-->
 	</div>
@@ -68,7 +71,7 @@ import observer    from '@/libs/observer.js';
 			subUserID:'', topicName: '',
 			sortType: '2', type: '0'
 		},
-		data: [{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}],
+		data: [/*{subUserID:'订阅者ID',subUserName:'订阅者名',subAppID:'订阅者AppID',pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间'}*/],
 		row: '',
 		selects: [],
 		size: 20,
@@ -197,9 +200,10 @@ import observer    from '@/libs/observer.js';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.elInput{width: 240px;line-height: 30px;}
+	.elInput{width: 240px;line-height: 1;}
 	.red{color: red;}
-	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
+	.blueBtn{margin-left: 10px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
+	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

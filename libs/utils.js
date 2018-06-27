@@ -346,7 +346,7 @@ function utils(){
 			}
 			globalVar.set('useridList', data.lists);
 			call(data.lists);
-			observer.execute('useridReady');
+//			observer.execute('useridReady');
 		});
 	};
 	

@@ -3,12 +3,12 @@
 		<h2 class="h2">{{pageTxt.label[0]}}</h2>
 		<ul class="list">
 			<li>
-				<label class="txt">{{pageTxt.label[1]}}</label>
+				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[1]}}</label>
 				<div class="rightBox">
 					<el-input placeholder="" v-model="info.topicName" ></el-input>
 				</div>
 			</li><li>
-				<label class="txt">{{pageTxt.label[2]}}</label>
+				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
 					<!--<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>-->
 					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" 
@@ -27,17 +27,17 @@
 				</div>
 			</li>-->
 			<li>
-				<label class="txt">{{pageTxt.label[4]}}</label>
+				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[4]}}</label>
 				<div class="rightBox">
 					<el-input placeholder="" v-model="info.topicDescr" ></el-input>
 				</div>
 			</li><li>
-				<label class="txt">{{pageTxt.label[5]}}</label>
+				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[5]}}</label>
 				<div class="rightBox">
 					<el-input placeholder="" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
 				</div>
 			</li><li>
-				<label class="txt">{{pageTxt.label[6]}}</label>
+				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[6]}}</label>
 				<div class="rightBox">
 					<el-input  type="number" placeholder="" v-model="info.effectiveDays" ></el-input>
 				</div>
@@ -67,8 +67,8 @@
 				<label class="txt">&nbsp;</label>
 				<div class="rightBox">
 					<p class="jg"></p>
-					<el-button type="primary" @click="submit">{{pageTxt.label[11]}}</el-button>
-					<el-button @click="back">{{pageTxt.label[12]}}</el-button>
+					<button class="blueBtn" @click="submit">{{pageTxt.label[11]}}</button>
+					<button class="defBtn" @click="back">{{pageTxt.label[12]}}</button>
 					<p class="jg"></p>
 				</div>
 			</li>
@@ -145,7 +145,7 @@ import observer  from '@/libs/observer.js';
 			},
 			idSelect(item){
 				isInput = false;
-				this.info.pubUserID = item.userID;
+//				this.info.pubUserID = item.userID;
 				this.idName = item.userID+'('+item.userName+')';
 				blurID(item.userID);
 			},
@@ -177,9 +177,15 @@ import observer  from '@/libs/observer.js';
 			},
 			rightCheck(arr, i){},
 			submit(e){
-//				if(submitList.length==0) return;
-				//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
+				var must = ['topicName', 'topicDescr', 'topicInfo', 'effectiveDays'],
+					tips = pageTxt.tips;
 				var i, ind, tem = [], info = this.info;
+				if(!this.idName) return utils.weakTips(tips.pubUserID);
+				for (i = 0; i < must.length; i++) {
+					var str = must[i];
+					if(!info[str]) return utils.weakTips(tips[str]);
+				}
+				//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
 				for (i = 0; i < submitList.length; i++) {
 					ind = submitList[i];
 					tem.push(this.list[ind]);
@@ -227,6 +233,7 @@ import observer  from '@/libs/observer.js';
 			cmdID: '600035',
 			userID: id
 		};
+		_this.info.pubUserID = id;
 		utils.post(param, function(data){
 //			console.log('通信关系用户：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
@@ -296,9 +303,11 @@ import observer  from '@/libs/observer.js';
 	.h2{font-size: 16px;color: #666;line-height: 50px;height: 50px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.list li{margin-bottom: 10px;}
 	.txt{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
+	.red{color: #F00;line-height: 1;vertical-align: text-bottom;}
 	.rightBox{vertical-align: top;display: inline-block;}
 	.rightBox .el-input{width: 255px;}
 	.rightBox .el-textarea{width: 835px;}
+	.blueBtn{margin-right: 40px;}
 	.jg{padding-bottom: 30px;}
 	.autocomplete{width: 255px;}
 	

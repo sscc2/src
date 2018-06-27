@@ -12,15 +12,21 @@
 			</div>
 			<div class="ver">
 				<label class="txt">{{pageTxt.label[2]}}</label>
-				<el-autocomplete class='autocomplete' v-model="info.ver1" :fetch-suggestions="querySearch" @select="handleSelect"
-					:placeholder="pageTxt.label[3]" :trigger-on-focus="false" clearable>
+				<el-autocomplete id='9' @input='autoInput1' class="elInput" v-model="idName1" :fetch-suggestions="fetch" 
+					:placeholder="pageTxt.label[3]" :trigger-on-focus="false" @select="idSelect1">
+					<div slot-scope="{item}">
+						<span class="name">{{item.userID}}</span>
+						<span class="addr">({{item.userName}})</span>
+					</div>
 				</el-autocomplete>
-				<!--<el-input placeholder="" v-model="" clearable></el-input>-->
 				<label class="txt">{{pageTxt.label[4]}}</label>
-				<el-autocomplete class='autocomplete' v-model="info.ver1" :fetch-suggestions="querySearch" @select="handleSelect"
-					:placeholder="pageTxt.label[5]" :trigger-on-focus="false" clearable>
+				<el-autocomplete @input='autoInput2' class="elInput" v-model="idName2" :fetch-suggestions="fetch" 
+					:placeholder="pageTxt.label[5]" :trigger-on-focus="false" @select="idSelect2">
+					<div slot-scope="{item}">
+						<span class="name">{{item.userID}}</span>
+						<span class="addr">({{item.userName}})</span>
+					</div>
 				</el-autocomplete>
-				<!--<el-input :placeholder="pageTxt.label[5]" v-model="info.man" clearable></el-input>-->
 				<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[6]}}</el-button>
 			</div>
 		</div>
@@ -30,11 +36,14 @@
 			<el-table-column prop="type" :label="pageTxt.list[0]" width='180px'  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="detail" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
 		</el-table>
-		<div class="_pagination" v-show="data.length!=0">
-			<el-pagination @current-change='currentPage' background layout="prev, pager, next" :page-size='20' :total="1000"></el-pagination>
+		<div class="_pagination" v-if="max>size">
+			<el-pagination @current-change='currentPage' background layout="prev, pager, next, jumper" @size-change="pageSize" :page-size='size' :total="max"></el-pagination>
 			<div class="rightTxt">
-				共{{maxData}}条数据
+				共{{max}}条数据
 			</div>
+		</div>
+		<div class="onePage" v-else-if="max>0&&max<=size">
+			已显示全部{{max}}个数据
 		</div>
 	</div>
 </template>
@@ -43,27 +52,69 @@
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
-import observer  from '@/libs/observer.js';
 
 
-	var pageTxt;
+	var pageTxt, _this, _currentPage = 1, autoTime, isInput1, isInput2;
 	pageTxt = lang.versionContrast;
 	
 	var data = {
 		pageTxt,
-		info: {config:'0', ver1:'', ver2:''},
+		idName1: '',
+		idName2: '',
+		info: {config:'3', ver1:'', ver2:''},
 		data: [{type:'verType',detail:'detail'}],
-		row: '',
-		maxData: '2000',
-		selects: []
+		row: {},
+		selects: [],
+		size: 20,
+		max: 0
 	};
-//	for (var i = 0; i < 30; i++) {
-//		data.data.push({userId:'49821',userName:'ABC',reNum:'5',subNum:'5',time:'2020'});
-//	}
-//	observer.addBinding('messUpload', function(master, param){
-//		if(master != 'messUpload') return;
-//		data.obj = param;
-//	});
+	
+	function search(num, size){
+		var info = _this.info;
+		var param = {
+			cmdID: '600064', type: info.config,
+			pageSize: size||_this.size,
+			currentPage: num||_currentPage,
+			version1: isInput1 ? info.idName1 : _this.ver1,
+			version2: isInput2 ? info.idName2 : _this.ver2
+		};
+		utils.post('mx/version/compare', param, function(data){
+			console.log('版本对比：', data);
+			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			_this.data = data.lists;
+			_this.max = parseInt(data.totalSize)||_this.data.length;
+		});
+	}
+	
+	function autoInput(str, cb){
+		if(!str) return;
+		var param = {
+			url: 'mx/version/queryCompare',
+			cmdID: "600062",
+			type: _this.info.config,
+			pageSize: 200,
+			currentPage: 1,
+			type: 1
+		};
+		utils.post(param, function(data){
+			console.log('自动输入版本：',data);
+			if(data.errcode < 0) return console.log(data.errinfo);
+			var obj, i;
+			for (i = 0; i < data.lists.length; i++) {
+				obj = data.lists[i];
+				obj.key = i;
+				obj.label = obj.userID+obj.userName;
+			}
+			filt(data.lists, cb);
+		});
+	}
+	function filt(data, cb){
+		var i,len = data.length,tem=[];
+		for (i = 0; i < len; i++) {
+			if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+		}
+		cb(tem);
+	}
 	
 	export default {
 		name: 'message_query',
@@ -71,33 +122,50 @@ import observer  from '@/libs/observer.js';
 			return data;
 		},
 		methods: {
+			fetch(str, cb){
+				clearTimeout(autoTime);
+				autoTime = setTimeout(autoInput, 300, str, cb);
+			},
+			idSelect1(item){
+				isInput1 = false;
+				this.info.ver1 = item.userID;
+				this.idName1 = item.userID+'('+item.userName+')';
+			},
+			autoInput1(){
+				isInput1 = true;
+			},
+			idSelect2(item){
+				isInput2 = false;
+				this.info.ver2 = item.userID;
+				this.idName1 = item.userID+'('+item.userName+')';
+			},
+			autoInput2(){
+				isInput2 = true;
+			},
 			search(){
-				var param = this.info;
-				console.log(this.picker)
-//				utils.post('', param, function(res){
-//					console.log(res);
-//				});
+				search(_currentPage = 1);
 			},
 			currenRow(row){
 				this.row = row;
-				console.log(row)
 			},
 			selectionRow(val){
 		     	this.selects = val;
+		   },
+			pageSize(val){
+		    	this.size = val;
+		    	search();
 		    },
-			currentPage(){
-				
-			},
-			querySearch(){
-				
-			},
-			handleSelect(){
-				
+			currentPage(val){
+				_currentPage = val;
+				search();
 			}
 		},
-		beforeCreate(){},
-		mounted(){},
-		components: {}
+		mounted(){
+			_this = this;
+			isInput1 = isInput2 = false;
+			this.info.config = '3';
+			search(_currentPage = 1);
+		}
 	}
 </script>
 
