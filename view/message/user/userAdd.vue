@@ -35,16 +35,16 @@
 					</el-col><el-col :span="18">
 
 						<ul class="right">
-							<el-form :model="info" ref="info">
+							<!-- <el-form :model="info" > -->
 							<li>
-								<el-form-item  prop="userID" :rules="[{ required: true, message: 'ID不能为空'}]">
+								<!-- <el-form-item  prop="userID" :rules="[{ required: true, message: 'ID不能为空'}]"> -->
 									<el-input v-model="info.userID"></el-input>
-								</el-form-item>	
+								<!-- </el-form-item>	 -->
 							</li>
 							<li>
-								<el-form-item  prop="userName" :rules="[{ required: true, message: '用户名不能为空'}]">
+								<!-- <el-form-item  prop="userName" :rules="[{ required: true, message: '用户名不能为空'}]"> -->
 									<el-input v-model="info.userName"></el-input>
-								</el-form-item>	
+								<!-- </el-form-item>	 -->
 							</li>
 							<li class="default_radio">
 								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">启用</el-radio>
@@ -101,13 +101,13 @@
 							<li>
 								<input type="text" v-model="info.maxDaysOfTopic" placeholder="">
 							</li>
-							</el-form>							
+							<!-- </el-form>	-->
 						</ul>
 					</el-col>
 				</el-row>
 
 				<div class="btn">
-					<el-button type="primary" @click="submitForm('info')">{{pageTxt.infoTxt[20]}}</el-button>
+					<el-button type="primary" @click="submitForm()">{{pageTxt.infoTxt[20]}}</el-button>
 					<el-button type="primary" @click='cancelFieldValidate($event)'>{{pageTxt.infoTxt[21]}}</el-button>
 					<el-button type="primary" @click='del()'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
@@ -132,7 +132,6 @@
 import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
-
 
 var info = {},
   def = [
@@ -188,7 +187,6 @@ var pageTxt = {
       "返回"
     ]
   },
-
   connect = [
     { value: "0", label: "Group0" },
     { value: "1", label: "Group1" },
@@ -203,42 +201,51 @@ var pageTxt = {
 export default {
   data() {
     return {
-      userType:[{id:'0',name:'1aaa'},{id:'1',name:'2aaa'}],
-      cities:[{id:'BJ',name:'1aaa'},{id:'1',name:'2aaa'}],
-
+      userType: [{ id: "0", name: "1aaa" }, { id: "1", name: "2aaa" }],
+      cities: [{ id: "BJ", name: "1aaa" }, { id: "1", name: "2aaa" }],
 
       info,
       pageTxt,
-      
+
       connect,
       online,
       time: getDate(),
-      judgment:[]
+      judgment: []
     };
   },
   methods: {
     // 表单验证
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
+    submitForm() {
+      var reg=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+      if (this.info.userID != "" && this.info.userName != "") {
+        if (this.info.isModifyDefaultPasswd==0) {
           this.add();
         } else {
-          
+          if (reg.test(this.info.userPasswd)) {
+              this.add();
+          } else {
+            utils.weakTips("密码必须包含大小写字母、数字、特殊字符中两项且大于8位");
+          }
         }
-      });
+      } else {
+        utils.weakTips("用户ID或用户名不能为空");
+      }
     },
-    judge(){
-        if(info.isModifyDefaultPasswd==0){
-          this.judgment=[]
-        }else{
-          this.judgment=[{ required: true, message: '密码不能为空'},{ pattern:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/, message: '密码必须包含大小写字母、数字、特殊字符中两项且大于8位' }]
-        }
-        console.log(info.isModifyDefaultPasswd,this.judgment)
+    judge() {
+      if (info.isModifyDefaultPasswd != 0) {
+        this.judgment = [];
+        this.info.userPasswd = "";
+      } else {
+        this.judgment = [{ required: true, message: "密码不能为空" }];
+       
+        this.info.userPasswd = 111111;
+      }
+      console.log(info.isModifyDefaultPasswd, this.judgment);
     },
 
     // 创建用户
     add: function() {
-      this.$store.state.transferEditID=this.info.userID;  
+      this.$store.state.transferEditID = this.info.userID;
       var _this = this;
       utils.post(
         "mx/userinfo/add",
@@ -261,41 +268,47 @@ export default {
           maxSubsCount: _this.info.maxSubsCount,
           maxDaysOfTopic: _this.info.maxDaysOfTopic,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
-          userPasswd: _this.info.userPasswd
+          userPasswd: _this.info.isModifyDefaultPasswd
+            ? _this.info.userPasswd
+            : md5.hex_md5("111111").substr(8, 16)
         },
         function(response) {
-          if(response.errcode == 0){
-            _this.open6(response.errinfo)
-          }else{
-            utils.weakTips(response.errifo);
+          if (response.errcode == 0) {
+            _this.open6(response.errinfo);
+          } else {
+            utils.weakTips(response.errinfo);
           }
         }
       );
     },
 
     open6(msg) {
-        this.$confirm(msg, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          center: true
-        }).then(() => {
-          this.$store.state.tabv="v2"
+      this.$confirm(msg, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        center: true
+      })
+        .then(() => {
+          this.$store.state.tabv = "v2";
           this.$router.replace({ path: "/message/userEdit/mess" });
-
-        }).catch(() => {
-          this.$store.state.tabv="v1"
+        })
+        .catch(() => {
+          this.$store.state.tabv = "v1";
           this.$router.replace({ path: "/message/userEdit/mess" });
         });
-      },
+    },
 
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
     }
+    // changeUserPasswd(){
+    //   this.info.userPasswd=111111;
+    // }
   },
   // 初始化数据
   created: function() {
-     var _this=this;
-     utils.post(
+    var _this = this;
+    utils.post(
       "mx/dict/query",
       {
         cmdID: "600000",
@@ -306,8 +319,8 @@ export default {
         _this.userType = response.lists;
       }
     );
-    
-     utils.post(
+
+    utils.post(
       "mx/dict/query",
       {
         cmdID: "600000",
@@ -318,10 +331,10 @@ export default {
         _this.cities = response.lists;
       }
     );
-    info.userID="";
-    info.userName="";
-    info.isModifyDefaultPasswd = "0";
-    info.userPasswd = md5.hex_md5("111111").substr(8, 16);
+    info.userID = "";
+    info.userName = "";
+    info.isModifyDefaultPasswd = 0;
+    info.userPasswd = "111111";
     info.userType = "0";
     info.userDistrict = "BJ";
     info.speedCtrlKbps = "-1";
@@ -450,7 +463,7 @@ input:focus {
   margin-left: 140px;
   margin-top: 30px;
 }
-._zero > img[data-v-d09b1104]{
+._zero > img[data-v-d09b1104] {
   margin-left: 0 !important;
 }
 </style>

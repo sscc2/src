@@ -139,7 +139,7 @@ export default {
       } else {
           var _this=this
           utils.hints({
-          txt:"123",
+          txt:"是否确定删除该用户记录",
           yes:_this.delAll,
           btn: 2
         })
@@ -161,6 +161,7 @@ export default {
               _this.userData.lists.splice(index, 1);
             }
             utils.weakTips(response.errinfo);
+            // utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errInfo);
           }
@@ -182,7 +183,7 @@ export default {
       this.rows = rows;
       var _this=this
         utils.hints({
-          txt:"123",
+          txt:"是否确定删除该用户记录",
           yes:_this.userDel,
           btn: 2
         })

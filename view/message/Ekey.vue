@@ -13,7 +13,10 @@
 			<el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
 
       <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
-			<el-autocomplete v-show='search.type==1'  class="input_normal" v-model="search.userID" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+			
+
+      <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" 
+				:trigger-on-focus="false" @select="idSelect">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
@@ -21,7 +24,9 @@
 			</el-autocomplete>
 
 
-			<el-button type="primary" plain @click='search'>{{pageTxt.Ekey[4]}}</el-button>
+
+
+			<el-button type="primary" plain @click='searchfn'>{{pageTxt.Ekey[4]}}</el-button>
 		</div>
 
 		<div class="btnBox">
@@ -213,11 +218,25 @@ var pageTxt_cn = {
   ]
 };
 
-var pageTxt = pageTxt_cn;
+var pageTxt = pageTxt_cn, autoTime, _currentPage=1, isInput=false;
+
+function autoInput(str, cb){
+		if(!str) return;
+		utils.getUserid(str, function(data){
+//			console.log('用户ID data',data);
+			var i,len = data.length,tem=[];
+			for (i = 0; i < len; i++) {
+				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+			}
+			cb(tem);
+		});
+	}
 
 export default {
   data() {
     return {
+      idName: '',
+      userID: '',
       search:{userID:"",type:"",ekeyName:""},
       ainfo,
       binfo,
@@ -263,14 +282,29 @@ export default {
     };
   },
   methods: {
+    fetch(str, cb){
+      clearTimeout(autoTime);
+      autoTime = setTimeout(autoInput, 300, str, cb);
+    },
+    idSelect(item){
+      isInput = false;
+      this.userID = item.userID;
+      this.idName = item.userID+'('+item.userName+')';
+    },
+    autoInput(){
+      isInput = true;
+    },
+
+
+
     //查询Ekey
-    search() {
+    searchfn() {
       var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
           cmdID: 600021,
-          userID: _this.search.userID,
+          userID: isInput?_this.idName: _this.userID,
           ekeyName: _this.search.ekeyName,
           type: _this.search.type,
           pageSize: _this.pageSize,
@@ -317,7 +351,7 @@ export default {
       } else {
           var _this=this
           utils.hints({
-          txt:"123",
+          txt:"是否删除该用户信息",
           yes:_this.del,
           btn: 2
         })
@@ -330,7 +364,7 @@ export default {
           {
             cmdID: 600024,
             operator: "admin",
-            userID: _this.selects[0].userID,
+            userID: _this.selects[0].userID? _this.selects[0].userID:"",
             ekeyName: _this.selects[0].ekeyName
           },
           function(response) {
@@ -361,7 +395,6 @@ export default {
 
     // 修改
     showEdit(row) {
-      console.log("1",row)
         this.editEkdy = true;   
         this.oldEkeyName=this.row.ekeyName
         var _this = this;
@@ -414,7 +447,7 @@ export default {
         this.rows = rows;
         var _this=this
         utils.hints({
-          txt:"123",
+          txt:"是否删除该用户信息",
           yes:_this.ekeyDel,
           btn: 2
         })
@@ -426,8 +459,8 @@ export default {
           {
             cmdID: 600024,
             operator: "admin",
-            userID: _this.row.userID,
-            ekeyName: _this.row.ekeyName
+            userID: _this.rows[0].userID,
+            ekeyName: _this.rows[0].ekeyName
           },
           function(response) {
               if (response.errcode == 0) {
@@ -499,23 +532,12 @@ export default {
     closePromptBox1() {
       this.promptBoxShow1 = false;
     },
-    			idSelect(item){
-        this.EkeyData.lists.userID = item.userID;
-				this.aaa = item.userID+'('+item.userName+')';
-      },
-      			fetch(str, cb){
-				var aaa,i,len = idList.length,obj,tem=[];
-				for (i = 0; i < len; i++) {
-					obj = idList[i];
-					aaa = obj.userID+obj.userName;
-					if(aaa.indexOf(str)!=-1) tem.push(obj);
-				}
-				cb(tem);
-			},
+    		
   },
     //初始化数据
   created() {
-    ainfo.type = 0;
+    this.search.type= 0;
+    this.ainfo.type = 0;
     // ainfo.ekeyName = "";
     var _this = this;
       var _this = this;
@@ -535,20 +557,9 @@ export default {
       );
     },
     mounted(){
-			useridList();
-		},
-    
+	
+		},  
 }
-var idList = [];
-	function useridList(){
-		idList = globalVar.get('useridList');
-		var call = function(master, list){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			idList = list; call = null;
-		}
-		if(!idList.length) observer.addBinding('useridReady', call);
-	}
 </script>
 
 <style scoped="scoped">
@@ -575,4 +586,46 @@ var idList = [];
 .promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
+
 </style>
+    // 创建Ekey
+    showAdd() {
+      this.addEkey=true;
+      this.ainfo.userID = this.$store.state.transferEditID;
+    },
+    submitAdd() {
+
+      var _this = this;
+      _this.addEkey = false;
+      utils.post(
+        "mx/userEkey/add",
+        {
+          cmdID: 600022,
+          operator: "admin",
+          userID: _this.$store.state.transferEditID,
+          ekeyName: _this.ainfo.ekeyName,
+          ekeyValidDate: _this.ainfo.ekeyValidDate,
+          comment: _this.ainfo.comment
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            _this.open6(response.errinfo)
+          } else {
+             utils.weakTips(response.errinfo);             
+          }
+        }
+      );
+    },
+    open6(msg) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+          this.$store.state.tabv = "v3";
+          this.$router.replace({ path: "/message/userEdit/mess" });
+        }).catch(() => {
+          this.$store.state.tabv = "v2";
+          this.$router.replace({ path: "/message/userEdit/mess" });   
+        });
+      },  

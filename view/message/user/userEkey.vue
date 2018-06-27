@@ -1,16 +1,29 @@
 <template>
-<div>	
+<div>
 	<div class="Ekey">
-		<!-- <div class="user">
+		<div class="user">
 			<span class="txt">{{pageTxt.Ekey[0]}}：</span>
-			<el-radio v-model="ainfo.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
-  		<el-radio v-model="ainfo.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-			<span v-show='ainfo.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
-			<el-input v-show='ainfo.type==0' v-model="ainfo.ekeyName" placeholder="" ></el-input>
-			<span v-show='ainfo.type==1' class="txt">用户：</span>
-			<el-input v-show='ainfo.type==1' v-model="ainfo.userID" placeholder=""></el-input>
-			<el-button type="primary" plain @click='search'>{{pageTxt.Ekey[4]}}</el-button>
-		</div> -->
+			<el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
+  		<el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
+			<span v-show='search.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
+			<el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
+
+      <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
+			
+
+      <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" 
+				:trigger-on-focus="false" @select="idSelect">
+				<div slot-scope="{item}">
+					<span class="name">{{item.userID}}</span>
+				    <span class="addr">({{item.userName}})</span>
+				</div>
+			</el-autocomplete>
+
+
+
+
+			<el-button type="primary" plain @click='searchfn'>{{pageTxt.Ekey[4]}}</el-button>
+		</div>
 
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
@@ -27,7 +40,7 @@
 			<el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
 			<el-table-column label="操作" width="110">
 				<div slot-scope="scope" class="_zero">
-					<div  id='Edit'  @click="showEdit"><img src="@/img/altericos.png"> </div>
+					<div  id='Edit'  @click="showEdit(scope.row)"><img src="@/img/altericos.png"> </div>
 					<div @click="showDel(scope.$index,EkeyData.lists)"><img src="@/img/deleticos.png" ></div>
 				</div>
 			</el-table-column>
@@ -40,7 +53,10 @@
 						<p class="txt">{{pageTxt.dialog[2]}}</p>
 					</div>
 					<div class="rightBox">
-						<el-input class='picker' v-model="ainfo.userID" disabled></el-input>
+            <el-select v-model="ainfo.userID" placeholder="请选择">
+              <el-option  v-for="item in EkeyData.lists" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
+            </el-select>
+						
 						<span class="txt red" v-show="err1.id">{{pageTxt.tips.id}}</span>
 					</div>
 				</li>
@@ -120,29 +136,14 @@
 		<div class="_pagination">
       <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="EkeyData.totalPage" :page-size="20"></el-pagination>
     </div> 
-
-    <el-dialog title="提示" :visible.sync="promptBoxShow1" width="600px">
-        <span class="promptBox_content_txt">是否删除此用户信息？</span>
-        <div class="promptBox_btn" >
-          <el-button @click="promptBoxShow1=false">取消</el-button>
-          <el-button type="primary" @click="del">确定</el-button>
-        </div>
-    </el-dialog>
-
-    <el-dialog title="提示" :visible.sync="promptBoxShow" width="600px">
-        <span class="promptBox_content_txt">是否删除此用户信息？</span>
-        <div class="promptBox_btn" >
-          <el-button @click="promptBoxShow=false">取消</el-button>
-          <el-button type="primary" @click="ekeyDel">确定</el-button>
-        </div>
-    </el-dialog>
-
 	</div>
 </div>	
 </template>
 
 <script>
-import utils from "@/libs/utils.js";
+import utils       from "@/libs/utils.js";
+import observer    from '@/libs/observer.js';
+import globalVar   from '@/libs/globalVar.js';
 
 var ainfo = {},
   def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
@@ -196,11 +197,26 @@ var pageTxt_cn = {
   ]
 };
 
-var pageTxt = pageTxt_cn;
+var pageTxt = pageTxt_cn, autoTime, _currentPage=1, isInput=false;
+
+function autoInput(str, cb){
+		if(!str) return;
+		utils.getUserid(str, function(data){
+//			console.log('用户ID data',data);
+			var i,len = data.length,tem=[];
+			for (i = 0; i < len; i++) {
+				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+			}
+			cb(tem);
+		});
+	}
 
 export default {
   data() {
     return {
+      idName: '',
+      userID: '',
+      search:{userID:"",type:"",ekeyName:""},
       ainfo,
       binfo,
       EkeyData: [],
@@ -245,16 +261,31 @@ export default {
     };
   },
   methods: {
+    fetch(str, cb){
+      clearTimeout(autoTime);
+      autoTime = setTimeout(autoInput, 300, str, cb);
+    },
+    idSelect(item){
+      isInput = false;
+      this.userID = item.userID;
+      this.idName = item.userID+'('+item.userName+')';
+    },
+    autoInput(){
+      isInput = true;
+    },
+
+
+
     //查询Ekey
-    search() {
+    searchfn() {
       var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
           cmdID: 600021,
-          userID: _this.ainfo.userID,
-          ekeyName: _this.ainfo.ekeyName,
-          type: _this.ainfo.type,
+          userID: isInput?_this.idName: _this.userID,
+          ekeyName: _this.search.ekeyName,
+          type: _this.search.type,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1,
         },
@@ -264,13 +295,13 @@ export default {
       );
     },
 
-    // 创建Ekey
+       // 创建Ekey
     showAdd() {
       this.addEkey=true;
       this.ainfo.userID = this.$store.state.transferEditID;
     },
     submitAdd() {
-      console.log(123)
+
       var _this = this;
       _this.addEkey = false;
       utils.post(
@@ -304,16 +335,16 @@ export default {
           this.$store.state.tabv = "v2";
           this.$router.replace({ path: "/message/userEdit/mess" });   
         });
-      },     
+      }, 
 
     // 删除Ekey
     fn(){
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！");
       } else {
-         var _this=this
+          var _this=this
           utils.hints({
-          txt:"123",
+          txt:"是否删除该用户信息",
           yes:_this.del,
           btn: 2
         })
@@ -326,7 +357,7 @@ export default {
           {
             cmdID: 600024,
             operator: "admin",
-            userID: _this.selects[0].userID,
+            userID: _this.selects[0].userID? _this.selects[0].userID:"",
             ekeyName: _this.selects[0].ekeyName
           },
           function(response) {
@@ -343,31 +374,42 @@ export default {
         );
       },
 
- 
+    open6(msg) {
+        this.$confirm(msg, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true
+        }).then(() => {
+
+        }).catch(() => {
+    
+        });
+      },  
 
     // 修改
-    showEdit() {      
+    showEdit(row) {
+        this.editEkdy = true;   
         this.oldEkeyName=this.row.ekeyName
         var _this = this;
-        utils.post(
-          "mx/userEkey/query",
-          {
-            cmdID: 600021,
-            userID: this.row.userID,
-            ekeyName: this.row.ekeyName,
-            type: 2,
-            pageSize:_this.pageSize,
-            currentPage:_this.currentPage1,
-          },
-          function(response) {
-            _this.binfo.userID=response.lists[0].userID;
-            _this.binfo.userName=response.lists[0].userName;
-            _this.binfo.ekeyName=response.lists[0].ekeyName;
-            _this.binfo.ekeyValidDate=response.lists[0].ekeyValidDate;
-            _this.binfo.comment=response.lists[0].comment;          
-          }
-        );
-          _this.editEkdy = true;     
+        // utils.post(
+        //   "mx/userEkey/query",
+        //   {
+        //     cmdID: 600021,
+        //     userID: row.userID,
+        //     ekeyName: row.ekeyName,
+        //     type: 2,
+        //     pageSize:_this.pageSize,
+        //     currentPage:_this.currentPage1,
+        //   },
+        //   function(response) {
+
+        //   }
+        // );
+            _this.binfo.userID=row.userID;
+            _this.binfo.userName=row.userName;
+            _this.binfo.ekeyName=row.ekeyName;
+            _this.binfo.ekeyValidDate=row.ekeyValidDate;
+            _this.binfo.comment=row.comment;               
     },
     submitEdit() {
       this.editEkdy = false;
@@ -396,12 +438,12 @@ export default {
     showDel(index, rows){
         this.index = index;
         this.rows = rows;
-         var _this=this
-          utils.hints({
-          txt:"123",
+        var _this=this
+        utils.hints({
+          txt:"是否删除该用户信息",
           yes:_this.ekeyDel,
           btn: 2
-        })    
+        })
     },
     ekeyDel(){
       var _this=this;
@@ -410,8 +452,8 @@ export default {
           {
             cmdID: 600024,
             operator: "admin",
-            userID: _this.row.userID,
-            ekeyName: _this.row.ekeyName
+            userID: _this.rows[0].userID,
+            ekeyName: _this.rows[0].ekeyName
           },
           function(response) {
               if (response.errcode == 0) {
@@ -429,29 +471,12 @@ export default {
     },
 
     currentRow: function(e) {
+      console.log(e)
       this.row=e
     },
     currentPage: function(e) {
       console.log(e);
     },
-    // checkAdd(e) {
-    //   var key, el;
-    //   el = e.type == "blur" ? e.target : e.$el.children[0];
-    //   key = el.name;
-    //   console.log(key);
-    //   if (!this.info[key]) {
-    //     this.err1[key] = true;
-    //   } else this.err1[key] = false;
-    // },
-    // checkEdit(e) {
-    //   var key, el;
-    //   el = e.type == "blur" ? e.target : e.$el.children[0];
-    //   key = el.name;
-    //   console.log(key);
-    //   if (!this.eInfo[key]) {
-    //     this.err2[key] = true;
-    //   } else this.err[key] = false;
-    // },
     // 分页
     handleSizeChange: function(size) {
       this.pageSize = size;
@@ -476,11 +501,13 @@ export default {
     },
     closePromptBox1() {
       this.promptBoxShow1 = false;
-    }
+    },
+    		
   },
     //初始化数据
   created() {
-    ainfo.type = 0;
+    this.search.type= 0;
+    this.ainfo.type = 0;
     // ainfo.ekeyName = "";
     var _this = this;
       var _this = this;
@@ -498,18 +525,23 @@ export default {
           _this.EkeyData = response;
         }
       );
-    }
+    },
+    mounted(){
+	
+		},  
 }
 </script>
 
 <style scoped="scoped">
+.header{height: 47px; border-bottom: 1px solid #ccc;}
+.header_txt{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 17px; font-weight: bold;}
 .Ekey *{vertical-align: middle;}
 .user .el-input{width: 210px; margin-right: 10px;}
 .user .el-button{margin-left: 35px; width: 90px; height: 30px; line-height: 0;}
 .user .red{color: #f56c6c;}
 .txt{font-size: 14px; color: #666666; margin-left: 20px;}
 .user > .el-button{margin-left: 35px; width: 90px; height: 30px; background-color: #32ccf9; line-height: 0px; border: 0; color: white;}
-.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 5px;}
+.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 18px;}
 .btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
 .btnBox div:nth-child(1){margin-left: 0;}
 .Ekey .eRadio{margin-right: 30px;}
@@ -524,3 +556,4 @@ export default {
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
 </style>
+ 

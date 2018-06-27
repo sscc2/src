@@ -16,8 +16,8 @@
 				</div>
 				
 				<div class="rightBox">
-						<el-radio v-model="info.isModifyDefaultPasswd" :label="0">重置</el-radio>
-  						<el-radio v-model="info.isModifyDefaultPasswd" :label="1">不重置</el-radio>
+						<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">重置</el-radio>
+  						<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">不重置</el-radio>
 				</div>
 			</li>
 			<li>
@@ -38,28 +38,10 @@
 					<span class="txt red" v-show="err.again">{{pageTxt.tips.again}}</span>
 				</div>
 			</li>
-      <li>
-				<div class="leftBox">
-					<p class="txt">{{pageTxt.lable[4]}}</p>
-				</div>
-        <div class="rightBox">
-					<el-input  name='assessor' v-model="info.assessor" :placeholder="pageTxt.lable[8]"></el-input>
-					<span class="txt red" v-show="err.assessor">{{pageTxt.tips.assessor}}</span>
-				</div>
-			</li>
-      <li>
-				<div class="leftBox">
-					<p class="txt">{{pageTxt.lable[5]}}</p>
-				</div>
-        <div class="rightBox">
-					<el-input name='pass' v-model="info.pass" :placeholder="pageTxt.lable[8]"></el-input>
-					<span class="txt red" v-show="err.pass">{{pageTxt.tips.pass}}</span>
-				</div>
-			</li>
 		</ul>
 		<div class="bottom_btn">
 		    <el-button @click="$store.state.passShow = false">{{pageTxt.lable[7]}}</el-button>
-		    <el-button type="primary" @click="submit">{{pageTxt.lable[6]}}</el-button>
+		    <el-button type="primary" @click="submit1">{{pageTxt.lable[6]}}</el-button>
 		</div>
 	</el-dialog>
 </template>
@@ -120,12 +102,26 @@ export default {
     return data;
   },
   methods: {
+    submit1(){
+       var reg=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+        if(this.info.isModifyDefaultPasswd==0){
+          this.submit()
+        }else{
+           if(reg.test(this.info.npasswd)){
+             if(this.info.npasswd==this.info.again){
+                 this.submit()
+             }else{
+                utils.weakTips("两次输入的应该一致");
+             }
+        }else{
+          utils.weakTips("密码必须包含大小写字母、数字、特殊字符中两项且大于8位");
+        }
+        }
+
+       
+    },
     submit() {
-      if (this.info.isModifyDefaultPasswd == 0) {
-        this.info.npasswd = md5.hex_md5("111111").substr(8, 16);
-      } else {
-        this.info.npasswd = md5.hex_md5(this.info.npasswd).substr(8, 16);
-      }
+      this.$store.state.passShow=false
       var _this = this;
       utils.post(
         "mx/userpasswd/modify",
@@ -134,27 +130,26 @@ export default {
           operator: "admin",
           userID: _this.$store.state.transferEditID,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
-          userPasswd: _this.info.npasswd
-
+          userPasswd: _this.info.isModifyDefaultPasswd?md5.hex_md5(_this.info.npasswd).substr(8, 16):md5.hex_md5("111111").substr(8, 16)
         },
         function(response) {
           if (response.errcode == 0) {
-            alert(response.errinfo);
+            utils.weakTips(response.errinfo);
           } else {
-           
+            utils.weakTips(response.errinfo);
           }
         }
       );
     },
-    // check(e) {
-    //   var key, el;
-    //   el = e.type == "blur" ? e.target : e.$el.children[0];
-    //   key = el.name;
-    //   console.log();
-    //   if (!this.info[key]) {
-    //     this.err[key] = true;
-    //   } else this.err[key] = false;
-    // }
+    changeNpasswd(){
+      if(this.info.isModifyDefaultPasswd==0){
+        this.info.npasswd=111111;
+        this.info.again=111111;
+      }else{
+        this.info.npasswd="";
+        this.info.again="";
+      }
+    }
   },
   created() {
     this.info.id = this.$store.state.transferEditID;
@@ -180,5 +175,8 @@ export default {
   color: #f56c6c;
   margin-left: 10px;
 }
+
+
+
 
 </style>

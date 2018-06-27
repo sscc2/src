@@ -10,24 +10,30 @@
 			<el-select class="input_normal" v-model="searchInfo.bizType" placeholder="请选择">
 				<el-option v-for="item in options1" :label="item.name" :key="item.id"  :value="item.id"></el-option>
 			</el-select>
-			<span class="txt">{{pageTxt.signal[1]}}：</span>
+			<span class="txt1">{{pageTxt.signal[1]}}：</span>
 
-			<el-autocomplete class="input_normal" v-model="aaa" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+
+
+     <el-autocomplete  @input='autoInput1' class="input_normal" v-model="idName1" :fetch-suggestions="fetch1" 
+				:trigger-on-focus="false" @select="idSelect1">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
 				</div>
 			</el-autocomplete>
 
-			<span class="txt">{{pageTxt.signal[2]}}：</span>
 
-			<!-- <el-input v-model="searchInfo.userID2"></el-input> -->
-			<el-autocomplete class="input_normal" v-model="aaa" :fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+
+
+			<span class="txt1">{{pageTxt.signal[2]}}：</span>
+      <el-autocomplete  @input='autoInput2' class="input_normal" v-model="idName2" :fetch-suggestions="fetch2" 
+				:trigger-on-focus="false" @select="idSelect2">
 				<div slot-scope="{item}">
 					<span class="name">{{item.userID}}</span>
 				    <span class="addr">({{item.userName}})</span>
 				</div>
-			</el-autocomplete>
+		</el-autocomplete>
+
 
 			<el-button type="primary" plain @click='search'>{{pageTxt.signal[3]}}</el-button>
 		</div>
@@ -150,11 +156,28 @@ var pageTxt= {
     ]
   };
 
+var autoTime1, isInput1=false,autoTime2, isInput2=false;
+
+function autoInput(str, cb){
+		if(!str) return;
+		utils.getUserid(str, function(data){
+//			console.log('用户ID data',data);
+			var i,len = data.length,tem=[];
+			for (i = 0; i < len; i++) {
+				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
+			}
+			cb(tem);
+		});
+	}
+
 export default {
   name: "mess_signal",
   data() {
     return {
-      aaa:'',
+      idName1: '',
+      userID1: '',
+      idName2: '',
+      userID2: '',
       searchInfo: { bizType: "", userID1: "", userID2: ""  },
       creatInfo: { bizType: "", user: "", other: [] },
       options1:[{userID:'0',userID:'1aaa'},{userID:'1',userID:'2aaa'}],
@@ -185,6 +208,40 @@ export default {
     };
   },
   methods: {
+    fetch1(str, cb){
+      clearTimeout(autoTime1);
+      autoTime1 = setTimeout(autoInput, 300, str, cb);
+    },
+    idSelect1(item){
+      isInput1 = false;
+      this.userID1 = item.userID;
+      this.idName1 = item.userID+'('+item.userName+')';
+    },
+    autoInput1(){
+      isInput1 = true;
+    },
+
+
+    fetch2(str, cb){
+      clearTimeout(autoTime2);
+      autoTime2 = setTimeout(autoInput, 300, str, cb);
+    },
+    idSelect2(item){
+      isInput2 = false;
+      this.userID2 = item.userID;
+      this.idName2 = item.userID+'('+item.userName+')';
+    },
+    autoInput2(){
+      isInput2 = true;
+    },
+
+
+
+
+
+
+
+
     // 查询
     search() {
       var _this = this;
@@ -193,8 +250,8 @@ export default {
         {
           cmdID: "600031",
           bizType: _this.searchInfo.bizType,
-          userID1: _this.searchInfo.userID1,
-          userID2: _this.searchInfo.userID2,
+          userID1: isInput1?_this.idName1: _this.userID1,
+          userID2: isInput2?_this.idName2: _this.userID2,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage
         },
@@ -234,7 +291,7 @@ export default {
       } else {
         var _this=this
         utils.hints({
-          txt:"123",
+          txt:"是否确定删除该用户记录",
           yes:_this.delUser,
           btn: 2
         })
@@ -271,7 +328,7 @@ export default {
       this.rows = rows;
       var _this=this
         utils.hints({
-          txt:"123",
+          txt:"是否确定删除该用户记录",
           yes:_this.delUser1,
           btn: 2
         })
@@ -364,20 +421,7 @@ export default {
           _this.userData = response;
         }
       );
-    },
-    			idSelect(item){
-        this.EkeyData.lists.userID = item.userID;
-				this.aaa = item.userID+'('+item.userName+')';
-      },
-      			fetch(str, cb){
-				var aaa,i,len = idList.length,obj,tem=[];
-				for (i = 0; i < len; i++) {
-					obj = idList[i];
-					aaa = obj.userID+obj.userName;
-					if(aaa.indexOf(str)!=-1) tem.push(obj);
-				}
-				cb(tem);
-			},    
+    },   
   },
   // mounted() {
   //   this.restaurants = this.loadAll();
@@ -463,6 +507,7 @@ var idList = [];
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
 .signal{margin: 22px;}
+.txt1{margin-left: 30px;font-size: 13px; color: #666666;}
 </style>
 
 
