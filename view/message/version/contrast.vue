@@ -75,8 +75,8 @@ import lang      from '@/language/lang.js';
 			cmdID: '600064', type: info.config,
 			pageSize: size||_this.size,
 			currentPage: num||_currentPage,
-			version1: isInput1 ? info.idName1 : _this.ver1,
-			version2: isInput2 ? info.idName2 : _this.ver2
+			version1: isInput1 ? info.ver1 : _this.idName1,
+			version2: isInput2 ? info.ver2 : _this.idName2
 		};
 		utils.post('mx/version/compare', param, function(data){
 			console.log('版本对比：', data);
@@ -93,8 +93,7 @@ import lang      from '@/language/lang.js';
 			cmdID: "600062",
 			type: _this.info.config,
 			pageSize: 200,
-			currentPage: 1,
-			type: 1
+			currentPage: 1
 		};
 		utils.post(param, function(data){
 			console.log('自动输入版本：',data);
