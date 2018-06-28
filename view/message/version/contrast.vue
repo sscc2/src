@@ -12,19 +12,17 @@
 			</div>
 			<div class="ver">
 				<label class="txt">{{pageTxt.label[2]}}</label>
-				<el-autocomplete id='9' @input='autoInput1' class="elInput" v-model="idName1" :fetch-suggestions="fetch" 
+				<el-autocomplete @input='autoInput1' class="elInput" v-model="info.ver1" :fetch-suggestions="fetch" 
 					:placeholder="pageTxt.label[3]" :trigger-on-focus="false" @select="idSelect1">
 					<div slot-scope="{item}">
-						<span class="name">{{item.userID}}</span>
-						<span class="addr">({{item.userName}})</span>
+						<span>{{item.version}}</span>
 					</div>
 				</el-autocomplete>
 				<label class="txt">{{pageTxt.label[4]}}</label>
-				<el-autocomplete @input='autoInput2' class="elInput" v-model="idName2" :fetch-suggestions="fetch" 
+				<el-autocomplete @input='autoInput2' class="elInput" v-model="info.ver2" :fetch-suggestions="fetch" 
 					:placeholder="pageTxt.label[5]" :trigger-on-focus="false" @select="idSelect2">
 					<div slot-scope="{item}">
-						<span class="name">{{item.userID}}</span>
-						<span class="addr">({{item.userName}})</span>
+						<span class="name">{{item.version}}</span>
 					</div>
 				</el-autocomplete>
 				<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[6]}}</el-button>
@@ -75,11 +73,13 @@ import lang      from '@/language/lang.js';
 			cmdID: '600064', type: info.config,
 			pageSize: size||_this.size,
 			currentPage: num||_currentPage,
-			version1: isInput1 ? info.ver1 : _this.idName1,
-			version2: isInput2 ? info.ver2 : _this.idName2
+			version1: info.ver1,
+			version2: info.ver2
 		};
+//		param.version1 = isInput1 ? _this.idName1 : info.ver1
+//		param.version2 = isInput2 ? _this.idName2 : info.ver2
 		utils.post('mx/version/compare', param, function(data){
-			console.log('版本对比：', data);
+//			console.log('版本对比：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.totalSize)||_this.data.length;
@@ -87,7 +87,6 @@ import lang      from '@/language/lang.js';
 	}
 	
 	function autoInput(str, cb){
-		if(!str) return;
 		var param = {
 			url: 'mx/version/queryCompare',
 			cmdID: "600062",
@@ -102,12 +101,12 @@ import lang      from '@/language/lang.js';
 			for (i = 0; i < data.lists.length; i++) {
 				obj = data.lists[i];
 				obj.key = i;
-				obj.label = obj.userID+obj.userName;
+				obj.label = obj.version;
 			}
-			filt(data.lists, cb);
+			filt(str, data.lists, cb);
 		});
 	}
-	function filt(data, cb){
+	function filt(str, data, cb){
 		var i,len = data.length,tem=[];
 		for (i = 0; i < len; i++) {
 			if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
@@ -127,16 +126,14 @@ import lang      from '@/language/lang.js';
 			},
 			idSelect1(item){
 				isInput1 = false;
-				this.info.ver1 = item.userID;
-				this.idName1 = item.userID+'('+item.userName+')';
+				this.info.ver1 = item.version;
 			},
 			autoInput1(){
 				isInput1 = true;
 			},
 			idSelect2(item){
 				isInput2 = false;
-				this.info.ver2 = item.userID;
-				this.idName1 = item.userID+'('+item.userName+')';
+				this.info.ver2 = item.version;
 			},
 			autoInput2(){
 				isInput2 = true;
@@ -163,7 +160,7 @@ import lang      from '@/language/lang.js';
 			_this = this;
 			isInput1 = isInput2 = false;
 			this.info.config = '3';
-			search(_currentPage = 1);
+			_currentPage = 1;
 		}
 	}
 </script>

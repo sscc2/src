@@ -171,13 +171,13 @@ import observer    from '@/libs/observer.js';
 				var row = this.selects;
 				if(isError(row)) return;
 				delTheme.row = row[0];
-				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:2});
+				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
 			},
 			del(ind, row){
 //				console.log(ind, row);
 				delTheme.index = ind;
 				delTheme.row = row;
-				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:2});
+				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
 			},
 			detailTheme(){
 				var row = this.selects;

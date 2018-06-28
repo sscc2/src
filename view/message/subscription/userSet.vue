@@ -7,8 +7,8 @@
 			<el-autocomplete @input='autoInput' class="elInput" v-model="idName" :fetch-suggestions="fetch" 
 				:trigger-on-focus="false" @select="idSelect">
 				<div slot-scope="{item}">
-					<span class="name">{{item.userID}}</span>
-				    <span class="addr">({{item.userName}})</span>
+					<span>{{item.userID}}</span>
+				    <span>({{item.userName}})</span>
 				</div>
 			</el-autocomplete>
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
