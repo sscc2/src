@@ -204,7 +204,7 @@ import lang      from '@/language/lang.js';
 				if( isSelectUser() ){
 					utils.hints({
 						txt: pageTxt.tips.nextNow,
-						yes: function(){this.active = 'second';}
+						yes: function(){_this.active = 'second';}
 					});
 				} else {
 					var info = this.info;
