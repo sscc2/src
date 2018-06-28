@@ -16,7 +16,7 @@
 			<label class="txt">{{pageTxt.label[3]}}</label>
 			<el-input class='elInput' placeholder="" v-model="info.topicName"></el-input>
 			<label class="txt">{{pageTxt.label[4]}}</label>
-			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd HH:mm:ss" :range-separator="pageTxt.label[6]" 
+			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd" :range-separator="pageTxt.label[6]" 
 				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
 			</el-date-picker>
 			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[8]}}</button>
@@ -78,9 +78,7 @@
 
 <script>
 import utils       from '@/libs/utils.js';
-import globalVar   from '@/libs/globalVar.js';
 import lang        from '@/language/lang.js';
-import observer    from '@/libs/observer.js';
 //import AddTheme    from '@/view/message/subscription/theme/addTheme.vue';
 //import EditTheme   from '@/view/message/subscription/theme/editTheme.vue';
 //import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
@@ -95,27 +93,29 @@ import observer    from '@/libs/observer.js';
 			pubUserID: '', topicName: '',
 			beginDate: '', endDate: '', sortType: '0'
 		},
-		picker: null,
-		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}*/],
+		picker: [],
+		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
 		row: '',
 		selects: [],
 		size: 20,
 		max: 0
 	};
 	
-//	observer.addBinding('messUpload', function(master, param){
-//		if(master != 'messUpload') return;
-//		data.obj = param;
-//	});
-	function delTheme(){
+	function delTheme(sub){
 		var row = delTheme.row,
 		param = {
-			url: 'mx/pubTopic/delete',
-			cmdID: '600046',
 			operator: 'admin',
 			pubUserID: row.pubUserID,
 			topicName: row.topicName
 		};
+		if(sub == 'now'){
+			param.url = 'mx/pubTopic/deleteImmediately';
+			param.cmdID = '600049';
+			param.reviewer = 'admin2';
+		} else {
+			param.url = 'mx/pubTopic/delete';
+			param.cmdID = '600046';
+		}
 		utils.post(param, function(data){
 			console.log('删除主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
@@ -123,6 +123,9 @@ import observer    from '@/libs/observer.js';
 			search();
 		});
 	}
+	
+	function delSend(){delTheme('send');}
+	function delNow(){delTheme('now');}
 	
 	function autoInput(str, cb){
 		if(!str) return;
@@ -171,13 +174,19 @@ import observer    from '@/libs/observer.js';
 				var row = this.selects;
 				if(isError(row)) return;
 				delTheme.row = row[0];
-				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
+				utils.hints({
+					txt:pageTxt.tips.del, btn:3,
+					yes:delSend, now:delNow,
+				});
 			},
 			del(ind, row){
 //				console.log(ind, row);
 				delTheme.index = ind;
 				delTheme.row = row;
-				utils.hints({txt:pageTxt.tips.del, yes:delTheme, btn:3});
+				utils.hints({
+					txt:pageTxt.tips.del, btn:3,
+					yes:delSend, now:delNow,
+				});
 			},
 			detailTheme(){
 				var row = this.selects;
@@ -249,6 +258,7 @@ import observer    from '@/libs/observer.js';
 			this.selects = [];
 			this.idName = this.info.pubUserID = this.info.topicName = '';
 			this.size = 20;
+			getDay(7);
 			search();
 		},
 //		components: {AddTheme, EditTheme, DetailTheme}
@@ -257,32 +267,39 @@ import observer    from '@/libs/observer.js';
 	function search(num, size){
 		var picker = _this.picker, info = _this.info;
 		var userID = isInput ? _this.idName : info.pubUserID;
-		if(!picker){
-			picker = _this.picker = today();
-		}
+		
 		info.cmdID = '600042';
-		info.beginDate = picker[0];
-		info.endDate = picker[1].split(' ',1)[0];
-		info.endDate += ' 23:59:59';
+		info.beginDate = picker[0] + ' 00:00:00';
+		info.endDate = picker[1] + ' 23:59:59';
 		info.pubUserID = userID;
 		info.currentPage = num||_currentPage;
 		info.pageSize = size||_this.size;
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			if(_currentPage>data.totalPage){
+				return search(_currentPage=data.totalPage);
+			}
 			_this.data = data.lists;
 			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});
 	}
 	
-	function today(){
-		var day = new Date(), str = '', t;
+	function getDay(num){
+		var begin, end, time = 24 * 3600 * 1000;
+		end = getTime(0);
+		time *= num;
+		begin = getTime(time);
+		_this.picker = [begin, end];
+	}
+	function getTime(t){
+		var day = new Date(Date.now()-t), str = '', t;
 		str += day.getFullYear() + '-';
 		t = day.getMonth() + 1;
 		str += (t<10 ? '0'+t : t) + '-';
-//		str += day.getDate();
-//		return [str+' 00:00:00',str+' 23:59:59'];
-		return [str+'01 00:00:00',str+'28 23:59:59'];
+		t = day.getDate();
+		str += (t<10 ? '0'+t : t);
+		return str;
 	}
 	
 	function isError(arr){

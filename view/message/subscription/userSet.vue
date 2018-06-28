@@ -52,7 +52,6 @@
 
 <script>
 import utils     from '@/libs/utils.js';
-import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
 
 

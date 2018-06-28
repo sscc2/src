@@ -21,14 +21,14 @@
 							<span class="txt1">{{info.pubTime}}</span>
 						</div>
 					</li><li>
-						<label class="txt">{{pageTxt.label[5]}}</label>
+						<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[5]}}</label>
 						<div class="rightBox">
-							<el-input placeholder="" v-model="info.topicDescr" clearable></el-input>
+							<el-input :placeholder="pageTxt.must" v-model="info.topicDescr" clearable></el-input>
 						</div>
 					</li><li>
-						<label class="txt">{{pageTxt.label[6]}}</label>
+						<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[6]}}</label>
 						<div class="rightBox">
-							<el-input placeholder="" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+							<el-input :placeholder="pageTxt.must" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
 						</div>
 					</li><li>
 						<label class="txt">{{pageTxt.label[7]}}</label>
@@ -48,6 +48,7 @@
 						<label class="txt">&nbsp;</label>
 						<div class="rightBox">
 							<p class="jg"></p>
+							<button class="blueBtn" @click="nextNow">{{pageTxt.label[14]}}</button>
 							<button class="blueBtn" @click="next">{{pageTxt.label[10]}}</button>
 							<button class="defBtn" @click="back">{{pageTxt.label[11]}}</button>
 							<p class="jg"></p>
@@ -73,7 +74,7 @@
 						<label class="txt">{{pageTxt.label[13]}}</label>
 						<div class="rightBox box">
 							<div class="table">
-								<h3 class="h3">{{pageTxt.label[8]}}</h3>
+								<h3 class="h3">{{pageTxt.label[15]}}</h3>
 								<el-table highlight-current-row :data="info.canSubsUserList" tooltip-effect="dark">
 									<el-table-column width="40">
 										<div slot-scope="scope" class="_zero">
@@ -85,7 +86,7 @@
 								</el-table>
 							</div>
 							<div class="table">
-								<h3 class="h3">{{pageTxt.label[9]}}</h3>
+								<h3 class="h3">{{pageTxt.label[16]}}</h3>
 								<el-table ref="delTable" id='appid' highlight-current-row :data="info.subsUserList" tooltip-effect="dark">
 									<el-table-column width="55">
 										<div slot-scope="scope" class="_zero">
@@ -106,7 +107,7 @@
 						<label class="txt">&nbsp;</label>
 						<div class="rightBox">
 							<p class="jg"></p>
-							<button class="blueBtn" @click="now">{{pageTxt.label[14]}}</button>
+							<button class="blueBtn" @click="nowAll">{{pageTxt.label[14]}}</button>
 							<button class="blueBtn" @click="submit">{{pageTxt.label[10]}}</button>
 							<button class="defBtn" @click="back">{{pageTxt.label[11]}}</button>
 							<p class="jg"></p>
@@ -123,7 +124,6 @@ import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
-import observer  from '@/libs/observer.js';
 
 
 	var pageTxt, slotTitle, all = false, _this,
@@ -154,9 +154,7 @@ import observer  from '@/libs/observer.js';
 			return data;
 		},
 		methods: {
-			tabsCK(){
-				
-			},
+			tabsCK(){},
 			handleChange(remain, direction, moved){
 //				console.log(remain);
 				var list = this.list, len = remain.length,arr=[];
@@ -179,10 +177,9 @@ import observer  from '@/libs/observer.js';
 				}
 				this.info.subsUserList = has;
 			},
-			back(){
-				utils.goto('/message/release');
-			},
+			back(){ utils.goto('/message/release'); },
 			next(){
+				if(isNull()) return;
 				if( isSelectUser() ){
 					this.active = 'second';
 				} else {
@@ -190,9 +187,35 @@ import observer  from '@/libs/observer.js';
 					info.cmdID = '600051';
 					info.operator = 'admin';
 					utils.hints({
-						txt: '是否要提交!',
+						txt: pageTxt.tips.send,
 						yes: function(){
 							utils.post('mx/pubTopic/modifyTopic', info, function(data){
+								console.log('修改主题1：',data);
+								if(data.errcode < 0) return utils.weakTips(data.errinfo);
+								utils.weakTips(data.errinfo);
+								utils.goto('/message/release');
+							});
+						}
+					});
+				}
+			},
+			nextNow(){
+				if(isNull()) return;
+				if( isSelectUser() ){
+					utils.hints({
+						txt: pageTxt.tips.nextNow,
+						yes: function(){this.active = 'second';}
+					});
+				} else {
+					var info = this.info;
+					info.url = 'mx/pubTopic/modifyTopicImmediately';
+					info.cmdID = '600055';
+					info.operator = 'admin';
+					info.reviewer = 'admin2';
+					utils.hints({
+						txt: pageTxt.tips.now,
+						yes: function(){
+							utils.post(info, function(data){
 								console.log('修改主题1：',data);
 								if(data.errcode < 0) return utils.weakTips(data.errinfo);
 								utils.weakTips(data.errinfo);
@@ -215,55 +238,21 @@ import observer  from '@/libs/observer.js';
 			delAppid(row, index){
 				var sub = this.info.subsUserList;
 				sub.splice(index, 1);
-				
-				
-//				var sub = this.info.subsUserList, id = row.userID;
-//				for (var i = 0; i < sub.length; i++) {
-//					if(sub[i].userID==id) sub.splice(i,1);
-//					break;
-//				}
-//				_this.$refs.delTable.setCurrentRow(undefined);
 			},
 			inck(e){
 //				console.log(e)
 			},
-			now(){
-				utils.weakTips('开发中...');
-			},
-			submit(){
-				var info = this.info;
-				info.cmdID = '600050';
-				info.operator = 'admin';
-				var sub = info.subsUserList, flag = true;
-				kit('.editTheme #appid .appInput').each(function(el, i){
-					if(el.value==''){
-						return flag = false;
-					}
-					sub[i].userAppid = el.value;
-				});
-				if(!flag){
-					utils.weakTips('AppId 不能为空！');
-					return;
-				}
-				utils.hints({
-					txt: '是否要提交!',
-					yes: function(){
-						utils.post('mx/pubTopic/modifyAll', info, function(data){
-							console.log('修改主题2：',data);
-							if(data.errcode < 0) return utils.weakTips(data.errinfo);
-							utils.weakTips(data.errinfo);
-							utils.goto('/message/release');
-						});
-					}
-				});
-			},
+			nowAll(){ submitAll('now'); },
+			submit(){ submitAll('send'); },
 		},
 		mounted(){
 			_this = this;
 			this.active = 'first';
 			this.keys = [];
-			this.info.canSubsUserList = [];
-			this.info.subsUserList = [];
+			var info = this.info;
+			for (var k in info) info[k] = '';
+			info.canSubsUserList = [];
+			info.subsUserList = [];
 			getDetail();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
@@ -278,7 +267,43 @@ import observer  from '@/libs/observer.js';
 		},
 		components: {}
 	};
-	
+	function submitAll(subm){
+		if(isNull()) return;
+		var info = _this.info;
+		var sub = info.subsUserList, flag = true;
+		kit('.editTheme #appid .appInput').each(function(el, i){
+			if(el.value==''){
+				return flag = false;
+			}
+			sub[i].userAppid = el.value;
+		});
+		if(!flag){
+			utils.weakTips(pageTxt.tips.appid);
+			return;
+		}
+		var opt = {};
+		if(subm == 'send'){
+			info.url = 'mx/pubTopic/modifyAll';
+			info.cmdID = '600050';
+			info.operator = 'admin';
+			opt.txt = pageTxt.tips.send;
+		} else {
+			info.url = 'mx/pubTopic/modifyAllImmediately';
+			info.cmdID = '600054';
+			info.operator = 'admin';
+			info.reviewer = 'admin2';
+			opt.txt = pageTxt.tips.now;
+		}
+		opt.yes = function(){
+			utils.post(info, function(data){
+				console.log('修改主题2：',data);
+				if(data.errcode < 0) return utils.weakTips(data.errinfo);
+				utils.weakTips(data.errinfo);
+				utils.goto('/message/release');
+			});
+		}
+		utils.hints(opt);
+	}
 	function isSelectUser(){//true为跳转
 		var i, len = _cans.length;
 		for (i = 0; i < len; i++) {
@@ -293,6 +318,19 @@ import observer  from '@/libs/observer.js';
 			if(sel[i].userID == obj) break;
 		}
 		return (i==len);
+	}
+	function isNull(){
+		var must = ['topicDescr', 'topicInfo'],
+			tips = pageTxt.tips;
+		var i, info = _this.info;
+		for (i = 0; i < must.length; i++) {
+			var str = must[i];
+			if(!info[str]){
+				utils.weakTips(tips[str]);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	function getAllUser(){
@@ -383,6 +421,7 @@ import observer  from '@/libs/observer.js';
 	.list li{margin-bottom: 10px;}
 	.txt,.txt1{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
 	.txt1{text-align: left;width: auto;}
+	.red{color: #F00;line-height: 1;vertical-align: text-bottom;}
 	.rightBox{vertical-align: top;display: inline-block;}
 	.rightBox .el-input{width: 255px;}
 	.rightBox .el-textarea{width: 835px;}

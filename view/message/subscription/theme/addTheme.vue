@@ -5,14 +5,14 @@
 			<li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[1]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.topicName" ></el-input>
+					<el-input :placeholder="pageTxt.must" v-model="info.topicName" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
 					<!--<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>-->
 					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" 
-						:fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false">
+						:fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false" :placeholder="pageTxt.must">
 						<div slot-scope="{item}">
 							<span class="name">{{item.userID}}</span>
 						    <span class="addr">({{item.userName}})</span>
@@ -29,17 +29,17 @@
 			<li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[4]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" v-model="info.topicDescr" ></el-input>
+					<el-input :placeholder="pageTxt.must" v-model="info.topicDescr" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[5]}}</label>
 				<div class="rightBox">
-					<el-input placeholder="" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+					<el-input :placeholder="pageTxt.must" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
 				</div>
 			</li><li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[6]}}</label>
 				<div class="rightBox">
-					<el-input  type="number" placeholder="" v-model="info.effectiveDays" ></el-input>
+					<el-input @input='number($event)' :placeholder="pageTxt.must" v-model="info.effectiveDays" ></el-input>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[7]}}</label>
@@ -67,8 +67,9 @@
 				<label class="txt">&nbsp;</label>
 				<div class="rightBox">
 					<p class="jg"></p>
-					<button class="blueBtn" @click="submit">{{pageTxt.label[11]}}</button>
-					<button class="defBtn" @click="back">{{pageTxt.label[12]}}</button>
+					<button class="blueBtn" @click="now">{{pageTxt.label[11]}}</button>
+					<button class="blueBtn" @click="send">{{pageTxt.label[12]}}</button>
+					<button class="defBtn" @click="back">{{pageTxt.label[13]}}</button>
 					<p class="jg"></p>
 				</div>
 			</li>
@@ -90,8 +91,6 @@
 import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
 import lang      from '@/language/lang.js';
-import globalVar from '@/libs/globalVar.js';
-import observer  from '@/libs/observer.js';
 
 
 	var pageTxt, _this, slotTitle, autoTime, isInput=false;
@@ -112,7 +111,8 @@ import observer  from '@/libs/observer.js';
 		idName: '',
 		info: {
 			operator:'admin', topicName:'主题名称', pubUserID:'发布者ID', pubUserName:'发布者名称',
-			topicDescr:'主题描述',topicInfo:'主题内容', effectiveDays: '7', canSubsUserList:[]
+			topicDescr:'主题描述',topicInfo:'主题内容', effectiveDays: '7', canSubsUserList:[],
+			reviewer: ''
 		},
 		list: list,
 		keys: [],
@@ -120,6 +120,7 @@ import observer  from '@/libs/observer.js';
 		allRight: []
 	};
 	var submitList = [];
+	
 	
 	function autoInput(str, cb){
 		if(!str) return;
@@ -176,37 +177,14 @@ import observer  from '@/libs/observer.js';
 				}
 			},
 			rightCheck(arr, i){},
-			submit(e){
-				var must = ['topicName', 'topicDescr', 'topicInfo', 'effectiveDays'],
-					tips = pageTxt.tips;
-				var i, ind, tem = [], info = this.info;
-				if(!this.idName) return utils.weakTips(tips.pubUserID);
-				for (i = 0; i < must.length; i++) {
-					var str = must[i];
-					if(!info[str]) return utils.weakTips(tips[str]);
-				}
-				//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
-				for (i = 0; i < submitList.length; i++) {
-					ind = submitList[i];
-					tem.push(this.list[ind]);
-				}
-				utils.hints({
-					txt:'是否要提交！',
-					yes: function(){
-						info.canSubsUserList = tem;
-						info.cmdID = '600045';
-						utils.post('mx/pubTopic/add', info, function(data){
-							console.log('增加主题：',data);
-							if(data.errcode < 0) return utils.weakTips(data.errinfo);
-							utils.weakTips(data.errinfo);
-							utils.goto('/message/release');
-						});
-					}
-				});
-				
-			},
-			back(){
-				utils.goto('/message/release');
+			send(e){ submit('send'); },
+			now(){ submit('now'); },
+			back(){ utils.goto('/message/release'); },
+			number(s){
+				setTimeout(function(){
+					var reg = /[^0123456789]/ig;
+					_this.info.effectiveDays = s.replace(reg,'');
+				}, 0);
 			}
 		},
 		mounted(){
@@ -251,6 +229,52 @@ import observer  from '@/libs/observer.js';
 			_this.keys = [];
 			_this.list = arr;
 		});
+	}
+	
+	function submit(sub){
+		var must = ['topicName', 'topicDescr', 'topicInfo', 'effectiveDays'],
+			tips = pageTxt.tips;
+		var i, ind, tem = [], info = _this.info;
+		if(!_this.idName) return utils.weakTips(tips.pubUserID);
+		for (i = 0; i < must.length; i++) {
+			var str = must[i];
+			if(!info[str]) return utils.weakTips(tips[str]);
+		}
+		//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
+		for (i = 0; i < submitList.length; i++) {
+			ind = submitList[i];
+			tem.push(_this.list[ind]);
+		}
+		info.canSubsUserList = tem;
+		if(sub == 'send'){
+			utils.hints({
+				txt: pageTxt.tips.send,
+				yes: function(){
+					info.cmdID = '600045';
+					info.operator = 'admin';
+					utils.post('mx/pubTopic/add', info, function(data){
+						console.log('增加主题：',data);
+						if(data.errcode < 0) return utils.weakTips(data.errinfo);
+						utils.weakTips(data.errinfo);
+						utils.goto('/message/release');
+					});
+				}
+			});
+		} else {
+			utils.hints({
+				txt: pageTxt.tips.now,
+				yes: function(){
+					info.cmdID = '600047';
+					info.reviewer = 'admin2';
+					utils.post('mx/pubTopic/addImmediately', info, function(data){
+						console.log('立即增加主题：',data);
+						if(data.errcode < 0) return utils.weakTips(data.errinfo);
+						utils.weakTips(data.errinfo);
+						utils.goto('/message/release');
+					});
+				}
+			});
+		}
 	}
 	
 	function addTitle(){

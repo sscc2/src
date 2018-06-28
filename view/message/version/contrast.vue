@@ -48,7 +48,6 @@
 
 <script>
 import utils     from '@/libs/utils.js';
-import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
 
 
@@ -76,8 +75,6 @@ import lang      from '@/language/lang.js';
 			version1: info.ver1,
 			version2: info.ver2
 		};
-//		param.version1 = isInput1 ? _this.idName1 : info.ver1
-//		param.version2 = isInput2 ? _this.idName2 : info.ver2
 		utils.post('mx/version/compare', param, function(data){
 //			console.log('版本对比：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
@@ -97,8 +94,8 @@ import lang      from '@/language/lang.js';
 		utils.post(param, function(data){
 			console.log('自动输入版本：',data);
 			if(data.errcode < 0) return console.log(data.errinfo);
-			var obj, i;
-			for (i = 0; i < data.lists.length; i++) {
+			var obj, i, len = data.lists.length;
+			for (i = 0; i < len; i++) {
 				obj = data.lists[i];
 				obj.key = i;
 				obj.label = obj.version;

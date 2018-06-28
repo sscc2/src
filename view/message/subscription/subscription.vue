@@ -55,9 +55,7 @@
 
 <script>
 import utils       from '@/libs/utils.js';
-import globalVar   from '@/libs/globalVar.js';
 import lang        from '@/language/lang.js';
-import observer    from '@/libs/observer.js';
 //import DetailTheme from '@/view/message/subscription/theme/detailTheme.vue';
 
 
@@ -77,13 +75,6 @@ import observer    from '@/libs/observer.js';
 		size: 20,
 		max: 0
 	};
-//	for (var i = 0; i < 30; i++) {
-//		data.data.push({userId:'49821',userName:'ABC',reNum:'5',subNum:'5',time:'2020'});
-//	}
-//	observer.addBinding('messUpload', function(master, param){
-//		if(master != 'messUpload') return;
-//		data.obj = param;
-//	});
 
 	function autoInput(str, cb){
 		if(!str) return;
