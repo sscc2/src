@@ -405,6 +405,7 @@ import lang      from '@/language/lang.js';
 			if(k==len2){
 				arr.push(can[i].userID);
 				len2 = arr.length;
+				key.push(k);
 			}
 		}
 		_this.keys = key;
