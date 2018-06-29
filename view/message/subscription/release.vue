@@ -117,7 +117,7 @@ import lang        from '@/language/lang.js';
 			param.cmdID = '600046';
 		}
 		utils.post(param, function(data){
-			console.log('删除主题：',data);
+//			console.log('删除主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			utils.weakTips(data.errinfo);
 			search();

@@ -89,7 +89,7 @@ import lang      from '@/language/lang.js';
 		param.beginDate = _this.picker[0] + ' 00:00:00';
 		param.endDate = _this.picker[1] + ' 23:59:59';
 		utils.post('mx/version/queryLists', param, function(data){
-			console.log('版本信息列表：', data);
+//			console.log('版本信息列表：', data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			_this.data = verType(data.lists);
 			_this.max = parseInt(data.totalSize)||_this.data.length;
@@ -131,7 +131,7 @@ import lang      from '@/language/lang.js';
 				search();
 			},
 			roolback(row){
-				console.log(row)
+//				console.log(row)
 				utils.hints({
 					txt: pageTxt.tips.roolback,
 					yes: function(){
@@ -142,7 +142,7 @@ import lang      from '@/language/lang.js';
 							version: row.version
 						};
 						utils.post(param, function(data){
-							console.log('版本回退：', data);
+//							console.log('版本回退：', data);
 							utils.weakTips(data.errinfo);
 							if(data.errcode >= 0) search(_currentPage = 1);
 						});

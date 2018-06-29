@@ -92,7 +92,7 @@ import lang      from '@/language/lang.js';
 			currentPage: 1
 		};
 		utils.post(param, function(data){
-			console.log('自动输入版本：',data);
+//			console.log('自动输入版本：',data);
 			if(data.errcode < 0) return console.log(data.errinfo);
 			var obj, i, len = data.lists.length;
 			for (i = 0; i < len; i++) {
@@ -166,10 +166,9 @@ import lang      from '@/language/lang.js';
 	};
 	
 	function hasVer(str, arr){
-		var i, len = arr.length, ver;
+		var i, len = arr.length;
 		for (i = 0; i < len; i++) {
-			ver = arr[i].version;
-			if(ver.indexOf(str)!=-1) return true;
+			if(arr[i].version == str) return true;
 		}
 		return false;
 	}
