@@ -13,14 +13,14 @@
 			<div class="ver">
 				<label class="txt">{{pageTxt.label[2]}}</label>
 				<el-autocomplete @input='autoInput1' class="elInput" v-model="info.ver1" :fetch-suggestions="fetch" 
-					:placeholder="pageTxt.label[3]" :trigger-on-focus="false" @select="idSelect1">
+					:placeholder="pageTxt.label[3]" :trigger-on-focus="true" @select="idSelect1">
 					<div slot-scope="{item}">
 						<span>{{item.version}}</span>
 					</div>
 				</el-autocomplete>
 				<label class="txt">{{pageTxt.label[4]}}</label>
 				<el-autocomplete @input='autoInput2' class="elInput" v-model="info.ver2" :fetch-suggestions="fetch" 
-					:placeholder="pageTxt.label[5]" :trigger-on-focus="false" @select="idSelect2">
+					:placeholder="pageTxt.label[5]" :trigger-on-focus="true" @select="idSelect2">
 					<div slot-scope="{item}">
 						<span class="name">{{item.version}}</span>
 					</div>
@@ -168,7 +168,7 @@ import lang      from '@/language/lang.js';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.select{width: 180px;}
-	.autocomplete{width: 200px;}
+	.elInput{width: 240px;line-height: 1;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
 	.el-input{width: 180px;line-height: 30px;}
 	.ver{margin: 10px 0;}
