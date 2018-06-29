@@ -397,7 +397,14 @@ import lang      from '@/language/lang.js';
 		for (i = 0; i < len1; i++) {
 			var id1 = can[i].userID;
 			for (k = 0; k < len2; k++) {
-				if(id1 == arr[k].userID) key.push(k);
+				if(id1 == arr[k].userID){
+					key.push(k);
+					break;
+				}
+			}
+			if(k==len2){
+				arr.push(can[i].userID);
+				len2 = arr.length;
 			}
 		}
 		_this.keys = key;
