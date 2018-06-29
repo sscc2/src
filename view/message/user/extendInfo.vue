@@ -56,16 +56,14 @@ var pageTxt_cn = {
     "SSCC客户经理："
   ],
   lable: [
-    '只能输入数字"、" +" ";"',
-    '只能输入数字"、" +" ";"',
+    '只能输入数字"-" ";"',
+    '只能输入数字"-" ";"',
     '只能输入数字和";"',
-    '只能输入数字"、" +" ";"',
-    '只能输入数字"、" +" ";"',
+    '只能输入数字"-" ";"',
+    '只能输入数字"-" ";"',
     "只能输入英文字符"
   ]
 };
-
-var pageTxt = pageTxt_cn;
 
 var def = [
     "userAlarmSmsNum",
@@ -77,6 +75,8 @@ var def = [
     "ssccManager"
   ],
   inputValue = {};
+
+var pageTxt = pageTxt_cn;
 
 for (var i = 0; i < def.length; i++) {
   inputValue[def[i]] = "";
@@ -125,18 +125,18 @@ export default {
     utils.post(
       "mx/userinfoExt/query",
       {
-        cmdID: 600013,
+        cmdID: "600013",
         userID: _this.$store.state.transferEditID,
         type: 0
       },
       function(response) {
-          _this.inputValue.userAlarmSmsNum=response.lists[0].userAlarmSmsNum,
-          _this.inputValue.userTelNum=response.lists[0].userTelNum,
-          _this.inputValue.userMobileNum=response.lists[0].userMobileNum,
-          _this.inputValue.operationPhoneNum=response.lists[0].operationPhoneNum,
-          _this.inputValue.operationFax=response.lists[0].operationFax,
-          _this.inputValue.email=response.lists[0].email,
-          _this.inputValue.ssccManager=response.lists[0].ssccManager      
+          _this.inputValue.userAlarmSmsNum=response.lists[0].userAlarmSmsNum?response.lists[0].userAlarmSmsNum:"",
+          _this.inputValue.userTelNum=response.lists[0].userTelNum?response.lists[0].userTelNum:"",
+          _this.inputValue.userMobileNum=response.lists[0].userMobileNum?response.lists[0].userMobileNum:"",
+          _this.inputValue.operationPhoneNum=response.lists[0].operationPhoneNum?response.lists[0].operationPhoneNum:"",
+          _this.inputValue.operationFax=response.lists[0].operationFax?response.lists[0].operationFax:"",
+          _this.inputValue.email=response.lists[0].email?response.lists[0].email:"",
+          _this.inputValue.ssccManager=response.lists[0].ssccManager?response.lists[0].ssccManager:""      
       }
     );
   }
@@ -144,58 +144,14 @@ export default {
 </script>
 
 <style  scoped="scoped">
-.extendInfo {
-  overflow: hidden;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #666666;
-}
-.left_list {
-  float: left;
-  width: 145px;
-  margin-left: 5px;
-}
-.left_list li {
-  line-height: 30px;
-  text-align: right;
-  margin-top: 10px;
-}
-.center_list {
-  float: left;
-  margin-left: 10px;
-}
-.center_list li {
-  margin-top: 10px;
-}
-.right_list {
-  font-size: 14px;
-  float: left;
-  margin-left: 10px;
-}
-.right_list li {
-  line-height: 30px;
-  text-align: left;
-  margin-left: 5px;
-  margin-top: 10px;
-}
-
-.bottom_btn {
-  margin-left: 160px;
-}
-.el-button:nth-child(1) {
-  width: 90px;
-  height: 30px;
-  background-color: #32ccf9;
-  line-height: 7px;
-  border: 1px solid #32ccf9;
-}
-.el-button:nth-child(2) {
-  margin: 20px;
-  width: 90px;
-  height: 30px;
-  background-color: #fff;
-  border: 1px solid #32ccf9;
-  color: #32ccf9;
-  line-height: 7px;
-}
+.extendInfo{overflow: hidden; margin-top: 10px; font-size: 14px; color: #666666;}
+.left_list{float: left; width: 145px; margin-left: 5px;}
+.left_list li{line-height: 30px; text-align: right; margin-top: 10px;}
+.center_list{float: left; margin-left: 10px;}
+.center_list li{margin-top: 10px;}
+.right_list{color: #999; font-size: 12px; float: left; margin-left: 10px;}
+.right_list li{line-height: 30px; text-align: left; margin-left: 5px; margin-top: 10px;}
+.bottom_btn{margin-left: 160px;}
+.el-button:nth-child(1){width: 90px; height: 30px; background-color: #32ccf9; line-height: 7px; border: 1px solid #32ccf9;}
+.el-button:nth-child(2){margin: 20px; width: 90px; height: 30px; background-color: #fff; border: 1px solid #32ccf9; color: #32ccf9; line-height: 7px;}
 </style>

@@ -5,7 +5,7 @@
 				<img  class="header_img" src="@/img/ico.png">
 				<span class="header_txt1" @click="del($event)">返回</span>
 				<div class="header_line"></div>
-				<span class='header_txt2'>修改用户</span>
+				<span class='header_txt2'>{{$store.state.headerText}}</span>
 		</div>
 
 		<el-tabs type="card" v-model="$store.state.tabv">
@@ -14,13 +14,13 @@
 				<el-row class='info'>
 					<el-col :span="6">			
 						<ul class="left">
-							<li><p>{{pageTxt.infoTxt[2]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[3]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[2]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[3]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[7]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[8]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[8]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[10]}}：</p></li>							
-							<li><p>{{pageTxt.infoTxt[11]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[11]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[12]}}：</p></li>							
 							<li><p>{{pageTxt.infoTxt[13]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[14]}}：</p></li>
@@ -202,6 +202,7 @@ export default {
     return data;
   },
   methods: {
+    //修改
     Edit() {
       var _this = this;
       utils.post(
@@ -226,29 +227,14 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            open6(response.errinfo)
+            utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
           }
         }
       );
     },
-    open6(msg) {
-      this.$confirm(msg, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        center: true
-      })
-        .then(() => {
-          this.$store.state.tabv = "v2";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        })
-        .catch(() => {
-          this.$store.state.tabv = "v1";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        });
-    },
-    
+    // 删除 
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
     },
@@ -325,108 +311,31 @@ function dbNum(num) {
 </script>
 
 <style scoped="scoped">
-.component {
-  color: #606266;
-  min-width: 800px;
-  min-height: 630px;
-}
-.red {
-  color: red;
-}
-.info li {
-  margin-top: 10px;
-  height: 36px;
-}
-.info {
-  white-space: nowrap;
-}
+.component{color: #606266; min-width: 800px; min-height: 630px;}
+.red{color: red;}
+.info li{margin-top: 10px; height: 36px;}
+.info{white-space: nowrap;}
 /* 头部 */
-.header {
-  height: 47px;
-  border-bottom: 1px solid #ccc;
-  overflow: hidden;
-}
-.header_img {
-  float: left;
-  margin-top: 15px;
-  margin-left: 20px;
-}
-.header_txt1 {
-  font-size: 13px;
-  color: #5c759d;
-  float: left;
-  line-height: 47px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-.header_line {
-  border-right: 1px solid #ebeff4;
-  height: 30px;
-  float: left;
-  margin-left: 20px;
-  margin-top: 9px;
-}
-.header_txt2 {
-  font-size: 16px;
-  color: #656a73;
-  line-height: 47px;
-  margin-left: 20px;
-  font-weight: bold;
-}
+.header{height: 47px; border-bottom: 1px solid #ccc; overflow: hidden;}
+.header_img{float: left; margin-top: 15px; margin-left: 20px;}
+.header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 47px; margin-left: 5px; cursor: pointer;}
+.header_line{border-right: 1px solid #ebeff4; height: 30px; float: left; margin-left: 20px; margin-top: 9px;}
+.header_txt2{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 20px; font-weight: bold;}
 /* 选项卡 */
-.el-tabs {
-  padding: 22px;
-  margin: 0 auto;
-}
+.el-tabs{padding: 22px; margin: 0 auto;}
 /* 表单左 */
-.el-col-6 {
-  width: 145px;
-  font-size: 14px;
-  color: #666666;
-}
-.left li {
-  text-align: right;
-  line-height: 40px;
-}
+.el-col-6{width: 145px; font-size: 14px; color: #666666;}
+.left li{text-align: right; line-height: 40px;}
 /* 表单右 */
-.right {
-  margin-left: 15px;
-  line-height: 40px;
-}
-.right input {
-  font-size: 14px;
-  width: 255px;
-  height: 30px;
-  vertical-align: middle;
-  padding: 0 5px;
-  border: 1px solid #d7d8da;
-  text-indent: 7px;
-}
-input:focus {
-  border: 2px solid #32ccf9;
-}
-.el-select {
-  width: 255px;
-}
-.el-textarea {
-  width: 255px;
-}
-.el-input {
-  width: 255px;
-}
-.kbit {
-  font-size: 12px;
-  line-height: 36px;
-  vertical-align: middle;
-  color: #999999;
-  margin-left: 10px;
-}
-.info .txtH {
-  height: 100px;
-}
+.right{margin-left: 15px; line-height: 40px;}
+.right input{font-size: 14px; width: 255px; height: 30px; vertical-align: middle; padding: 0 5px; border: 1px solid #d7d8da; text-indent: 7px;}
+input:focus{border: 2px solid #32ccf9;}
+.el-select{width: 255px;}
+.el-textarea{width: 255px;}
+.el-input{width: 255px;}
+.kbit{font-size: 12px; line-height: 36px; vertical-align: middle; color: #999999; margin-left: 10px;}
+.info .txtH{height: 100px;}
 /* 按钮 */
-.btn {
-  margin-left: 140px;
-  margin-top: 30px;
-}
+.btn{margin-left: 140px; margin-top: 30px;}
+.red{color: red; font-size: 14px;}
 </style>

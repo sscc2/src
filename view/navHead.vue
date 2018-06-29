@@ -5,15 +5,17 @@
         </div>
 
         <div class="messBox">
-			<div class="ico1"><img class="csor" src="../img/cdico.png"/></div> 
-			<div class="ico2"><img class="csor" src="../img/warinico.png" /></div>  
+			<div class="ico1">
+				<!-- <img class="csor" src="../img/cdico.png"/> -->
+			</div> 
+			<div class="ico2"><img  src="../img/warinico.png" /></div>  
 			<div class="ico3"><span class='ioc3_txt'>38</span></div>
 			<span class="warin_txt">警告：2018-03-05 10:31:47 深圳RU：大面积用户掉线。错误代码：SKG9QM2425。</span>
         </div>
 
         <div class="userBox">
 			<div>
-				<div class="ico4"><img class="csor" src="../img/switchico.png"></div> 
+				<div class="ico4"><img src="../img/switchico.png"></div> 
 				<span class="margin_left" @click="swc">{{this.swc_txt}}</span>		
 			</div>
 			
@@ -74,7 +76,7 @@ export default {
 <style scoped="scoped">
 
 	.navHead{width: 100%;height: 50px; background: #3571D5; overflow: hidden; font-size: 12px;color: #FEFFFF}
-	.logoBox{width: 226px;height: 100%; position: relative; float: left}
+	.logoBox{width: 226px;height: 100%; position: relative; float: left;background-color: #2861c1}
 	.logo{width: 168px; height: 37px; position: absolute; margin: auto; top: 0;bottom: 0; left: 0; right: 0;}
 	
 	.userBox *,.messBox *{vertical-align:middle}
@@ -93,5 +95,5 @@ export default {
 	.userBox>div:nth-child(2){display: inline-block; margin-right: 10px;}
 	.userBox>div:nth-child(3){display: inline-block;}
 
-	.margin_left,.ioc3_txt,.csor{cursor:pointer}
+	.csor{cursor:pointer} 
 </style>

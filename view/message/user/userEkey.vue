@@ -1,30 +1,6 @@
 <template>
 <div>
 	<div class="Ekey">
-		<div class="user">
-			<span class="txt">{{pageTxt.Ekey[0]}}：</span>
-			<el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
-  		<el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-			<span v-show='search.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
-			<el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
-
-      <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
-			
-
-      <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" 
-				:trigger-on-focus="false" @select="idSelect">
-				<div slot-scope="{item}">
-					<span class="name">{{item.userID}}</span>
-				    <span class="addr">({{item.userName}})</span>
-				</div>
-			</el-autocomplete>
-
-
-
-
-			<el-button type="primary" plain @click='searchfn'>{{pageTxt.Ekey[4]}}</el-button>
-		</div>
-
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
 			<div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
@@ -41,7 +17,7 @@
 			<el-table-column label="操作" width="110">
 				<div slot-scope="scope" class="_zero">
 					<div  id='Edit'  @click="showEdit(scope.row)"><img src="@/img/altericos.png"> </div>
-					<div @click="showDel(scope.$index,EkeyData.lists)"><img src="@/img/deleticos.png" ></div>
+					<div @click="showDel"><img src="@/img/deleticos.png" ></div>
 				</div>
 			</el-table-column>
 		</el-table>
@@ -50,19 +26,15 @@
 			<ul class="_dialog">
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[2]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
 					</div>
-					<div class="rightBox">
-            <el-select v-model="ainfo.userID" placeholder="请选择">
-              <el-option  v-for="item in EkeyData.lists" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
-            </el-select>
-						
-						<span class="txt red" v-show="err1.id">{{pageTxt.tips.id}}</span>
+					<div class="rightBox">     					
+						<el-input type="text" v-model="ainfo.userID" disabled class='picker'></el-input>
 					</div>
 				</li>
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[3]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
 					</div>
 					<div class="rightBox">
 						<el-input   class='picker' v-model="ainfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
@@ -71,7 +43,7 @@
 				</li>
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[6]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
 					</div>
 					<div class="rightBox">
 						<el-date-picker class='picker' v-model="ainfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
@@ -79,7 +51,7 @@
 				</li>
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[5]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
 					</div>
 					<div class="rightBox">
 						<el-input class='picker' v-model="ainfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
@@ -96,15 +68,15 @@
 			<ul class="_dialog">
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[2]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
 					</div>
 					<div class="rightBox">
-						<el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.dialog[13]"></el-input>
+						<el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.dialog[13]" disabled></el-input>
 					</div>
 				</li>
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[3]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
 					</div>
 					<div class="rightBox">
 						<el-input  class='picker' v-model="binfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
@@ -113,14 +85,14 @@
 				</li>
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[6]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
 					</div><div class="rightBox">
 						<el-date-picker class='picker' v-model="binfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
 					</div>
 				</li>
 				<li>
 					<div class="leftBox">
-						<p class="txt">{{pageTxt.dialog[5]}}</p>
+						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
 					</div>
 					<div class="rightBox">
 						<el-input class='picker' v-model="binfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
@@ -133,9 +105,11 @@
 			</div>
 		</el-dialog>
 
-		<div class="_pagination">
-      <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="EkeyData.totalPage" :page-size="20"></el-pagination>
+		<div class="_pagination" v-show="EkeyData.totalPage>0">
+      <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
+      <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
     </div> 
+
 	</div>
 </div>	
 </template>
@@ -197,19 +171,7 @@ var pageTxt_cn = {
   ]
 };
 
-var pageTxt = pageTxt_cn, autoTime, _currentPage=1, isInput=false;
-
-function autoInput(str, cb){
-		if(!str) return;
-		utils.getUserid(str, function(data){
-//			console.log('用户ID data',data);
-			var i,len = data.length,tem=[];
-			for (i = 0; i < len; i++) {
-				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
-			}
-			cb(tem);
-		});
-	}
+var pageTxt = pageTxt_cn, autoTime, _currentPage=1;
 
 export default {
   data() {
@@ -254,74 +216,63 @@ export default {
       err2: { id: false, Ekey: false, pass: false, start: false, end: false },
       currentPage1: 1,
       pageSize: 20,
-      promptBoxShow1: false,
-      promptBoxShow:false,
-      index:'',
-      rows:'',
+      options:[]
     };
   },
   methods: {
-    fetch(str, cb){
-      clearTimeout(autoTime);
-      autoTime = setTimeout(autoInput, 300, str, cb);
-    },
-    idSelect(item){
-      isInput = false;
-      this.userID = item.userID;
-      this.idName = item.userID+'('+item.userName+')';
-    },
-    autoInput(){
-      isInput = true;
-    },
 
-
-
-    //查询Ekey
-    searchfn() {
-      var _this = this;
-      utils.post(
-        "mx/userEkey/query",
-        {
-          cmdID: 600021,
-          userID: isInput?_this.idName: _this.userID,
-          ekeyName: _this.search.ekeyName,
-          type: _this.search.type,
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage1,
-        },
-        function(response) {
-          _this.EkeyData = response;
-        }
-      );
-    },
-
-       // 创建Ekey
+    // 创建Ekey
     showAdd() {
       this.addEkey=true;
       this.ainfo.userID = this.$store.state.transferEditID;
+      this.ainfo.ekeyName = "";
+      this.ainfo.ekeyValidDate = "";
+      this.ainfo.comment = ""
     },
     submitAdd() {
-
-      var _this = this;
-      _this.addEkey = false;
-      utils.post(
-        "mx/userEkey/add",
-        {
-          cmdID: 600022,
-          operator: "admin",
-          userID: _this.$store.state.transferEditID,
-          ekeyName: _this.ainfo.ekeyName,
-          ekeyValidDate: _this.ainfo.ekeyValidDate,
-          comment: _this.ainfo.comment
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            _this.open6(response.errinfo)
-          } else {
-             utils.weakTips(response.errinfo);             
+      if(this.ainfo.ekeyName==""){
+        utils.weakTips("Ekey名称不能为空"); 
+      }else{
+        if(this.ainfo.ekeyName==""){
+          utils.weakTips("Ekey名称不能为空")
+        }else{
+          if(this.ainfo.ekeyValidDate==""){
+            utils.weakTips("Ekey有效期不能为空")
+          }else{
+            if(this.ainfo.comment==""){
+              utils.weakTips("Ekey描述不能为空")
+            }else{
+              var _this = this;
+              utils.post(
+                "mx/userEkey/add",
+                {
+                  cmdID: 600022,
+                  operator: "admin",
+                  userID: _this.ainfo.userID,
+                  ekeyName: _this.ainfo.ekeyName,
+                  ekeyValidDate: _this.ainfo.ekeyValidDate,
+                  comment: _this.ainfo.comment
+                },
+                function(response) {
+                  if (response.errcode == 0) {
+                    if( _this.$store.state.creatAndEdit){
+                      _this.addEkey = false;
+                      _this.renderDate();
+                      utils.weakTips(response.errinfo);
+                    }else{
+                      _this.renderDate();
+                      _this.addEkey = false;
+                      _this.open6("跳转至通信关系")
+                    }                  
+                  } else {
+                    utils.weakTips(response.errinfo);             
+                  }
+                }
+              );
+            }
           }
         }
-      );
+      }
     },
     open6(msg) {
         this.$confirm(msg, '提示', {
@@ -333,7 +284,7 @@ export default {
           this.$router.replace({ path: "/message/userEdit/mess" });
         }).catch(() => {
           this.$store.state.tabv = "v2";
-          this.$router.replace({ path: "/message/userEdit/mess" });   
+          this.$router.replace({ path: "/message/userEdit/mess" }); 
         });
       }, 
 
@@ -362,10 +313,7 @@ export default {
           },
           function(response) {
             if (response.errcode == 0) {
-              var index = _this.EkeyData.lists.indexOf(_this.selects[0]);
-              if (index > -1) {
-                _this.EkeyData.lists.splice(index, 1);
-              }
+              _this.renderDate();
               utils.weakTips(response.errinfo);            
             } else {
               utils.weakTips(response.errinfo);
@@ -374,37 +322,11 @@ export default {
         );
       },
 
-    open6(msg) {
-        this.$confirm(msg, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          center: true
-        }).then(() => {
-
-        }).catch(() => {
-    
-        });
-      },  
-
     // 修改
     showEdit(row) {
         this.editEkdy = true;   
         this.oldEkeyName=this.row.ekeyName
         var _this = this;
-        // utils.post(
-        //   "mx/userEkey/query",
-        //   {
-        //     cmdID: 600021,
-        //     userID: row.userID,
-        //     ekeyName: row.ekeyName,
-        //     type: 2,
-        //     pageSize:_this.pageSize,
-        //     currentPage:_this.currentPage1,
-        //   },
-        //   function(response) {
-
-        //   }
-        // );
             _this.binfo.userID=row.userID;
             _this.binfo.userName=row.userName;
             _this.binfo.ekeyName=row.ekeyName;
@@ -412,32 +334,38 @@ export default {
             _this.binfo.comment=row.comment;               
     },
     submitEdit() {
-      this.editEkdy = false;
-      var _this = this;
-      utils.post(
-        "mx/userEkey/modify",
-        {
-          cmdID: '600023',
-          operator: "admin",
-          userID: _this.binfo.userID,
-          oldEkeyName:_this.oldEkeyName,
-          ekeyName: _this.binfo.ekeyName,
-          ekeyValidDate: _this.binfo.ekeyValidDate,
-          comment: _this.binfo.comment
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            utils.weakTips(response.errinfo);
-          } else {
-            utils.weakTips(response.errinfo);            
-          }
+      if(binfo.userID == ""){
+        utils.weakTips("用户名不能为空");
+      }else{
+        if(binfo.ekeyName==""){
+          utils.weakTips("Ekey名不能为空");
+        }else{
+          var _this = this;
+          utils.post(
+            "mx/userEkey/modify",
+            {
+              cmdID: '600023',
+              operator: "admin",
+              userID: _this.binfo.userID,
+              oldEkeyName:_this.oldEkeyName,
+              ekeyName: _this.binfo.ekeyName,
+              ekeyValidDate: _this.binfo.ekeyValidDate,
+              comment: _this.binfo.comment
+            },
+            function(response) {
+              if (response.errcode == 0) {
+                _this.renderDate();
+                utils.weakTips(response.errinfo);
+              } else {
+                utils.weakTips(response.errinfo);            
+              }
+            }
+          );
         }
-      );
+      }        
     },
     //删除(row)
-    showDel(index, rows){
-        this.index = index;
-        this.rows = rows;
+    showDel(){
         var _this=this
         utils.hints({
           txt:"是否删除该用户信息",
@@ -452,12 +380,12 @@ export default {
           {
             cmdID: 600024,
             operator: "admin",
-            userID: _this.rows[0].userID,
-            ekeyName: _this.rows[0].ekeyName
+            userID: _this.row.userID,
+            ekeyName: _this.row.ekeyName
           },
           function(response) {
               if (response.errcode == 0) {
-              _this.rows.splice(_this.index, 1);
+              _this.renderDate()
               utils.weakTips(response.errinfo);
             } else {
               utils.weakTips(response.errinfo);
@@ -471,13 +399,13 @@ export default {
     },
 
     currentRow: function(e) {
-      console.log(e)
       this.row=e
     },
-    currentPage: function(e) {
-      console.log(e);
-    },
+
     // 分页
+    currentPage: function(e) {
+      this.currentPage=e
+    },
     handleSizeChange: function(size) {
       this.pageSize = size;
     },
@@ -485,39 +413,79 @@ export default {
       this.currentPage1 = currentPage;
       var _this = this;
       utils.post(
-        "mx/userinfo/queryLists",
+        "mx/userEkey/query",
         {
-          cmdID: "600001",
-          userID: "",
-          userName: "",
+          cmdID: "600021",
+          userID: _this.$store.state.creatAndEdit?"":_this.$store.state.transferEditID,
+          ekeyName: "",
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1,
-          type: "0"
+          type: _this.$store.state.creatAndEdit?2:1,
         },
         function(response) {
-          _this.userData = response;
+          _this.EkeyData = response;
+          if(response.totalPage<_this.currentPage1){
+              utils.post(
+              "mx/userEkey/query",
+              {
+                cmdID: "600021",
+                userID: _this.$store.state.creatAndEdit?"":_this.$store.state.transferEditID,
+                ekeyName: "",
+                type: _this.search.type,
+                pageSize: _this.$store.state.creatAndEdit?2:1,
+                currentPage: response.totalPage,
+              },
+            )
+          }
         }
       );
     },
-    closePromptBox1() {
-      this.promptBoxShow1 = false;
-    },
-    		
-  },
-    //初始化数据
-  created() {
-    this.search.type= 0;
-    this.ainfo.type = 0;
-    // ainfo.ekeyName = "";
-    var _this = this;
+    // 更新数据
+    renderDate(){
       var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
-          cmdID: 600021,
-          userID: _this.ainfo.userID,
-          ekeyName: _this.ainfo.ekeyName,
-          type: _this.ainfo.type,
+          cmdID: "600021",
+          userID: _this.$store.state.transferEditID,
+          ekeyName: _this.search.ekeyName,
+          type: _this.$store.state.creatAndEdit?_this.search.type:_this.search.type,
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage1,
+        },
+        function(response) {
+            if(response.totalPage<_this.currentPage1){
+            utils.post(
+              "mx/userEkey/query",
+              {
+                cmdID: "600021",
+                userID: _this.$store.state.transferEditID,
+                ekeyName: _this.search.ekeyName,
+                type: _this.$store.state.creatAndEdit?_this.search.type:_this.search.type,
+                pageSize: _this.pageSize,
+                currentPage: response.totalPage,
+              },
+              function(response){
+                _this.EkeyData = response;
+              }
+            )
+          }else{
+            _this.EkeyData = response;
+          }
+        }
+      );
+    } 		
+  },
+  //初始化数据
+  created() {
+      var _this = this;
+      utils.post(
+        "mx/userEkey/query",
+        {
+          cmdID: "600021",
+          userID: _this.$store.state.creatAndEdit?"":_this.$store.state.transferEditID,
+          ekeyName: "",
+          type: _this.$store.state.creatAndEdit?2:1,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1,
         },
@@ -525,10 +493,21 @@ export default {
           _this.EkeyData = response;
         }
       );
-    },
-    mounted(){
-	
-		},  
+      utils.post(
+      "mx/userinfo/queryLists",
+      {
+        cmdID: "600001",
+        userID: _this.$store.state.transferEditID,
+        userName: "",
+        pageSize: "210000",
+        currentPage: "1",
+        type: "0"
+      },
+      function(response) {
+        _this.options = response.lists;
+      }
+    );
+    }, 
 }
 </script>
 
@@ -540,8 +519,7 @@ export default {
 .user .el-button{margin-left: 35px; width: 90px; height: 30px; line-height: 0;}
 .user .red{color: #f56c6c;}
 .txt{font-size: 14px; color: #666666; margin-left: 20px;}
-.user > .el-button{margin-left: 35px; width: 90px; height: 30px; background-color: #32ccf9; line-height: 0px; border: 0; color: white;}
-.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 18px;}
+.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 5px;}
 .btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
 .btnBox div:nth-child(1){margin-left: 0;}
 .Ekey .eRadio{margin-right: 30px;}
@@ -555,5 +533,6 @@ export default {
 .promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
+.red{ font-size: 14px; color: red;}
 </style>
  

@@ -34,28 +34,12 @@
 				</el-table-column>
 			</el-table>
 
-			<div class="_pagination">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper, total" :total="userData.totalPage" :page-size="20"></el-pagination>
+			<div class="_pagination" v-show="userData.totalPage>0">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="userData.totalPage" :page-size="20"></el-pagination>
+        <div class="rightTxt">共{{userData.totalSize}}条数据</div>
       </div>  
 			<Password></Password>
 			<Upload></Upload>
-
-      <el-dialog title="提示" :visible.sync="promptBoxShow1" width="600px">
-          <span class="promptBox_content_txt">是否删除此用户信息？</span>
-          <div class="promptBox_btn" >
-            <el-button @click="promptBoxShow1=false">取消</el-button>
-            <el-button type="primary" @click="delAll">确定</el-button>
-          </div>
-      </el-dialog>
-
-      <el-dialog title="提示" :visible.sync="promptBoxShow" width="600px">
-          <span class="promptBox_content_txt">是否删除此用户信息？</span>
-          <div class="promptBox_btn" >
-            <el-button @click="promptBoxShow=false">取消</el-button>
-            <el-button type="primary" @click="userDel">确定</el-button>
-          </div>
-      </el-dialog> 
-
 		</div>	
   </div>
 </template>
@@ -93,19 +77,10 @@ export default {
     return {
       pageTxt,
       userParam: { id: "", name: "" },
-      userData: {
-        count: 30,
-        lists: [
-          { userID: "A1", userName: "123" }
-        ]
-      },
+      userData: {},
       selects: [],
       currentPage: 1,
       pageSize: 20,
-      promptBoxShow1: false,
-      promptBoxShow: false,
-      index: "",
-      rows: ""
     };
   },
 
@@ -125,11 +100,29 @@ export default {
         },
         function(response) {
           _this.userData = response;
+          if(response.totalPage<_this.currentPage){
+            utils.post(
+              "mx/userinfo/queryLists",
+              {
+                cmdID: "600001",
+                userID: _this.userParam.id,
+                userName: _this.userParam.name,
+                pageSize: _this.pageSize,
+                currentPage: response.totalPage,
+                type: "0"
+              },
+              function(response){
+                _this.userData = response;
+              }
+            )
+          }
         }
       );
     },
     // 增加用户
     createUser: function() {
+      this.$store.state.creatAndEdit = false;
+      this.$store.state.headerText = "创建用户";
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
     // 删除用户
@@ -156,12 +149,8 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            var index = _this.userData.lists.indexOf(_this.selects[0]);
-            if (index > -1) {
-              _this.userData.lists.splice(index, 1);
-            }
+            _this.renderDate()
             utils.weakTips(response.errinfo);
-            // utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errInfo);
           }
@@ -170,17 +159,16 @@ export default {
     },
     // 导入扩展信息
     importExtInfo: function() {
-      // observer.execute("messUpload", true);
     },
     // 修改用户(row)
     userEdit: function(e) {
       this.$store.state.tabv = "v1";
+      this.$store.state.headerText="修改用户"
+      this.$store.state.creatAndEdit= true;
       this.$router.replace({ path: "/message/userEdit/mess" });
     },
     // 删除用户(row)
-    showPromptBox(index, rows) {
-      this.index = index;
-      this.rows = rows;
+    showPromptBox() {
       var _this=this
         utils.hints({
           txt:"是否确定删除该用户记录",
@@ -199,7 +187,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.rows.splice(_this.index, 1);
+            _this.renderDate()
             utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
@@ -217,21 +205,7 @@ export default {
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage = currentPage;
-      var _this = this;
-      utils.post(
-        "mx/userinfo/queryLists",
-        {
-          cmdID: "600001",
-          userID: "",
-          userName: "",
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage,
-          type: "0"
-        },
-        function(response) {
-          _this.userData = response;
-        }
-      );
+      this.renderDate()
     },    
 
     selectionRow(val) {
@@ -240,11 +214,38 @@ export default {
     currentRow: function(e) {
       this.$store.state.transferEditID = e.userID;
     },
-    closePromptBox() {
-      this.promptBoxShow = false;
-    },
-    closePromptBox1() {
-      this.promptBoxShow1 = false;
+    renderDate(){
+      var _this = this;
+      utils.post(
+        "mx/userinfo/queryLists",
+        {
+          cmdID: "600001",
+          userID: _this.userParam.id,
+          userName: _this.userParam.name,
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage,
+          type: 1
+        },
+        function(response) {
+          _this.userData = response;
+          if(response.totalPage<_this.currentPage){
+            utils.post(
+              "mx/userinfo/queryLists",
+              {
+                cmdID: "600001",
+                userID: _this.userParam.id,
+                userName: _this.userParam.name,
+                pageSize: _this.pageSize,
+                currentPage: response.totalPage,
+                type: 1
+              },
+              function(response){
+                _this.userData = response;
+              }
+            )
+          }
+        }
+      );
     }
   },
   //初始化数据

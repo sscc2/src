@@ -13,9 +13,6 @@
 import kit       from '@/libs/kit.js';
 import utils     from '@/libs/utils.js';
 import globalVar from '@/libs/globalVar.js';
-// import observer  from '@/libs/observer.js';
-
-
 
     export default{
         data(){
@@ -23,18 +20,16 @@ import globalVar from '@/libs/globalVar.js';
 
             }
         },
+        
         methods:{
             del(){
                 this.$router.replace({ path: "/message/userEdit/mess" });
-                // observer.execute('messUserEdit',{type:'b'});
-            }
-           
+            }           
         }
     }
 </script>
 
 <style  scoped="scoped">
-    /* 头部 */
 	.header{height:47px; border-bottom:1px solid #ccc; overflow:hidden;}
 	.header_img{float:left; margin-top:15px; margin-left:20px;}
 	.header_txt1{font-size:13px; color:#5C759D; float:left; line-height:47px; margin-left:5px; cursor:pointer;}

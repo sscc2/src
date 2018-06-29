@@ -15,15 +15,15 @@
 					<el-col :span="6">
 
 						<ul class="left">
-							<li><p>{{pageTxt.infoTxt[2]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[3]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[2]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[3]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[4]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[5]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[5]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[7]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[8]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[8]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[10]}}：</p></li>							
-							<li><p>{{pageTxt.infoTxt[11]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[11]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[12]}}：</p></li>							
 							<li><p>{{pageTxt.infoTxt[13]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[14]}}：</p></li>
@@ -77,7 +77,7 @@
 							</li>
 							<li>
 								<el-select v-model="info.isAlarmIfOffLine" placeholder="">
-									<el-option v-for="item in online" :key="item.userTypeId" :label="item.name" :value="item.userTypeId"></el-option>
+									<el-option v-for="item in online" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -188,21 +188,21 @@ var pageTxt = {
     ]
   },
   connect = [
-    { value: "0", label: "Group0" },
-    { value: "1", label: "Group1" },
-    { value: "2", label: "Group2" },
-    { value: "3", label: "Group3" },
-    { value: "4", label: "Group4" },
-    { value: "5", label: "Group5" },
-    { value: "6", label: "Group6" }
+    { id: "0", name: "Group0" },
+    { id: "1", name: "Group1" },
+    { id: "2", name: "Group2" },
+    { id: "3", name: "Group3" },
+    { id: "4", name: "Group4" },
+    { id: "5", name: "Group5" },
+    { id: "6", name: "Group6" }
   ],
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
 export default {
   data() {
     return {
-      userType: [{ id: "0", name: "1aaa" }, { id: "1", name: "2aaa" }],
-      cities: [{ id: "BJ", name: "1aaa" }, { id: "1", name: "2aaa" }],
+      userType: [{ id: "0", name: "test" }, { id: "1", name: "test" }],
+      cities: [{ id: "BJ", name: "test" }, { id: "1", name: "test" }],
 
       info,
       pageTxt,
@@ -233,19 +233,17 @@ export default {
     },
     judge() {
       if (info.isModifyDefaultPasswd != 0) {
-        this.judgment = [];
         this.info.userPasswd = "";
       } else {
-        this.judgment = [{ required: true, message: "密码不能为空" }];
-       
         this.info.userPasswd = 111111;
       }
-      console.log(info.isModifyDefaultPasswd, this.judgment);
     },
 
     // 创建用户
     add: function() {
       this.$store.state.transferEditID = this.info.userID;
+      
+    
       var _this = this;
       utils.post(
         "mx/userinfo/add",
@@ -268,9 +266,7 @@ export default {
           maxSubsCount: _this.info.maxSubsCount,
           maxDaysOfTopic: _this.info.maxDaysOfTopic,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
-          userPasswd: _this.info.isModifyDefaultPasswd
-            ? _this.info.userPasswd
-            : md5.hex_md5("111111").substr(8, 16)
+          userPasswd: _this.info.isModifyDefaultPasswd ? _this.info.userPasswd : md5.hex_md5("111111").substr(8, 16)
         },
         function(response) {
           if (response.errcode == 0) {
@@ -293,6 +289,7 @@ export default {
           this.$router.replace({ path: "/message/userEdit/mess" });
         })
         .catch(() => {
+          this.$store.state.headerText
           this.$store.state.tabv = "v1";
           this.$router.replace({ path: "/message/userEdit/mess" });
         });
@@ -301,12 +298,10 @@ export default {
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
     }
-    // changeUserPasswd(){
-    //   this.info.userPasswd=111111;
-    // }
   },
   // 初始化数据
   created: function() {
+
     var _this = this;
     utils.post(
       "mx/dict/query",
@@ -319,7 +314,6 @@ export default {
         _this.userType = response.lists;
       }
     );
-
     utils.post(
       "mx/dict/query",
       {
@@ -364,106 +358,27 @@ function dbNum(num) {
 </script>
 
 <style scoped="scoped">
-.component {
-  color: #606266;
-  min-width: 1000px;
-  min-height: 630px;
-}
-.header {
-  height: 47px;
-  border-bottom: 1px solid #ccc;
-  overflow: hidden;
-}
-.header_img {
-  float: left;
-  margin-top: 15px;
-  margin-left: 20px;
-}
-.header_txt1 {
-  font-size: 13px;
-  color: #5c759d;
-  float: left;
-  line-height: 47px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-.header_line {
-  border-right: 1px solid #ebeff4;
-  height: 30px;
-  float: left;
-  margin-left: 20px;
-  margin-top: 9px;
-}
-.header_txt2 {
-  font-size: 16px;
-  color: #656a73;
-  line-height: 47px;
-  margin-left: 20px;
-  font-weight: bold;
-}
-.el-tabs {
-  padding: 22px;
-}
-.info {
-  white-space: nowrap;
-}
-.el-col-6 {
-  width: 140px;
-  font-size: 14px;
-  color: #666666;
-}
-.left li {
-  text-align: right;
-  line-height: 40px;
-}
-.info li {
-  margin-top: 10px;
-  height: 36px;
-}
-.right {
-  margin-left: 15px;
-  line-height: 40px;
-}
-.right input {
-  font-size: 14px;
-  width: 255px;
-  height: 30px;
-  vertical-align: middle;
-  padding: 0 5px;
-  border: 1px solid #d7d8da;
-  text-indent: 12px;
-  color: #666;
-}
-input:focus {
-  border: 2px solid #32ccf9;
-}
-.el-select {
-  width: 255px;
-}
-.el-textarea {
-  width: 255px;
-}
-.el-input {
-  width: 255px;
-}
-.kbit {
-  font-size: 12px;
-  line-height: 36px;
-  vertical-align: middle;
-  color: #999999;
-  margin-left: 10px;
-}
-.info .txtH {
-  height: 100px;
-}
-.default_radio {
-  line-height: 50px;
-}
-.btn {
-  margin-left: 140px;
-  margin-top: 30px;
-}
-._zero > img[data-v-d09b1104] {
-  margin-left: 0 !important;
-}
+.component{color: #606266; min-width: 1000px; min-height: 630px;}
+.header{height: 47px; border-bottom: 1px solid #ccc; overflow: hidden;}
+.header_img{float: left; margin-top: 15px; margin-left: 20px;}
+.header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 47px; margin-left: 5px; cursor: pointer;}
+.header_line{border-right: 1px solid #ebeff4; height: 30px; float: left; margin-left: 20px; margin-top: 9px;}
+.header_txt2{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 20px; font-weight: bold;}
+.el-tabs{padding: 22px;}
+.info{white-space: nowrap;}
+.el-col-6{width: 140px; font-size: 14px; color: #666666;}
+.left li{text-align: right; line-height: 40px;}
+.info li{margin-top: 10px; height: 36px;}
+.right{margin-left: 15px; line-height: 40px;}
+.right input{font-size: 14px; width: 255px; height: 30px; vertical-align: middle; padding: 0 5px; border: 1px solid #d7d8da; text-indent: 12px; color: #666;}
+input:focus{border: 2px solid #32ccf9;}
+.el-select{width: 255px;}
+.el-textarea{width: 255px;}
+.el-input{width: 255px;}
+.kbit{font-size: 12px; line-height: 36px; vertical-align: middle; color: #999999; margin-left: 10px;}
+.info .txtH{height: 100px;}
+.default_radio{line-height: 50px;}
+.btn{margin-left: 140px; margin-top: 30px;}
+._zero > img[data-v-d09b1104]{margin-left: 0 !important;}
+.red{color: red; font-size: 14px;}
 </style>

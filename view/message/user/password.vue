@@ -102,6 +102,7 @@ export default {
     return data;
   },
   methods: {
+    // 验证
     submit1(){
        var reg=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
         if(this.info.isModifyDefaultPasswd==0){
@@ -116,9 +117,7 @@ export default {
         }else{
           utils.weakTips("密码必须包含大小写字母、数字、特殊字符中两项且大于8位");
         }
-        }
-
-       
+        }       
     },
     submit() {
       this.$store.state.passShow=false
@@ -158,25 +157,8 @@ export default {
 </script>
 
 <style scoped="scoped">
-.txt {
-  font-size: 16px;
-  line-height: 30px;
-  height: 30px;
-}
-.userPass {
-  width: 600px;
-  margin: 0 auto;
-  border: 1px solid #dcdfe6;
-}
-.input {
-  width: 180px;
-}
-.red {
-  color: #f56c6c;
-  margin-left: 10px;
-}
-
-
-
-
+.txt{font-size: 16px; line-height: 30px; height: 30px;}
+.userPass{width: 600px; margin: 0 auto; border: 1px solid #dcdfe6;}
+.input{width: 180px;}
+.red{color: #f56c6c; margin-left: 10px;}
 </style>
