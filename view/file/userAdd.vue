@@ -160,7 +160,6 @@
 		methods: {
 			add: function(e){
 				var info = this.info;
-				console.log(info);
 				for (var i = 0; i < must.length; i++) {
 					if(info[must[i]] == '') break;
 				}

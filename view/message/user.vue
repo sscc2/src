@@ -227,8 +227,8 @@ export default {
           type: 1
         },
         function(response) {
-          _this.userData = response;
-          if(response.totalPage<_this.currentPage){
+          if(response.errcode==0){
+              if(response.totalPage<_this.currentPage){
             utils.post(
               "mx/userinfo/queryLists",
               {
@@ -240,10 +240,18 @@ export default {
                 type: 1
               },
               function(response){
-                _this.userData = response;
+                if(response.errcode==0){
+                  _this.userData = response;
+                }
+                
               }
             )
+          }else{
+             _this.userData = response;
           }
+          }
+         
+          
         }
       );
     }
@@ -262,7 +270,10 @@ export default {
         type: "0"
       },
       function(response) {
-        _this.userData = response;
+        if(response.errcode==0){
+          _this.userData = response;
+        }
+        
       }
     );
   },

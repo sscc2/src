@@ -65,22 +65,17 @@ var pageTxt_cn = {
   ]
 };
 
-var def = [
-    "userAlarmSmsNum",
-    "userTelNum",
-    "userMobileNum",
-    "operationPhoneNum",
-    "operationFax",
-    "email",
-    "ssccManager"
-  ],
-  inputValue = {};
+var inputValue = {
+  userAlarmSmsNum: "",
+  userTelNum: "",
+  userMobileNum: "",
+  operationPhoneNum: "",
+  operationFax: "",
+  email: "",
+  ssccManager: ""
+};
 
 var pageTxt = pageTxt_cn;
-
-for (var i = 0; i < def.length; i++) {
-  inputValue[def[i]] = "";
-}
 
 export default {
   name: "extendifo",
@@ -110,7 +105,7 @@ export default {
         function(response) {
           if (response.errcode == 0) {
             utils.weakTips(response.errinfo);
-          }else{
+          } else {
             utils.weakTips(response.msg);
           }
         }
@@ -118,9 +113,12 @@ export default {
     },
     goBack: function() {
       this.$router.replace({ path: "/message/user" });
-    },
+    }
   },
   created() {
+    for (var i in this.inputValue) {
+      this.inputValue[i] = "";
+    }
     var _this = this;
     utils.post(
       "mx/userinfoExt/query",
@@ -130,13 +128,17 @@ export default {
         type: 0
       },
       function(response) {
-          _this.inputValue.userAlarmSmsNum=response.lists[0].userAlarmSmsNum?response.lists[0].userAlarmSmsNum:"",
-          _this.inputValue.userTelNum=response.lists[0].userTelNum?response.lists[0].userTelNum:"",
-          _this.inputValue.userMobileNum=response.lists[0].userMobileNum?response.lists[0].userMobileNum:"",
-          _this.inputValue.operationPhoneNum=response.lists[0].operationPhoneNum?response.lists[0].operationPhoneNum:"",
-          _this.inputValue.operationFax=response.lists[0].operationFax?response.lists[0].operationFax:"",
-          _this.inputValue.email=response.lists[0].email?response.lists[0].email:"",
-          _this.inputValue.ssccManager=response.lists[0].ssccManager?response.lists[0].ssccManager:""      
+        if(response.errcode==0){
+          var response1 = response.lists[0];
+          if (response1) {
+            _this.inputValue.userAlarmSmsNum = response1.userAlarmSmsNum;
+            _this.inputValue.userTelNum = response1.userTelNum;
+            _this.inputValue.userMobileNum = response1.userMobileNum;
+            _this.inputValue.operationFax = response1.operationFax;
+            _this.inputValue.email = response1.email;
+            _this.inputValue.ssccManager = response1.ssccManager;
+          }
+        }       
       }
     );
   }

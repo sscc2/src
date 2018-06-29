@@ -274,6 +274,7 @@ function utils(){
 		};
 		function error(e){
 			exp.loadClose();
+			if(e.message == 'Network Error') return;
 			if(e.response){
 				var res = e.response;
 				if(res.status == 404) return;

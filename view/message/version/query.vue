@@ -19,7 +19,7 @@
 				    <el-radio :label="3">{{pageTxt.label[6]}}</el-radio>
 				</el-radio-group>
 				<label class="txt">{{pageTxt.label[7]}}</label>
-				<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd" type="daterange" 
+				<el-date-picker :disabled="radio!=3" class='daterange' v-model="picker" value-format="yyyy-MM-dd" type="daterange" 
 					:start-placeholder="pageTxt.label[9]" :range-separator="pageTxt.label[8]" :end-placeholder="pageTxt.label[10]">
 				</el-date-picker>
 				<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[11]}}</button>

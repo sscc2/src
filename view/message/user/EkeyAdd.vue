@@ -10,29 +10,27 @@
 </template>
 
 <script>
-import kit       from '@/libs/kit.js';
-import utils     from '@/libs/utils.js';
-import globalVar from '@/libs/globalVar.js';
+import kit from "@/libs/kit.js";
+import utils from "@/libs/utils.js";
+import globalVar from "@/libs/globalVar.js";
 
-    export default{
-        data(){
-            return{
+export default {
+  data() {
+    return {};
+  },
 
-            }
-        },
-        
-        methods:{
-            del(){
-                this.$router.replace({ path: "/message/userEdit/mess" });
-            }           
-        }
+  methods: {
+    del() {
+      this.$router.replace({ path: "/message/userEdit/mess" });
     }
+  }
+};
 </script>
 
 <style  scoped="scoped">
-	.header{height:47px; border-bottom:1px solid #ccc; overflow:hidden;}
-	.header_img{float:left; margin-top:15px; margin-left:20px;}
-	.header_txt1{font-size:13px; color:#5C759D; float:left; line-height:47px; margin-left:5px; cursor:pointer;}
-	.header_line{border-right:1px solid #EBEFF4; height:30px; float: left; margin-left:20px; margin-top:9px;}
-	.header_txt2{font-size:16px; color: #656A73; line-height:47px; margin-left:20px; font-weight:bold;}
+.header{height:47px; border-bottom:1px solid #ccc; overflow:hidden;}
+.header_img{float:left; margin-top:15px; margin-left:20px;}
+.header_txt1{font-size:13px; color:#5C759D; float:left; line-height:47px; margin-left:5px; cursor:pointer;}
+.header_line{border-right:1px solid #EBEFF4; height:30px; float: left; margin-left:20px; margin-top:9px;}
+.header_txt2{font-size:16px; color: #656A73; line-height:47px; margin-left:20px; font-weight:bold;}
 </style>

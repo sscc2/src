@@ -214,23 +214,30 @@ export default {
           currentPage: _this.currentPage
         },
         function(response) {
-          _this.list = as(response);
-          if(response.totalPage<_this.currentPage){
-            utils.post(
-            "/mx/userComm/query",
-            {
-              cmdID: "600031",
-              bizType: _this.searchInfo.bizType,
-              userID1: isInput1?_this.idName1: _this.userID1,
-              userID2: isInput2?_this.idName2: _this.userID2,
-              pageSize: _this.pageSize,
-              currentPage: response.totalPage
-            },
-            function(response){
-              _this.list = as(response);
-              }
-            )
+          if(response.errcode==0){
+            if(response.totalPage<_this.currentPage){
+                utils.post(
+                "/mx/userComm/query",
+                {
+                  cmdID: "600031",
+                  bizType: _this.searchInfo.bizType,
+                  userID1: isInput1?_this.idName1: _this.userID1,
+                  userID2: isInput2?_this.idName2: _this.userID2,
+                  pageSize: _this.pageSize,
+                  currentPage: response.totalPage
+                },
+                function(response){
+                  if(response.errcode==0){
+                    _this.list = as(response);
+                  }
+                
+                  }
+                )
+              }else{
+             _this.list = as(response);
           }
+
+          }          
         }
       );
     },
@@ -265,7 +272,6 @@ export default {
       var options5=[].concat(options4);
       for(var i=0; i<options5.length; i++){
         if(options5[i].userID==this.creatInfo.user){
-           console.log(options5[i])
            options5.splice(i,1);
           break;
         }
@@ -371,7 +377,8 @@ export default {
         currentPage: _this.currentPage,
         },
         function(response) {
-          if(response.totalPage<_this.currentPage){
+          if(response.errcode==0){
+                        if(response.totalPage<_this.currentPage){
               utils.post(
               "mx/userComm/query",
               {
@@ -383,12 +390,17 @@ export default {
               currentPage: response.totalPage,
               },
               function(response){
-                _this.list = as(response);
+                if(response.errcode==0){
+                   _this.list = as(response);
+                }
+               
               }
             )
           }else{
             _this.list = as(response);
           } 
+          }
+
         }
       );
     }   
@@ -396,7 +408,7 @@ export default {
   // 初始化数据
   created() {
      this.searchInfo.bizType="-1";
-     this.creatInfo.bizType="0";
+     this.creatInfo.bizType = "0";
      var _this=this;
      utils.post(          
       "mx/dict/query",
@@ -406,8 +418,10 @@ export default {
         type: "3"
       },
       function(response) {
-        _this.options1 = response.lists;
-        _this.options1.unshift({"id":"-1","name":"全部"});
+        if(response.errcode==0){
+          _this.options1 = response.lists;
+          _this.options1.unshift({"id":"-1","name":"全部"});
+        }
       }
     );
      utils.post(          
@@ -418,7 +432,10 @@ export default {
         type: "3"
       },
       function(response) {
-        _this.optionsCreat=response.lists;
+        if(response.errcode==0){
+           _this.optionsCreat=response.lists;
+        }
+       
       }
     );
     utils.post(
@@ -432,7 +449,10 @@ export default {
         currentPage: _this.currentPage,
       },
       function(response) {
-        _this.list = as(response);
+        if(response.errcode==0){
+          _this.list = as(response);
+        }
+       
       }
     );
     utils.post(
@@ -446,8 +466,11 @@ export default {
         type: "0"
       },
       function(response) {
-        _this.options2 = response.lists;
-        options4=[].concat( _this.options2)
+        if(response.errcode==0){
+           _this.options2 = response.lists;
+          options4=[].concat( _this.options2)
+        }
+       
       }
     );
   }, 

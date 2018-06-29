@@ -143,7 +143,7 @@ var info = {},
     "maxDaysOfTopic",
     "isModifyDefaultPasswd",
     "userPasswd"
-  ]
+  ];
 for (var i = 0; i < def.length; i++) {
   info[def[i]] = "";
 }
@@ -188,13 +188,13 @@ var pageTxt = {
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
 var data = {
-  userType:[{id:'0',name:'1aaa'},{id:'1',name:'2aaa'}],
-  cities:[{id:'BJ',name:'1aaa'},{id:'1',name:'2aaa'}],
+  userType: [{ id: "0", name: "1aaa" }, { id: "1", name: "2aaa" }],
+  cities: [{ id: "BJ", name: "1aaa" }, { id: "1", name: "2aaa" }],
   info,
   pageTxt,
   connect,
   online,
-  time: getDate(),
+  time: getDate()
 };
 
 export default {
@@ -234,10 +234,10 @@ export default {
         }
       );
     },
-    // 删除 
+    // 删除
     del: function(e) {
       this.$router.replace({ path: "/message/user" });
-    },
+    }
   },
 
   // 初始化数据
@@ -267,7 +267,7 @@ export default {
         _this.info.maxDaysOfTopic = response.lists[0].maxDaysOfTopic;
       }
     );
-     utils.post(
+    utils.post(
       "mx/dict/query",
       {
         cmdID: "600000",
@@ -275,11 +275,13 @@ export default {
         type: "1"
       },
       function(response) {
-        _this.userType = response.lists;
+        if (response.errcode == 0) {
+          _this.userType = response.lists;
+        }
       }
     );
-    
-     utils.post(
+
+    utils.post(
       "mx/dict/query",
       {
         cmdID: "600000",
@@ -287,7 +289,9 @@ export default {
         type: "2"
       },
       function(response) {
-        _this.cities = response.lists;
+        if (response.errcode == 0) {
+          _this.cities = response.lists;
+        }
       }
     );
   },
@@ -315,18 +319,14 @@ function dbNum(num) {
 .red{color: red;}
 .info li{margin-top: 10px; height: 36px;}
 .info{white-space: nowrap;}
-/* 头部 */
 .header{height: 47px; border-bottom: 1px solid #ccc; overflow: hidden;}
 .header_img{float: left; margin-top: 15px; margin-left: 20px;}
 .header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 47px; margin-left: 5px; cursor: pointer;}
 .header_line{border-right: 1px solid #ebeff4; height: 30px; float: left; margin-left: 20px; margin-top: 9px;}
 .header_txt2{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 20px; font-weight: bold;}
-/* 选项卡 */
 .el-tabs{padding: 22px; margin: 0 auto;}
-/* 表单左 */
 .el-col-6{width: 145px; font-size: 14px; color: #666666;}
 .left li{text-align: right; line-height: 40px;}
-/* 表单右 */
 .right{margin-left: 15px; line-height: 40px;}
 .right input{font-size: 14px; width: 255px; height: 30px; vertical-align: middle; padding: 0 5px; border: 1px solid #d7d8da; text-indent: 7px;}
 input:focus{border: 2px solid #32ccf9;}
@@ -335,7 +335,6 @@ input:focus{border: 2px solid #32ccf9;}
 .el-input{width: 255px;}
 .kbit{font-size: 12px; line-height: 36px; vertical-align: middle; color: #999999; margin-left: 10px;}
 .info .txtH{height: 100px;}
-/* 按钮 */
 .btn{margin-left: 140px; margin-top: 30px;}
 .red{color: red; font-size: 14px;}
 </style>

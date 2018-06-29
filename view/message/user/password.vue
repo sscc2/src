@@ -52,34 +52,34 @@ import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
 
 var pageTxt_cn = {
-    tips: {
-      id: "请填写用户ID",
-      usernam: "请填写用户名",
-      npasswd: "请输入新密码",
-      again: "重复新密码",
-      assessor: "请填写审核人",
-      pass: "请填写复核密码"
-    },
-    lable: [
-      "修改密码",
-      "用户ID：",
-      "是否重置默认密码：",
-      "新密码：",
-      "审核人：",
-      "审核pass：",
-      "提交",
-      "返回",
-      "必填项...",
-      "选择日期",
-      "确认："
-    ],
-    error: [
-      "请选择软加密开始时间",
-      "束时间不能小于开始时间",
-      "请填写复核操作员",
-      "请填写复核密码"
-    ]
-  }
+  tips: {
+    id: "请填写用户ID",
+    usernam: "请填写用户名",
+    npasswd: "请输入新密码",
+    again: "重复新密码",
+    assessor: "请填写审核人",
+    pass: "请填写复核密码"
+  },
+  lable: [
+    "修改密码",
+    "用户ID：",
+    "是否重置默认密码：",
+    "新密码：",
+    "审核人：",
+    "审核pass：",
+    "提交",
+    "返回",
+    "必填项...",
+    "选择日期",
+    "确认："
+  ],
+  error: [
+    "请选择软加密开始时间",
+    "束时间不能小于开始时间",
+    "请填写复核操作员",
+    "请填写复核密码"
+  ]
+};
 
 var pageTxt = pageTxt_cn;
 
@@ -103,24 +103,26 @@ export default {
   },
   methods: {
     // 验证
-    submit1(){
-       var reg=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
-        if(this.info.isModifyDefaultPasswd==0){
-          this.submit()
-        }else{
-           if(reg.test(this.info.npasswd)){
-             if(this.info.npasswd==this.info.again){
-                 this.submit()
-             }else{
-                utils.weakTips("两次输入的应该一致");
-             }
-        }else{
-          utils.weakTips("密码必须包含大小写字母、数字、特殊字符中两项且大于8位");
+    submit1() {
+      var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+      if (this.info.isModifyDefaultPasswd == 0) {
+        this.submit();
+      } else {
+        if (reg.test(this.info.npasswd)) {
+          if (this.info.npasswd == this.info.again) {
+            this.submit();
+          } else {
+            utils.weakTips("两次输入的应该一致");
+          }
+        } else {
+          utils.weakTips(
+            "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
+          );
         }
-        }       
+      }
     },
     submit() {
-      this.$store.state.passShow=false
+      this.$store.state.passShow = false;
       var _this = this;
       utils.post(
         "mx/userpasswd/modify",
@@ -129,7 +131,7 @@ export default {
           operator: "admin",
           userID: _this.$store.state.transferEditID,
           isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
-          userPasswd: _this.info.isModifyDefaultPasswd?md5.hex_md5(_this.info.npasswd).substr(8, 16):md5.hex_md5("111111").substr(8, 16)
+          userPasswd: _this.info.isModifyDefaultPasswd ? md5.hex_md5(_this.info.npasswd).substr(8, 16) : md5.hex_md5("111111").substr(8, 16)
         },
         function(response) {
           if (response.errcode == 0) {
@@ -140,13 +142,13 @@ export default {
         }
       );
     },
-    changeNpasswd(){
-      if(this.info.isModifyDefaultPasswd==0){
-        this.info.npasswd=111111;
-        this.info.again=111111;
-      }else{
-        this.info.npasswd="";
-        this.info.again="";
+    changeNpasswd() {
+      if (this.info.isModifyDefaultPasswd == 0) {
+        this.info.npasswd = 111111;
+        this.info.again = 111111;
+      } else {
+        this.info.npasswd = "";
+        this.info.again = "";
       }
     }
   },
@@ -161,4 +163,5 @@ export default {
 .userPass{width: 600px; margin: 0 auto; border: 1px solid #dcdfe6;}
 .input{width: 180px;}
 .red{color: #f56c6c; margin-left: 10px;}
+.rightBox > .el-radio{line-height: 30px}
 </style>

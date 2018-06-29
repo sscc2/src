@@ -142,9 +142,9 @@
 </template>
 
 <script>
-import utils       from "@/libs/utils.js";
-import observer    from '@/libs/observer.js';
-import globalVar   from '@/libs/globalVar.js';
+import utils from "@/libs/utils.js";
+import observer from "@/libs/observer.js";
+import globalVar from "@/libs/globalVar.js";
 
 var ainfo = {},
   def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
@@ -198,30 +198,35 @@ var pageTxt_cn = {
   ]
 };
 
-var pageTxt = pageTxt_cn, autoTime, _currentPage=1, isInput=false;
+var pageTxt = pageTxt_cn,
+  autoTime,
+  _currentPage = 1,
+  isInput = false;
 
-function autoInput(str, cb){
-		if(!str) return;
-		utils.getUserid(str, function(data){
-			var i,len = data.length,tem=[];
-			for (i = 0; i < len; i++) {
-				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);
-			}
-			cb(tem);
-		});
-	}
+function autoInput(str, cb) {
+  if (!str) return;
+  utils.getUserid(str, function(data) {
+    var i,
+      len = data.length,
+      tem = [];
+    for (i = 0; i < len; i++) {
+      if (data[i].label.indexOf(str) != -1) tem.push(data[i]);
+    }
+    cb(tem);
+  });
+}
 
 export default {
   data() {
     return {
-      idName: '',
-      userID: '',
-      search:{userID:"",type:"",ekeyName:""},
+      idName: "",
+      userID: "",
+      search: { userID: "", type: "", ekeyName: "" },
       ainfo,
       binfo,
       EkeyData: [],
       selects: [],
-      oldEkeyName:'',
+      oldEkeyName: "",
 
       pageTxt: pageTxt,
       radio: 1,
@@ -254,20 +259,20 @@ export default {
       err2: { id: false, Ekey: false, pass: false, start: false, end: false },
       currentPage1: 1,
       pageSize: 20,
-      options:[]
+      options: []
     };
   },
   methods: {
-    fetch(str, cb){
+    fetch(str, cb) {
       clearTimeout(autoTime);
       autoTime = setTimeout(autoInput, 300, str, cb);
     },
-    idSelect(item){
+    idSelect(item) {
       isInput = false;
       this.userID = item.userID;
-      this.idName = item.userID+'('+item.userName+')';
+      this.idName = item.userID + "(" + item.userName + ")";
     },
-    autoInput(){
+    autoInput() {
       isInput = true;
     },
 
@@ -278,51 +283,60 @@ export default {
         "mx/userEkey/query",
         {
           cmdID: "600021",
-          userID: isInput?_this.idName: _this.userID,
+          userID: isInput ? _this.idName : _this.userID,
           ekeyName: _this.search.ekeyName,
           type: _this.search.type,
           pageSize: _this.pageSize,
-          currentPage: _this.currentPage1,
+          currentPage: _this.currentPage1
         },
         function(response) {
-          _this.EkeyData = response;
-          if(response.totalPage<_this.currentPage1){
+          if (response.errcode == 0) {
+            if (response.totalPage < _this.currentPage1) {
               utils.post(
-              "mx/userEkey/query",
-              {
-                cmdID: "600021",
-                userID: isInput?_this.idName: _this.userID,
-                ekeyName: _this.search.ekeyName,
-                type: _this.search.type,
-                pageSize: _this.pageSize,
-                currentPage: response.totalPage,
-              },
-            )
+                "mx/userEkey/query",
+                {
+                  cmdID: "600021",
+                  userID: isInput ? _this.idName : _this.userID,
+                  ekeyName: _this.search.ekeyName,
+                  type: _this.search.type,
+                  pageSize: _this.pageSize,
+                  currentPage: response.totalPage
+                },
+                function(response) {
+                  if(response.errcode==0){
+                    _this.EkeyData = response;
+                  }
+                  
+                }
+              );
+            } else {
+              _this.EkeyData = response;
+            }
           }
         }
       );
     },
     // 创建Ekey
     showAdd() {
-      this.addEkey=true;
+      this.addEkey = true;
       this.ainfo.userID = "";
       this.ainfo.ekeyName = "";
       this.ainfo.ekeyValidDate = "";
-      this.ainfo.comment = ""
+      this.ainfo.comment = "";
     },
     submitAdd() {
-      if(this.ainfo.userID==""){
-        utils.weakTips("用户ID不能为空")
-      }else{
-        if(this.ainfo.ekeyName==""){
-          utils.weakTips("Ekey名称不能为空")
-        }else{
-          if(this.ainfo.ekeyValidDate==""){
-            utils.weakTips("Ekey有效期不能为空")
-          }else{
-            if(this.ainfo.comment==""){
-              utils.weakTips("Ekey描述不能为空")
-            }else{
+      if (this.ainfo.userID == "") {
+        utils.weakTips("用户ID不能为空");
+      } else {
+        if (this.ainfo.ekeyName == "") {
+          utils.weakTips("Ekey名称不能为空");
+        } else {
+          if (this.ainfo.ekeyValidDate == "") {
+            utils.weakTips("Ekey有效期不能为空");
+          } else {
+            if (this.ainfo.comment == "") {
+              utils.weakTips("Ekey描述不能为空");
+            } else {
               var _this = this;
               utils.post(
                 "mx/userEkey/add",
@@ -337,10 +351,10 @@ export default {
                 function(response) {
                   if (response.errcode == 0) {
                     _this.addEkey = false;
-                    _this.renderDate()
+                    _this.renderDate();
                     utils.weakTips(response.errinfo);
                   } else {
-                    utils.weakTips(response.errinfo);             
+                    utils.weakTips(response.errinfo);
                   }
                 }
               );
@@ -350,65 +364,65 @@ export default {
       }
     },
     // 删除Ekey
-    fn(){
+    fn() {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！");
       } else {
-          var _this=this
-          utils.hints({
-          txt:"是否删除该用户信息",
-          yes:_this.del,
+        var _this = this;
+        utils.hints({
+          txt: "是否删除该用户信息",
+          yes: _this.del,
           btn: 2
-        })
+        });
       }
     },
     del() {
-        var _this=this;
-        utils.post(
-          "mx/userEkey/delete",
-          {
-            cmdID: 600024,
-            operator: "admin",
-            userID: _this.selects[0].userID? _this.selects[0].userID:"",
-            ekeyName: _this.selects[0].ekeyName
-          },
-          function(response) {
-            if (response.errcode == 0) {
-              _this.renderDate();
-              utils.weakTips(response.errinfo);            
-            } else {
-              utils.weakTips(response.errinfo);
-            }
+      var _this = this;
+      utils.post(
+        "mx/userEkey/delete",
+        {
+          cmdID: 600024,
+          operator: "admin",
+          userID: _this.selects[0].userID ? _this.selects[0].userID : "",
+          ekeyName: _this.selects[0].ekeyName
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            _this.renderDate();
+            utils.weakTips(response.errinfo);
+          } else {
+            utils.weakTips(response.errinfo);
           }
-        );
-      },
+        }
+      );
+    },
     // 修改
     showEdit(row) {
-        this.editEkdy = true;  
-        
-        this.oldEkeyName=this.row.ekeyName
-        var _this = this;
-            _this.binfo.userID=row.userID;
-            _this.binfo.userName=row.userName;
-            _this.binfo.ekeyName=row.ekeyName;
-            _this.binfo.ekeyValidDate=row.ekeyValidDate;
-            _this.binfo.comment=row.comment;               
+      this.editEkdy = true;
+
+      this.oldEkeyName = this.row.ekeyName;
+      var _this = this;
+      _this.binfo.userID = row.userID;
+      _this.binfo.userName = row.userName;
+      _this.binfo.ekeyName = row.ekeyName;
+      _this.binfo.ekeyValidDate = row.ekeyValidDate;
+      _this.binfo.comment = row.comment;
     },
     submitEdit() {
-      if(binfo.userID == ""){
+      if (binfo.userID == "") {
         utils.weakTips("用户名不能为空");
-      }else{
-        if(binfo.ekeyName==""){
+      } else {
+        if (binfo.ekeyName == "") {
           utils.weakTips("Ekey名不能为空");
-        }else{
+        } else {
           var _this = this;
           utils.post(
             "mx/userEkey/modify",
             {
-              cmdID: '600023',
+              cmdID: "600023",
               operator: "admin",
               userID: _this.binfo.userID,
-              oldEkeyName:_this.oldEkeyName,
+              oldEkeyName: _this.oldEkeyName,
               ekeyName: _this.binfo.ekeyName,
               ekeyValidDate: _this.binfo.ekeyValidDate,
               comment: _this.binfo.comment
@@ -418,54 +432,54 @@ export default {
                 _this.renderDate();
                 utils.weakTips(response.errinfo);
               } else {
-                utils.weakTips(response.errinfo);            
+                utils.weakTips(response.errinfo);
               }
             }
           );
         }
-      }        
+      }
     },
     //删除(row)
-    showDel(){
-        var _this=this
-        utils.hints({
-          txt:"是否删除该用户信息",
-          yes:_this.ekeyDel,
-          btn: 2
-        })
+    showDel() {
+      var _this = this;
+      utils.hints({
+        txt: "是否删除该用户信息",
+        yes: _this.ekeyDel,
+        btn: 2
+      });
     },
-    ekeyDel(){
-      var _this=this;
-        utils.post(
-          "mx/userEkey/delete",
-          {
-            cmdID: 600024,
-            operator: "admin",
-            userID: _this.row.userID,
-            ekeyName: _this.row.ekeyName
-          },
-          function(response) {
-              if (response.errcode == 0) {
-              _this.renderDate()
-              utils.weakTips(response.errinfo);
-            } else {
-              utils.weakTips(response.errinfo);
-            }
+    ekeyDel() {
+      var _this = this;
+      utils.post(
+        "mx/userEkey/delete",
+        {
+          cmdID: 600024,
+          operator: "admin",
+          userID: _this.row.userID,
+          ekeyName: _this.row.ekeyName
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            _this.renderDate();
+            utils.weakTips(response.errinfo);
+          } else {
+            utils.weakTips(response.errinfo);
           }
-        );
-      },
+        }
+      );
+    },
 
     selectionRow(val) {
       this.selects = val;
     },
 
     currentRow: function(e) {
-      this.row=e
+      this.row = e;
     },
 
     // 分页
     currentPage: function(e) {
-      this.currentPage=e
+      this.currentPage = e;
     },
     handleSizeChange: function(size) {
       this.pageSize = size;
@@ -484,69 +498,78 @@ export default {
           type: 3
         },
         function(response) {
-          _this.EkeyData = response;
-        }
-      );
-    },
-    // 更新数据
-    renderDate(){
-      var _this = this;
-      utils.post(
-        "mx/userEkey/query",
-        {
-          cmdID: "600021",
-          userID: isInput?_this.idName: _this.userID,
-          ekeyName: _this.search.ekeyName,
-          type: _this.search.type,
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage1,
-        },
-        function(response) {
-          if(response.totalPage<_this.currentPage1){
-            utils.post(
-              "mx/userEkey/query",
-              {
-                cmdID: "600021",
-                userID: isInput?_this.idName: _this.userID,
-                ekeyName: _this.search.ekeyName,
-                type: _this.search.type,
-                pageSize: _this.pageSize,
-                currentPage: response.totalPage,
-              },
-              function(response){
-                _this.EkeyData = response;
-              }
-            )
-          }else{
+          if (response.errcode == 0) {
             _this.EkeyData = response;
           }
         }
       );
-    } 		
-  },
-  //初始化数据
-  created() {
-    this.search.type= 0;
-    this.ainfo.type = 0;
+    },
+    // 更新数据
+    renderDate() {
       var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
           cmdID: "600021",
-          userID: "",
-          ekeyName: "",
-          type: 3,
+          userID: isInput ? _this.idName : _this.userID,
+          ekeyName: _this.search.ekeyName,
+          type: _this.search.type,
           pageSize: _this.pageSize,
-          currentPage: _this.currentPage1,
+          currentPage: _this.currentPage1
         },
         function(response) {
-          _this.EkeyData = response;
-          if(response.totalPage<_this.currentPage1){
-              _this.renderDate();
+          if(response.errcode==0){
+             if (response.totalPage < _this.currentPage1) {
+            utils.post(
+              "mx/userEkey/query",
+              {
+                cmdID: "600021",
+                userID: isInput ? _this.idName : _this.userID,
+                ekeyName: _this.search.ekeyName,
+                type: _this.search.type,
+                pageSize: _this.pageSize,
+                currentPage: response.totalPage
+              },
+              function(response) {
+                if(response.errcode==0){
+                   _this.EkeyData = response;
+                }              
+              }
+            );
+          } else {
+            _this.EkeyData = response;
           }
+          }
+         
         }
       );
-      utils.post(
+    }
+  },
+  //初始化数据
+  created() {
+    this.search.type = 0;
+    this.ainfo.type = 0;
+    var _this = this;
+    utils.post(
+      "mx/userEkey/query",
+      {
+        cmdID: "600021",
+        userID: "",
+        ekeyName: "",
+        type: 3,
+        pageSize: _this.pageSize,
+        currentPage: _this.currentPage1
+      },
+      function(response) {
+        if (response.errcode == 0) {
+          _this.EkeyData = response;
+          if (response.totalPage < _this.currentPage1) {
+            _this.renderDate();
+          }
+        }
+      }
+    );
+    utils.post(
       "mx/userinfo/queryLists",
       {
         cmdID: "600001",
@@ -557,11 +580,13 @@ export default {
         type: "0"
       },
       function(response) {
-        _this.options = response.lists;
+        if (response.errcode == 0) {
+          _this.options = response.lists;
+        }
       }
     );
-    }, 
-}
+  }
+};
 </script>
 
 <style scoped="scoped">
@@ -589,5 +614,4 @@ export default {
 .promptBox_btn button:nth-child(1){margin-left: 0;}
 #rightBox1{margin-left: 10px; width: 210px;}
 .red{ color:red; font-size: 14px;}
-
 </style>

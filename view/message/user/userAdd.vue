@@ -216,15 +216,17 @@ export default {
   methods: {
     // 表单验证
     submitForm() {
-      var reg=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+      var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
       if (this.info.userID != "" && this.info.userName != "") {
-        if (this.info.isModifyDefaultPasswd==0) {
+        if (this.info.isModifyDefaultPasswd == 0) {
           this.add();
         } else {
           if (reg.test(this.info.userPasswd)) {
-              this.add();
+            this.add();
           } else {
-            utils.weakTips("密码必须包含大小写字母、数字、特殊字符中两项且大于8位");
+            utils.weakTips(
+              "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
+            );
           }
         }
       } else {
@@ -242,8 +244,7 @@ export default {
     // 创建用户
     add: function() {
       this.$store.state.transferEditID = this.info.userID;
-      
-    
+
       var _this = this;
       utils.post(
         "mx/userinfo/add",
@@ -289,7 +290,7 @@ export default {
           this.$router.replace({ path: "/message/userEdit/mess" });
         })
         .catch(() => {
-          this.$store.state.headerText
+          this.$store.state.headerText;
           this.$store.state.tabv = "v1";
           this.$router.replace({ path: "/message/userEdit/mess" });
         });
@@ -301,7 +302,6 @@ export default {
   },
   // 初始化数据
   created: function() {
-
     var _this = this;
     utils.post(
       "mx/dict/query",
@@ -311,7 +311,9 @@ export default {
         type: "1"
       },
       function(response) {
-        _this.userType = response.lists;
+        if (response.errcode == 0) {
+          _this.userType = response.lists;
+        }
       }
     );
     utils.post(
@@ -322,7 +324,9 @@ export default {
         type: "2"
       },
       function(response) {
-        _this.cities = response.lists;
+        if (response.errcode == 0) {
+          _this.cities = response.lists;
+        }
       }
     );
     info.userID = "";
@@ -344,13 +348,13 @@ export default {
 };
 function getDate() {
   var d = new Date(),
-    t = d.getFullYear() + "-";
-  t += dbNum(d.getMonth() + 1) + "-";
-  t += d.getDate() + " ";
-  t += dbNum(d.getHours()) + ":";
-  t += dbNum(d.getMinutes()) + ":";
-  t += dbNum(d.getSeconds());
-  return t;
+      t = d.getFullYear() + "-";
+      t += dbNum(d.getMonth() + 1) + "-";
+      t += d.getDate() + " ";
+      t += dbNum(d.getHours()) + ":";
+      t += dbNum(d.getMinutes()) + ":";
+      t += dbNum(d.getSeconds());
+      return t;
 }
 function dbNum(num) {
   return num < 10 ? "0" + num : num;
