@@ -127,8 +127,8 @@ import lang      from '@/language/lang.js';
 
 <style scoped="scoped">
 	.sidebar{position: absolute;top:0;left: 0;width: 226px;height: 100%;background: #F7F9FA;overflow: auto;border-right: 1px solid #D7D8DA;}
-	.icon{margin: 0 5px 0 0px;}
-	.two{padding-left: 20px;}
+	/*.icon{margin: 0 5px 0 0px;}*/
+	.two{padding-left: 30px;}
 	/*.sidebar .el-menu-item-group .el-menu-item:hover{background: #FFF !important;}*/
 	.sidebar .bg{background: #FFF !important;}
 	.sidebar .is-active{background: #FFF !important;}
