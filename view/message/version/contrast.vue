@@ -51,7 +51,7 @@ import utils     from '@/libs/utils.js';
 import lang      from '@/language/lang.js';
 
 
-	var pageTxt, _this, _currentPage = 1, autoTime, isInput1, isInput2;
+	var pageTxt, _this, _currentPage = 1, autoTime, isVer, verArr1, verArr2;
 	pageTxt = lang.versionContrast;
 	
 	var data = {
@@ -100,6 +100,8 @@ import lang      from '@/language/lang.js';
 				obj.key = i;
 				obj.label = obj.version;
 			}
+			if(isVer == '1') verArr1 = data.lists;
+			else verArr2 = data.lists;
 			filt(str, data.lists, cb);
 		});
 	}
@@ -122,20 +124,21 @@ import lang      from '@/language/lang.js';
 				autoTime = setTimeout(autoInput, 300, str, cb);
 			},
 			idSelect1(item){
-				isInput1 = false;
 				this.info.ver1 = item.version;
 			},
 			autoInput1(){
-				isInput1 = true;
+				isVer = '1';
 			},
 			idSelect2(item){
-				isInput2 = false;
 				this.info.ver2 = item.version;
 			},
 			autoInput2(){
-				isInput2 = true;
+				isVer = '2';
 			},
 			search(){
+				var tips = pageTxt.tips, info = this.info;
+				if(!hasVer(info.ver1,verArr1)) return utils.weakTips(tips.ver1);
+				if(!hasVer(info.ver2,verArr2)) return utils.weakTips(tips.ver2);
 				search(_currentPage = 1);
 			},
 			currenRow(row){
@@ -155,10 +158,20 @@ import lang      from '@/language/lang.js';
 		},
 		mounted(){
 			_this = this;
-			isInput1 = isInput2 = false;
+			verArr1 = [];
+			verArr2 = [];
 			this.info.config = '3';
 			_currentPage = 1;
 		}
+	};
+	
+	function hasVer(str, arr){
+		var i, len = arr.length, ver;
+		for (i = 0; i < len; i++) {
+			ver = arr[i].version;
+			if(ver.indexOf(str)!=-1) return true;
+		}
+		return false;
 	}
 </script>
 
