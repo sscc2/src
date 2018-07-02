@@ -11,7 +11,7 @@ function utils(){
 		app = globalVar.get('vm'), lang = {};
 	lang.en = {
 		title:'Reminder', message:'You are sure to do the following?',
-		okBtn: 'Yes', cBtn: 'No'
+		okBtn: 'Yes', cBtn: 'No', nowBtn: 'Now'
 	}
 	function MessageMask(){
 		var time = null, load, isLoading = false;
@@ -191,16 +191,14 @@ function utils(){
 					el.parentNode.removeChild(el);
 			},
 			runNo:function(){
-				if(typeof(this.noFn)=="function") this.noFn();
-			},
-			yesFn: null,
-			noFn: null,
-			nowFn: null
+				if(typeof(_opt.no)=="function") _opt.no.call(_opt.that, _opt.noParam);
+			}
 		};
 		if(globalVar.get('lang')=='en'){
 			hintsObj.title.text('Tips');
-			hintsObj.yes.text('yes');
-			hintsObj.no.text('no');
+			hintsObj.yes.text('Yes');
+			hintsObj.no.text('No');
+			hintsObj.now.text('Now');
 		}
 		$hints.click(function(e){
 			if(e.target != this) return;
@@ -208,7 +206,7 @@ function utils(){
 			hintsObj.hide();
 		});
 		hintsObj.yes.click(function(e){
-			if(typeof(hintsObj.yesFn)=="function") hintsObj.yesFn();
+			if(typeof(_opt.yes)=="function") _opt.yes.call(_opt.that, _opt.yesParam);
 			hintsObj.hide();
 		});
 		hintsObj.no.click(function(e){
@@ -216,18 +214,24 @@ function utils(){
 			hintsObj.hide();
 		});
 		hintsObj.now.click(function(e){
-			if(typeof(hintsObj.nowFn)=="function") hintsObj.nowFn();
+			if(typeof(_opt.now)=="function") _opt.now.call(_opt.that, _opt.nowParam);
 			hintsObj.hide();
 		});
 		$hints.find('#_close').click(function(e){
 			hintsObj.runNo();
 			hintsObj.hide();
 		});
+		var _opt;
+		/**
+		 * @param {Object} opt {txt,yes,no,now,param,that}
+		 * txt: 文本，
+		 * yes，no，now：为回调函数，
+		 * yesParam，noParam，nowParam：回调函数的传参，类型为数组，
+		 * that：修改this的指向
+		 */
 		this.hints = function(opt){
 			if(typeof(opt)!="object") opt = {};
-			hintsObj.yesFn = opt.yes;
-			hintsObj.noFn = opt.no;
-			hintsObj.nowFn = opt.now;
+			_opt = opt;
 			hintsObj.show(opt);
 		};
 	};
