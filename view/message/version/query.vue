@@ -25,7 +25,7 @@
 				<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[11]}}</button>
 			</div>
 		</div>
-		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
+		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
 			<el-table-column width="50" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="typeTxt" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>

@@ -28,7 +28,7 @@
 				<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[6]}}</el-button>
 			</div>
 		</div>
-		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" border tooltip-effect="dark">
+		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
 			<el-table-column width="50" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="type" :label="pageTxt.list[0]" width='180px'  show-overflow-tooltip></el-table-column>
