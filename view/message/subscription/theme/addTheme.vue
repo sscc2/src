@@ -1,6 +1,12 @@
 <template>
 	<div class="addTheme">
-		<h2 class="h2">{{pageTxt.label[0]}}</h2>
+		<h2 class="h2">
+			<em @click="back">
+				<img class="icon" src="@/img/ico.png" />
+				<span class="topBack">{{pageTxt.label[13]}}</span>
+			</em>
+			<span class="span">{{pageTxt.label[0]}}</span>
+		</h2>
 		<ul class="list">
 			<li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[1]}}</label>
@@ -278,7 +284,13 @@ import lang      from '@/language/lang.js';
 
 <style scoped="scoped">
 	.addTheme{min-width: 1016px;}
-	.h2{font-size: 16px;color: #666;line-height: 50px;height: 50px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
+	.h2{border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
+	.h2 *{vertical-align: middle;}
+	.h2 em{cursor: pointer;}
+	.h2 .icon{margin-right: 6px;}
+	.h2 .topBack{font-size: 13px;color: #5a719d;line-height: 32px;height: 32px;padding-right: 20px;
+		border-right: 1px solid #edeef0;}
+	.h2 .span{font-size: 16px;color: #666;line-height: 50px;height: 50px;padding-left: 20px;font-weight: bold;}
 	.list li{margin-bottom: 10px;}
 	.txt{display: inline-block;font-size: 14px;line-height: 30px;width: 160px;vertical-align: top;text-align: right;padding-right: 10px;}
 	.red{color: #F00;line-height: 1;vertical-align: text-bottom;}
