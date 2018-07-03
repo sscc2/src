@@ -111,7 +111,7 @@ import lang   from '@/language/lang.js';
 			cmdID: '600072',
 			url: 'mx/batchDispatch/dispatch',
 			type: _this.type,
-			suName: arr,
+			lists: arr,
 			count: arr.length,
 		};
 		utils.post(param, function(data){

@@ -69,18 +69,17 @@ import lang      from '@/language/lang.js';
 	pageTxt = lang.themeDetailTheme;
 	
 	var list = [];
-	for (var i = 0; i < 10; i++) {
+	/*for (var i = 0; i < 10; i++) {
 		var obj = {
 			key:i, userID: 'userID'+kit.randomNum(10,99),
 			userName: '用户名'+i, subUserppid:'appid'+i
 		};
 		obj.label = obj.userID + obj.userName;
 		list.push(obj);
-	}
+	}*/
 	
 	var data = {
 		pageTxt,
-		data: false,
 		info: {topicName:'',pubUserID:'',topicDescr:'',topicInfo:''},
 		list: list,
 		keys: [],

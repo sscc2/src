@@ -416,10 +416,6 @@ import lang      from '@/language/lang.js';
 			var parent = el.parentNode;
 			parent.insertBefore(kit(slotTitle)[0], el);
 		});
-//		kit('.editTheme .el-transfer-panel').each(function(el, i){
-//			el.className += ' wrap';
-//			if(i==3) el.className += '1';
-//		});
 	}
 </script>
 

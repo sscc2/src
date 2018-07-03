@@ -94,7 +94,7 @@ import lang        from '@/language/lang.js';
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: [],
-		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
+		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}*/],
 		row: '',
 		selects: [],
 		size: 20,

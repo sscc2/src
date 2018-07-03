@@ -158,24 +158,9 @@ import lang      from '@/language/lang.js';
 				if(isInput) blurID(this.idName);
 			},
 			handleChange(remain, direction, moved){
-//				kit('.slotTitle').each(function(el){
-//					el.check = true;
-//				}).trigger('click');
-//				console.log(remain, moved);
 				submitList = remain;
 			},
-			leftCheck(arr, i){
-				return;
-				var curLen = arr.length, remainLen = submitList.length,
-					listLen = this.list.length, el = kit('.addTheme .slotTitle').eq(0);
-				console.log(curLen, remainLen, listLen);
-				el[0].check = false;
-				if(listLen - remainLen == curLen){
-					el.trigger('click');
-				} else {
-					el.find('.el-checkbox__input')[0].className ='el-checkbox__input';
-				}
-			},
+			leftCheck(arr, i){},
 			rightCheck(arr, i){},
 			send(e){ submit('send'); },
 			now(){ submit('now'); },
@@ -281,43 +266,12 @@ import lang      from '@/language/lang.js';
 		kit('.addTheme .el-checkbox-group').each(function(el, i){
 			el.className += ' _transfer_group_' + i;
 			var parent = el.parentNode;
-			var tiel = kit(slotTitle).click(ck);
+			var tiel = kit(slotTitle);
 			parent.insertBefore(tiel[0], el);
-			var checkBox = tiel.find('.el-checkbox__input');
-			tiel = tiel[0];
-			tiel.index = i;
-			tiel.check = false;
-			
-			
-			function ck(e){
-				return;
-//				e.stopImmediatePropagation();
-//				e.preventDefault();
-//				var qq=document.querySelector('.addTheme .el-checkbox-group .el-checkbox__original');
-				console.log(_this);
-				tiel.check = !tiel.check;
-//				debugger;
-				if(tiel.check){
-					var len = _this.list.length, temp = [];
-					for (var i = 0; i < len; i++) temp.push(i);
-					if(tiel.index == 0){
-						_this.allLeft = temp;
-					} else {
-						_this.allRight = temp;
-					}
-					checkBox[0].className ='el-checkbox__input is-checked';
-				} else {
-					if(tiel.index == 0){
-						_this.allLeft = [];
-					} else {
-						_this.allRight = [];
-					}
-					checkBox[0].className ='el-checkbox__input';
-				}
-			}
 		});
 //		kit('.transfer .el-transfer-panel__header .el-checkbox__input').detach();
 //		kit('.el-transfer-panel__header .el-checkbox__original').css('display','none');
+	
 	}
 			
 </script>
