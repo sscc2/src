@@ -313,7 +313,7 @@ import lang        from '@/language/lang.js';
 
 <style scoped="scoped">
 	.release{padding:0 20px;white-space: nowrap;color: #333;}
-	.h2{font-size: 16px;line-height: 44px;color: #666;}
+	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
 	._hr{margin: 0 0 10px;min-width: 1000px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
