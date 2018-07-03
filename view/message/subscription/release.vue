@@ -247,9 +247,9 @@ import lang        from '@/language/lang.js';
 			},
 			download(){
 				utils.post('mx/pubTopic/exportCsv',{cmdID:'600053'},function(data){
-					console.log(data);
-				})
-//				window.open("htpp://127.0.0.1/test.rar");
+					if(data.errcode < 0) return utils.weakTips(data.errinfo);
+					location.href = data.errinfo;
+				});
 			}
 		},
 		beforeCreate(){},
