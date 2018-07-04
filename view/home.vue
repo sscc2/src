@@ -1,28 +1,5 @@
 <template>
 	<div class="home">
-	
-			'<div id="_hints"><div class="_panle">'+
-			'<div><p id="_title">复核操作</p><img id="_close" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z'+
-			'0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOVJREFUeNqMk90NgjAURmvjCDKFiDsormCI8cUNNO7hgw4hO/ATRxBwC9lBv5vcJtcbKm1yeLA9h2sTJrv9ITLG5OAMni'+
-			'ZsLcEFZBaPO1iBgjdC5IKdnAJH8AYzUI5EnByxc6LAi2tjkUTJKWgtb1JkLSL67yQc/pFpw4pDnYhEIuKVaU3VmB0fKEXECHkjZT2BWy1H3CRSbvRh67ntT+Bvg4EYVPzmXk'+
-			'xS8n38DZBcCznl0b0ROyI3jI4sdEDL+sJ0pHIRCswH5KGPykV6EYkpcA2QZSQVkRsFMvAIkHWEnO1XgAEAy8ZNZzb9vqAAAAAASUVORK5CYII=" />'+
-			'</div><div class="_messaga"><p id="_ctxt">sdfsdf</p></div>'+
-			'<div><button id="_yes" class="blueBtn">提 交</button><button id="_no" class="defBtn">返 回</button></div></div></div>';
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	    <navhead></navhead>
 	    <div class="cw">
 	    	<sidebar></sidebar>
@@ -37,17 +14,17 @@
 
 <script>
 import utils from '@/libs/utils.js';
-import globalVar from '@/libs/globalVar.js';
 import observer  from '@/libs/observer.js';
 import navhead   from '@/view/navHead.vue';
 import sidebar   from '@/view/sidebar.vue';
-
+	
 	
 	export default {
 		name: 'home',
 		data() {
 			return {};
 		},
+		mounted(){},
        components: {navhead,sidebar}
 	}
 </script>

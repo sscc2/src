@@ -3,6 +3,7 @@ import axios      from 'axios';
 import kit        from '@/libs/kit.js';
 import globalVar  from '@/libs/globalVar.js';
 import observer   from '@/libs/observer.js';
+import md5        from '@/libs/md5.js';
 	
 	
 function utils(){
@@ -137,6 +138,7 @@ function utils(){
 			isLoading = false;
 			return exp;
 		};
+		
 		// 弱提示
 		var weakHtml = '<div id="_weakTips"><div class="_panle"><div class="_container"></div></div></div>';
 		var weakTips = {
@@ -162,6 +164,7 @@ function utils(){
 			this.weakEl(txt, type);
 //			weakTips.show(txt);
 		};
+		
 		// 带按钮的消息框
 		var hintHtml = '<div id="_hints"><div class="_panle">'+
 			'<div><p id="_title">提示</p><img id="_close" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z'+
@@ -234,10 +237,76 @@ function utils(){
 			_opt = opt;
 			hintsObj.show(opt);
 		};
+		
 		// 复核操作员
-		var review = 
-		this.review = function(yes, no){
-			
+		var reviewHtml = '<div id="_review"><div class="_panle">'+
+			'<div><p id="_title">复核操作</p><img id="_close" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z'+
+			'0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOVJREFUeNqMk90NgjAURmvjCDKFiDsormCI8cUNNO7hgw4hO/ATRxBwC9lBv5vcJtcbKm1yeLA9h2sTJrv9ITLG5OAMni'+
+			'ZsLcEFZBaPO1iBgjdC5IKdnAJH8AYzUI5EnByxc6LAi2tjkUTJKWgtb1JkLSL67yQc/pFpw4pDnYhEIuKVaU3VmB0fKEXECHkjZT2BWy1H3CRSbvRh67ntT+Bvg4EYVPzmXk'+
+			'xS8n38DZBcCznl0b0ROyI3jI4sdEDL+sJ0pHIRCswH5KGPykV6EYkpcA2QZSQVkRsFMvAIkHWEnO1XgAEAy8ZNZzb9vqAAAAAASUVORK5CYII=" />'+
+			'</div><ul class="_messaga"><li><label class="lab">复核操作员：</label><input id="_name" class="inp" type="text" /></li>'+
+			'<li><label class="lab">复核员密码：</label><input id="_pass" class="inp" type="password" /></li></ul>'+
+			'<div><button id="_yes" class="blueBtn">提 交</button><button id="_no" class="defBtn">返 回</button></div></div></div>';
+		var $review = kit(reviewHtml), _rept;
+		var reObj = {
+			el: $review[0],
+			title: $review.find('#_title'),
+			yes: $review.find('#_yes'),
+			no: $review.find('#_no'),
+			label: $review.find('.lab'),
+			pass: $review.find('#_pass'),
+			name: $review.find('#_name'),
+			show: function(opt){
+				reObj.pass.val('');
+				reObj.name.val('');
+				kit.body().appendChild(this.el);
+			},
+			hide: function(){
+				var el = reObj.el;
+				if(el.parentNode)
+					el.parentNode.removeChild(el);
+			},
+			runNo:function(){
+				if(typeof(_rept.no)=="function") _rept.no.call(_rept.that, _rept.noParam);
+			}
+		};
+		if(globalVar.get('lang')=='en'){
+			reObj.title.text('review');
+			reObj.yes.text('Yes');
+			reObj.no.text('No');
+			reObj.label[0].innerText = 'review name:';
+			reObj.label[1].innerText = 'password:';
+		}
+		$review.click(function(e){
+			if(e.target != this) return;
+			reObj.runNo();
+			reObj.hide();
+		});
+		$review.find('#_close').click(function(e){
+			reObj.runNo();
+			reObj.hide();
+		});
+		reObj.no.click(function(e){
+			reObj.runNo();
+			reObj.hide();
+		});
+		reObj.yes.click(function(e){
+			if(typeof(_rept.yes)!="function") return console.warn('回调函数不正确！');
+			var name=reObj.name.val(), pass=reObj.pass.val();
+			if(name==''||pass=='') return exp.weakTips('复核员或密码不能为空！', 2);
+			var param = {
+				url: 'mx/userinfo/review',
+				cmdID: '90001',
+				name: reObj.name.val(),
+				pass: md5.hex_md5(reObj.pass.val())
+			};
+			exp.post(param, _rept.yes);
+			reObj.hide();
+		});
+		this.review = function(opt){
+			if(typeof(opt)!="object") opt = {};
+			_rept = opt;
+			reObj.show(opt);
 		}
 	};
 	kit.extend(exp, new MessageMask());
