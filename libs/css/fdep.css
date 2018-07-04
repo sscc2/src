@@ -123,8 +123,7 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .el-tabs__item.is-active{color: #0DB9EB;}
 .el-tabs__item{color: #5C759D;}
 /* 多行文本框 */
-.el-textarea__inner{border: 2px solid #D7D8DA;}
-.textarea__inner:focus{border-color: #32ccf9;}
+.el-textarea__inner{border: 2px solid #D7D8DA;background-color: #F8F8F8}
 /* 开关 */
 .el-switch__label{color: #666}
 .el-switch__label.is-active{color: #0DB9EB;}
@@ -138,3 +137,6 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .Popup ._messaga_info{margin-left: 60px; margin-top: 20px;}
 .Popup .info_txt{font-size: 14px; color: #999}
 .Popup .info_button{margin-left: 100px; text-align: left; margin-top: 65px;}
+
+.date_picker .el-range__icon{line-height: 20px;}
+.date_picker .el-range-separator{line-height: 20px;}

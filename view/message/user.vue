@@ -48,14 +48,14 @@
           </div>
           <div class="_messaga1">
             <span class="txt"><span class="red">*&nbsp;</span>{{pageTxt.userTxt[12]}}</span>
-            <el-input class="Popup_input"></el-input>
+            <el-input class="Popup_input" v-model="csvFileName"></el-input>
             <div class="_messaga1_info">
               <span class="info_txt">请将扩展信息文件放到服务器路路径：/home/fdep/notice内；</span><br/>
               <span class="info_txt">在输入框中填入扩展信息文件名。</span>
             </div>
           </div>
           <div class="info_button1">
-            <el-button type="primary" @click="">提交</el-button>
+            <el-button type="primary" @click="importExtInfoSubmit">提交</el-button>
             <el-button type="default" class="Popup_return" @click="showImportExtInfo=false">返回</el-button>
           </div>
         </div>
@@ -67,7 +67,7 @@
                <img id="_close" src="@/img/close.png" @click="showExportExtInfo=false">
           </div>
           <div class="_messaga">
-            <span class="txt">文件名：<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+            <span class="txt">文件名：<a :href="exportCsvSrc" style="color:#5C759D">{{exportCsvSrc}}</a></span>
             <div class="_messaga_info">
               <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
             </div>
@@ -116,7 +116,7 @@ var pageTxt = {
     "删除用户",
     "修改密码",
     "批量导入扩展信息",
-    "批量导出拓展信息",
+    "批量导出扩展信息",
     "批量导出基础信息",
     "批量导入路径："
   ],
@@ -139,7 +139,12 @@ export default {
       pageSize: 20,
       showImportExtInfo:false,
       showExportExtInfo:false,
-      showExportBasicsInfo:false
+      showExportBasicsInfo:false,
+      csvFileName:"",
+      exportCsvSrc:"",
+      exportCsvName:"",
+      BasicsSrc:"",
+      BasicsName:""
     };
   },
 
@@ -216,14 +221,62 @@ export default {
         }
       );
     },
-    // 导入扩展信息
+ 
     importExtInfo(){
+      this.csvFileName=""
       this.showImportExtInfo=true;
     },
-    exportExtInfo(){
-      this.showExportExtInfo=true;
+    importExtInfoSubmit(){
+      var _this=this
+      utils.post(
+        "mx/userinfoExt/ImportCsv",
+        {
+          cmdID:"600016",
+          csvFileName: _this.csvFileName 
+        },
+        function(response){
+          if(response.errcode == 0){
+            utils.weakTips(response.errinfo)
+          }else{
+            utils.weakTips(response.errinfo)
+          }
+        }
+      )
     },
+    exportExtInfo(){
+      var _this=this;
+      utils.post(
+        "mx/userinfoExt/ExportCsv",
+        {
+          cmdID:"600015"
+        },
+        function(response){
+          if(response.errcode == 0){
+            _this.exportCsvName=response.errinfo.split("/")
+            console.log(_this.exportCsvName)
+            _this.exportCsvSrc=response.errinfo
+            _this.showExportExtInfo=true;
+           
+          }else{
+            utils.weakTips(response.errinfo)
+          }
+        }
+      )
+    },
+
     exportBasicsInfo(){
+      var _this=this;
+      utils.post(
+        "mx/userinfo/ExportCsv",
+        {
+          cmdID:"600014"
+        },
+        function(response){
+          if(response.errinfo == 0 ){
+            
+          }
+        }
+      )
       this.showExportBasicsInfo=true;
     },
     // 修改用户(row)

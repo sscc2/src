@@ -568,7 +568,7 @@ function as(data){
 .user *{vertical-align: middle;}
 .userH .el-input{width: 160px; height: 30px; margin-right: 10px;}
 .txt{font-size: 13px; color: #666666;}
-.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d;}
+.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d; border:1px solid red;}
 .btnBox div{display: inline-block; cursor: pointer; margin-left: 30px;}
 .btnBox span{margin-left: 4px;}
 .btnBox div:nth-child(1){margin-left: 0;}

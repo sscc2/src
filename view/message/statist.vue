@@ -25,10 +25,9 @@
 					<el-radio v-model="timeMethod" label="1" @change="getTimeFn">{{pageTxt.lable1[9]}}</el-radio>
 					<el-radio v-model="timeMethod" label="2" @change="getTimeFn">{{pageTxt.lable1[10]}}</el-radio>
 					<el-radio v-model="timeMethod" label="3" @change="getTimeFn">{{pageTxt.lable1[11]}}</el-radio>
-					<el-date-picker class='picker first_select' :disabled="timeMethod!=3" @change="changeDate1" v-model="search.start" type="date" placeholder="选择日期"></el-date-picker>
-					<span class="txt">{{pageTxt.lable1[13]}}</span>
-					<el-date-picker :disabled="timeMethod!=3" class='picker' @change="changeDate2" v-model="search.end" type="date" placeholder="选择日期"></el-date-picker>
-					<el-button class="searchBtn" type="primary" @click="searchFn">{{pageTxt.lable1[14]}}</el-button>
+          <el-date-picker class="date_picker" :disabled="timeMethod!=3"  @change="changeDate" :clearable=false format="yyyy-MM-dd" v-model="search" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+          </el-date-picker>				
+          <el-button class="searchBtn" type="primary" @click="searchFn">{{pageTxt.lable1[14]}}</el-button>
 					<el-button class="exportBtn" type="primary" @click="exportFn">{{pageTxt.lable1[15]}}</el-button>				
 				</div>
 
@@ -84,13 +83,13 @@ export default {
   name: "message_statist",
   data() {
     return {
-	  pageTxt,
+    search:[],
+    pageTxt,
 	  currentPage: 1,
 	  pageSize: 20,
 	  timeMethod: "",
 	  statisticalMethod: "",
-      modeType: { user: "", userType: "", businessType: "" },
-	  search: { type: "", start: "", end: "",},
+    modeType: { user: "", userType: "", businessType: "" },
 	  data: {
         // lists: [{ operator: "test01", operationType: "01" }],
         // totalSize: "12"
@@ -106,8 +105,8 @@ export default {
           cmdID: "600091",
           operator: _this.modeType.user,
           operationType: _this.modeType.userType,
-          operationBeginTime: _this.search.start,
-          operationEndTime: _this.search.end,
+          operationBeginTime: _this.search[0] + " 00:00:00",
+          operationEndTime: _this.search[1] + " 23:59:59",
           sequence: _this.statisticalMethod,
           type: 0,
           pageSize: 20,
@@ -128,8 +127,8 @@ export default {
           cmdID: "600091",
           operator: _this.modeType.user,
           operationType: _this.modeType.userType,
-          operationBeginTime: _this.search.start,
-          operationEndTime: _this.search.end,
+          operationBeginTime: _this.search[0] + " 00:00:00",
+          operationEndTime: _this.search[1] + " 23:59:59",
           sequence: _this.statisticalMethod,
           type: 1,
           pageSize: 20,
@@ -139,8 +138,8 @@ export default {
           if (response.errcode == 0) {
             utils.weakTips(response.errinfo)
           }else{
-			utils.weakTips(response.errinfo)
-		  }
+			      utils.weakTips(response.errinfo)
+		      }
         }
       );
     },
@@ -148,31 +147,27 @@ export default {
       if (this.timeMethod == 0) {
         var toDate = new Date();
         toDate = this.transferTime(toDate);
-        this.search.end = toDate + "23:59:59";
-        this.search.start = toDate + "00:00:00";
+        this.search = [toDate, toDate]
       }
       if (this.timeMethod == 1) {
         var beforeTime = new Date();
         beforeTime = this.transferTime(beforeTime);
-        this.search.end = beforeTime + "23:59:59";
         var nowTime = new Date();
         nowTime.setDate(nowTime.getDate() - 7);
         nowTime = this.transferTime(nowTime);
-        this.search.start = nowTime + "00:00:00";
+        this.search = [nowTime , beforeTime]
       }
       if (this.timeMethod == 2) {
         var beforeTime = new Date();
         beforeTime = this.transferTime(beforeTime);
-        this.search.end = beforeTime + "23:59:59";
         var nowTime = new Date();
         nowTime.setDate(nowTime.getDate() - 30);
         nowTime = this.transferTime(nowTime);
-        this.search.start = nowTime + "00:00:00";
-	  }
-	  if(this.timeMethod == 3) {
-		this.search.end = "";
-		this.search.start = "";
-	  }
+        this.search = [nowTime , beforeTime]
+	   }
+      if (this.timeMethod == 3) {
+        this.search = ["",""]
+      }
     },
     transferTime(beforeTime) {
       var year = beforeTime.getFullYear(),
@@ -184,15 +179,12 @@ export default {
       if (date < 10) {
         date = "0" + date;
       }
-      var returnDate = year + "-" + month + "-" + date + " ";
+      var returnDate = year + "-" + month + "-" + date;
       return returnDate;
 	},
-	changeDate1(){
-    this.search.start = this.transferTime(this.search.start)+ "00:00:00";
-    // new Date(this.search.start).getTime()
-	},
-	changeDate2(){
-    this.search.end = this.transferTime(this.search.end)+ "23:59:59"
+	changeDate(){
+    this.search[0] = this.transferTime(this.search[0]);
+    this.search[1] = this.transferTime(this.search[1]);
 	},
     currentRow2() {
   
@@ -210,8 +202,7 @@ export default {
     this.timeMethod = "0";
     var toDate = new Date();
     toDate = this.transferTime(toDate);
-    this.search.start = toDate + "00:00:00";
-    this.search.end = toDate + "23:59:59";
+    this.search = [toDate , toDate]
     var _this = this;
     utils.post(
       "mx/operationRecording/query",
@@ -240,8 +231,7 @@ export default {
 .title span{font-size: 16px; color: #333; line-height: 40px;}
 .lined *{vertical-align: middle;}
 .lined{margin-top: 15px; font-size: 14px; color: #666;}
-.statist .input,
-.statist .picker{width: 200px;}
+.statist .input,.statist .picker{width: 200px;}
 .t1{margin-left: 30px;}
 .first_select{margin-left: 15px;}
 .pagination{text-align: right; padding: 20px 0;}
@@ -252,4 +242,6 @@ export default {
 .searchBtn{margin-left: 40px;}
 .exportBtn{float: right;}
 .ver{margin: 10px 0;}
+.date_picker{margin-left: 30px;height: 30px;width: 350px;}
+
 </style>

@@ -1,28 +1,5 @@
 <template>
 	<div>
-		
-
-
-
-		<el-select class="box" v-model="value10" multiple filterable="" allow-create="" default-first-option placeholder="请选择文章标签">
-    <el-option v-for="item in options5" :key="item.value" :label="item.label" :value="item.value">
-    </el-option>
-  </el-select>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		<div class='header'>
 			<span class='header_txt'>{{hostText_cn[0]}}</span>
 		</div>
@@ -76,28 +53,6 @@ export default {
 	  textareaValue2: '',
 	  activeName: 'first',
 	  hostType:0,
-
-
- options5: [{
-          value: 'HTML',
-          label: 'HTML'
-        }, {
-          value: 'CSS',
-          label: 'CSS'
-        }, {
-          value: 'JavaScript',
-          label: 'JavaScript'
-        }, {
-          value: 'JavaScript123',
-          label: 'JavaScript123'
-        }, {
-          value: 'JavaScript1213',
-          label: 'JavaScript1123'
-        }],
-        value10: []
-
-
-	
     }
   },
   methods:{
