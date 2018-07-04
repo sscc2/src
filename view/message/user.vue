@@ -17,8 +17,8 @@
 				<div  @click="createUser"><img src="@/img/creatico.png" ><span>{{pageTxt.userTxt[5]}}</span></div>
 				<div  @click="deleteUser"><img src="@/img/deletico.png" ><span>{{pageTxt.userTxt[7]}}</span></div>
 				<div  @click="importExtInfo"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[9]}}</span></div>
-        <div  @click=""><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[10]}}</span></div>
-        <div  @click=""><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[11]}}</span></div>
+        <div  @click="exportExtInfo"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[10]}}</span></div>
+        <div  @click="exportBasicsInfo"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[11]}}</span></div>
 			</div>
 
 			<el-table ref="multipleTable" tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" :data="userData.lists">
@@ -40,6 +40,61 @@
       </div>  
 			<Password></Password>
 			<Upload></Upload>
+
+      <div class="Popup" v-show="showImportExtInfo">
+        <div class="_panle">
+          <div><p id="_title">{{pageTxt.userTxt[9]}}</p>
+               <img id="_close" src="@/img/close.png" @click="showImportExtInfo=false">
+          </div>
+          <div class="_messaga1">
+            <span class="txt"><span class="red">*&nbsp;</span>{{pageTxt.userTxt[12]}}</span>
+            <el-input class="Popup_input"></el-input>
+            <div class="_messaga1_info">
+              <span class="info_txt">请将扩展信息文件放到服务器路路径：/home/fdep/notice内；</span><br/>
+              <span class="info_txt">在输入框中填入扩展信息文件名。</span>
+            </div>
+          </div>
+          <div class="info_button1">
+            <el-button type="primary" @click="">提交</el-button>
+            <el-button type="default" class="Popup_return" @click="showImportExtInfo=false">返回</el-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="Popup" v-show="showExportExtInfo">
+        <div class="_panle">
+          <div><p id="_title">{{pageTxt.userTxt[9]}}</p>
+               <img id="_close" src="@/img/close.png" @click="showExportExtInfo=false">
+          </div>
+          <div class="_messaga">
+            <span class="txt">文件名：<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+            <div class="_messaga_info">
+              <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+            </div>
+          </div>
+          <div class="info_button">
+            <el-button type="default" @click="showExportExtInfo=false">关闭</el-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="Popup" v-show="showExportBasicsInfo">
+        <div class="_panle">
+          <div><p id="_title"></p>
+                <img id="_close" src="@/img/close.png" @click="showExportBasicsInfo=false">
+          </div>
+          <div class="_messaga">
+            <span class="txt">文件名：&nbsp;<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+            <div class="_messaga_info">
+              <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+            </div>
+          </div>
+          <div class="info_button">
+            <el-button type="default" @click="showExportBasicsInfo=false">关闭</el-button>
+          </div>
+        </div>
+      </div> 
+
 		</div>	
   </div>
 </template>
@@ -62,7 +117,8 @@ var pageTxt = {
     "修改密码",
     "批量导入扩展信息",
     "批量导出拓展信息",
-    "批量导出基础信息"
+    "批量导出基础信息",
+    "批量导入路径："
   ],
   listTxt: ["用户ID", "用户名称", "操作"],
   tips: {
@@ -77,10 +133,13 @@ export default {
     return {
       pageTxt,
       userParam: { id: "", name: "" },
-      userData: {},
+      userData: {lists:[{userID:'test01'}]},
       selects: [],
       currentPage: 1,
       pageSize: 20,
+      showImportExtInfo:false,
+      showExportExtInfo:false,
+      showExportBasicsInfo:false
     };
   },
 
@@ -158,7 +217,14 @@ export default {
       );
     },
     // 导入扩展信息
-    importExtInfo: function() {
+    importExtInfo(){
+      this.showImportExtInfo=true;
+    },
+    exportExtInfo(){
+      this.showExportExtInfo=true;
+    },
+    exportBasicsInfo(){
+      this.showExportBasicsInfo=true;
     },
     // 修改用户(row)
     userEdit: function(e) {
@@ -242,16 +308,13 @@ export default {
               function(response){
                 if(response.errcode==0){
                   _this.userData = response;
-                }
-                
+                }               
               }
             )
           }else{
              _this.userData = response;
-          }
-          }
-         
-          
+            }
+          }                   
         }
       );
     }
@@ -285,8 +348,8 @@ export default {
 .user{padding: 22px; white-space: nowrap;}
 .user *{vertical-align: middle;}
 .user input{margin-left: 10px; border: 1px solid #d7d8da; text-indent: 12px;}
-.user .txt{font-size: 14px; line-height: 30px; height: 30px; color: #666666;}
-.user .el-button{margin-left: 35px;}
+.txt{font-size: 14px; line-height: 30px; height: 30px; color: #666666;}
+.userH .el-button{margin-left: 35px;}
 .userH > span:nth-child(3){margin-left: 35px;}
 .userH > span:nth-child(6){margin-left: 10px;}
 .userH > input:focus{border: 2px solid #32ccf9;}
@@ -295,12 +358,12 @@ export default {
 .btnBox > div > span{margin-left: 3px;}
 .btnBox div:nth-child(1){margin-left: 0;}
 ._zero > div{display: inline-block; margin-right: 14px; cursor: pointer;}
-.promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
-.promptBox_btn button:nth-child(1){margin-left: 0;}
-.delInfo{width: 328px; height: 132px; background-color: #262626; border-radius: 8px; margin: 0 auto; opacity: 0.7; position: relative; margin-top: 10px; z-index: 101;}
-.delInfo_txt{font-size: 14px; color: #fff; display: block; text-align: center; line-height: 132px;}
-.promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
-.promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
-.promptBox_btn button:nth-child(1){margin-left: 0;}
+
+.Popup ._messaga1{margin-top: 40px;margin-left: 40px;text-align: left;}
+.Popup .red{color:#FF6B6B;}
+.Popup_input{width: 360px;margin-left: 18px;}
+.Popup ._messaga1_info{margin-left: 125px;margin-top: 15px;line-height: 20px;}
+.Popup .info_button1{text-align: left;margin-left: 165px;margin-top: 40px;}
+.Popup_return{margin-left: 40px;}
 </style>
 

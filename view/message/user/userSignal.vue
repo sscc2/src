@@ -571,17 +571,7 @@ function as(data) {
   }
   return data;
 }
-var idList = [];
-function useridList() {
-  idList = globalVar.get("useridList");
-  var call = function(master, list) {
-    if (master != "useridReady") return;
-    observer.delBinding("useridReady", call);
-    idList = list;
-    call = null;
-  };
-  if (!idList.length) observer.addBinding("useridReady", call);
-}
+
 </script>
 
 <style scoped="scoped">

@@ -11,7 +11,7 @@ function utils(){
 		app = globalVar.get('vm'), lang = {};
 	lang.en = {
 		title:'Reminder', message:'You are sure to do the following?',
-		okBtn: 'Yes', cBtn: 'No', nowBtn: 'Now'
+		okBtn: 'Yes', cBtn: 'No', nowBtn: 'Now', review: 'review'
 	}
 	function MessageMask(){
 		var time = null, load, isLoading = false;
@@ -234,6 +234,11 @@ function utils(){
 			_opt = opt;
 			hintsObj.show(opt);
 		};
+		// 复核操作员
+		var review = 
+		this.review = function(yes, no){
+			
+		}
 	};
 	kit.extend(exp, new MessageMask());
 //		axios.request（config）

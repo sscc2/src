@@ -26,7 +26,7 @@
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
 			<div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
-			<div @click=""><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
+			<div @click="exportEkeyInfo"><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
 		</div>
 	
 		<el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
@@ -135,9 +135,26 @@
 		<div class="_pagination" v-show="EkeyData.totalPage>0">
       <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
       <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
-    </div> 
+    </div>
 
 	</div>
+
+  <div class="Popup" v-show="showExportEkeyInfo">
+      <div class="_panle">
+        <div><p id="_title"></p>
+              <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
+        </div>
+        <div class="_messaga">
+          <span class="txt">文件名：&nbsp;<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+          <div class="_messaga_info">
+            <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+          </div>
+        </div>
+        <div class="info_button">
+          <el-button type="default" @click="showExportEkeyInfo=false">关闭</el-button>
+        </div>
+      </div>
+    </div> 
 </div>	
 </template>
 
@@ -259,7 +276,8 @@ export default {
       err2: { id: false, Ekey: false, pass: false, start: false, end: false },
       currentPage1: 1,
       pageSize: 20,
-      options: []
+      options: [],
+      showExportEkeyInfo:false
     };
   },
   methods: {
@@ -439,6 +457,9 @@ export default {
         }
       }
     },
+    exportEkeyInfo(){
+      this.showExportEkeyInfo=true;
+    },
     //删除(row)
     showDel() {
       var _this = this;
@@ -594,12 +615,13 @@ export default {
 .header_txt{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 17px; font-weight: bold;}
 .Ekey *{vertical-align: middle;}
 .user .el-input{width: 210px; margin-right: 10px;}
-.user .el-button{margin-left: 35px; width: 90px; height: 30px; line-height: 0;}
+.user .el-button{margin-left: 35px;}
 .user .red{color: #f56c6c;}
 .txt{font-size: 14px; color: #666666; margin-left: 20px;}
 .btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 18px;}
 .btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
 .btnBox div:nth-child(1){margin-left: 0;}
+.btnBox span{margin-left: 4px;}
 .Ekey{padding: 22px;}
 .Ekey .eRadio{margin-right: 30px;}
 .Ekey .el-radio__label{font-size: 16px;}
@@ -613,5 +635,5 @@ export default {
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
 #rightBox1{margin-left: 10px; width: 210px;}
-.red{ color:red; font-size: 14px;}
+.red{color:red; font-size: 14px;}
 </style>

@@ -385,4 +385,8 @@ input:focus{border: 2px solid #32ccf9;}
 .btn{margin-left: 140px; margin-top: 30px;}
 ._zero > img[data-v-d09b1104]{margin-left: 0 !important;}
 .red{color: red; font-size: 14px;}
+
+</style>
+
+<style>
 </style>

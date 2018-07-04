@@ -6,11 +6,11 @@
 
         <div class="messBox">
 			<div class="ico1">
-				<!-- <img class="csor" src="../img/cdico.png"/> -->
+				<img class="csor" src="../img/cdico.png"/>
 			</div> 
 			<div class="ico2"><img  src="../img/warinico.png" /></div>  
 			<div class="ico3"><span class='ioc3_txt'>38</span></div>
-			<span class="warin_txt">警告：2018-03-05 10:31:47 深圳RU：大面积用户掉线。错误代码：SKG9QM2425。</span>
+			<span class="warin_txt">告警：2018-03-05 10:31:47 深圳RU:大面积用户掉线。错误代码：SKG9QM2425。</span>
         </div>
 
         <div class="userBox">
@@ -22,7 +22,7 @@
 			<div>
 				<el-dropdown trigger="click">
 				<span class="el-dropdown-link">
-					<span class="margin_left">业务监控分析系统</span>
+					<span class="margin_left">配置管理系统</span>
 					<div class="ico5"><img class="csor" src="../img/selectdico1.png"></div>	
 				</span>
 				<el-dropdown-menu slot="dropdown">
@@ -40,9 +40,9 @@
 					<div class="ico5"><img class="csor" src="../img/selectdico1.png"></div>	
 				</span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item>黄金糕</el-dropdown-item>
-					<el-dropdown-item>狮子头</el-dropdown-item>
-					<el-dropdown-item>螺蛳粉</el-dropdown-item>
+					<el-dropdown-item>admin1</el-dropdown-item>
+					<el-dropdown-item>admin2</el-dropdown-item>
+					<el-dropdown-item>admin3</el-dropdown-item>
 				</el-dropdown-menu>
 				</el-dropdown>							
 			</div>
@@ -85,14 +85,14 @@ export default {
 	.ico2{margin-left: 30px; display: inline-block;}
 	.ico3{margin-left: 12px; display: inline-block;} 
 	.ioc3_txt{background-color: #FF6B6B; width: 20px; height: 20px; text-align: center; line-height: 20px; border-radius: 50%} 
-	.warin_txt{line-height: 50px; margin-left: 3px;} 
+	.warin_txt{line-height: 50px; margin-left: 8px;} 
 	 
 	.userBox{float:right; margin-right: 20px;height: 100%;}
-	.ico4{margin-right: 3px; display: inline-block;}
-	.ico5{margin-left: 3px; display: inline-block;}
+	.ico4{margin-right: 8px; display: inline-block;}
+	.ico5{margin-left: 8px; display: inline-block;}
 	.margin_left{line-height: 50px; font-size: 12px;color: #FEFFFF}
-	.userBox>div:nth-child(1){display: inline-block; margin-right: 30px;}
-	.userBox>div:nth-child(2){display: inline-block; margin-right: 10px;}
+	.userBox>div:nth-child(1){display: inline-block; margin-right: 50px;}
+	.userBox>div:nth-child(2){display: inline-block; margin-right: 22px;}
 	.userBox>div:nth-child(3){display: inline-block;}
 
 	.csor{cursor:pointer} 

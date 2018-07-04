@@ -34,7 +34,7 @@
 		<div class="btnBox">
 			<div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
 			<div @click="fn"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div>
-			<div @click=""><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
+			<div @click="exportSignalInfo"><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
 		</div>
 
 		<el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
@@ -99,6 +99,23 @@
 		</el-dialog>
 	</div>
 
+  <div class="Popup" v-show="showExportSignalInfo">
+    <div class="_panle">
+      <div><p id="_title"></p>
+            <img id="_close" src="@/img/close.png" @click="showExportSignalInfo=false">
+      </div>
+      <div class="_messaga">
+        <span class="txt">文件名：&nbsp;<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+        <div class="_messaga_info">
+          <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+        </div>
+      </div>
+      <div class="info_button">
+        <el-button type="default" @click="showExportSignalInfo=false">关闭</el-button>
+      </div>
+    </div>
+  </div> 
+	
 </div>	
 </template>
 
@@ -172,6 +189,7 @@ export default {
       row: "",
       pageTxt,     
       list: [],
+      showExportSignalInfo:false
     };
   },
   methods: {
@@ -311,6 +329,9 @@ export default {
             }
           }
         );    
+    },
+    exportSignalInfo(){
+      this.showExportSignalInfo=true;
     },
     // 刪除通信关系(row)
     showPromptBox() {
@@ -540,37 +561,27 @@ function as(data){
   return data;
 
 }
-var idList = [];
-	function useridList(){
-		idList = globalVar.get('useridList');
-		var call = function(master, list){
-			if(master != 'useridReady') return;
-			observer.delBinding('useridReady', call);
-			idList = list; call = null;
-		}
-		if(!idList.length) observer.addBinding('useridReady', call);
-	}
+
 </script>
 
 <style scoped="scoped">
 .user *{vertical-align: middle;}
 .userH .el-input{width: 160px; height: 30px; margin-right: 10px;}
 .txt{font-size: 13px; color: #666666;}
-.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d; overflow: hidden;}
-.btnBox div{float: left; cursor: pointer; margin-left: 30px;}
-.btnBox span{margin-left: 5px;}
+.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d;}
+.btnBox div{display: inline-block; cursor: pointer; margin-left: 30px;}
+.btnBox span{margin-left: 4px;}
 .btnBox div:nth-child(1){margin-left: 0;}
 ._zero > img{cursor: pointer;}
 .sel{width: 350px; line-height: 40px;}
 .leftBox{height: 30px;}
-.sel[data-v-50d0771e]{width: 202px;} 
-.delInfo{width: 328px;height: 132px;background-color: #262626;border-radius: 8px;margin: 0 auto;opacity:0.7;position: relative;margin-top: -15%;z-index: 101;} 
-.delInfo_txt{font-size: 14px;color:#fff;display: block;text-align:center;line-height: 132px;} 
+.sel[data-v-50d0771e]{width: 202px;}
 .txt1{margin-left: 30px;font-size: 13px; color: #666666;}
 .signal{margin: 22px;}
 .btn{margin-left: 35px;}
 .input_normal{width: 250px;height: auto;}
 </style>
+
 <style>
 	.signal .input_normal span{white-space: normal;word-break: keep-all;display: inline-block;}
 </style>

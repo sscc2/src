@@ -423,7 +423,7 @@ export default {
           ekeyName: "",
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1,
-          type: _this.$store.state.creatAndEdit ? 2 : 1
+          type: 1
         },
         function(response) {
           if(response.errcode == 0){
@@ -432,7 +432,7 @@ export default {
               cmdID: "600021",
               userID: _this.$store.state.creatAndEdit? "" : _this.$store.state.transferEditID,
               ekeyName: "",
-              type: _this.search.type,
+              type: 1,
               pageSize: _this.$store.state.creatAndEdit ? 2 : 1,
               currentPage: response.totalPage
             },
@@ -458,9 +458,7 @@ export default {
           cmdID: "600021",
           userID: _this.$store.state.transferEditID,
           ekeyName: _this.search.ekeyName,
-          type: _this.$store.state.creatAndEdit
-            ? _this.search.type
-            : _this.search.type,
+          type: 1,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1
         },
@@ -473,9 +471,7 @@ export default {
                 cmdID: "600021",
                 userID: _this.$store.state.transferEditID,
                 ekeyName: _this.search.ekeyName,
-                type: _this.$store.state.creatAndEdit
-                  ? _this.search.type
-                  : _this.search.type,
+                type: _this.$store.state.creatAndEdit ? _this.search.type : _this.search.type,
                 pageSize: _this.pageSize,
                 currentPage: response.totalPage
               },
@@ -500,11 +496,9 @@ export default {
       "mx/userEkey/query",
       {
         cmdID: "600021",
-        userID: _this.$store.state.creatAndEdit
-          ? ""
-          : _this.$store.state.transferEditID,
+        userID: _this.$store.state.transferEditID,
         ekeyName: "",
-        type: _this.$store.state.creatAndEdit ? 2 : 1,
+        type: 1,
         pageSize: _this.pageSize,
         currentPage: _this.currentPage1
       },

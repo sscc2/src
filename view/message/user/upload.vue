@@ -1,5 +1,5 @@
 <template>
-	<el-dialog class='upload' :title="pageTxt.lable[0]" width='600px' :visible.sync="imports">
+	<el-dialog class='upload' :title="pageTxt.lable[0]" width='600px' :visible.sync="$store.state.showImportExtInfo">
 		<el-upload class="uploadFile" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1" :on-exceed="handleLimit"
 			:on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
 			<el-button slot="trigger" size="small" type="primary">{{pageTxt.lable[1]}}</el-button>
@@ -8,7 +8,7 @@
 		<p class="t2">{{pageTxt.lable[6]}}</p>
 		<p class="t2">{{pageTxt.lable[5]}}</p>
 		<div slot="footer" class="dialog-footer">
-		    <el-button @click="imports = false">{{pageTxt.lable[3]}}</el-button>
+		    <el-button @click="$store.state.showImportExtInfo = false">{{pageTxt.lable[3]}}</el-button>
 		</div>
 	</el-dialog>
 </template>
@@ -16,7 +16,7 @@
 <script>
 import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
+
 
 var pageTxt_cn = {
     tips: { sub: "确认批量导入用户扩展信息吗？" },
@@ -35,14 +35,8 @@ var pageTxt_cn = {
 var pageTxt = pageTxt_cn;
 var data = {
   pageTxt,
-  imports: false,
   fileList: []
 };
-
-observer.addBinding("messUpload", function(master, param) {
-  if (master != "messUpload") return;
-  data.imports = param;
-});
 
 export default {
   name: "mess_upload",

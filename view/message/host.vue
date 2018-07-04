@@ -1,34 +1,59 @@
 <template>
-
 	<div>
-		<!-- 头部 -->
+		
+
+
+
+		<el-select class="box" v-model="value10" multiple filterable="" allow-create="" default-first-option placeholder="请选择文章标签">
+    <el-option v-for="item in options5" :key="item.value" :label="item.label" :value="item.value">
+    </el-option>
+  </el-select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		<div class='header'>
-				<span class='header_txt'>主机配置</span>
+			<span class='header_txt'>{{hostText_cn[0]}}</span>
 		</div>
 
 		<div class="host">
-			<!-- 导航 -->
+
 			<div class='host_btn'>
-				<el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-					
-					<el-tab-pane label="全局静态配置" name="first">
-						<span class='title_txt'>静态配置文件：</span>						
-						<div class='textarea'>
-							<el-input type="textarea" :rows="9"  v-model="textarea1">
-							</el-input>							
-						</div>
-							<el-button @click="handleClick">编辑</el-button>
-					</el-tab-pane>
-					
-					<el-tab-pane label="全局动态配置">
-						<span class='title_txt'>动态配置文件：</span> 
-						<div class='textarea'>
-							<el-input type="textarea" :rows="9"  v-model="textarea2">
-							</el-input>
-							
-						</div>
-							<el-button @click="handleClick">编辑</el-button>
-					</el-tab-pane>
+				<el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+			
+						<el-tab-pane :label="hostText_cn[1]" name="first">
+							<div class="switch_box">
+								<span class='title_txt'><span class="red">*&nbsp;</span> {{hostText_cn[2]}}</span>
+								<el-switch v-model="switchValue1" :active-text="hostText_cn[7]"  active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
+							</div>
+							<div class="content">
+								<el-input  type="textarea" rows="18" v-model="textareaValue1" :readonly="!switchValue1"></el-input>
+							</div>
+							<el-button type="primary" @click="edit">{{hostText_cn[3]}}</el-button>
+						</el-tab-pane>		
+
+						<el-tab-pane :label="hostText_cn[4]" name="second">
+							<div class="switch_box">
+								<span class='title_txt'><span class="red">*&nbsp;</span> {{hostText_cn[5]}}</span>
+								<el-switch v-model="switchValue2" :active-text="hostText_cn[7]"  active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
+							</div>
+							<div class="content">
+								<el-input  type="textarea" rows="18" v-model="textareaValue2" :readonly="!switchValue2"></el-input>
+							</div>
+							<el-button type="primary" @click="edit">{{hostText_cn[3]}}</el-button>
+						</el-tab-pane>	
+
 				</el-tabs>
 			</div>				
 
@@ -37,33 +62,120 @@
 </template>
 
 <script>
+import utils from "@/libs/utils.js";
+
+var hostText_cn=['主机配置','全局静态配置','静态配置文件：','编辑','全局动态配置','动态配置文件：','只读','编辑']
+
 export default {
   data() {
     return {
-      textarea1: '<el-input type="textarea" :rows="9"  v-model="textarea2"><el-tabs v-model="activeName2" type="card" @tab-click="handleClick">',
-	  textarea2: '<el-input type="textarea" :rows="9"  v-model="textarea2"><el-tabs v-model="activeName2" type="card" @tab-click="handleClick">',
-	  activeName2: 'first'
+	  hostText_cn,	
+	  switchValue1: false,
+	  switchValue2: false,	  
+      textareaValue1: '',
+	  textareaValue2: '',
+	  activeName: 'first',
+	  hostType:0,
+
+
+ options5: [{
+          value: 'HTML',
+          label: 'HTML'
+        }, {
+          value: 'CSS',
+          label: 'CSS'
+        }, {
+          value: 'JavaScript',
+          label: 'JavaScript'
+        }, {
+          value: 'JavaScript123',
+          label: 'JavaScript123'
+        }, {
+          value: 'JavaScript1213',
+          label: 'JavaScript1123'
+        }],
+        value10: []
+
+
+	
     }
   },
   methods:{
+	  edit(){
+		 utils.hints({
+          txt:"是否提交当前修改",
+          yes:this.editSubmit,
+          btn: 2
+        })
+	  },
+	  editSubmit(){
+		var _this=this;
+		utils.post(
+		"mx/suConfig/modify",
+		{
+			cmdID:"600082",
+			type:_this.hostType,
+			cfgInfo:_this.hostType?_this.textareaValue2:_this.textareaValue1
+		},
+		function(response){
+			if(response.errcode==0){
+				utils.weakTips(response.errinfo);
+			}
+		}
+	)
+	  },
 	  handleClick(tab, event) {
-        console.log(tab, event);
+		  if(event.target.getAttribute('id')=='tab-first'){
+			  this.hostType=0
+		  }
+		  if(event.target.getAttribute('id')=='tab-second'){
+			  this.hostType=1
+		  }
+		  var _this=this;
+		  utils.post(
+			"mx/suConfig/query",
+			{
+				cmdID:"600081",
+				type:_this.hostType
+			},
+			function(response){
+				if(_this.hostType==0){
+					_this.textareaValue1=response.cfgInfo;
+				}else{
+					_this.textareaValue2=response.cfgInfo;
+				}				
+			}
+		)  
       }
+  },
+  created(){
+		var _this=this;
+		utils.post(
+		"mx/suConfig/query",
+		{
+			cmdID:"600081",
+			type:_this.hostType
+		},
+		function(response){
+			if(response.errcode==0){
+				if(_this.hostType==0){
+					_this.textareaValue1=response.cfgInfo;
+				}else{
+					_this.textareaValue2=response.cfgInfo;
+				}				
+			}
+		}
+	)
   }
 }
 </script>
 
 <style scoped="scoped">
-
-/* 头部 */
-.header {height: 47px;border-bottom: 1px solid #ccc;}
-.header_txt {font-size: 16px;  color: #656a73;  line-height: 47px;  margin-left: 17px;  font-weight: bold;}
-
 .host{padding:22px}
-.title_txt{font-size: 14px; color:#666; float: left;}
-.textarea{width: 60%; margin-top: 40px;}
-.el-button--big{margin-top: 40px; margin-left: 100px; width: 90px; height: 30px; line-height: 0; background-color:#32CCF9; color:white}
-.host_btn > .el-textarea__inner{background-color: #F8F8F8; }
-.el-textarea{width: 600px; height: 200px;}
-
+.showHost{margin-top: 40px; width: 1350px;}
+.title_txt{font-size:14px; color:#666;  margin-right: 10px;float: left; line-height: 20px;}
+.red{font-size:14px; color:#FF6B6B;}
+.switch_box{margin-top: 20px;}
+.content{margin-top: 20px; width: 75%; margin-left: 120px;}
+.el-button--big{margin-top: 40px; margin-left: 120px; display: block;}
 </style>
