@@ -73,6 +73,23 @@
 		<!--<AddTheme></AddTheme>-->
 		<!--<EditTheme></EditTheme>-->
 		<!--<DetailTheme></DetailTheme>-->
+		<div class="Popup" v-show="downCSV">
+			<div class="_panle">
+				<div>
+					<p id="_title">{{pageTxt.label[13]}}</p>
+					<img id="_close" src="@/img/close.png" @click="downCSV=false">
+				</div>
+				<div class="_messaga">
+					<span class="txt">文件名：<a :href="csvUrl" style="color:#5C759D">{{csvName}}</a></span>
+					<div class="_messaga_info">
+						<span class="info_txt">{{pageTxt.label[14]}}</span>
+					</div>
+				</div>
+				<div class="info_button">
+					<button class="defBtn" @click="downCSV=false">{{pageTxt.label[15]}}</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -98,7 +115,10 @@ import lang        from '@/language/lang.js';
 		row: '',
 		selects: [],
 		size: 20,
-		max: 0
+		max: 0,
+		downCSV: false,
+		csvUrl: '#',
+		csvName: ''
 	};
 	
 	function delTheme(sub){
@@ -248,7 +268,11 @@ import lang        from '@/language/lang.js';
 			download(){
 				utils.post('mx/pubTopic/exportCsv',{cmdID:'600053'},function(data){
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
-					location.href = data.errinfo;
+//					location.href = data.errinfo;
+					var url = data.errinfo, ind = url.lastIndexOf('/');
+					_this.csvName = url.substring(ind);
+					_this.csvUrl = url;
+					_this.downCSV = true;
 				});
 			}
 		},
@@ -258,6 +282,7 @@ import lang        from '@/language/lang.js';
 			this.selects = [];
 			this.idName = this.info.pubUserID = this.info.topicName = '';
 			this.size = 20;
+			this.downCSV = false;
 			getDay(7);
 			search();
 		},
