@@ -17,23 +17,11 @@ vars.loadTime = 2;
 //vars.urlIP = 'http://192.168.22.22:8081/fdep/';  //曼萍
 //vars.urlIP = 'http://120.78.209.133:8080/fdep/';  //外网
 
-function creatID(){
-	for (var i = 0; i < 10; i++) {
-		var obj = {userID:'userID'+i,userName:'userName'+(i+1)};
-		obj.label = obj.userID + obj.userName;
-		vars.useridList.push(obj);
-	}
-//	console.log('creatID', vars.useridList);
-}
-//creatID();
 
 
 export default {
 	set(key, val){vars[key] = val;},
-	get(key){
-//		if(key == 'useridList') return console.warn('请用useridList()方法!');
-		return vars[key];
-	}
+	get(key){ return vars[key]; }
 };
 /**
  * lang         语言
