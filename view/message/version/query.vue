@@ -96,8 +96,9 @@ import lang      from '@/language/lang.js';
 		});
 	}
 	function verType(arr){
-		//'dcfg','scfg','pscomm','passwd','rdcfg','rscfg','rpscomm','rpasswd' 12345678
-		var txt = ['','dcfg','scfg','pscomm','passwd','rdcfg','rscfg','rpscomm','rpasswd'];
+		//1   动态配置文件  dcfg  2 静态配置文件  scfg   3 密码表 passwd 4  用户主题关联信息表 pscomm  5   动态配置文件回滚  rdcfg  
+		//6 静态配置文件回滚  rscfg   7 密码表回滚  rpasswd 8  用户主题关联信息表回滚  rpscomm
+		var txt = ['','dcfg','scfg','passwd','pscomm','rdcfg','rscfg','rpasswd','rpscomm'];
 		var i, len = arr.length, obj, oper = ['','全量下发','增量下发'];
 		for (i = 0; i < len; i++) {
 			obj = arr[i];
