@@ -245,9 +245,6 @@ import lang      from '@/language/lang.js';
 				sub.splice(index, 1);
 				setTimeout(appidValue, 25);
 			},
-			delTableRow(row){
-				delRow = row;
-			},
 			inck(e, row, i){
 				row.userAppid = e.target.value;
 			},
