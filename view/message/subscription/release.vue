@@ -270,7 +270,7 @@ import lang        from '@/language/lang.js';
 					if(data.errcode < 0) return utils.weakTips(data.errinfo);
 //					location.href = data.errinfo;
 					var url = data.errinfo, ind = url.lastIndexOf('/');
-					_this.csvName = url.substring(ind);
+					_this.csvName = url.substring(ind + 1);
 					_this.csvUrl = url;
 					_this.downCSV = true;
 				});

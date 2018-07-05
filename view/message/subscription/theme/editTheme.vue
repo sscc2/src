@@ -95,14 +95,14 @@
 								<el-table ref="delTable" id='appid' highlight-current-row :data="info.subsUserList" tooltip-effect="dark">
 									<el-table-column width="55">
 										<div slot-scope="scope" class="_zero">
-											<img @click="delAppid(scope.row,scope.$index)" src="@/img/theme/del_1.png" alt="">
+											<img @click="delAppid(scope.row, scope.$index)" src="@/img/theme/del_1.png" alt="">
 										</div>
 									</el-table-column>
 									<el-table-column prop="userID" :label="pageTxt.list[0]" show-overflow-tooltip></el-table-column>
 									<el-table-column prop="userName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
 									<el-table-column :label="pageTxt.list[2]" width='120'>
 										<div slot-scope="scope" class="_zero">
-											<input class="appInput" @click="inck(this)" />
+											<input class="appInput" @input="inck($event, scope.row, scope.$index)" />
 										</div>
 									</el-table-column>
 								</el-table>
@@ -238,14 +238,18 @@ import lang      from '@/language/lang.js';
 					userAppid: '',
 				};
 				this.info.subsUserList.unshift(obj);
-				
+				setTimeout(appidValue, 25);
 			},
 			delAppid(row, index){
 				var sub = this.info.subsUserList;
 				sub.splice(index, 1);
+				setTimeout(appidValue, 25);
 			},
-			inck(e){
-//				console.log(e)
+			delTableRow(row){
+				delRow = row;
+			},
+			inck(e, row, i){
+				row.userAppid = e.target.value;
 			},
 			nowAll(){ submitAll('now'); },
 			submit(){ submitAll('send'); },
@@ -264,14 +268,24 @@ import lang      from '@/language/lang.js';
 		},
 		watch: {
 			active(cur, old){
-				var sub = this.info.subsUserList;
-				kit('.editTheme #appid .appInput').each(function(el, i){
-					el.value = sub[i].userAppid;
-				});
-			}
+				appidValue();
+			},
+//			info: {
+//				handler(cur, old) {
+//					appidValue()
+//				},
+//				immediate: true,
+//				deep: true
+//			}
 		},
 		components: {}
 	};
+	function appidValue(){
+		var sub = _this.info.subsUserList;
+		kit('.editTheme #appid .appInput').each(function(el, i){
+			el.value = sub[i].userAppid;
+		});
+	}
 	function submitAll(subm){
 		if(isNull()) return;
 		var info = _this.info;
@@ -367,12 +381,13 @@ import lang      from '@/language/lang.js';
 	
 	function getDetail(){
 		var userid = globalVar.get('userid');
+		if(!userid) return;
 		var param = {
 				cmdID: '600043', pubUserID: userid.pubUserID,
 				topicName: userid.topicName, type: '0'
 			};
 		utils.post('mx/pubTopic/query', param, function(data){
-			console.log('订阅详情：',data);
+//			console.log('订阅详情：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
 			var res = data.lists[0], info = _this.info;
 //			_this.info = res;

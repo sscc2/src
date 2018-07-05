@@ -462,8 +462,8 @@ function utils(){
 				return;
 			}
 			if(data.endQuery==0) return;
-			
-			var list = data.list, len = list.length, obj, str = '',
+			clearInterval(once);
+			var list = data.lists, len = list.length, obj, str = '',
 				dom = '<p>suName：{suName}；errcode：{errcode}；errinfo：{errinfo}</p>';
 			for (var i = 0; i < len; i++) {
 				obj = list[i];
@@ -471,7 +471,8 @@ function utils(){
 					str += kit.template(obj, dom);
 				}
 			}
-			if(str) utils.weakTips(str, 2);
+			if(str) exp.weakTips(str, 2);
+			hide();
 		}
 		function show(){
 			kit.body().appendChild(WheelReq.el);
