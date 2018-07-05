@@ -67,7 +67,7 @@
                <img id="_close" src="@/img/close.png" @click="showExportExtInfo=false">
           </div>
           <div class="_messaga">
-            <span class="txt">文件名：<a :href="exportCsvSrc" style="color:#5C759D">{{exportCsvSrc}}</a></span>
+            <span class="txt">文件名：<a :href="exportCsvSrc" style="color:#5C759D">{{exportCsvName}}</a></span>
             <div class="_messaga_info">
               <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
             </div>
@@ -84,7 +84,7 @@
                 <img id="_close" src="@/img/close.png" @click="showExportBasicsInfo=false">
           </div>
           <div class="_messaga">
-            <span class="txt">文件名：&nbsp;<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+            <span class="txt">文件名：&nbsp;<a :href="BasicsSrc" style="color:#5C759D">{{BasicsName}}</a></span>
             <div class="_messaga_info">
               <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
             </div>
@@ -183,7 +183,7 @@ export default {
         }
       );
     },
-    // 增加用户
+    // 创建用户
     createUser: function() {
       this.$store.state.creatAndEdit = false;
       this.$store.state.headerText = "创建用户";
@@ -221,7 +221,7 @@ export default {
         }
       );
     },
- 
+    // 导入扩展信息
     importExtInfo(){
       this.csvFileName=""
       this.showImportExtInfo=true;
@@ -243,7 +243,8 @@ export default {
         }
       )
     },
-    exportExtInfo(){
+    // 导出扩展信息
+    exportExtInfo(){          
       var _this=this;
       utils.post(
         "mx/userinfoExt/ExportCsv",
@@ -252,18 +253,16 @@ export default {
         },
         function(response){
           if(response.errcode == 0){
-            _this.exportCsvName=response.errinfo.split("/")
-            console.log(_this.exportCsvName)
-            _this.exportCsvSrc=response.errinfo
-            _this.showExportExtInfo=true;
-           
+            _this.exportCsvSrc=response.errinfo;            
+            _this.exportCsvName=response.errinfo.split("/").pop();
+            _this.showExportExtInfo=true;           
           }else{
             utils.weakTips(response.errinfo)
           }
         }
       )
     },
-
+    // 导出基本信息
     exportBasicsInfo(){
       var _this=this;
       utils.post(
@@ -272,12 +271,15 @@ export default {
           cmdID:"600014"
         },
         function(response){
-          if(response.errinfo == 0 ){
-            
+          if(response.errcode == 0 ){
+            _this.BasicsSrc=response.errinfo
+            _this.BasicsName=response.errinfo.split("/").pop();
+            _this.showExportBasicsInfo=true;
+          }else{
+              utils.weakTips(response.errinfo)
           }
         }
       )
-      this.showExportBasicsInfo=true;
     },
     // 修改用户(row)
     userEdit: function(e) {

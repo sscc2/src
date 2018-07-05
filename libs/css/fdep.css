@@ -7,8 +7,8 @@
 textarea{resize: none !important;}
 ._zero{font-size: 0; line-height: 0;}
 ._iBtn{padding: 6px 10px; font-size: 16px;}
-input[type=text],input[type=password],input[type=number],input[type=email],input[type=search],input[type=tel],input[type=url]{border: 1px solid #D7D8DA;}
-input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{border: 2px solid #32CCF9;}
+/*input[type=text],input[type=password],input[type=number],input[type=email],input[type=search],input[type=tel],input[type=url]{border: 1px solid #D7D8DA;}
+input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{border: 2px solid #32CCF9;}*/
 /* 分页 */
 ._pagination{padding:20px 0;text-align:left;}
 ._pagination>div{display:inline-block;padding:0;vertical-align:middle;}
@@ -108,7 +108,8 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 #_review *{vertical-align: middle;}
 #_review li{margin-bottom: 10px;}
 #_review .lab{display: inline-block;width: 165px;font-size: 14px; color: #666; line-height: 30px;height: 30px;text-align: right;padding-right: 10px;}
-#_review .inp{display: inline-block;width: 255px;font-size: 14px; color: #666; height: 30px;padding: 0 10px;}
+#_review .inp{display: inline-block;width: 255px;font-size: 14px; color: #666; height: 30px;padding: 0 10px;border: 1px solid #D7D8DA;}
+#_review .inp:focus{border: 2px solid #32CCF9;}
 #_review button{margin: 0 20px;}
 /* 标题 */
 .header{height: 47px; border-bottom: 1px solid #ccc;}
@@ -118,18 +119,19 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .bottom_btn{margin-top: 30px !important; width: 200px; margin: 0 auto;}
 /* 选项卡 */
 .el-tabs--top.el-tabs--card .el-tabs__item:nth-child(2){padding: 0 30px 0 30px;}
-.el-tabs__item.is-disabled{background: #E8E8E8;}
+.el-tabs__item.is-disabled{background: rgb(245,247,250);}
 .el-tabs--card>.el-tabs__header .el-tabs__nav{border-radius: 0;}
 .el-tabs__item.is-active{color: #0DB9EB;}
 .el-tabs__item{color: #5C759D;}
+.el-tabs--card>.el-tabs__header .el-tabs__item{border-bottom: 1px solid #e4e7ed;}
 /* 多行文本框 */
-.el-textarea__inner{border: 2px solid #D7D8DA;background-color: #F8F8F8}
+.content .el-textarea__inner{border: 1px solid #D7D8DA;background-color: #F8F8F8}
 /* 开关 */
 .el-switch__label{color: #666}
 .el-switch__label.is-active{color: #0DB9EB;}
 /* 弹出框 */
 .Popup{background: rgba(59, 65, 75, 0.2); position: fixed; height: 100%; width: 100%; text-align: center; top: 0; left: 0; font-size: 0; z-index: 2015;}
-.Popup ._panle{display: inline-block; width: 600px; height: 300px; margin-top: 180px; background: #FFF; border-radius: 4px;}
+.Popup ._panle{display: inline-block; width: 600px; height: 310px; margin-top: 180px; background: #FFF; border-radius: 4px;}
 .Popup #_title{font-size: 16px; color: #656A73; text-align: left; text-indent: 20px; border-bottom: 1px solid #D7D8DA; line-height: 50px; height: 50px;}
 .Popup #_close{position: absolute; top: 17px; right: 17px; cursor: pointer;}
 .Popup ._messaga{text-align: left; margin-top: 40px; margin-left: 40px;}

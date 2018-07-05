@@ -145,7 +145,7 @@
               <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
         </div>
         <div class="_messaga">
-          <span class="txt">文件名：&nbsp;<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+          <span class="txt">文件名：&nbsp;<a :href="EkeyInfoSrc" style="color:#5C759D">{{EkeyInfoName}}</a></span>
           <div class="_messaga_info">
             <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
           </div>
@@ -244,7 +244,8 @@ export default {
       EkeyData: [],
       selects: [],
       oldEkeyName: "",
-
+      EkeyInfoSrc:"",
+      EkeyInfoName:"",
       pageTxt: pageTxt,
       radio: 1,
       info: {
@@ -277,7 +278,9 @@ export default {
       currentPage1: 1,
       pageSize: 20,
       options: [],
-      showExportEkeyInfo:false
+      showExportEkeyInfo:false,
+      EkeyInfoSrc:"",
+      EkeyInfoName:""
     };
   },
   methods: {
@@ -457,9 +460,27 @@ export default {
         }
       }
     },
+    // 导出Ekey
     exportEkeyInfo(){
-      this.showExportEkeyInfo=true;
+      var _this=this;
+      utils.post(
+        "mx/userEkey/ExportCsv",
+        {
+          cmdID:"600028"
+        },
+        function(response){
+          if(response.errcode ==0 ){
+            _this.EkeyInfoSrc=response.errinfo
+            _this.EkeyInfoName=response.errinfo.split("/").pop()
+            _this.showExportEkeyInfo=true;
+          }else{
+            utils.weakTips(response.errinfo)
+          }
+        }
+      )
+     
     },
+    
     //删除(row)
     showDel() {
       var _this = this;

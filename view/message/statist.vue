@@ -28,7 +28,7 @@
           <el-date-picker class="date_picker" :disabled="timeMethod!=3"  @change="changeDate" :clearable=false format="yyyy-MM-dd" v-model="search" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>				
           <el-button class="searchBtn" type="primary" @click="searchFn">{{pageTxt.lable1[14]}}</el-button>
-					<el-button class="exportBtn" type="primary" @click="exportFn">{{pageTxt.lable1[15]}}</el-button>				
+					<a :href="operationRecordingSrc" @click="exportFn"><el-button  type="primary">{{pageTxt.lable1[15]}}</el-button></a>			
 				</div>
 
 			</header>
@@ -88,7 +88,8 @@ export default {
 	  currentPage: 1,
 	  pageSize: 20,
 	  timeMethod: "",
-	  statisticalMethod: "",
+    statisticalMethod: "",
+    operationRecordingSrc: "",
     modeType: { user: "", userType: "", businessType: "" },
 	  data: {
         // lists: [{ operator: "test01", operationType: "01" }],
@@ -119,6 +120,7 @@ export default {
         }
       );
     },
+    // 导出报表
     exportFn() {
       var _this = this;
       utils.post(
@@ -136,9 +138,9 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            utils.weakTips(response.errinfo)
+            _this.operationRecordingSrc=response.errinfo;
           }else{
-			      utils.weakTips(response.errinfo)
+			      utils.weakTips(response.errinfo);
 		      }
         }
       );
@@ -240,7 +242,6 @@ export default {
 .el-select{width: 200px;}
 .el-table{margin-top: 15px;}
 .searchBtn{margin-left: 40px;}
-.exportBtn{float: right;}
 .ver{margin: 10px 0;}
 .date_picker{margin-left: 30px;height: 30px;width: 350px;}
 

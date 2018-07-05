@@ -105,7 +105,7 @@
             <img id="_close" src="@/img/close.png" @click="showExportSignalInfo=false">
       </div>
       <div class="_messaga">
-        <span class="txt">文件名：&nbsp;<a href="#" style="color:#5C759D">Report_2018070265114.csv</a></span>
+        <span class="txt">文件名：&nbsp;<a :href="signalInfoSrc" style="color:#5C759D">{{signalInfoName}}</a></span>
         <div class="_messaga_info">
           <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
         </div>
@@ -189,7 +189,9 @@ export default {
       row: "",
       pageTxt,     
       list: [],
-      showExportSignalInfo:false
+      showExportSignalInfo:false,
+      signalInfoSrc:"",
+      signalInfoName:""
     };
   },
   methods: {
@@ -330,8 +332,25 @@ export default {
           }
         );    
     },
+    // 导出通信关系
     exportSignalInfo(){
-      this.showExportSignalInfo=true;
+      var _this=this;
+      utils.post(        
+        "ms/userComm/ExportCsv",
+        {
+          cmdID:"600034"
+        },
+        function(response){
+          if(response.errcode == 0){
+            _this.signalInfoSrc=response.errinfo;
+            _this.signalInfoName=response.errinfo.split("/").pop();
+            _this.showExportSignalInfo=true;
+          }else{
+            utils.weakTips(response.errinfo)
+          }
+        }
+      )
+     
     },
     // 刪除通信关系(row)
     showPromptBox() {
@@ -568,7 +587,7 @@ function as(data){
 .user *{vertical-align: middle;}
 .userH .el-input{width: 160px; height: 30px; margin-right: 10px;}
 .txt{font-size: 13px; color: #666666;}
-.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d; border:1px solid red;}
+.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d; }
 .btnBox div{display: inline-block; cursor: pointer; margin-left: 30px;}
 .btnBox span{margin-left: 4px;}
 .btnBox div:nth-child(1){margin-left: 0;}
