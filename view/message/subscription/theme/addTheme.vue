@@ -244,7 +244,7 @@ import lang      from '@/language/lang.js';
 					info.cmdID = '600045';
 					info.operator = 'admin';
 					utils.post('mx/pubTopic/add', info, function(data){
-						console.log('增加主题：',data);
+//						console.log('增加主题：',data);
 						if(data.errcode < 0) return utils.weakTips(data.errinfo);
 						utils.weakTips(data.errinfo);
 						utils.goto('/message/release');
@@ -252,16 +252,21 @@ import lang      from '@/language/lang.js';
 				}
 			});
 		} else {
-			utils.hints({
-				txt: pageTxt.tips.now,
-				yes: function(){
-					info.cmdID = '600047';
-					info.reviewer = 'admin2';
-					utils.post('mx/pubTopic/addImmediately', info, function(data){
-						console.log('立即增加主题：',data);
-						if(data.errcode < 0) return utils.weakTips(data.errinfo);
-						utils.weakTips(data.errinfo);
-						utils.goto('/message/release');
+			utils.review({
+				yes: function(a){
+					utils.hints({
+						txt: pageTxt.tips.now,
+						yes: function(){
+							info.cmdID = '600047';
+							info.reviewer = 'admin2';
+							utils.post('mx/pubTopic/addImmediately', info, function(data){
+//								console.log('立即增加主题：',data);
+								if(data.errcode < 0) return utils.weakTips(data.errinfo);
+								utils.weakTips(data.errinfo);
+								utils.wheelReq(data.uuid);
+								utils.goto('/message/release');
+							});
+						}
 					});
 				}
 			});

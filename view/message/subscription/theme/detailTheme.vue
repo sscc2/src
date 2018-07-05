@@ -98,8 +98,8 @@ import lang      from '@/language/lang.js';
 		},
 		methods: {
 			handleChange(remain, direction, moved){
-				console.log(remain);
-				console.log(this.keys);
+//				console.log(remain);
+//				console.log(this.keys);
 			},
 			back(){
 				utils.goto('/message/' + utils.route().id);

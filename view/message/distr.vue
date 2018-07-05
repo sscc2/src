@@ -88,7 +88,7 @@ import lang   from '@/language/lang.js';
 				utils.hints({
 					txt:pageTxt.tips.submit,
 					yes: fullDose,
-					yesParam: arr
+					yesArgs: arr
 				});
 			}
 		},

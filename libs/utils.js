@@ -33,7 +33,7 @@ function utils(){
 		        type: type,
 //		        center: true,
 //		        showClose: true,
-//				duration: 0
+				duration: 5000
 	        });
 	        return exp;
 		};
@@ -194,7 +194,7 @@ function utils(){
 					el.parentNode.removeChild(el);
 			},
 			runNo:function(){
-				if(typeof(_opt.no)=="function") _opt.no.call(_opt.that, _opt.noParam);
+				if(typeof(_opt.no)=="function") _opt.no.call(_opt.that, _opt.noArgs);
 			}
 		};
 		if(globalVar.get('lang')=='en'){
@@ -209,7 +209,7 @@ function utils(){
 			hintsObj.hide();
 		});
 		hintsObj.yes.click(function(e){
-			if(typeof(_opt.yes)=="function") _opt.yes.call(_opt.that, _opt.yesParam);
+			if(typeof(_opt.yes)=="function") _opt.yes.call(_opt.that, _opt.yesArgs);
 			hintsObj.hide();
 		});
 		hintsObj.no.click(function(e){
@@ -217,7 +217,7 @@ function utils(){
 			hintsObj.hide();
 		});
 		hintsObj.now.click(function(e){
-			if(typeof(_opt.now)=="function") _opt.now.call(_opt.that, _opt.nowParam);
+			if(typeof(_opt.now)=="function") _opt.now.call(_opt.that, _opt.nowArgs);
 			hintsObj.hide();
 		});
 		$hints.find('#_close').click(function(e){
@@ -229,7 +229,7 @@ function utils(){
 		 * @param {Object} opt {txt,yes,no,now,param,that}
 		 * txt: 文本，
 		 * yes，no，now：为回调函数，
-		 * yesParam，noParam，nowParam：回调函数的传参，类型为数组，
+		 * yesArgs，noArgs，nowArgs：回调函数的传参，类型为数组，
 		 * that：修改this的指向
 		 */
 		this.hints = function(opt){
@@ -267,7 +267,7 @@ function utils(){
 					el.parentNode.removeChild(el);
 			},
 			runNo:function(){
-				if(typeof(_rept.no)=="function") _rept.no.call(_rept.that, _rept.noParam);
+				if(typeof(_rept.no)=="function") _rept.no.call(_rept.that, _rept.noArgs);
 			}
 		};
 		if(globalVar.get('lang')=='en'){
@@ -294,11 +294,15 @@ function utils(){
 			if(typeof(_rept.yes)!="function") return console.warn('回调函数不正确！');
 			var name=reObj.name.val(), pass=reObj.pass.val();
 			if(name==''||pass=='') return exp.weakTips('复核员或密码不能为空！', 2);
+			reObj.hide();
+			return _rept.yes.call(_rept.that, _rept.yesArgs);
 			var param = {
 				url: 'mx/userinfo/review',
 				cmdID: '90001',
 				name: reObj.name.val(),
-				pass: md5.hex_md5(reObj.pass.val())
+				pass: md5.hex_md5(reObj.pass.val()),
+				that: _rept.that,
+				args: _rept.yesArgs
 			};
 			exp.post(param, _rept.yes);
 			reObj.hide();
@@ -308,6 +312,10 @@ function utils(){
 			_rept = opt;
 			reObj.show(opt);
 		}
+		this.reviewHide = function(){
+			reObj.runNo();
+			reObj.hide();
+		};
 	};
 	kit.extend(exp, new MessageMask());
 //		axios.request（config）
@@ -319,12 +327,12 @@ function utils(){
 //		axios.patch（url [，data [，config]]）
 	function ReqHttp()
 	{
-		function callback(response, fn){
+		function callback(response, fn, that, args){
 //			console.log(response);
 			if(response.status!==200) return console.log(response);
 			var data = response.data;
 			if(!data.errinfo) data.errinfo = data.errcode < 0 ? '操作失败！' : '操作成功！';
-			if(fn instanceof Function) fn(data);
+			if(fn instanceof Function) fn.call(that, data, args);
 			exp.loadClose();
 		}
 		function getUrl(url){
@@ -346,8 +354,10 @@ function utils(){
 					delete params.url;
 				}
 			}
+			var that = params.that, args = params.args;
+			delete params.that; delete params.args;
 			axios.post(getUrl(url), params).then(function(response){
-				callback(response, fn);
+				callback(response, fn, that, args);
 			}).catch(function (e) { error(e); });
 		};
 		function error(e){
@@ -427,6 +437,62 @@ function utils(){
 			call(data.lists);
 //			observer.execute('useridReady');
 		});
+	};
+	
+	function WheelReq(uuid){
+		var begin, over = 30*1000, once;
+		var param = {
+			cmdID: '600100',
+			uuid: uuid,
+			lastQuery: 0 //1最后一次，0不是；
+		};
+		
+		function req(){
+			if(Date.now()-begin>=over){
+				clearInterval(once);
+				param.lastQuery = 1;
+				hide();
+			}
+			exp.post('mx/dispatch/queryRequest', param, response);
+		}
+		function response(data){
+			if(data.errcode < 0){
+				clearInterval(once);
+				hide();
+				return;
+			}
+			if(data.endQuery==0) return;
+			
+			var list = data.list, len = list.length, obj, str = '',
+				dom = '<p>suName：{suName}；errcode：{errcode}；errinfo：{errinfo}</p>';
+			for (var i = 0; i < len; i++) {
+				obj = list[i];
+				if(obj.errcode<0){
+					str += kit.template(obj, dom);
+				}
+			}
+			if(str) utils.weakTips(str, 2);
+		}
+		function show(){
+			kit.body().appendChild(WheelReq.el);
+		}
+		function hide(){
+			var parent = WheelReq.el.parentNode;
+			if(parent) parent.removeChild(WheelReq.el);
+		}
+		this.start = function(){
+			begin = Date.now();
+			show();
+			req();
+			clearInterval(once);
+			once = setInterval(req, 2000);
+		};
+	}
+	WheelReq.el = kit(`<div id="_wheel"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular">
+		<circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg></div></div>`)[0];
+	exp.wheelReq = function(uuid){
+		var w = new WheelReq(uuid);
+		w.start();
 	};
 	
 	return exp;

@@ -195,7 +195,7 @@ import lang      from '@/language/lang.js';
 						txt: pageTxt.tips.send,
 						yes: function(){
 							utils.post('mx/pubTopic/modifyTopic', info, function(data){
-								console.log('修改主题1：',data);
+//								console.log('修改主题1：',data);
 								if(data.errcode < 0) return utils.weakTips(data.errinfo);
 								utils.weakTips(data.errinfo);
 								utils.goto('/message/release');
@@ -221,7 +221,7 @@ import lang      from '@/language/lang.js';
 						txt: pageTxt.tips.now,
 						yes: function(){
 							utils.post(info, function(data){
-								console.log('修改主题1：',data);
+//								console.log('修改主题1：',data);
 								if(data.errcode < 0) return utils.weakTips(data.errinfo);
 								utils.weakTips(data.errinfo);
 								utils.goto('/message/release');
@@ -231,7 +231,7 @@ import lang      from '@/language/lang.js';
 				}
 			},
 			addAppid(row){
-				console.log(row);
+//				console.log(row);
 				var obj = {
 					userID: row.userID,
 					userName: row.userName,
@@ -301,7 +301,7 @@ import lang      from '@/language/lang.js';
 		}
 		opt.yes = function(){
 			utils.post(info, function(data){
-				console.log('修改主题2：',data);
+//				console.log('修改主题2：',data);
 				if(data.errcode < 0) return utils.weakTips(data.errinfo);
 				utils.weakTips(data.errinfo);
 				utils.goto('/message/release');
