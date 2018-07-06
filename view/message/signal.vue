@@ -75,18 +75,18 @@
 					</div>
 					<div class="rightBox">
 						  <el-select class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changeCreatinfo">
-                <el-option v-for="item in options2" :key="item.userName" :label="item.userID" :value="item.userID">
+                <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID">
                 </el-option>
               </el-select>
 					</div>
 				</li>
 				<li>
-					<div class="leftBox">
+					<div class="leftBox bug">
 						<p class="txt">{{pageTxt.dialog[3]}}</p>
 					</div>
 					<div class="rightBox">
 				<el-select class="input_normal"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-                	<el-option  v-for="item in options3" :key="item.userName" :label="item.userID" :value="item.userID"></el-option>  
+                	<el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
             	</el-select>
 						<p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
 					</div>
@@ -121,7 +121,6 @@
 
 <script>
 import utils from "@/libs/utils.js";
-import globalVar   from '@/libs/globalVar.js';
 
 var pageTxt= {
     tips: {
@@ -584,18 +583,25 @@ function as(data){
 
 <style scoped="scoped">
 .signal *{vertical-align: middle;}
-.signal{margin: 22px;}
+.signal{margin: 20px;}
+.signal .userH{height: 30px;}
 .input_normal{margin-left: 10px;}
 .txt{font-size: 14px; color: #666666;}
 .btn{margin-left: 35px;}
-.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 14px; color: #5c759d; }
+.btnBox{margin-bottom: 10px; margin-top: 20px; font-size: 14px; color: #5c759d; }
 .btnBox div{display: inline-block; cursor: pointer; margin-right: 35px;}
-.btnBox span{margin-left: 4px;}
+.btnBox span{margin-left: 4px;height: 30px; line-height: 30px;}
 ._zero > img{cursor: pointer;}
 .txt1{margin-left: 35px;font-size: 14px; color: #666666;}
 ._dialog .leftBox{height: 30px;}
 
-
+.bug{vertical-align:top}
+.sel{width: 350px; line-height: 40px;}
+.leftBox{height: 30px;}
+.sel[data-v-50d0771e]{width: 202px;}
+.txt1{margin-left: 30px;font-size: 13px; color: #666666;}
+.signal{margin: 20px;}
+.input_normal{width: 250px;height: auto;}
 </style>
 
 <style>

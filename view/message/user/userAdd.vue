@@ -1,19 +1,16 @@
 <template>
 	<div class="component">
-	
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
 				<span class="header_txt1" @click="del($event)">返回</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{pageTxt.infoTxt[0]}}</span>
 		</div>
-
 		<el-tabs type="card">
 			<el-tab-pane label="基本信息">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
 				<el-row class='info'>
 					<el-col :span="6">
-
 						<ul class="left">
 							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[2]}}：</p></li>
 							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[3]}}：</p></li>
@@ -33,18 +30,12 @@
 							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
 						</ul>
 					</el-col><el-col :span="18">
-
 						<ul class="right">
-							<!-- <el-form :model="info" > -->
-							<li>
-								<!-- <el-form-item  prop="userID" :rules="[{ required: true, message: 'ID不能为空'}]"> -->
+							<li>	
 									<el-input v-model="info.userID"></el-input>
-								<!-- </el-form-item>	 -->
 							</li>
 							<li>
-								<!-- <el-form-item  prop="userName" :rules="[{ required: true, message: '用户名不能为空'}]"> -->
 									<el-input v-model="info.userName"></el-input>
-								<!-- </el-form-item>	 -->
 							</li>
 							<li class="default_radio">
 								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">启用</el-radio>
@@ -101,26 +92,21 @@
 							<li>
 								<input type="text" v-model="info.maxDaysOfTopic" placeholder="">
 							</li>
-							<!-- </el-form>	-->
 						</ul>
 					</el-col>
 				</el-row>
-
 				<div class="btn">
-					<el-button type="primary" @click="submitForm()">{{pageTxt.infoTxt[20]}}</el-button>
-					<el-button type="primary" @click='cancelFieldValidate($event)'>{{pageTxt.infoTxt[21]}}</el-button>
-					<el-button type="primary" @click='del()'>{{pageTxt.infoTxt[22]}}</el-button>
+          <el-button type="primary" @click='sendDown'>{{pageTxt.infoTxt[21]}}</el-button>
+					<el-button type="primary" @click="submitForm">{{pageTxt.infoTxt[20]}}</el-button>					
+					<el-button type="default" @click='del()'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
-			</el-tab-pane>
-			
+			</el-tab-pane>			
 			<el-tab-pane label="Ekey" disabled>
 				<span slot="label">{{pageTxt.tab[1]}}</span>
-			</el-tab-pane>
-			
+			</el-tab-pane>			
 			<el-tab-pane label="通信关系" disabled>
 				<span slot="label">{{pageTxt.tab[2]}}</span>
 			</el-tab-pane>
-			
 			<el-tab-pane label="扩展信息" disabled>
 				<span slot="label">{{pageTxt.tab[3]}}</span>				
 			</el-tab-pane>
@@ -129,7 +115,6 @@
 </template>
 
 <script>
-import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
 
@@ -196,20 +181,17 @@ var pageTxt = {
     { id: "5", name: "Group5" },
     { id: "6", name: "Group6" }
   ],
-  online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
+  online = [{ value: "1", label: "是" }, { value: "0", label: "否" }],_this;
 
 export default {
   data() {
     return {
       userType: [{ id: "0", name: "test" }, { id: "1", name: "test" }],
       cities: [{ id: "BJ", name: "test" }, { id: "1", name: "test" }],
-
       info,
       pageTxt,
-
       connect,
       online,
-      time: getDate(),
       judgment: []
     };
   },
@@ -240,12 +222,47 @@ export default {
         this.info.userPasswd = 111111;
       }
     },
-
+    // 立即下发
+    sendDown() {
+      utils.review({
+        yes:function(){
+          utils.hints({
+						txt: "是否立即下发",
+						yes: function(){
+              utils.post('mx/userinfo/addImmediately',
+               {
+                  cmdID: "600006",
+                  operator: "admin",
+                  reviewer: "admin2",
+                  userID: _this.info.userID,
+                  userName: _this.info.userName,
+                  userType: _this.info.userType,
+                  userDistrict: _this.info.userDistrict,
+                  speedCtrlKbps: _this.info.speedCtrlKbps,
+                  configTime: _this.info.configTime,
+                  userInfo: _this.info.userInfo,
+                  connSuGroupName: _this.info.connSuGroupName,
+                  isAlarmIfOffLine: _this.info.isAlarmIfOffLine,
+                  softEncBeginDate: _this.info.softEncBeginDate,
+                  softEncEndDate: _this.info.softEncEndDate,
+                  allowSendRecvFile: _this.info.allowSendRecvFile,
+                  maxPubsCount: _this.info.maxPubsCount,
+                  maxSubsCount: _this.info.maxSubsCount,
+                  maxDaysOfTopic: _this.info.maxDaysOfTopic,
+                  isModifyDefaultPasswd: _this.info.isModifyDefaultPasswd,
+                  userPasswd: _this.info.isModifyDefaultPasswd ? _this.info.userPasswd : md5.hex_md5("111111").substr(8, 16)
+               }, 
+               function(response){
+                 utils.wheelReq(response.uuid);                
+							});
+						}
+					});
+        }
+      });
+    },
     // 创建用户
     add: function() {
       this.$store.state.transferEditID = this.info.userID;
-
-      var _this = this;
       utils.post(
         "mx/userinfo/add",
         {
@@ -278,7 +295,6 @@ export default {
         }
       );
     },
-
     open6(msg) {
       this.$confirm(msg, "提示", {
         confirmButtonText: "确定",
@@ -302,7 +318,7 @@ export default {
   },
   // 初始化数据
   created: function() {
-    var _this = this;
+    _this = this;
     utils.post(
       "mx/dict/query",
       {
@@ -346,19 +362,6 @@ export default {
     info.maxDaysOfTopic = "0";
   }
 };
-function getDate() {
-  var d = new Date(),
-      t = d.getFullYear() + "-";
-      t += dbNum(d.getMonth() + 1) + "-";
-      t += d.getDate() + " ";
-      t += dbNum(d.getHours()) + ":";
-      t += dbNum(d.getMinutes()) + ":";
-      t += dbNum(d.getSeconds());
-      return t;
-}
-function dbNum(num) {
-  return num < 10 ? "0" + num : num;
-}
 </script>
 
 <style scoped="scoped">
@@ -385,8 +388,4 @@ input:focus{border: 2px solid #32ccf9;}
 .btn{margin-left: 140px; margin-top: 30px;}
 ._zero > img[data-v-d09b1104]{margin-left: 0 !important;}
 .red{color: red; font-size: 14px;}
-
-</style>
-
-<style>
 </style>

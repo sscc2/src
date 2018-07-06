@@ -30,7 +30,6 @@
 		<div class="btnBox">
 			<div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
 			<div @click="fn"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div>
-			<!-- <div @click=""><img src="@/img/creatico.png"><span>批量导出通信关系</span></div> -->
 		</div>
 
 		<el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
@@ -71,18 +70,18 @@
 					</div>
 					<div class="rightBox">
 						  <el-select class="input_normal" v-model="$store.state.transferEditID" disabled filterable placeholder="请选择">
-                <el-option v-for="item in options2" :key="item.userName" :label="item.userID" :value="item.userID">
+                <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID">
                 </el-option>
               </el-select>
 					</div>
 				</li>
 				<li>
-					<div class="leftBox">
+					<div class="leftBox bug">
 						<p class="txt">{{pageTxt.dialog[3]}}</p>
 					</div>
 					<div class="rightBox">
 						  <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-                <el-option  v-for="item in options3" :key="item.userName" :label="item.userID" :value="item.userID"></el-option>  
+                <el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
               </el-select>
 						<p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
 					</div>
@@ -100,8 +99,6 @@
 
 <script>
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
-import globalVar from "@/libs/globalVar.js";
 
 var pageTxt = {
   tips: {
@@ -575,24 +572,29 @@ function as(data) {
 </script>
 
 <style scoped="scoped">
-.user *{vertical-align: middle;}
-.userH .el-input{width: 160px; height: 30px; margin-right: 10px;}
-.userH > .el-button{margin-left: 35px; width: 90px; height: 30px; background-color: #32ccf9; line-height: 0px; border: 0; color: white;}
-.txt{font-size: 13px; color: #666666;}
-.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d; overflow: hidden;}
-.btnBox div{float: left; cursor: pointer; margin-left: 30px;}
-.btnBox span{margin-left: 5px;}
-.btnBox div:nth-child(1){margin-left: 0;}
+.signal *{vertical-align: middle;}
+.signal .userH{height: 30px;}
+.input_normal{margin-left: 10px;}
+.txt{font-size: 14px; color: #666666;}
+.btn{margin-left: 35px;}
+.btnBox{margin-bottom: 10px; margin-top: 20px; font-size: 14px; color: #5c759d; }
+.btnBox div{display: inline-block; cursor: pointer; margin-right: 35px;}
+.btnBox span{margin-left: 4px;height: 30px; line-height: 30px;}
 ._zero > img{cursor: pointer;}
+.txt1{margin-left: 35px;font-size: 14px; color: #666666;}
+._dialog .leftBox{height: 30px;}
+
+.bug{vertical-align:top}
 .sel{width: 350px; line-height: 40px;}
-.leftBox{height: 30px; margin-top: 10px;}
-.sel[data-v-50d0771e]{width: 202px;} 
-.delInfo{width: 328px;height: 132px;background-color: #262626;border-radius: 8px;margin: 0 auto;opacity:0.7;position: relative;margin-top: -15%;z-index: 101;} 
-.delInfo_txt{font-size: 14px;color:#fff;display: block;text-align:center;line-height: 132px;} 
-.promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
-.promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
-.promptBox_btn button:nth-child(1){margin-left: 0;}
+.leftBox{height: 30px;}
+.sel[data-v-50d0771e]{width: 202px;}
 .txt1{margin-left: 30px;font-size: 13px; color: #666666;}
+.signal{margin: 22px;}
+.input_normal{width: 250px;height: auto;}
+</style>
+
+<style>
+	.signal .input_normal span{white-space: normal;word-break: keep-all;display: inline-block;}
 </style>
 
 

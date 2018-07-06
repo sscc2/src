@@ -39,7 +39,6 @@
         <div class="rightTxt">共{{userData.totalSize}}条数据</div>
       </div>  
 			<Password></Password>
-			<Upload></Upload>
 
       <div class="Popup" v-show="showImportExtInfo">
         <div class="_panle">
@@ -101,7 +100,6 @@
 
 <script>
 import Password from "@/view/message/user/password.vue";
-import Upload from "@/view/message/user/upload.vue";
 import utils from "@/libs/utils.js";
 
 var pageTxt = {
@@ -199,7 +197,9 @@ export default {
           utils.hints({
           txt:"是否确定删除该用户记录",
           yes:_this.delAll,
-          btn: 2
+          now: function(){},
+          btn: 3,
+          that: _this
         })
       }
     },
@@ -383,21 +383,22 @@ export default {
       }
     );
   },
-  components: { Password, Upload }
+  components: { Password }
 };
 </script>
 
 <style scoped="scoped">
 .user *{vertical-align: middle;}
-.user{padding: 22px; white-space: nowrap;}
+.user{padding: 20px; white-space: nowrap;}
+.user .userH{height: 30px;}
 .userH .txt{font-size: 14px; line-height: 30px; height: 30px; color: #666666;}
 .userH > span:nth-child(3){margin-left: 35px;}
 .userH .el-button{margin-left: 35px;}
 .userH .el-input{margin-left: 10px;}
-.btnBox{font-size: 14px; color: #5c759d; margin-top: 18px; margin-bottom: 8px;}
+.btnBox{font-size: 14px; color: #5c759d; margin-top: 20px; margin-bottom: 10px;}
 .btnBox div{margin-left: 35px; cursor: pointer; display: inline-block;}
 .btnBox div:nth-child(1){margin-left: 0;}
-.btnBox > div > span{margin-left: 4px;}
+.btnBox > div > span{margin-left: 4px; line-height: 30px; height: 30px}
 ._zero > div{display: inline-block; margin-right: 14px; cursor: pointer;}
 .Popup ._messaga1{margin-top: 40px;margin-left: 40px;text-align: left;}
 .Popup ._messaga1_info{margin-left: 125px;margin-top: 15px;line-height: 20px;}

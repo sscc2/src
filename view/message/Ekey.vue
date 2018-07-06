@@ -1,167 +1,159 @@
 <template>
-<div>
-	<div class='header'>
-			<span class='header_txt'>Ekey</span>
-	</div>	
+  <div>
+    <div class='header'>
+        <span class='header_txt'>Ekey</span>
+    </div>	
 
-	<div class="Ekey">
+    <div class="Ekey">     
+      <div class="user">
+        <span>{{pageTxt.Ekey[0]}}：</span>
+        <el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
+        <el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
+        <span v-show='search.type==0' id="box" class="txt">{{pageTxt.Ekey[3]}}：</span>
+        <el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" ></el-input>
+        <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
+        <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" :trigger-on-focus="false" @select="idSelect">
+          <div slot-scope="{item}">
+            <span class="name">{{item.userID}}</span>
+            <span class="addr">({{item.userName}})</span>
+          </div>
+        </el-autocomplete>
+        <el-button type="primary" @click='searchfn'>{{pageTxt.Ekey[4]}}</el-button>
+      </div>
+
+      <div class="btnBox">
+        <div @click="showAdd" id='Add' ><img src="@/img/creatico.png" ><span>{{pageTxt.Ekey[5]}}</span></div>
+        <div @click="fn"><img src="@/img/deletico.png" ><span>{{pageTxt.Ekey[7]}}</span></div>
+        <div @click="exportEkeyInfo"><img src="@/img/creatico.png"><span>批量导出Ekey</span></div>
+      </div>
     
-		<div class="user">
-			<span>{{pageTxt.Ekey[0]}}：</span>
-			<el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
-  		<el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-			<span v-show='search.type==0' id="box" class="txt">{{pageTxt.Ekey[3]}}：</span>
-			<el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" ></el-input>
-      <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
-      <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" 
-				:trigger-on-focus="false" @select="idSelect">
-				<div slot-scope="{item}">
-					<span class="name">{{item.userID}}</span>
-				    <span class="addr">({{item.userName}})</span>
-				</div>
-			</el-autocomplete>
-			<el-button type="primary" @click='searchfn'>{{pageTxt.Ekey[4]}}</el-button>
-		</div>
+      <el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ekeyName" label="Ekey名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ekeyValidDate" label="Ekey有效期" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
+        <el-table-column label="操作" width="110">
+          <div slot-scope="scope" class="_zero">
+            <div @click="showEdit(scope.row)" id='Edit'><img src="@/img/altericos.png"> </div>
+            <div @click="showDel"><img src="@/img/deleticos.png" ></div>
+          </div>
+        </el-table-column>
+      </el-table>
 
-		<div class="btnBox">
-			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
-			<div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
-			<div @click="exportEkeyInfo"><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
-		</div>
-	
-		<el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
-			<el-table-column type="selection" width="55"></el-table-column>
-			<el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="ekeyName" label="Ekey名称" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="ekeyValidDate" label="Ekey有效期" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
-			<el-table-column label="操作" width="110">
-				<div slot-scope="scope" class="_zero">
-					<div  id='Edit'  @click="showEdit(scope.row)"><img src="@/img/altericos.png"> </div>
-					<div @click="showDel"><img src="@/img/deleticos.png" ></div>
-				</div>
-			</el-table-column>
-		</el-table>
+      <el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
+        <ul class="_dialog">
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
+            </div>
+            <div class="rightBox" id="rightBox1">
+              <el-select filterable v-model="ainfo.userID" placeholder="请选择">
+                <el-option  v-for="item in options" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
+              </el-select>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-input   class='picker' v-model="ainfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-date-picker class='picker' v-model="ainfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-input class='picker' v-model="ainfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
+            </div>
+          </li>				
+        </ul>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="addEkey = false">{{pageTxt.dialog[12]}}</el-button>
+            <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>
+        </div>
+      </el-dialog>
+      
+      <el-dialog :title="pageTxt.dialog[1]" :visible.sync="editEkdy" width='620px'>
+        <ul class="_dialog">
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.dialog[13]" disabled></el-input>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-input  class='picker' v-model="binfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-date-picker class='picker' v-model="binfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox">
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
+            </div>
+            <div class="rightBox">
+              <el-input class='picker' v-model="binfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
+            </div>
+          </li>
+        </ul>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
+            <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
+        </div>
+      </el-dialog>
 
-		<el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
-			<ul class="_dialog">
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
-					</div>
-					<div class="rightBox" id="rightBox1">
+      <div class="_pagination" v-show="EkeyData.totalPage>0">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
+        <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
+      </div>
 
-            <el-select filterable v-model="ainfo.userID" placeholder="请选择">
-              <el-option  v-for="item in options" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
-            </el-select>
-						
-						<span class="txt red" v-show="err1.id">{{pageTxt.tips.id}}</span>
-					</div>
-				</li>
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
-					</div>
-					<div class="rightBox">
-						<el-input   class='picker' v-model="ainfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
-						<span class="txt red" v-show="err1.Ekey">{{pageTxt.tips.Ekey}}</span>
-					</div>
-				</li>
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
-					</div>
-					<div class="rightBox">
-						<el-date-picker class='picker' v-model="ainfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
-					</div>
-				</li>
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
-					</div>
-					<div class="rightBox">
-						<el-input class='picker' v-model="ainfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
-					</div>
-				</li>				
-			</ul>
-			<div slot="footer" class="dialog-footer">
-			    <el-button @click="addEkey = false">{{pageTxt.dialog[12]}}</el-button>
-			    <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>
-			</div>
-		</el-dialog>
-		
-		<el-dialog :title="pageTxt.dialog[1]" :visible.sync="editEkdy" width='620px'>
-			<ul class="_dialog">
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
-					</div>
-					<div class="rightBox">
-						<el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.dialog[13]" disabled></el-input>
-					</div>
-				</li>
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
-					</div>
-					<div class="rightBox">
-						<el-input  class='picker' v-model="binfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
-						<span class="txt red" v-show="err2.Ekey">{{pageTxt.tips.Ekey}}</span>
-					</div>
-				</li>
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
-					</div><div class="rightBox">
-						<el-date-picker class='picker' v-model="binfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
-					</div>
-				</li>
-				<li>
-					<div class="leftBox">
-						<p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
-					</div>
-					<div class="rightBox">
-						<el-input class='picker' v-model="binfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
-					</div>
-				</li>
-			</ul>
-			<div slot="footer" class="dialog-footer">
-			    <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
-			    <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
-			</div>
-		</el-dialog>
-
-		<div class="_pagination" v-show="EkeyData.totalPage>0">
-      <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
-      <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
     </div>
 
-	</div>
-
-  <div class="Popup" v-show="showExportEkeyInfo">
-      <div class="_panle">
-        <div><p id="_title"></p>
-              <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
-        </div>
-        <div class="_messaga">
-          <span class="txt">文件名：&nbsp;<a :href="EkeyInfoSrc" style="color:#5C759D">{{EkeyInfoName}}</a></span>
-          <div class="_messaga_info">
-            <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+    <div class="Popup" v-show="showExportEkeyInfo">
+        <div class="_panle">
+          <div><p id="_title"></p>
+                <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
+          </div>
+          <div class="_messaga">
+            <span class="txt">文件名：&nbsp;<a :href="EkeyInfoSrc" style="color:#5C759D">{{EkeyInfoName}}</a></span>
+            <div class="_messaga_info">
+              <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+            </div>
+          </div>
+          <div class="info_button">
+            <el-button type="default" @click="showExportEkeyInfo=false">关闭</el-button>
           </div>
         </div>
-        <div class="info_button">
-          <el-button type="default" @click="showExportEkeyInfo=false">关闭</el-button>
-        </div>
-      </div>
-    </div> 
-</div>	
+      </div> 
+  </div>	
 </template>
 
 <script>
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
-import globalVar from "@/libs/globalVar.js";
 
 var ainfo = {},
   def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
@@ -176,13 +168,6 @@ for (var i = 0; i < det.length; i++) {
 }
 
 var pageTxt_cn = {
-  tips: {
-    id: "请输入用户ID",
-    Ekey: "请输入Ekey名称",
-    pass: "请输入软加密密码",
-    start: "请选择软加密开始时间",
-    end: "束时间不能小于开始时间"
-  },
   Ekey: [
     "查询方式 ",
     "按Ekey查询",
@@ -215,23 +200,7 @@ var pageTxt_cn = {
   ]
 };
 
-var pageTxt = pageTxt_cn,
-  autoTime,
-  _currentPage = 1,
-  isInput = false;
-
-function autoInput(str, cb) {
-  if (!str) return;
-  utils.getUserid(str, function(data) {
-    var i,
-      len = data.length,
-      tem = [];
-    for (i = 0; i < len; i++) {
-      if (data[i].label.indexOf(str) != -1) tem.push(data[i]);
-    }
-    cb(tem);
-  });
-}
+var pageTxt = pageTxt_cn,autoTime,_currentPage = 1,isInput = false,_this;
 
 export default {
   data() {
@@ -248,33 +217,10 @@ export default {
       EkeyInfoName:"",
       pageTxt: pageTxt,
       radio: 1,
-      info: {
-        id: "",
-        Ekey: "",
-        pass: "111111",
-        notes: "",
-        valid: "",
-        check: false,
-        start: "",
-        end: ""
-      },
       addEkey: false,
       editEkdy: false,
-      eInfo: {
-        id: "",
-        Ekey: "",
-        pass: "111111",
-        notes: "",
-        valid: "",
-        check: true,
-        start: "",
-        end: "",
-        check1: false
-      },
       row: {},
       data2: [{ Ekey: "AAA" }],
-      err1: { id: false, Ekey: false, pass: false, start: false, end: false },
-      err2: { id: false, Ekey: false, pass: false, start: false, end: false },
       currentPage1: 1,
       pageSize: 20,
       options: [],
@@ -299,7 +245,6 @@ export default {
 
     //查询Ekey
     searchfn() {
-      var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
@@ -326,8 +271,7 @@ export default {
                 function(response) {
                   if(response.errcode==0){
                     _this.EkeyData = response;
-                  }
-                  
+                  }                 
                 }
               );
             } else {
@@ -358,7 +302,6 @@ export default {
             if (this.ainfo.comment == "") {
               utils.weakTips("Ekey描述不能为空");
             } else {
-              var _this = this;
               utils.post(
                 "mx/userEkey/add",
                 {
@@ -389,7 +332,6 @@ export default {
       if (this.selects.length != 1) {
         utils.weakTips("请在列表中选择一条记录！");
       } else {
-        var _this = this;
         utils.hints({
           txt: "是否删除该用户信息",
           yes: _this.del,
@@ -398,7 +340,6 @@ export default {
       }
     },
     del() {
-      var _this = this;
       utils.post(
         "mx/userEkey/delete",
         {
@@ -420,14 +361,12 @@ export default {
     // 修改
     showEdit(row) {
       this.editEkdy = true;
-
       this.oldEkeyName = this.row.ekeyName;
-      var _this = this;
-      _this.binfo.userID = row.userID;
-      _this.binfo.userName = row.userName;
-      _this.binfo.ekeyName = row.ekeyName;
-      _this.binfo.ekeyValidDate = row.ekeyValidDate;
-      _this.binfo.comment = row.comment;
+      this.binfo.userID = row.userID;
+      this.binfo.userName = row.userName;
+      this.binfo.ekeyName = row.ekeyName;
+      this.binfo.ekeyValidDate = row.ekeyValidDate;
+      this.binfo.comment = row.comment;
     },
     submitEdit() {
       if (binfo.userID == "") {
@@ -436,7 +375,6 @@ export default {
         if (binfo.ekeyName == "") {
           utils.weakTips("Ekey名不能为空");
         } else {
-          var _this = this;
           utils.post(
             "mx/userEkey/modify",
             {
@@ -462,7 +400,6 @@ export default {
     },
     // 导出Ekey
     exportEkeyInfo(){
-      var _this=this;
       utils.post(
         "mx/userEkey/ExportCsv",
         {
@@ -482,7 +419,6 @@ export default {
     
     //删除(row)
     showDel() {
-      var _this = this;
       utils.hints({
         txt: "是否删除该用户信息",
         yes: _this.ekeyDel,
@@ -490,7 +426,6 @@ export default {
       });
     },
     ekeyDel() {
-      var _this = this;
       utils.post(
         "mx/userEkey/delete",
         {
@@ -509,11 +444,9 @@ export default {
         }
       );
     },
-
     selectionRow(val) {
       this.selects = val;
     },
-
     currentRow: function(e) {
       this.row = e;
     },
@@ -527,7 +460,6 @@ export default {
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage1 = currentPage;
-      var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
@@ -547,7 +479,6 @@ export default {
     },
     // 更新数据
     renderDate() {
-      var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
@@ -561,27 +492,26 @@ export default {
         function(response) {
           if(response.errcode==0){
              if (response.totalPage < _this.currentPage1) {
-            utils.post(
-              "mx/userEkey/query",
-              {
-                cmdID: "600021",
-                userID: isInput ? _this.idName : _this.userID,
-                ekeyName: _this.search.ekeyName,
-                type: _this.search.type,
-                pageSize: _this.pageSize,
-                currentPage: response.totalPage
-              },
-              function(response) {
-                if(response.errcode==0){
-                   _this.EkeyData = response;
-                }              
-              }
-            );
-          } else {
-            _this.EkeyData = response;
+              utils.post(
+                "mx/userEkey/query",
+                {
+                  cmdID: "600021",
+                  userID: isInput ? _this.idName : _this.userID,
+                  ekeyName: _this.search.ekeyName,
+                  type: _this.search.type,
+                  pageSize: _this.pageSize,
+                  currentPage: response.totalPage
+                },
+                function(response) {
+                  if(response.errcode==0){
+                    _this.EkeyData = response;
+                  }              
+                }
+              );
+            } else {
+              _this.EkeyData = response;
+            }
           }
-          }
-         
         }
       );
     }
@@ -590,7 +520,7 @@ export default {
   created() {
     this.search.type = 0;
     this.ainfo.type = 0;
-    var _this = this;
+    _this = this;
     utils.post(
       "mx/userEkey/query",
       {
@@ -628,19 +558,29 @@ export default {
     );
   }
 };
+function autoInput(str, cb) {
+  if (!str) return;
+  utils.getUserid(str, function(data) {
+    var i,
+      len = data.length,
+      tem = [];
+    for (i = 0; i < len; i++) {
+      if (data[i].label.indexOf(str) != -1) tem.push(data[i]);
+    }
+    cb(tem);
+  });
+}
 </script>
 
 <style scoped="scoped">
 .Ekey *{vertical-align: middle;}
-.Ekey{padding: 22px;}
-.user {height: 30px; font-size: 14px; color: #666666;}
-.user .el-input{margin-right: 10px;}
+.Ekey{padding: 20px;}
+.user{height: 30px; font-size: 14px; color: #666666;}
 .user .el-button{margin-left: 35px;}
-.user .txt{margin-left: 35px;}
-.btnBox{margin-bottom: 10px; margin-top: 18px;}
+.txt{margin-left: 35px;font-size: 14px; color: #666666;}
+.btnBox{margin-bottom: 10px; margin-top: 20px;}
 .btnBox div{font-size: 14px; color: #5c759d; cursor: pointer; margin-right: 35px; display: inline-block;}
-.btnBox span{margin-left: 4px;}
-
+.btnBox span{margin-left: 4px; height: 30px; line-height: 30px;}
 .Ekey .eRadio{margin-right: 30px;}
 .Ekey .el-radio__label{font-size: 16px;}
 .picker{width: 200px;}

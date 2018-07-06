@@ -13,7 +13,7 @@
 							<div class="switch_box">
 								<span class='title_txt'><span class="red">*&nbsp;</span>{{hostText_cn[2]}}</span>
 								<el-switch v-model="switchValue1" @change="changeTextarea" :active-text="hostText_cn[7]"  active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
-                <span class='title_txt'>{{hostText_cn[9]}}</span>
+                <span class='prompt_txt'>{{hostText_cn[9]}}</span>
 							</div>
 							<div class="content">
 								<el-input id="textarea1" type="textarea" rows="18" v-model="textareaValue1" :readonly="!switchValue1"></el-input>
@@ -25,7 +25,7 @@
 							<div class="switch_box">
 								<span class='title_txt'><span class="red">*&nbsp;</span>{{hostText_cn[5]}}</span>
 								<el-switch v-model="switchValue2"  @change="changeTextarea" :active-text="hostText_cn[7]"  active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
-                <span class='title_txt'>{{hostText_cn[10]}}</span>
+                <span class='prompt_txt'>{{hostText_cn[10]}}</span>
 							</div>
 							<div class="content">
 								<el-input id="textarea2" type="textarea" rows="18" v-model="textareaValue2" :readonly="!switchValue2"></el-input>
@@ -167,11 +167,12 @@ export default {
 </script>
 
 <style scoped="scoped">
-.host{padding:22px;}
+.host{padding:20px;}
 .host_btn *{vertical-align:middle;}
 .host_btn .blueBtn{margin-top: 40px; margin-left: 120px;}
 .title_txt{font-size:14px; color:#666; margin-right: 10px;}
-.switch_box{margin-top: 20px;}
+.prompt_txt{font-size:14px; color:#999; margin-right: 10px;}
+.switch_box{margin-top: 5px;}
 .switch_box .el-switch{margin-right: 20px;}
 .content{margin-top: 20px; width: 75%; margin-left: 120px;}
 .red{font-size:14px; color:#FF6B6B;}

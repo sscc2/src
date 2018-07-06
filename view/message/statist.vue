@@ -7,7 +7,7 @@
 	<div class="statist">
 		<div>
 			<header>
-				<div>
+				<div class="statist_herader">
 					<span>{{pageTxt.lable1[2]}}</span>
 					<el-input class='input_normal' v-model="modeType.user"></el-input>
 					<span class="txt ml" >{{pageTxt.lable1[3]}}</span>
@@ -249,12 +249,12 @@ export default {
 
 <style scoped="scoped">
 .statist *{vertical-align: middle;}
-.statist{padding: 22px; padding-top: 10px;font-size: 14px; color: #666;}
-.statist .lined{margin-top: 20px;}
+.statist{padding: 20px;font-size: 14px; color: #666;}
+.statist_herader{height: 30px;}
+.statist .lined{margin-top: 20px;height: 30px;}
 .lined .date_picker{margin-left: 30px;height: 30px;width: 360px;}
-.lined {margin-bottom: 20px;}
+.lined {margin-bottom: 10px;}
 .lined .searchBtn{margin-left: 35px;}
 .ml{margin-left: 30px;}
 .el-radio+.el-radio{margin-left: 18px;} 
-/* .pagination{text-align: right; padding: 20px 0;} */
 </style>

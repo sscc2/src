@@ -116,8 +116,6 @@
 
 <script>
 import utils from "@/libs/utils.js";
-import observer from "@/libs/observer.js";
-import globalVar from "@/libs/globalVar.js";
 
 var ainfo = {},
   def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
@@ -529,27 +527,23 @@ export default {
 </script>
 
 <style scoped="scoped">
-.header{height: 47px; border-bottom: 1px solid #ccc;}
-.header_txt{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 17px; font-weight: bold;}
 .Ekey *{vertical-align: middle;}
-.user .el-input{width: 210px; margin-right: 10px;}
-.user .el-button{margin-left: 35px; width: 90px; height: 30px; line-height: 0;}
-.user .red{color: #f56c6c;}
-.txt{font-size: 14px; color: #666666; margin-left: 20px;}
-.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 5px;}
-.btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
-.btnBox div:nth-child(1){margin-left: 0;}
+.user{height: 30px; font-size: 14px; color: #666666;}
+.user .el-button{margin-left: 35px;}
+.txt{margin-left: 35px;font-size: 14px; color: #666666;}
+.btnBox{margin-bottom: 10px;}
+.btnBox div{font-size: 14px; color: #5c759d; cursor: pointer; margin-right: 35px; display: inline-block;}
+.btnBox span{margin-left: 4px;height: 30px; line-height: 30px;}
 .Ekey .eRadio{margin-right: 30px;}
 .Ekey .el-radio__label{font-size: 16px;}
 .picker{width: 200px;}
-.red{color: #f56c6c; margin-left: 10px;}
 ._zero div{float: left; margin-left: 14px; cursor: pointer;}
 ._zero{overflow: hidden;}
 .el-input{margin-left: 10px;}
-.user > span:nth-child(1){margin-left: 0;}
 .promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
-.red{ font-size: 14px; color: red;}
+#rightBox1{margin-left: 10px; width: 210px;}
+.red{color:#f56c6c; font-size: 14px;}
 </style>
  

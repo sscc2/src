@@ -6,7 +6,7 @@
 
         <div class="messBox">
 			<div class="ico1">
-				<img class="csor" src="../img/cdico.png"/>
+				<!-- <img class="csor" src="../img/cdico.png"/> -->
 			</div> 
 			<div class="ico2"><img  src="../img/warinico.png" /></div>  
 			<div class="ico3"><span class='ioc3_txt'>38</span></div>

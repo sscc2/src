@@ -35,8 +35,8 @@
 			</div>	
 		</div>
 		<div class='bottom_btn'>
-			<el-button type="success" @click='submit'>提交</el-button>
-			<el-button type="danger" @click='goBack'>返回</el-button>
+			<el-button type="primary" @click='submit'>提交</el-button>
+			<el-button type="default" @click='goBack'>返回</el-button>
 		</div>
 	</div>
 </template>
@@ -154,6 +154,4 @@ export default {
 .right_list{color: #999; font-size: 12px; float: left; margin-left: 10px;}
 .right_list li{line-height: 30px; text-align: left; margin-left: 5px; margin-top: 10px;}
 .bottom_btn{margin-left: 160px;}
-.el-button:nth-child(1){width: 90px; height: 30px; background-color: #32ccf9; line-height: 7px; border: 1px solid #32ccf9;}
-.el-button:nth-child(2){margin: 20px; width: 90px; height: 30px; background-color: #fff; border: 1px solid #32ccf9; color: #32ccf9; line-height: 7px;}
 </style>

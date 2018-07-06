@@ -20,11 +20,6 @@ import observer  from '@/libs/observer.js';
 		
 	};
 	
-//	observer.addBinding('messUpload', function(master, param){
-//		if(master != 'messUpload') return;
-//		data.obj = param;
-//	});
-	
 	export default {
 		name: 'message_',
 		data() {

@@ -1,13 +1,11 @@
 <template>
 	<div class="component">
-
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
 				<span class="header_txt1" @click="del($event)">返回</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{$store.state.headerText}}</span>
 		</div>
-
 		<el-tabs type="card" v-model="$store.state.tabv">
 			<el-tab-pane label="基本信息" name="v1">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
@@ -29,8 +27,7 @@
 							<li><p>{{pageTxt.infoTxt[17]}}：</p></li>
 							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
 						</ul>
-					</el-col><el-col :span="18">
-				
+					</el-col><el-col :span="18">		
 						<ul class="right">
 							<li>
 								<el-input v-model="$store.state.transferEditID" disabled></el-input>
@@ -54,9 +51,7 @@
 							</li>
 							<li>
 								<el-input v-model="info.userInfo" placeholder=""></el-input>
-							</li>							
-							
-
+							</li>														
 							<li>
 								<el-select v-model="info.connSuGroupName" placeholder="">
 									<el-option v-for="item in connect" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -86,28 +81,25 @@
 							</li>							
 							<li>
 								<el-input v-model="info.maxDaysOfTopic" placeholder=""></el-input>
-							</li>
-														
+							</li>														
 						</ul>
 					</el-col>
 				</el-row>
 				<div class="btn">
-					<el-button type="primary" @click="Edit($event)">{{pageTxt.infoTxt[20]}}</el-button>
-					<el-button type="primary" @click='del($event)'>{{pageTxt.infoTxt[21]}}</el-button>
-					<el-button type="primary" @click='del($event)'>{{pageTxt.infoTxt[22]}}</el-button>
+          <el-button type="primary" @click='del($event)'>{{pageTxt.infoTxt[21]}}</el-button>
+					<el-button type="primary" @click="Edit($event)">{{pageTxt.infoTxt[20]}}</el-button>					
+					<el-button type="default" @click='del($event)'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
 			</el-tab-pane>
 			
 			<el-tab-pane label="Ekey" name="v2">
 				<span slot="label">{{pageTxt.tab[1]}}</span>
 				<UserEkey></UserEkey>
-			</el-tab-pane>
-			
+			</el-tab-pane>			
 			<el-tab-pane label="通信关系" name="v3">
 				<span slot="label">{{pageTxt.tab[2]}}</span>
 				<UserSignal></UserSignal>
-			</el-tab-pane>
-			
+			</el-tab-pane>			
 			<el-tab-pane label="扩展信息" name="v4">
 				<span slot="label">{{pageTxt.tab[3]}}</span>
 				<ExtendInfo></ExtendInfo>
@@ -117,7 +109,6 @@
 </template>
 
 <script>
-import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
 import UserEkey from "@/view/message/user/userEkey.vue";
@@ -194,7 +185,6 @@ var data = {
   pageTxt,
   connect,
   online,
-  time: getDate()
 };
 
 export default {
@@ -236,7 +226,6 @@ export default {
     },
     // 删除
     del: function(e) {
-      console.log(this.$store.state.editBack)
       this.$router.replace({ path: this.$store.state.editBack });
     }
   },
@@ -298,21 +287,6 @@ export default {
   },
   components: { UserEkey, UserSignal, ExtendInfo }
 };
-
-function getDate() {
-  var d = new Date(),
-    t = d.getFullYear() + "-";
-  t += dbNum(d.getMonth() + 1) + "-";
-  t += d.getDate() + " ";
-  t += dbNum(d.getHours()) + ":";
-  t += dbNum(d.getMinutes()) + ":";
-  t += dbNum(d.getSeconds());
-  return t;
-}
-
-function dbNum(num) {
-  return num < 10 ? "0" + num : num;
-}
 </script>
 
 <style scoped="scoped">
