@@ -10,8 +10,9 @@ const store=new Vuex.Store({
         passShow: false,     //修改密码的显示
         dateListsUserID:{},
         HeaderText:"",
-       creatAndEdit:'' ,     
-       showImportExtInfo:false
+        creatAndEdit:'' ,     
+        showImportExtInfo:false,
+        editBack:""
     } 
 })
 

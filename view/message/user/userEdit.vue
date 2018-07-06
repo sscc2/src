@@ -33,10 +33,10 @@
 				
 						<ul class="right">
 							<li>
-								<input type="text" v-model="$store.state.transferEditID" disabled>
+								<el-input v-model="$store.state.transferEditID" disabled></el-input>
 							</li>
 							<li>
-								<input type="text" v-model="info.userName" placeholder="">
+								<el-input v-model="info.userName" placeholder=""></el-input>
 							</li>
 							<li>
 								<el-select v-model="info.userType" placeholder="">
@@ -49,11 +49,11 @@
 								</el-select>
 							</li>
 							<li>
-								<input type="text" v-model="info.speedCtrlKbps" placeholder="">
+								<el-input v-model="info.speedCtrlKbps" placeholder=""></el-input>
 								<span class="kbit">{{pageTxt.infoTxt[19]}}</span>
 							</li>
 							<li>
-								<input type="text" v-model="info.userInfo" placeholder="">
+								<el-input v-model="info.userInfo" placeholder=""></el-input>
 							</li>							
 							
 
@@ -79,13 +79,13 @@
 								</el-select>
 							</li>
 							<li>
-								<input type="text" v-model="info.maxPubsCount" placeholder="">
+								<el-input v-model="info.maxPubsCount" placeholder=""></el-input>
 							</li>
 							<li>
-								<input type="text" v-model="info.maxSubsCount" placeholder="">
+								<el-input v-model="info.maxSubsCount" placeholder=""></el-input>
 							</li>							
 							<li>
-								<input type="text" v-model="info.maxDaysOfTopic" placeholder="">
+								<el-input v-model="info.maxDaysOfTopic" placeholder=""></el-input>
 							</li>
 														
 						</ul>
@@ -236,7 +236,8 @@ export default {
     },
     // 删除
     del: function(e) {
-      this.$router.replace({ path: "/message/user" });
+      console.log(this.$store.state.editBack)
+      this.$router.replace({ path: this.$store.state.editBack });
     }
   },
 

@@ -30,7 +30,7 @@
 		<div class="btnBox">
 			<div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
 			<div @click="fn"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div>
-			<div @click=""><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
+			<!-- <div @click=""><img src="@/img/creatico.png"><span>批量导出通信关系</span></div> -->
 		</div>
 
 		<el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>

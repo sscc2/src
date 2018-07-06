@@ -7,10 +7,10 @@
 	<div class="Ekey">
     
 		<div class="user">
-			<span class="txt">{{pageTxt.Ekey[0]}}：</span>
+			<span>{{pageTxt.Ekey[0]}}：</span>
 			<el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
   		<el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-			<span v-show='search.type==0' class="txt" id="box">{{pageTxt.Ekey[3]}}：</span>
+			<span v-show='search.type==0' id="box" class="txt">{{pageTxt.Ekey[3]}}：</span>
 			<el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" ></el-input>
       <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
       <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" 
@@ -477,8 +477,7 @@ export default {
             utils.weakTips(response.errinfo)
           }
         }
-      )
-     
+      )     
     },
     
     //删除(row)
@@ -632,29 +631,25 @@ export default {
 </script>
 
 <style scoped="scoped">
-.header{height: 47px; border-bottom: 1px solid #ccc;}
-.header_txt{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 17px; font-weight: bold;}
 .Ekey *{vertical-align: middle;}
-.user .el-input{width: 210px; margin-right: 10px;}
-.user .el-button{margin-left: 35px;}
-.user .red{color: #f56c6c;}
-.txt{font-size: 14px; color: #666666; margin-left: 20px;}
-.btnBox{overflow: hidden; margin-bottom: 10px; margin-top: 18px;}
-.btnBox div{font-size: 13px; color: #5c759d; float: left; cursor: pointer; margin-left: 30px;}
-.btnBox div:nth-child(1){margin-left: 0;}
-.btnBox span{margin-left: 4px;}
 .Ekey{padding: 22px;}
+.user {height: 30px; font-size: 14px; color: #666666;}
+.user .el-input{margin-right: 10px;}
+.user .el-button{margin-left: 35px;}
+.user .txt{margin-left: 35px;}
+.btnBox{margin-bottom: 10px; margin-top: 18px;}
+.btnBox div{font-size: 14px; color: #5c759d; cursor: pointer; margin-right: 35px; display: inline-block;}
+.btnBox span{margin-left: 4px;}
+
 .Ekey .eRadio{margin-right: 30px;}
 .Ekey .el-radio__label{font-size: 16px;}
 .picker{width: 200px;}
-.red{color: #f56c6c; margin-left: 10px;}
 ._zero div{float: left; margin-left: 14px; cursor: pointer;}
 ._zero{overflow: hidden;}
 .el-input{margin-left: 10px;}
-.user > span:nth-child(1){margin-left: 0;}
 .promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}
 .promptBox_btn{text-align: center; margin-top: 60px; margin-bottom: 50px;}
 .promptBox_btn button:nth-child(1){margin-left: 0;}
 #rightBox1{margin-left: 10px; width: 210px;}
-.red{color:red; font-size: 14px;}
+.red{color:#f56c6c; font-size: 14px;}
 </style>

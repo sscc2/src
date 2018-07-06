@@ -7,18 +7,18 @@
 		<div class="user">
 			<div class="userH">
 				<span class="txt">{{pageTxt.userTxt[1]}}：</span>
-				<input class="input_normal" type="text" v-model="userParam.id">
+				<el-input class="input_normal" v-model="userParam.id"></el-input>
 				<span class="txt">{{pageTxt.userTxt[2]}}：</span>
-				<input class="input_normal" type="text" v-model="userParam.name">
+				<el-input class="input_normal" v-model="userParam.name"></el-input>
 				<el-button type="primary"  @click='userSearch'>{{pageTxt.userTxt[3]}}</el-button>
 			</div>
 
 			<div class="btnBox">
 				<div  @click="createUser"><img src="@/img/creatico.png" ><span>{{pageTxt.userTxt[5]}}</span></div>
 				<div  @click="deleteUser"><img src="@/img/deletico.png" ><span>{{pageTxt.userTxt[7]}}</span></div>
-				<div  @click="importExtInfo"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[9]}}</span></div>
-        <div  @click="exportExtInfo"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[10]}}</span></div>
-        <div  @click="exportBasicsInfo"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[11]}}</span></div>
+				<div  @click="importExtInfo"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[9]}}</span></div>
+        <div  @click="exportExtInfo"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[10]}}</span></div>
+        <div  @click="exportBasicsInfo"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[11]}}</span></div>
 			</div>
 
 			<el-table ref="multipleTable" tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" :data="userData.lists">
@@ -118,7 +118,7 @@ var pageTxt = {
     "批量导入扩展信息",
     "批量导出扩展信息",
     "批量导出基础信息",
-    "批量导入路径："
+    "扩展信息文件名"
   ],
   listTxt: ["用户ID", "用户名称", "操作"],
   tips: {
@@ -187,6 +187,7 @@ export default {
     createUser: function() {
       this.$store.state.creatAndEdit = false;
       this.$store.state.headerText = "创建用户";
+      this.$store.state.editBack = "/message/user"
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
     // 删除用户
@@ -286,6 +287,7 @@ export default {
       this.$store.state.tabv = "v1";
       this.$store.state.headerText="修改用户"
       this.$store.state.creatAndEdit= true;
+      this.$store.state.editBack = "/message/user"
       this.$router.replace({ path: "/message/userEdit/mess" });
     },
     // 删除用户(row)
@@ -350,22 +352,8 @@ export default {
         function(response) {
           if(response.errcode==0){
               if(response.totalPage<_this.currentPage){
-            utils.post(
-              "mx/userinfo/queryLists",
-              {
-                cmdID: "600001",
-                userID: _this.userParam.id,
-                userName: _this.userParam.name,
-                pageSize: _this.pageSize,
-                currentPage: response.totalPage,
-                type: 1
-              },
-              function(response){
-                if(response.errcode==0){
-                  _this.userData = response;
-                }               
-              }
-            )
+                _this.currentPage = response.totalPage;
+                _this.renderDate()
           }else{
              _this.userData = response;
             }
@@ -400,25 +388,22 @@ export default {
 </script>
 
 <style scoped="scoped">
-.user{padding: 22px; white-space: nowrap;}
 .user *{vertical-align: middle;}
-.user input{margin-left: 10px; border: 1px solid #d7d8da; text-indent: 12px;}
-.txt{font-size: 14px; line-height: 30px; height: 30px; color: #666666;}
-.userH .el-button{margin-left: 35px;}
+.user{padding: 22px; white-space: nowrap;}
+.userH .txt{font-size: 14px; line-height: 30px; height: 30px; color: #666666;}
 .userH > span:nth-child(3){margin-left: 35px;}
-.userH > span:nth-child(6){margin-left: 10px;}
-.userH > input:focus{border: 2px solid #32ccf9;}
-.btnBox{font-size: 13px; color: #5c759d; margin-top: 18px; margin-bottom: 10px;}
-.btnBox div{margin-left: 15px; cursor: pointer; display: inline-block;}
-.btnBox > div > span{margin-left: 3px;}
+.userH .el-button{margin-left: 35px;}
+.userH .el-input{margin-left: 10px;}
+.btnBox{font-size: 14px; color: #5c759d; margin-top: 18px; margin-bottom: 8px;}
+.btnBox div{margin-left: 35px; cursor: pointer; display: inline-block;}
 .btnBox div:nth-child(1){margin-left: 0;}
+.btnBox > div > span{margin-left: 4px;}
 ._zero > div{display: inline-block; margin-right: 14px; cursor: pointer;}
-
 .Popup ._messaga1{margin-top: 40px;margin-left: 40px;text-align: left;}
-.Popup .red{color:#FF6B6B;}
-.Popup_input{width: 360px;margin-left: 18px;}
 .Popup ._messaga1_info{margin-left: 125px;margin-top: 15px;line-height: 20px;}
+.Popup_input{width: 360px;margin-left: 18px;}
 .Popup .info_button1{text-align: left;margin-left: 165px;margin-top: 40px;}
 .Popup_return{margin-left: 40px;}
+.Popup .red{color:#FF6B6B;}
 </style>
 

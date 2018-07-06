@@ -130,11 +130,13 @@ import lang      from '@/language/lang.js';
 				}
 				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row[0].userID;
+				this.$store.state.editBack = "/message/userSet"
 				utils.goto('/message/userEdit/mess_userSet');
 			},
 			edit(row){
 				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row.userID;
+				this.$store.state.editBack = "/message/userSet"
 				utils.goto('/message/userEdit/mess_userSet');
 			}
 		},

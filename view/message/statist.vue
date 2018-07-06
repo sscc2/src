@@ -7,14 +7,12 @@
 	<div class="statist">
 		<div>
 			<header>
-				<div class='title'><span>{{pageTxt.lable1[1]}}</span></div>
-
-				<div class="lined">
+				<div>
 					<span>{{pageTxt.lable1[2]}}</span>
 					<el-input class='input_normal' v-model="modeType.user"></el-input>
-					<span class="txt t1" >{{pageTxt.lable1[3]}}</span>
-					<el-input class='input' v-model="modeType.userType"></el-input>
-					<span class="txt t1">{{pageTxt.lable1[4]}}</span>
+					<span class="txt ml" >{{pageTxt.lable1[3]}}</span>
+					<el-input class='input_normal' v-model="modeType.userType"></el-input>
+					<span class="txt ml">{{pageTxt.lable1[4]}}</span>
 					<el-radio v-model="statisticalMethod" label="0">{{pageTxt.lable1[5]}}</el-radio>
 					<el-radio v-model="statisticalMethod" label="1">{{pageTxt.lable1[6]}}</el-radio>					
 				</div>
@@ -25,21 +23,21 @@
 					<el-radio v-model="timeMethod" label="1" @change="getTimeFn">{{pageTxt.lable1[9]}}</el-radio>
 					<el-radio v-model="timeMethod" label="2" @change="getTimeFn">{{pageTxt.lable1[10]}}</el-radio>
 					<el-radio v-model="timeMethod" label="3" @change="getTimeFn">{{pageTxt.lable1[11]}}</el-radio>
-          <el-date-picker class="date_picker" :disabled="timeMethod!=3"  @change="changeDate" :clearable=false format="yyyy-MM-dd" v-model="search" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+          <el-date-picker class="date_picker" :disabled="timeMethod!=3"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['12:00:00', '08:00:00']" format="yyyy-MM-dd HH:mm:ss" v-model="search" type="datetimerange" :range-separator="pageTxt.lable1[12]" :start-placeholder="pageTxt.lable1[13]" :end-placeholder="pageTxt.lable1[14]">
           </el-date-picker>				
-          <el-button class="searchBtn" type="primary" @click="searchFn">{{pageTxt.lable1[14]}}</el-button>
-					<a :href="operationRecordingSrc" @click="exportFn"><el-button  type="primary">{{pageTxt.lable1[15]}}</el-button></a>			
+          <el-button class="searchBtn" type="primary" @click="searchFn">{{pageTxt.lable1[15]}}</el-button>        		
+          <el-button @click="exportFn" type="primary">{{pageTxt.lable1[16]}}</el-button>
 				</div>
-
 			</header>
 
-			<el-table highlight-current-row  @current-change="currentRow2" :data="data.lists"  >
+			<el-table highlight-current-row :data="data.lists"  >
 				<el-table-column type="selection" width="55"></el-table-column>
-				<el-table-column prop="operator" :label="pageTxt.lable2[0]" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="operatorRole" :label="pageTxt.lable2[1]" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="operationType" :label="pageTxt.lable2[2]" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="operationTime" :label="pageTxt.lable2[3]" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="state" :label="pageTxt.lable2[0]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="operationTime" width="250" :label="pageTxt.lable1[20]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="operationType" width="150" :label="pageTxt.lable1[19]" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="operator" width="150" :label="pageTxt.lable1[17]" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="operatorRole" width="150" :label="pageTxt.lable1[18]" show-overflow-tooltip></el-table-column>			
+        <el-table-column prop="errorCode" width="150" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="errorInfo" :label="pageTxt.lable1[22]" show-overflow-tooltip></el-table-column>
 			</el-table>			
 
 			<div class="_pagination" v-show="data.totalPage>0">
@@ -69,153 +67,175 @@ var pageTxt_cn = {
     "本周",
     "本月",
     "其他",
-    "",
     "至",
+    "开始时间",
+    "结束时间",
     "查询",
-    "导出报表"
-  ],
-  lable2: ["操作员", "操作员角色", "操作类型", "操作时间"]
+    "导出报表",
+    "操作员",
+    "操作员角色",
+    "操作类型",
+    "操作时间",
+    "操作错误码",
+    "操作错误描述",
+  ]
 };
 
-var pageTxt = pageTxt_cn;
+var pageTxt = pageTxt_cn,_this;
 
 export default {
   name: "message_statist",
   data() {
     return {
-    search:[],
-    pageTxt,
-	  currentPage: 1,
-	  pageSize: 20,
-	  timeMethod: "",
-    statisticalMethod: "",
-    operationRecordingSrc: "",
-    modeType: { user: "", userType: "", businessType: "" },
-	  data: {
-        // lists: [{ operator: "test01", operationType: "01" }],
-        // totalSize: "12"
-      },    
+      pageTxt,
+      search: "",
+      currentPage: 1,
+      pageSize: 20,
+      timeMethod: "",
+      statisticalMethod: "",
+      modeType: { user: "", userType: "" },
+      data: {}
     };
   },
   methods: {
+    // 查询
     searchFn() {
-      var _this = this;
       utils.post(
         "mx/operationRecording/query",
         {
           cmdID: "600091",
           operator: _this.modeType.user,
           operationType: _this.modeType.userType,
-          operationBeginTime: _this.search[0] + " 00:00:00",
-          operationEndTime: _this.search[1] + " 23:59:59",
+          operationBeginTime: _this.search?_this.search[0]:'',
+          operationEndTime: _this.search?_this.search[1]:'',
           sequence: _this.statisticalMethod,
           type: 0,
-          pageSize: 20,
-          currentPage: 1
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage
         },
         function(response) {
           if (response.errcode == 0) {
             _this.data = response;
+          } else {
+            utils.weakTips(response.errinfo);
           }
         }
       );
     },
     // 导出报表
     exportFn() {
-      var _this = this;
       utils.post(
         "mx/operationRecording/query",
         {
           cmdID: "600091",
           operator: _this.modeType.user,
           operationType: _this.modeType.userType,
-          operationBeginTime: _this.search[0] + " 00:00:00",
-          operationEndTime: _this.search[1] + " 23:59:59",
+          operationBeginTime: _this.search?_this.search[0]:'',
+          operationEndTime: _this.search?_this.search[1]:'',
           sequence: _this.statisticalMethod,
           type: 1,
-          pageSize: 20,
-          currentPage: 1
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.operationRecordingSrc=response.errinfo;
-          }else{
-			      utils.weakTips(response.errinfo);
-		      }
+            window.location.href = response.errinfo;
+          } else {
+            utils.weakTips(response.errinfo);
+          }
         }
       );
     },
+    // 获得指定时间
     getTimeFn() {
       if (this.timeMethod == 0) {
         var toDate = new Date();
-        toDate = this.transferTime(toDate);
-        this.search = [toDate, toDate]
+        toDate = this.transferDate(toDate);
+        this.search = [toDate+" 00:00:00", toDate+ " 23:59:59"];
       }
       if (this.timeMethod == 1) {
         var beforeTime = new Date();
-        beforeTime = this.transferTime(beforeTime);
+        beforeTime = this.transferDate(beforeTime);
         var nowTime = new Date();
         nowTime.setDate(nowTime.getDate() - 7);
-        nowTime = this.transferTime(nowTime);
-        this.search = [nowTime , beforeTime]
+        nowTime = this.transferDate(nowTime);
+        this.search = [nowTime+" 00:00:00", beforeTime+ " 23:59:59"];
       }
       if (this.timeMethod == 2) {
         var beforeTime = new Date();
-        beforeTime = this.transferTime(beforeTime);
+        beforeTime = this.transferDate(beforeTime);
         var nowTime = new Date();
         nowTime.setDate(nowTime.getDate() - 30);
-        nowTime = this.transferTime(nowTime);
-        this.search = [nowTime , beforeTime]
-	   }
+        nowTime = this.transferDate(nowTime);
+        this.search = [nowTime+" 00:00:00", beforeTime+ " 23:59:59"];
+      }
       if (this.timeMethod == 3) {
-        this.search = ["",""]
+         this.search = ""
       }
     },
-    transferTime(beforeTime) {
+    // 转换日期格式
+    transferDate(beforeTime) {
       var year = beforeTime.getFullYear(),
-        month = beforeTime.getMonth() + 1,
-        date = beforeTime.getDate();
+          month = beforeTime.getMonth() + 1,
+          date = beforeTime.getDate();
       if (month < 10) {
         month = "0" + month;
       }
       if (date < 10) {
         date = "0" + date;
       }
-      var returnDate = year + "-" + month + "-" + date;
-      return returnDate;
-	},
-	changeDate(){
-    this.search[0] = this.transferTime(this.search[0]);
-    this.search[1] = this.transferTime(this.search[1]);
-	},
-    currentRow2() {
-  
+      return year + "-" + month + "-" + date; 
     },
+    // 转换时间格式
+    // transferTime(beforeTime){
+    //   var hours=beforeTime.getHours(),
+    //       minutes=beforeTime.getMinutes(),
+    //       seconds=beforeTime.getSeconds();
+    //   if(hours<10){
+    //     hours = "0" + hours;
+    //   }
+    //   if(minutes < 10){
+    //     minutes = "0" +minutes;
+    //   }
+    //   if(seconds < 10){
+    //     seconds = "0" +seconds
+    //   }
+    //   return hours + ":" + minutes + ":" + seconds
+    // },
+    // 自定义时间
+    // changeDate() {
+      // this.search[0] = this.transferDate(this.search[0]) + " " + this.transferTime(this.search[0]);
+      // this.search[1] = this.transferDate(this.search[1]) + " " +this.transferTime(this.search[1]);
+    // },
 
+    // 分页
     handleSizeChange(size) {
       this.pageSize = size;
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
-    },
+    }
   },
+  // 初始化数据
   created() {
     this.statisticalMethod = "0";
     this.timeMethod = "0";
     var toDate = new Date();
-    toDate = this.transferTime(toDate);
-    this.search = [toDate , toDate]
-    var _this = this;
+    toDate = this.transferDate(toDate);
+    this.search = [toDate+" 00:00:00", toDate+" 23:59:59"];
+    _this = this;
     utils.post(
       "mx/operationRecording/query",
       {
         cmdID: "600091",
         operator: _this.modeType.user,
         operationType: _this.modeType.userType,
-        operationBeginTime: _this.search.start,
-        operationEndTime: _this.search.end,
-        sequence: 0,
-        type: 0
+        operationBeginTime: _this.search?_this.search[0]:'',
+        operationEndTime: _this.search?_this.search[1]:'',
+        sequence: _this.statisticalMethod,
+        type: 0,
+        pageSize: _this.pageSize,
+        currentPage: _this.currentPage
       },
       function(response) {
         if (response.errcode == 0) {
@@ -225,24 +245,16 @@ export default {
     );
   }
 };
-    
 </script>
-<style scoped="scoped">
-.statist{padding: 22px; padding-top: 10px;}
-.title{border-bottom: 1px solid #ebeff4;}
-.title span{font-size: 16px; color: #333; line-height: 40px;}
-.lined *{vertical-align: middle;}
-.lined{margin-top: 15px; font-size: 14px; color: #666;}
-.statist .input,.statist .picker{width: 200px;}
-.t1{margin-left: 30px;}
-.first_select{margin-left: 15px;}
-.pagination{text-align: right; padding: 20px 0;}
-.t{font-size: 20px; color: #409eff;}
-.iconBtn{padding: 6px 10px; font-size: 20px;}
-.el-select{width: 200px;}
-.el-table{margin-top: 15px;}
-.searchBtn{margin-left: 40px;}
-.ver{margin: 10px 0;}
-.date_picker{margin-left: 30px;height: 30px;width: 350px;}
 
+<style scoped="scoped">
+.statist *{vertical-align: middle;}
+.statist{padding: 22px; padding-top: 10px;font-size: 14px; color: #666;}
+.statist .lined{margin-top: 20px;}
+.lined .date_picker{margin-left: 30px;height: 30px;width: 360px;}
+.lined {margin-bottom: 20px;}
+.lined .searchBtn{margin-left: 35px;}
+.ml{margin-left: 30px;}
+.el-radio+.el-radio{margin-left: 18px;} 
+/* .pagination{text-align: right; padding: 20px 0;} */
 </style>

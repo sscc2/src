@@ -4,7 +4,7 @@
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
 			<div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
-			<div @click=""><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div>
+			<!-- <div @click=""><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div> -->
 		</div>
 	
 		<el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >

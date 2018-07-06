@@ -121,7 +121,6 @@
 
 <script>
 import utils from "@/libs/utils.js";
-import observer    from '@/libs/observer.js';
 import globalVar   from '@/libs/globalVar.js';
 
 var pageTxt= {
@@ -336,7 +335,7 @@ export default {
     exportSignalInfo(){
       var _this=this;
       utils.post(        
-        "ms/userComm/ExportCsv",
+        "mx/userComm/ExportCsv",
         {
           cmdID:"600034"
         },
@@ -584,21 +583,19 @@ function as(data){
 </script>
 
 <style scoped="scoped">
-.user *{vertical-align: middle;}
-.userH .el-input{width: 160px; height: 30px; margin-right: 10px;}
-.txt{font-size: 13px; color: #666666;}
-.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 13px; color: #5c759d; }
-.btnBox div{display: inline-block; cursor: pointer; margin-left: 30px;}
-.btnBox span{margin-left: 4px;}
-.btnBox div:nth-child(1){margin-left: 0;}
-._zero > img{cursor: pointer;}
-.sel{width: 350px; line-height: 40px;}
-.leftBox{height: 30px;}
-.sel[data-v-50d0771e]{width: 202px;}
-.txt1{margin-left: 30px;font-size: 13px; color: #666666;}
+.signal *{vertical-align: middle;}
 .signal{margin: 22px;}
+.input_normal{margin-left: 10px;}
+.txt{font-size: 14px; color: #666666;}
 .btn{margin-left: 35px;}
-.input_normal{width: 250px;height: auto;}
+.btnBox{margin-bottom: 10px; margin-top: 18px; font-size: 14px; color: #5c759d; }
+.btnBox div{display: inline-block; cursor: pointer; margin-right: 35px;}
+.btnBox span{margin-left: 4px;}
+._zero > img{cursor: pointer;}
+.txt1{margin-left: 35px;font-size: 14px; color: #666666;}
+._dialog .leftBox{height: 30px;}
+
+
 </style>
 
 <style>
