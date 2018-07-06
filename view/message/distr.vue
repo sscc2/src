@@ -129,7 +129,6 @@ import lang   from '@/language/lang.js';
 <style scoped="scoped">
 	.distr{padding: 0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;margin-left: -20px;}
 	
 	.list li{margin-bottom: 10px;}
 	.txt,.txt2,.txt3{display: inline-block;font-size: 14px;line-height: 30px;width: 120px;vertical-align: top;text-align: right;padding-right: 10px;}

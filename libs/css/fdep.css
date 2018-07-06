@@ -3,7 +3,7 @@
 .el-message__icon{font-size: 14px;}
 .el-loading-mask{background: transparent !important;}
 .el-menu{border: none;}
-._hr{margin: 15px 0; border: none; height: 1px; background: #D8D8D8;}
+._hr{width: calc(100% + 40px);margin: 0 0 20px -20px; border: none; height: 1px; background: #EBEFF4;}
 textarea{resize: none !important;}
 ._zero{font-size: 0; line-height: 0;}
 ._iBtn{padding: 6px 10px; font-size: 16px;}

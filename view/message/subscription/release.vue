@@ -38,7 +38,6 @@
 				<img src="@/img/importico.png"/>
 				<span class="btnTxt">{{pageTxt.label[13]}}</span>
 			</el-button>
-			
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
 			highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 1040px">
@@ -346,14 +345,15 @@ import lang        from '@/language/lang.js';
 <style scoped="scoped">
 	.release{padding:0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;min-width: 1080px;margin-left: -20px;}
+	._hr{min-width: 1080px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
 	.elInput{width: 200px;line-height: 1;margin-right: 35px;}
 	.el-button *{vertical-align: middle;}
 	.blueBtn{margin-left: 10px;margin-left: 35px;}
-	.btn{margin-right: 35px;margin-left: 0;}
-	.btnTxt{color: #5a769e;}
+	.btnBox{padding: 10px 0;}
+	.btn{margin-right: 35px;margin-left: 0;padding: 0;}
+	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	._zero{white-space: nowrap;}
 	._zero img{vertical-align: middle;margin-right: 10px;}
 	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}

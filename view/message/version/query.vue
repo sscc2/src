@@ -200,7 +200,7 @@ import lang      from '@/language/lang.js';
 <style scoped="scoped">
 	.query{padding: 0 20px;white-space: nowrap;color: #333;min-width: 912px;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;margin-left: -20px;min-width: 980px;}
+	._hr{min-width: 980px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
 	.select{width: 180px;}

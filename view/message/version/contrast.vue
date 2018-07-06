@@ -177,7 +177,6 @@ import lang      from '@/language/lang.js';
 <style scoped="scoped">
 	.contrast{padding: 0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.select{width: 180px;}
 	.elInput{width: 240px;line-height: 1;margin-right: 35px;}

@@ -166,12 +166,13 @@ import lang      from '@/language/lang.js';
 <style scoped="scoped">
 	.userSet{padding: 0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
 	.elInput{width: 240px;line-height: 1;margin-right: 35px;}
 	.blueBtn{margin-right: 35px;}
-	.btnTxt{color: #5a769e;}
+	.btnBox{padding: 10px 0;}
+	.btn{margin-right: 35px;margin-left: 0;padding: 0;}
+	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	.el-button *{vertical-align: middle;}
 	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>
