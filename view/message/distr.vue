@@ -20,7 +20,7 @@
 			</li><li>
 				<label class="txt">{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
-					<p class="txt2">{{pageTxt.label[7]}}</p>
+					<p class="txt3">{{pageTxt.label[7]}}</p>
 					<el-table class='suList' :data="data" tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow">
 						<!--<el-table-column width="55" type="index"></el-table-column>-->
 						<el-table-column type="selection" width="55"></el-table-column>
@@ -126,8 +126,9 @@ import lang   from '@/language/lang.js';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	
 	.list li{margin-bottom: 10px;}
-	.txt,.txt2{display: inline-block;font-size: 14px;line-height: 30px;width: 120px;vertical-align: top;text-align: right;padding-right: 10px;}
-	.txt2{width: auto;text-align: left;}
+	.txt,.txt2,.txt3{display: inline-block;font-size: 14px;line-height: 30px;width: 120px;vertical-align: top;text-align: right;padding-right: 10px;}
+	.txt2{width: auto;text-align: left;color: #999;}
+	.txt3{width: auto;text-align: left;}
 	.red{color: #F00;line-height: 1;vertical-align: text-bottom;}
 	.rightBox{vertical-align: top;display: inline-block;}
 	.rightBox .el-input{width: 255px;}

@@ -41,7 +41,7 @@
 			
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
-			highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 960px">
+			highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 1040px">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="pubUserID" sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
@@ -111,7 +111,7 @@ import lang        from '@/language/lang.js';
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: [],
-		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}*/],
+		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
 		row: '',
 		selects: [],
 		size: 20,
@@ -121,31 +121,38 @@ import lang        from '@/language/lang.js';
 		csvName: ''
 	};
 	
-	function delTheme(sub){
+	function delTheme(sub, args){
 		var row = delTheme.row,
 		param = {
 			operator: 'admin',
 			pubUserID: row.pubUserID,
 			topicName: row.topicName
 		};
-		if(sub == 'now'){
-			param.url = 'mx/pubTopic/deleteImmediately';
-			param.cmdID = '600049';
-			param.reviewer = 'admin2';
-		} else {
+		if(sub == 'send'){
 			param.url = 'mx/pubTopic/delete';
 			param.cmdID = '600046';
+		} else {
+			param.url = 'mx/pubTopic/deleteImmediately';
+			param.cmdID = '600049';
+			param.reviewer = args.name;
 		}
 		utils.post(param, function(data){
 //			console.log('删除主题：',data);
 			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			utils.weakTips(data.errinfo);
+			if(sub == 'send') utils.weakTips(data.errinfo);
+			else utils.wheelReq(data); //轮循
 			search();
 		});
 	}
 	
 	function delSend(){delTheme('send');}
-	function delNow(){delTheme('now');}
+	function delNow(){
+		utils.review({ //审核
+			yes: function(args){
+				delTheme('now', args);
+			}
+		});
+	}
 	
 	function autoInput(str, cb){
 		if(!str) return;
@@ -339,12 +346,13 @@ import lang        from '@/language/lang.js';
 <style scoped="scoped">
 	.release{padding:0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;min-width: 1000px;margin-left: -20px;}
+	._hr{margin: 0 0 10px;min-width: 1080px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
-	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.elInput{width: 200px;line-height: 1;}
+	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
+	.elInput{width: 200px;line-height: 1;margin-right: 35px;}
 	.el-button *{vertical-align: middle;}
-	.blueBtn{margin-left: 10px;}
+	.blueBtn{margin-left: 10px;margin-left: 35px;}
+	.btn{margin-right: 35px;margin-left: 0;}
 	.btnTxt{color: #5a769e;}
 	._zero{white-space: nowrap;}
 	._zero img{vertical-align: middle;margin-right: 10px;}

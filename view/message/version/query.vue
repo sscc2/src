@@ -25,7 +25,8 @@
 				<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[11]}}</button>
 			</div>
 		</div>
-		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
+		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow"
+			:data="data" tooltip-effect="dark"  style="min-width: 940px">
 			<el-table-column width="50" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="typeTxt" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
@@ -194,13 +195,13 @@ import lang      from '@/language/lang.js';
 <style scoped="scoped">
 	.query{padding: 0 20px;white-space: nowrap;color: #333;min-width: 912px;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;margin-left: -20px;}
+	._hr{margin: 0 0 10px;margin-left: -20px;min-width: 980px;}
 	.searchBox *{vertical-align: middle;}
-	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
+	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
 	.select{width: 180px;}
 	.el-input{width: 180px;line-height: 30px;}
 	.ver{margin: 10px 0;}
-	.blueBtn{margin-left: 10px;}
+	.blueBtn{margin-left: 35px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
 	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}

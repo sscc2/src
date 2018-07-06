@@ -295,14 +295,15 @@ function utils(){
 			var name=reObj.name.val(), pass=reObj.pass.val();
 			if(name==''||pass=='') return exp.weakTips('复核员或密码不能为空！', 2);
 			reObj.hide();
-			return _rept.yes.call(_rept.that, _rept.yesArgs);
+			return _rept.yes.call(_rept.that, {name});
 			var param = {
 				url: 'mx/userinfo/review',
 				cmdID: '90001',
 				name: reObj.name.val(),
 				pass: md5.hex_md5(reObj.pass.val()),
 				that: _rept.that,
-				args: _rept.yesArgs
+				args: {name},
+				that: _rept.that
 			};
 			exp.post(param, _rept.yes);
 			reObj.hide();
@@ -312,6 +313,7 @@ function utils(){
 			_rept = opt;
 			reObj.show(opt);
 		}
+		// 复核操作员
 		this.reviewHide = function(){
 			reObj.runNo();
 			reObj.hide();
@@ -442,18 +444,18 @@ function utils(){
 	function WheelReq(uuid){
 		var begin, over = 30*1000, once;
 		var param = {
-			cmdID: '600100',
+			cmdID: '600073',
 			uuid: uuid,
-			lastQuery: 0 //1最后一次，0不是；
+			lastQueryFlag: 0 //1最后一次，0不是；
 		};
 		
 		function req(){
 			if(Date.now()-begin>=over){
 				clearInterval(once);
-				param.lastQuery = 1;
+				param.lastQueryFlag = 1;
 				hide();
 			}
-			exp.post('mx/dispatch/queryRequest', param, response);
+			exp.post('mx/batchDispatch/queryBatchDisptachDispatchResponse', param, response);
 		}
 		function response(data){
 			if(data.errcode < 0){
@@ -461,10 +463,10 @@ function utils(){
 				hide();
 				return;
 			}
-			if(data.endQuery==0) return;
+			if(data.endQueryFlag==0) return;
 			clearInterval(once);
 			var list = data.lists, len = list.length, obj, str = '',
-				dom = '<p>suName：{suName}；errcode：{errcode}；errinfo：{errinfo}</p>';
+				dom = '<p>serviceID：{serviceID}；errcode：{errcode}；errinfo：{errinfo}</p>';
 			for (var i = 0; i < len; i++) {
 				obj = list[i];
 				if(obj.errcode<0){
@@ -491,8 +493,9 @@ function utils(){
 	}
 	WheelReq.el = kit(`<div id="_wheel"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular">
 		<circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg></div></div>`)[0];
-	exp.wheelReq = function(uuid){
-		var w = new WheelReq(uuid);
+	exp.wheelReq = function(sv){
+		if(sv.endQueryFlag==1||!sv.uuid) return utils.weakTips(sv.errinfo);
+		var w = new WheelReq(sv.uuid);
 		w.start();
 	};
 	

@@ -24,7 +24,7 @@
 			</el-button>
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow"
-				highlight-current-row :data="data" tooltip-effect="dark">
+				highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 1040px">
 			<!--<el-table-column width="50" type="index"></el-table-column>-->
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="subUserID"  sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
@@ -188,10 +188,10 @@ import lang        from '@/language/lang.js';
 <style scoped="scoped">
 	.subscription{padding: 0 20px;white-space: nowrap;color: #333;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
-	._hr{margin: 0 0 10px;margin-left: -20px;}
+	._hr{margin: 0 0 10px;margin-left: -20px;min-width: 1080px;}
 	.searchBox *{vertical-align: middle;}
-	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
-	.elInput{width: 240px;line-height: 1;}
+	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
+	.elInput{width: 240px;line-height: 1;margin-right: 35px;}
 	.red{color: red;}
 	.blueBtn{margin-left: 10px;}
 	.btnTxt{color: #5a769e;}

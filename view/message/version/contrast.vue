@@ -62,7 +62,7 @@ import lang      from '@/language/lang.js';
 		data: [/*{type:'verType',detail:'detail'}*/],
 		row: {},
 		selects: [],
-		size: 20,
+		size: 9000,
 		max: 0
 	};
 	
@@ -180,8 +180,8 @@ import lang      from '@/language/lang.js';
 	._hr{margin: 0 0 10px;margin-left: -20px;}
 	.searchBox *{vertical-align: middle;}
 	.select{width: 180px;}
-	.elInput{width: 240px;line-height: 1;}
-	.txt{font-size: 14px;line-height: 30px;padding-left: 10px;}
+	.elInput{width: 240px;line-height: 1;margin-right: 35px;}
+	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
 	.el-input{width: 180px;line-height: 30px;}
 	.ver{margin: 10px 0;}
 	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}

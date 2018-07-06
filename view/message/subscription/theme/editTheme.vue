@@ -212,19 +212,24 @@ import lang      from '@/language/lang.js';
 						yes: function(){_this.active = 'second';}
 					});
 				} else {
-					var info = this.info;
-					info.url = 'mx/pubTopic/modifyTopicImmediately';
-					info.cmdID = '600055';
-					info.operator = 'admin';
-					info.reviewer = 'admin2';
-					utils.hints({
-						txt: pageTxt.tips.now,
-						yes: function(){
-							utils.post(info, function(data){
-//								console.log('修改主题1：',data);
-								if(data.errcode < 0) return utils.weakTips(data.errinfo);
-								utils.weakTips(data.errinfo);
-								utils.goto('/message/release');
+					utils.review({
+						yes: function(args){
+							var info = _this.info;
+							info.url = 'mx/pubTopic/modifyTopicImmediately';
+							info.cmdID = '600055';
+							info.operator = 'admin';
+							info.reviewer = args.name;
+							utils.hints({
+								txt: pageTxt.tips.now,
+								yes: function(){
+									utils.post(info, function(data){
+	//									console.log('修改主题1：',data);
+										if(data.errcode < 0) return utils.weakTips(data.errinfo);
+	//									utils.weakTips(data.errinfo);
+										utils.wheelReq(data);
+										utils.goto('/message/release');
+									});
+								}
 							});
 						}
 					});
@@ -314,11 +319,20 @@ import lang      from '@/language/lang.js';
 			utils.post(info, function(data){
 //				console.log('修改主题2：',data);
 				if(data.errcode < 0) return utils.weakTips(data.errinfo);
-				utils.weakTips(data.errinfo);
+				if(subm == 'send') utils.weakTips(data.errinfo);
+				else utils.wheelReq(data); //轮循
 				utils.goto('/message/release');
 			});
 		}
-		utils.hints(opt);
+		
+		if(subm != 'send'){
+			utils.review({ //审核
+				yes: function(args){
+					info.reviewer = args.name;
+					utils.hints(opt);
+				}
+			});
+		} else utils.hints(opt);
 	}
 	function isSelectUser(){//true为跳转
 		var i, len = _cans.length;

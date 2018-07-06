@@ -252,18 +252,18 @@ import lang      from '@/language/lang.js';
 				}
 			});
 		} else {
-			utils.review({
-				yes: function(a){
+			utils.review({ //审核
+				yes: function(args){
 					utils.hints({
 						txt: pageTxt.tips.now,
 						yes: function(){
 							info.cmdID = '600047';
-							info.reviewer = 'admin2';
+							info.reviewer = args.name;
 							utils.post('mx/pubTopic/addImmediately', info, function(data){
 //								console.log('立即增加主题：',data);
 								if(data.errcode < 0) return utils.weakTips(data.errinfo);
-								utils.weakTips(data.errinfo);
-								utils.wheelReq(data.uuid);
+//								utils.weakTips(data.errinfo);
+								utils.wheelReq(data); //轮循
 								utils.goto('/message/release');
 							});
 						}
