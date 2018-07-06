@@ -77,7 +77,7 @@ import lang      from '@/language/lang.js';
 			operation:'send',reviewer:'sh',operationType:'sendType'}*/],
 		row: {},
 		selects: [],
-		size: 20,
+		size: 9000,
 		max: 0
 	};
 
@@ -133,20 +133,25 @@ import lang      from '@/language/lang.js';
 				search();
 			},
 			roolback(row){
-//				console.log(row)
-				utils.hints({
-					txt: pageTxt.tips.roolback,
-					yes: function(){
-						var param = {
-							url: 'mx/version/rollback',
-							cmdID: '600063',
-							type: row.type,
-							version: row.version
-						};
-						utils.post(param, function(data){
-//							console.log('版本回退：', data);
-							utils.weakTips(data.errinfo);
-							if(data.errcode >= 0) search(_currentPage = 1);
+				utils.review({ //审核
+					yes: function(args){
+						utils.hints({
+							txt: pageTxt.tips.roolback,
+							yes: function(){
+								var param = {
+									url: 'mx/version/rollback',
+									cmdID: '600063',
+									type: row.type,
+									version: row.version,
+									reviewer: args.name
+								};
+								utils.post(param, function(data){
+		//							console.log('版本回退：', data);
+//									utils.weakTips(data.errinfo);
+									utils.wheelReq(data); //轮循
+									if(data.errcode >= 0) search(_currentPage = 1);
+								});
+							}
 						});
 					}
 				});

@@ -24,7 +24,7 @@
 					<el-table class='suList' :data="data" tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow">
 						<!--<el-table-column width="55" type="index"></el-table-column>-->
 						<el-table-column type="selection" width="55"></el-table-column>
-						<el-table-column prop="suName" :label="pageTxt.list[0]" ></el-table-column>
+						<el-table-column prop="serviceID" :label="pageTxt.list[0]" ></el-table-column>
 					</el-table>
 					<!--<div class="pagination" v-show="data.length!=0">
 						<el-pagination @current-change='userChange($event)' background layout="prev, pager, next" 
@@ -68,7 +68,7 @@ import lang   from '@/language/lang.js';
 		data() {
 			return {
 				pageTxt,
-		        data: [/*{suName: 'SU-06'},{suName: 'AU-01'}*/],
+		        data: [/*{serviceID: 'SU-06'},{serviceID: 'AU-01'}*/],
 		        type: '1',
 		        selects: []
 			};
@@ -107,15 +107,21 @@ import lang   from '@/language/lang.js';
 		}
 	};
 	function fullDose(arr){
-		var param = {
-			cmdID: '600072',
-			url: 'mx/batchDispatch/dispatch',
-			type: _this.type,
-			lists: arr,
-			count: arr.length,
-		};
-		utils.post(param, function(data){
-			utils.weakTips(data.errinfo);
+		utils.review({ //审核
+			yes: function(args){
+				var param = {
+					cmdID: '600072',
+					url: 'mx/batchDispatch/dispatch',
+					type: _this.type,
+					lists: arr,
+					count: arr.length,
+					reviewer: args.name
+				};
+				utils.post(param, function(data){
+//					utils.weakTips(data.errinfo);
+					utils.wheelReq(data); //轮循
+				});
+			}
 		});
 	}
 </script>

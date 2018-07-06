@@ -474,6 +474,7 @@ function utils(){
 				}
 			}
 			if(str) exp.weakTips(str, 2);
+			else exp.weakTips(data.errinfo, 1);
 			hide();
 		}
 		function show(){
@@ -494,7 +495,7 @@ function utils(){
 	WheelReq.el = kit(`<div id="_wheel"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular">
 		<circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg></div></div>`)[0];
 	exp.wheelReq = function(sv){
-		if(sv.endQueryFlag==1||!sv.uuid) return utils.weakTips(sv.errinfo);
+		if(sv.endQueryFlag==1||!sv.uuid) return exp.weakTips(sv.errinfo);
 		var w = new WheelReq(sv.uuid);
 		w.start();
 	};
