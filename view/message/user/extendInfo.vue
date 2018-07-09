@@ -128,6 +128,7 @@ export default {
         type: 0
       },
       function(response) {
+        console.log(response.lists[0].operationFax)
         if(response.errcode==0){
           var response1 = response.lists[0];
           if (response1) {
@@ -136,6 +137,7 @@ export default {
             _this.inputValue.userMobileNum = response1.userMobileNum;
             _this.inputValue.operationFax = response1.operationFax;
             _this.inputValue.email = response1.email;
+            _this.inputValue.operationPhoneNum = response1.operationPhoneNum;
             _this.inputValue.ssccManager = response1.ssccManager;
           }
         }       

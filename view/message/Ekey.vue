@@ -42,6 +42,11 @@
         </el-table-column>
       </el-table>
 
+      <div class="_pagination" v-show="EkeyData.totalPage>0">
+        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
+        <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
+      </div>
+
       <el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
         <ul class="_dialog">
           <li>
@@ -80,8 +85,9 @@
           </li>				
         </ul>
         <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="sendDown">立即下发</el-button>
+            <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>            
             <el-button @click="addEkey = false">{{pageTxt.dialog[12]}}</el-button>
-            <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>
         </div>
       </el-dialog>
       
@@ -121,15 +127,11 @@
           </li>
         </ul>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
             <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
+            <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
+            <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
         </div>
       </el-dialog>
-
-      <div class="_pagination" v-show="EkeyData.totalPage>0">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
-        <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
-      </div>
 
     </div>
 
@@ -210,7 +212,7 @@ export default {
       search: { userID: "", type: "", ekeyName: "" },
       ainfo,
       binfo,
-      EkeyData: [],
+      EkeyData: {lists:[{"userID":"1"}]},
       selects: [],
       oldEkeyName: "",
       EkeyInfoSrc:"",
@@ -245,41 +247,32 @@ export default {
 
     //查询Ekey
     searchfn() {
-      utils.post(
-        "mx/userEkey/query",
-        {
-          cmdID: "600021",
-          userID: isInput ? _this.idName : _this.userID,
-          ekeyName: _this.search.ekeyName,
-          type: _this.search.type,
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage1
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            if (response.totalPage < _this.currentPage1) {
-              utils.post(
-                "mx/userEkey/query",
-                {
-                  cmdID: "600021",
-                  userID: isInput ? _this.idName : _this.userID,
-                  ekeyName: _this.search.ekeyName,
-                  type: _this.search.type,
-                  pageSize: _this.pageSize,
-                  currentPage: response.totalPage
-                },
-                function(response) {
-                  if(response.errcode==0){
-                    _this.EkeyData = response;
-                  }                 
-                }
-              );
-            } else {
-              _this.EkeyData = response;
-            }
-          }
+      this.renderDate(_this.search.type)
+    },
+    // 立即下发
+    sendDown() {
+      utils.review({
+        yes:function(){
+          utils.hints({
+						txt: "是否立即下发",
+						yes: function(){
+              utils.post('mx/userEkey/addImmediately',
+               {
+                  cmdID: "600008",
+                  operator: "admin",
+                  reviewer: "admin2",
+                  userID: _this.ainfo.userID,
+                  ekeyName: _this.ainfo.ekeyName,
+                  ekeyValidDate: _this.ainfo.ekeyValidDate,
+                  comment: _this.ainfo.comment                                       
+               }, 
+               function(response){
+                 utils.wheelReq(response.uuid);                
+							});
+						}
+					});
         }
-      );
+      });
     },
     // 创建Ekey
     showAdd() {
@@ -335,7 +328,7 @@ export default {
         utils.hints({
           txt: "是否删除该用户信息",
           yes: _this.del,
-          btn: 2
+          btn: 3
         });
       }
     },
@@ -416,13 +409,12 @@ export default {
         }
       )     
     },
-    
     //删除(row)
     showDel() {
       utils.hints({
         txt: "是否删除该用户信息",
         yes: _this.ekeyDel,
-        btn: 2
+        btn: 3
       });
     },
     ekeyDel() {
@@ -450,7 +442,6 @@ export default {
     currentRow: function(e) {
       this.row = e;
     },
-
     // 分页
     currentPage: function(e) {
       this.currentPage = e;
@@ -460,54 +451,25 @@ export default {
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage1 = currentPage;
-      utils.post(
-        "mx/userEkey/query",
-        {
-          cmdID: "600021",
-          userID: "",
-          ekeyName: "",
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage1,
-          type: 3
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            _this.EkeyData = response;
-          }
-        }
-      );
+      this.renderDate(_this.search.type);
     },
     // 更新数据
-    renderDate() {
+    renderDate(type) {
       utils.post(
         "mx/userEkey/query",
         {
           cmdID: "600021",
           userID: isInput ? _this.idName : _this.userID,
           ekeyName: _this.search.ekeyName,
-          type: _this.search.type,
+          type: type,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1
         },
         function(response) {
           if(response.errcode==0){
              if (response.totalPage < _this.currentPage1) {
-              utils.post(
-                "mx/userEkey/query",
-                {
-                  cmdID: "600021",
-                  userID: isInput ? _this.idName : _this.userID,
-                  ekeyName: _this.search.ekeyName,
-                  type: _this.search.type,
-                  pageSize: _this.pageSize,
-                  currentPage: response.totalPage
-                },
-                function(response) {
-                  if(response.errcode==0){
-                    _this.EkeyData = response;
-                  }              
-                }
-              );
+              _this.currentPage1 = response.totalPage;
+              _this.renderDate();
             } else {
               _this.EkeyData = response;
             }
@@ -521,25 +483,7 @@ export default {
     this.search.type = 0;
     this.ainfo.type = 0;
     _this = this;
-    utils.post(
-      "mx/userEkey/query",
-      {
-        cmdID: "600021",
-        userID: "",
-        ekeyName: "",
-        type: 3,
-        pageSize: _this.pageSize,
-        currentPage: _this.currentPage1
-      },
-      function(response) {
-        if (response.errcode == 0) {
-          _this.EkeyData = response;
-          if (response.totalPage < _this.currentPage1) {
-            _this.renderDate();
-          }
-        }
-      }
-    );
+    this.renderDate(3);
     utils.post(
       "mx/userinfo/queryLists",
       {
@@ -578,7 +522,7 @@ function autoInput(str, cb) {
 .user{height: 30px; font-size: 14px; color: #666666;}
 .user .el-button{margin-left: 35px;}
 .txt{margin-left: 35px;font-size: 14px; color: #666666;}
-.btnBox{margin-bottom: 10px; margin-top: 20px;}
+.btnBox{margin-bottom: 10px; margin-top: 10px;}
 .btnBox div{font-size: 14px; color: #5c759d; cursor: pointer; margin-right: 35px; display: inline-block;}
 .btnBox span{margin-left: 4px; height: 30px; line-height: 30px;}
 .Ekey .eRadio{margin-right: 30px;}

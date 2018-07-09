@@ -198,9 +198,13 @@ import lang      from '@/language/lang.js';
 	function blurID(id){
 //		var id = isInput ? _this.idName : _this.info.pubUserID;
 		var param = {
-			url: 'mx/userComm/querySpcificUser',
-			cmdID: '600035',
-			userID: id
+			url: 'mx/userinfo/queryLists', //mx/userComm/querySpcificUser
+			cmdID: '600001', //600035
+			userID: id,
+			type: 1,
+			pageSize: 500,
+        	currentPage: 1,
+        	userName: ''
 		};
 		_this.info.pubUserID = id;
 		utils.post(param, function(data){

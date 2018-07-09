@@ -577,7 +577,7 @@ function as(data) {
 .input_normal{margin-left: 10px;}
 .txt{font-size: 14px; color: #666666;}
 .btn{margin-left: 35px;}
-.btnBox{margin-bottom: 10px; margin-top: 20px; font-size: 14px; color: #5c759d; }
+.btnBox{margin-bottom: 10px; margin-top: 10px; font-size: 14px; color: #5c759d; }
 .btnBox div{display: inline-block; cursor: pointer; margin-right: 35px;}
 .btnBox span{margin-left: 4px;height: 30px; line-height: 30px;}
 ._zero > img{cursor: pointer;}
@@ -589,7 +589,6 @@ function as(data) {
 .leftBox{height: 30px;}
 .sel[data-v-50d0771e]{width: 202px;}
 .txt1{margin-left: 30px;font-size: 13px; color: #666666;}
-.signal{margin: 22px;}
 .input_normal{width: 250px;height: auto;}
 </style>
 

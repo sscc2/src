@@ -127,6 +127,10 @@ export default {
     changeTextarea() {
       afn("textarea1","button1",this.switchValue1)
       afn("textarea2","button2",this.switchValue2)
+    },
+    // 更新数据
+    renderDate(){
+      
     }
   },
   //初始化数据
@@ -153,10 +157,10 @@ export default {
     this.changeTextarea() 
   }
 };
-  function afn(textareaID,buttonID,p){
+  function afn(textareaID,buttonID,i){
       var textarea=document.getElementById(textareaID);
       var button=document.getElementById(buttonID)
-      if(p){
+      if(i){
         textarea.style = "background:#fff"
         button.style = "background-color:#32CCF9" 
       }else{
@@ -176,6 +180,5 @@ export default {
 .switch_box .el-switch{margin-right: 20px;}
 .content{margin-top: 20px; width: 75%; margin-left: 120px;}
 .red{font-size:14px; color:#FF6B6B;}
-
 </style>
 

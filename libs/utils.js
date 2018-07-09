@@ -19,7 +19,7 @@ function utils(){
 		/**
 		 * @param type 默认:一般; 1:成功; 2:失败; 3:警告; 4:消息提示;
 		 */
-		this.weakEl = function(txt, type){
+		this.weakEl = function(txt, type, time){
 			switch (type){
 				case 1: type = 'success'; break;
 				case 2: type = 'error'; break;
@@ -33,7 +33,7 @@ function utils(){
 		        type: type,
 //		        center: true,
 //		        showClose: true,
-				duration: 0
+				duration: time || 5000
 	        });
 	        return exp;
 		};

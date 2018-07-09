@@ -370,8 +370,9 @@ import lang      from '@/language/lang.js';
 			cmdID: '600001', //600035
 			userID: id,
 			type: 1,
-			pageSize: "500",
-        	currentPage: "1"
+			pageSize: 500,
+        	currentPage: 1,
+        	userName: ''
 		};
 		utils.post(param, function(data){
 //			console.log('通信关系用户：', data);

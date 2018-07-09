@@ -98,7 +98,7 @@
 				<div class="btn">
           <el-button type="primary" @click='sendDown'>{{pageTxt.infoTxt[21]}}</el-button>
 					<el-button type="primary" @click="submitForm">{{pageTxt.infoTxt[20]}}</el-button>					
-					<el-button type="default" @click='del()'>{{pageTxt.infoTxt[22]}}</el-button>
+					<el-button type="default" @click='del'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
 			</el-tab-pane>			
 			<el-tab-pane label="Ekey" disabled>
@@ -186,8 +186,8 @@ var pageTxt = {
 export default {
   data() {
     return {
-      userType: [{ id: "0", name: "test" }, { id: "1", name: "test" }],
-      cities: [{ id: "BJ", name: "test" }, { id: "1", name: "test" }],
+      userType: [{ id: "0", name: "tmp" }],
+      cities: [{ id: "BJ", name: "北京" }],
       info,
       pageTxt,
       connect,
@@ -196,32 +196,6 @@ export default {
     };
   },
   methods: {
-    // 表单验证
-    submitForm() {
-      var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
-      if (this.info.userID != "" && this.info.userName != "") {
-        if (this.info.isModifyDefaultPasswd == 0) {
-          this.add();
-        } else {
-          if (reg.test(this.info.userPasswd)) {
-            this.add();
-          } else {
-            utils.weakTips(
-              "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
-            );
-          }
-        }
-      } else {
-        utils.weakTips("用户ID或用户名不能为空");
-      }
-    },
-    judge() {
-      if (info.isModifyDefaultPasswd != 0) {
-        this.info.userPasswd = "";
-      } else {
-        this.info.userPasswd = 111111;
-      }
-    },
     // 立即下发
     sendDown() {
       utils.review({
@@ -259,6 +233,32 @@ export default {
 					});
         }
       });
+    },
+    // 表单验证
+    submitForm() {
+      var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+      if (this.info.userID != "" && this.info.userName != "") {
+        if (this.info.isModifyDefaultPasswd == 0) {
+          this.add();
+        } else {
+          if (reg.test(this.info.userPasswd)) {
+            this.add();
+          } else {
+            utils.weakTips(
+              "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
+            );
+          }
+        }
+      } else {
+        utils.weakTips("用户ID或用户名不能为空");
+      }
+    },
+    judge() {
+      if (info.isModifyDefaultPasswd != 0) {
+        this.info.userPasswd = "";
+      } else {
+        this.info.userPasswd = 111111;
+      }
     },
     // 创建用户
     add: function() {

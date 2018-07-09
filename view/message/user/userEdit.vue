@@ -86,7 +86,7 @@
 					</el-col>
 				</el-row>
 				<div class="btn">
-          <el-button type="primary" @click='del($event)'>{{pageTxt.infoTxt[21]}}</el-button>
+          <el-button type="primary" @click='sendDown'>{{pageTxt.infoTxt[21]}}</el-button>
 					<el-button type="primary" @click="Edit($event)">{{pageTxt.infoTxt[20]}}</el-button>					
 					<el-button type="default" @click='del($event)'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
@@ -179,8 +179,8 @@ var pageTxt = {
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
 var data = {
-  userType: [{ id: "0", name: "1aaa" }, { id: "1", name: "2aaa" }],
-  cities: [{ id: "BJ", name: "1aaa" }, { id: "1", name: "2aaa" }],
+  userType: [{ id: "0", name: "tmp" }],
+  cities: [{ id: "BJ", name: "北京" }],
   info,
   pageTxt,
   connect,
@@ -192,6 +192,42 @@ export default {
     return data;
   },
   methods: {
+    // 立即下发
+    sendDown() {
+      utils.review({
+        yes:function(){
+          utils.hints({
+						txt: "是否立即下发",
+						yes: function(){
+              utils.post('mx/userinfo/modifyImmediately',
+               {
+                  cmdID: "600007",
+                  operator: "admin",
+                  reviewer: "admin2",
+                  userID: _this.$store.state.transferEditID,
+                  userName: _this.info.userName,
+                  userType: _this.info.userType,
+                  userDistrict: _this.info.userDistrict,
+                  speedCtrlKbps: _this.info.speedCtrlKbps,
+                  configTime: _this.info.configTime,
+                  userInfo: _this.info.userInfo,
+                  connSuGroupName: _this.info.connSuGroupName,
+                  isAlarmIfOffLine: _this.info.isAlarmIfOffLine,
+                  softEncBeginDate: _this.info.softEncBeginDate,
+                  softEncEndDate: _this.info.softEncEndDate,
+                  allowSendRecvFile: _this.info.allowSendRecvFile,
+                  maxPubsCount: _this.info.maxPubsCount,
+                  maxSubsCount: _this.info.maxSubsCount,
+                  maxDaysOfTopic: _this.info.maxDaysoftTopic,                                        
+               }, 
+               function(response){
+                 utils.wheelReq(response.uuid);                
+							});
+						}
+					});
+        }
+      });
+    },
     //修改
     Edit() {
       var _this = this;
@@ -199,8 +235,8 @@ export default {
         "mx/userinfo/modify",
         {
           cmdID: "600004",
-          userID: _this.$store.state.transferEditID,
           operator: "admin",
+          userID: _this.$store.state.transferEditID,
           userName: _this.info.userName,
           userType: _this.info.userType,
           userDistrict: _this.info.userDistrict,

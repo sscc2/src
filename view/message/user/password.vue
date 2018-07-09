@@ -1,10 +1,12 @@
 <template>
     <div class="Popup" v-show="$store.state.passShow">
+
         <div class="_panle">
           <div>
             <p id="_title">{{pageTxt.lable[0]}}</p>
             <img id="_close" src="@/img/close.png" @click="$store.state.passShow = false">
           </div>
+
           <div class="_messaga">
             <ul class="_dialog">
               <li>
@@ -42,17 +44,18 @@
               </li>
             </ul>
           </div>
+
           <div class="passwd_btn">
             <el-button type="primary" @click="sendDown">立即下发</el-button>
             <el-button type="primary" @click="verify">提交</el-button>
             <el-button type="default" @click="$store.state.passShow = false">返回</el-button>
           </div>
+
         </div>
       </div> 
 </template>
 
 <script>
-import kit from "@/libs/kit.js";
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
 
@@ -142,7 +145,7 @@ export default {
                  userPasswd: _this.info.isModifyDefaultPasswd ? md5.hex_md5(_this.info.npasswd).substr(8, 16) : md5.hex_md5("111111").substr(8, 16) 
                }, 
                function(response){
-                  utils.wheelReq(response);                                                
+                  utils.wheelReq(response);  //轮巡                                              
 							});
 						}
 					});
@@ -160,6 +163,7 @@ export default {
       }
     }
   },
+  // 初始化
   created() {
     _this=this;
     this.info.id = this.$store.state.transferEditID;
