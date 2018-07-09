@@ -77,7 +77,7 @@ import lang      from '@/language/lang.js';
 			operation:'send',reviewer:'sh',operationType:'sendType'}*/],
 		row: {},
 		selects: [],
-		size: 9000,
+		size: 20,
 		max: 0
 	};
 

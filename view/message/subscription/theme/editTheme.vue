@@ -366,9 +366,12 @@ import lang      from '@/language/lang.js';
 	function getAllUser(){
 		var id = globalVar.get('userid').pubUserID;
 		var param = {
-			url: 'mx/userComm/querySpcificUser',
-			cmdID: '600035',
-			userID: id
+			url: 'mx/userinfo/queryLists', //mx/userComm/querySpcificUser
+			cmdID: '600001', //600035
+			userID: id,
+			type: 1,
+			pageSize: "500",
+        	currentPage: "1"
 		};
 		utils.post(param, function(data){
 //			console.log('通信关系用户：', data);

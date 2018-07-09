@@ -62,7 +62,7 @@ import lang      from '@/language/lang.js';
 		data: [/*{type:'verType',detail:'detail'}*/],
 		row: {},
 		selects: [],
-		size: 9000,
+		size: 10,
 		max: 0
 	};
 	

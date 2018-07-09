@@ -33,7 +33,7 @@ function utils(){
 		        type: type,
 //		        center: true,
 //		        showClose: true,
-				duration: 5000
+				duration: 0
 	        });
 	        return exp;
 		};
@@ -440,7 +440,7 @@ function utils(){
 //			observer.execute('useridReady');
 		});
 	};
-	
+	//轮偱
 	function WheelReq(uuid){
 		var begin, over = 30*1000, once;
 		var param = {
@@ -466,15 +466,20 @@ function utils(){
 			if(data.endQueryFlag==0) return;
 			clearInterval(once);
 			var list = data.lists, len = list.length, obj, str = '',
-				dom = '<p>serviceID：{serviceID}；errcode：{errcode}；errinfo：{errinfo}</p>';
+				dom = '<li><i class="l1">{serviceID}</i><i class="l1">{errcode}</i><i class="l1">{errinfo}</i></li>';
 			for (var i = 0; i < len; i++) {
 				obj = list[i];
 				if(obj.errcode<0){
 					str += kit.template(obj, dom);
 				}
 			}
-			if(str) exp.weakTips(str, 2);
-			else exp.weakTips(data.errinfo, 1);
+			if(str){
+				var err = `<div class="whellError"><div><i class="l1">serviceID</i>
+					<i class="l1">errcode</i><i class="l1">errinfo</i></div><ul>`;
+				err += str + '</ul></div>';
+				exp.weakTips(err);
+			}
+			else exp.weakTips(data.errinfo);
 			hide();
 		}
 		function show(){

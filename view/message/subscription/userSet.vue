@@ -47,6 +47,26 @@
 		<div class="onePage" v-else-if="max>0&&max<=size">
 			已显示全部{{max}}个数据
 		</div>
+	<!--<div id="err">
+		<div class="whellError">
+			<div>
+				<i class="l1">serviceID</i>
+				<i class="l1">errcode</i>
+				<i class="l1">errinfo</i>
+			</div>
+			<ul>
+				<li>
+					<i class="l1">{serviceID}</i>
+					<i class="l1">{errcode}</i>
+					<i class="l1">{errinfo}</i>
+				</li><li>
+					<i class="l1">{serviceID}</i>
+					<i class="l1">{errcode}</i>
+					<i class="l1">{errinfo}</i>
+				</li>
+			</ul>
+		</div>
+	</div>-->
 	</div>
 </template>
 
@@ -141,6 +161,7 @@ import lang      from '@/language/lang.js';
 			}
 		},
 		mounted(){
+//			utils.weakTips(document.querySelector('#err').innerHTML);
 			_this = this;
 			this.idName = this.userID = '';
 			this.size = 20;
