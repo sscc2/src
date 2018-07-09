@@ -131,7 +131,7 @@ export default {
     sendDown(){
       this.$store.state.passShow = false;
       utils.review({
-        yes:function(a){
+        yes:function(info){
           utils.hints({
 						txt: "是否立即下发",
 						yes: function(){
@@ -139,13 +139,13 @@ export default {
                {
                  cmdID: "600010",
                  operator: "admin",
-                 reviewer: "admin2",
+                 reviewer: info.name,
                  userID: _this.$store.state.transferEditID,
                  isModifyDefaultPasswd:_this.info.isModifyDefaultPasswd,
                  userPasswd: _this.info.isModifyDefaultPasswd ? md5.hex_md5(_this.info.npasswd).substr(8, 16) : md5.hex_md5("111111").substr(8, 16) 
                }, 
                function(response){
-                  utils.wheelReq(response);  //轮巡                                              
+                  utils.wheelReq(response);                                           
 							});
 						}
 					});

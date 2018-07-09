@@ -42,6 +42,9 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .el-textarea__inner:focus{border: 2px solid #32CCF9;}
 .el-dialog__header{padding: 0 0 0 20px;}
 .el-dialog__title{color: #666; line-height: 50px;}
+.el-dialog__headerbtn .el-dialog__close{color: #656A73; font-weight: bold; font-size: 25px;}
+.el-dialog__headerbtn{top:12px;}
+.el-dialog__headerbtn:hover .el-dialog__close{color: #656A73;}
 /* 表格 */
 .el-table{border:1px solid #EFEFEF;border-width:1px 1px 0;}
 .el-table td,.el-table th{padding:0;}

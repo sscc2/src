@@ -223,7 +223,7 @@ export default {
     // 立即下发
     deleteSendDown(id) {
       utils.review({
-        yes:function(){
+        yes:function(info){
           utils.hints({
 						txt: "是否立即下发",
 						yes: function(){
@@ -231,11 +231,12 @@ export default {
                {
                   cmdID: "600008",
                   operator: "admin",
-                  reviewer: "admin2",
+                  reviewer: info.name,
                   userID: id,                                       
                }, 
                function(response){
-                 utils.wheelReq(response.uuid);                
+                 utils.wheelReq(response);
+                 _this.renderDate();                
 							});
 						}
 					});

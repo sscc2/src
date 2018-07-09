@@ -84,6 +84,7 @@
             </div>
           </li>				
         </ul>
+
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="sendDown">立即下发</el-button>
             <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>            
@@ -127,7 +128,7 @@
           </li>
         </ul>
         <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
+            <el-button type="primary" @click="lijixiafa">立即下发</el-button>
             <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
             <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
         </div>
@@ -244,35 +245,9 @@ export default {
     autoInput() {
       isInput = true;
     },
-
     //查询Ekey
     searchfn() {
       this.renderDate(_this.search.type)
-    },
-    // 立即下发
-    sendDown() {
-      utils.review({
-        yes:function(){
-          utils.hints({
-						txt: "是否立即下发",
-						yes: function(){
-              utils.post('mx/userEkey/addImmediately',
-               {
-                  cmdID: "600008",
-                  operator: "admin",
-                  reviewer: "admin2",
-                  userID: _this.ainfo.userID,
-                  ekeyName: _this.ainfo.ekeyName,
-                  ekeyValidDate: _this.ainfo.ekeyValidDate,
-                  comment: _this.ainfo.comment                                       
-               }, 
-               function(response){
-                 utils.wheelReq(response.uuid);                
-							});
-						}
-					});
-        }
-      });
     },
     // 创建Ekey
     showAdd() {
@@ -281,6 +256,32 @@ export default {
       this.ainfo.ekeyName = "";
       this.ainfo.ekeyValidDate = "";
       this.ainfo.comment = "";
+    },
+    // 立即下发
+    sendDown() {
+      this.addEkey = false;
+      utils.review({
+        yes:function(info){
+          utils.hints({
+						txt: "是否立即下发",
+						yes: function(){
+              utils.post('mx/userEkey/addImmediately',
+               {
+                  cmdID: "600025",
+                  operator: "admin",
+                  reviewer: info.name,
+                  userID: _this.ainfo.userID,
+                  ekeyName: _this.ainfo.ekeyName,
+                  ekeyValidDate: _this.ainfo.ekeyValidDate,
+                  comment: _this.ainfo.comment                                       
+               }, 
+               function(response){
+                 utils.wheelReq(response);                
+							});
+						}
+					});
+        }
+      });
     },
     submitAdd() {
       if (this.ainfo.userID == "") {
@@ -308,7 +309,7 @@ export default {
                 function(response) {
                   if (response.errcode == 0) {
                     _this.addEkey = false;
-                    _this.renderDate();
+                    _this.renderDate(_this.search.type);
                     utils.weakTips(response.errinfo);
                   } else {
                     utils.weakTips(response.errinfo);
@@ -328,6 +329,7 @@ export default {
         utils.hints({
           txt: "是否删除该用户信息",
           yes: _this.del,
+          now: function(){_this.modifydel(_this.selects[0].userID ? _this.selects[0].userID : "",_this.selects[0].ekeyName)},
           btn: 3
         });
       }
@@ -343,13 +345,36 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.renderDate();
+            _this.renderDate(_this.search.type);
             utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
           }
         }
       );
+    },
+    modifydel(id,name){
+      utils.review({
+        yes:function(info){
+          utils.hints({
+						txt: "是否立即下发",
+						yes: function(){
+              utils.post('mx/userEkey/deleteImmediately',
+               {
+                  cmdID: "600027",
+                  operator: "admin",
+                  reviewer: info.name,
+                  userID: id,
+                  ekeyName: name                                    
+               }, 
+               function(response){
+                 utils.wheelReq(response);
+                 _this.renderDate(_this.search.type)                
+							});
+						}
+					});
+        }
+      });
     },
     // 修改
     showEdit(row) {
@@ -360,6 +385,32 @@ export default {
       this.binfo.ekeyName = row.ekeyName;
       this.binfo.ekeyValidDate = row.ekeyValidDate;
       this.binfo.comment = row.comment;
+    },
+    lijixiafa() {
+      this.editEkdy = false;
+      utils.review({
+        yes:function(info){
+          utils.hints({
+						txt: "是否立即下发",
+						yes: function(){
+              utils.post('mx/userEkey/modifyImmediately',
+               {
+                  cmdID: "600026",
+                  operator: "admin",
+                  reviewer: info.name,
+                  oldEkeyName: _this.oldEkeyName,
+                  userID: _this.binfo.userID,
+                  ekeyName: _this.binfo.ekeyName,
+                  ekeyValidDate: _this.binfo.ekeyValidDate,
+                  comment: _this.binfo.comment                                      
+               }, 
+               function(response){
+                 utils.wheelReq(response);                
+							});
+						}
+					});
+        }
+      });
     },
     submitEdit() {
       if (binfo.userID == "") {
@@ -381,7 +432,7 @@ export default {
             },
             function(response) {
               if (response.errcode == 0) {
-                _this.renderDate();
+                _this.renderDate(_this.search.type);
                 utils.weakTips(response.errinfo);
               } else {
                 utils.weakTips(response.errinfo);
@@ -414,6 +465,7 @@ export default {
       utils.hints({
         txt: "是否删除该用户信息",
         yes: _this.ekeyDel,
+        now: function(){_this.modifydel( _this.row.userID,_this.row.ekeyName)},
         btn: 3
       });
     },
@@ -428,7 +480,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.renderDate();
+            _this.renderDate(_this.search.type);
             utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
@@ -469,7 +521,7 @@ export default {
           if(response.errcode==0){
              if (response.totalPage < _this.currentPage1) {
               _this.currentPage1 = response.totalPage;
-              _this.renderDate();
+              _this.renderDate(type);
             } else {
               _this.EkeyData = response;
             }

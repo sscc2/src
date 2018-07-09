@@ -96,8 +96,8 @@
 					</el-col>
 				</el-row>
 				<div class="btn">
-          <el-button type="primary" @click='sendDown'>{{pageTxt.infoTxt[21]}}</el-button>
-					<el-button type="primary" @click="submitForm">{{pageTxt.infoTxt[20]}}</el-button>					
+          <el-button type="primary" @click='submitForm(sendDown)'>{{pageTxt.infoTxt[21]}}</el-button>
+					<el-button type="primary" @click="submitForm(add)">{{pageTxt.infoTxt[20]}}</el-button>					
 					<el-button type="default" @click='del'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
 			</el-tab-pane>			
@@ -199,7 +199,7 @@ export default {
     // 立即下发
     sendDown() {
       utils.review({
-        yes:function(){
+        yes:function(info){
           utils.hints({
 						txt: "是否立即下发",
 						yes: function(){
@@ -207,7 +207,7 @@ export default {
                {
                   cmdID: "600006",
                   operator: "admin",
-                  reviewer: "admin2",
+                  reviewer: info.name,
                   userID: _this.info.userID,
                   userName: _this.info.userName,
                   userType: _this.info.userType,
@@ -227,41 +227,15 @@ export default {
                   userPasswd: _this.info.isModifyDefaultPasswd ? _this.info.userPasswd : md5.hex_md5("111111").substr(8, 16)
                }, 
                function(response){
-                 utils.wheelReq(response.uuid);                
+                 utils.wheelReq(response);                
 							});
 						}
 					});
         }
       });
     },
-    // 表单验证
-    submitForm() {
-      var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
-      if (this.info.userID != "" && this.info.userName != "") {
-        if (this.info.isModifyDefaultPasswd == 0) {
-          this.add();
-        } else {
-          if (reg.test(this.info.userPasswd)) {
-            this.add();
-          } else {
-            utils.weakTips(
-              "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
-            );
-          }
-        }
-      } else {
-        utils.weakTips("用户ID或用户名不能为空");
-      }
-    },
-    judge() {
-      if (info.isModifyDefaultPasswd != 0) {
-        this.info.userPasswd = "";
-      } else {
-        this.info.userPasswd = 111111;
-      }
-    },
-    // 创建用户
-    add: function() {
+    // 创建
+    add() {
       this.$store.state.transferEditID = this.info.userID;
       utils.post(
         "mx/userinfo/add",
@@ -295,6 +269,32 @@ export default {
         }
       );
     },
+    // 表单验证
+    submitForm(fn) {
+      var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+      if (this.info.userID != "" && this.info.userName != "") {
+        if (this.info.isModifyDefaultPasswd == 0) {
+          fn();
+        } else {
+          if (reg.test(this.info.userPasswd)) {
+            fn();
+          } else {
+            utils.weakTips(
+              "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
+            );
+          }
+        }
+      } else {
+        utils.weakTips("用户ID或用户名不能为空");
+      }
+    },
+    judge() {
+      if (info.isModifyDefaultPasswd != 0) {
+        this.info.userPasswd = "";
+      } else {
+        this.info.userPasswd = 111111;
+      }
+    },
     open6(msg) {
       this.$confirm(msg, "提示", {
         confirmButtonText: "确定",
@@ -311,8 +311,7 @@ export default {
           this.$router.replace({ path: "/message/userEdit/mess" });
         });
     },
-
-    del: function(e) {
+    del() {
       this.$router.replace({ path: "/message/user" });
     }
   },
@@ -324,7 +323,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type: "1"
+        type: 1
       },
       function(response) {
         if (response.errcode == 0) {
@@ -337,7 +336,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type: "2"
+        type: 2
       },
       function(response) {
         if (response.errcode == 0) {

@@ -4,8 +4,6 @@
 			<span class='header_txt'>{{hostText_cn[0]}}</span>
 		</div>
 
-		<div class="host">
-
 			<div class='host_btn'>
 				<el-tabs v-model="activeName" type="card" @tab-click="handleClick">
 			
@@ -36,7 +34,6 @@
 				</el-tabs>
 			</div>				
 
-		</div>
 	</div>
 </template>
 
@@ -44,19 +41,19 @@
 import utils from "@/libs/utils.js";
 
 var hostText_cn = [
-  "主机配置",
-  "全局静态配置",
-  "静态配置文件：",
-  "提交",
-  "全局动态配置",
-  "动态配置文件：",
-  "只读",
-  "编辑",
-  "是否提交当前修改",
-  "(全局静态配置文件为：mxstatic.ini，文件仅支持UTF-8格式)",
-  "(全局动态配置文件为：mxdynamic.ini，文件仅支持UTF-8格式)",
-],_this;
-
+    "主机配置",
+    "全局静态配置",
+    "静态配置文件：",
+    "提交",
+    "全局动态配置",
+    "动态配置文件：",
+    "只读",
+    "编辑",
+    "是否提交当前修改",
+    "(全局静态配置文件为：mxstatic.ini，文件仅支持UTF-8格式)",
+    "(全局动态配置文件为：mxdynamic.ini，文件仅支持UTF-8格式)"
+  ],
+  _this;
 
 export default {
   data() {
@@ -73,9 +70,9 @@ export default {
   methods: {
     //编辑
     edit() {
-      var configinfo=_this.hostType ? _this.switchValue2 : _this.switchValue1;
-      if(!configinfo){
-        return
+      var configinfo = _this.hostType ? _this.switchValue2 : _this.switchValue1;
+      if (!configinfo) {
+        return;
       }
       utils.hints({
         txt: hostText_cn[8],
@@ -89,10 +86,11 @@ export default {
         {
           cmdID: "600082",
           type: _this.hostType,
-          cfgInfo: _this.hostType ? _this.textareaValue2 : _this.textareaValue1 
+          cfgInfo: _this.hostType ? _this.textareaValue2 : _this.textareaValue1
         },
         function(response) {
           if (response.errcode == 0) {
+            _this.renderDate();
             utils.weakTips(response.errinfo);
           }
         }
@@ -106,8 +104,17 @@ export default {
       if (event.target.getAttribute("id") == "tab-second") {
         this.hostType = 1;
       }
-      this.switchValue1=this.switchValue2=false;
+      this.switchValue1 = this.switchValue2 = false;
       this.changeTextarea();
+      this.renderDate();
+    },
+    //改变文本框
+    changeTextarea() {
+      afn("textarea1", "button1", this.switchValue1);
+      afn("textarea2", "button2", this.switchValue2);
+    },
+    // 更新数据
+    renderDate() {
       utils.post(
         "mx/suConfig/query",
         {
@@ -115,63 +122,41 @@ export default {
           type: _this.hostType
         },
         function(response) {
-          if (_this.hostType == 0) {
-            _this.textareaValue1 = response.cfgInfo;
-          } else {
-            _this.textareaValue2 = response.cfgInfo;
+          if (response.errcode == 0) {
+            if (_this.hostType == 0) {
+              _this.textareaValue1 = response.cfgInfo;
+            } else {
+              _this.textareaValue2 = response.cfgInfo;
+            }
           }
         }
       );
-    },
-    //改变文本框
-    changeTextarea() {
-      afn("textarea1","button1",this.switchValue1)
-      afn("textarea2","button2",this.switchValue2)
-    },
-    // 更新数据
-    renderDate(){
-      
     }
   },
   //初始化数据
   created() {
     _this = this;
-    utils.post(
-      "mx/suConfig/query",
-      {
-        cmdID: "600081",
-        type: _this.hostType
-      },
-      function(response) {
-        if (response.errcode == 0) {
-          if (_this.hostType == 0) {
-            _this.textareaValue1 = response.cfgInfo;
-          } else {
-            _this.textareaValue2 = response.cfgInfo;
-          }
-        }
-      }
-    );
+    this.renderDate();
   },
-  mounted(){
-    this.changeTextarea() 
+  mounted() {
+    this.changeTextarea();
   }
 };
-  function afn(textareaID,buttonID,i){
-      var textarea=document.getElementById(textareaID);
-      var button=document.getElementById(buttonID)
-      if(i){
-        textarea.style = "background:#fff"
-        button.style = "background-color:#32CCF9" 
-      }else{
-        textarea.style = "background:#F8F8F8"
-        button.style = "background-color:rgb(215, 216, 218)" 
-      }
+function afn(textareaID, buttonID, i) {
+  var textarea = document.getElementById(textareaID);
+  var button = document.getElementById(buttonID);
+  if (i) {
+    textarea.style = "background:#fff";
+    button.style = "background-color:#32CCF9";
+  } else {
+    textarea.style = "background:#F8F8F8";
+    button.style = "background-color:rgb(215, 216, 218)";
   }
+}
 </script>
 
 <style scoped="scoped">
-.host{padding:20px;}
+.host_btn{padding:20px;}
 .host_btn *{vertical-align:middle;}
 .host_btn .blueBtn{margin-top: 40px; margin-left: 120px;}
 .title_txt{font-size:14px; color:#666; margin-right: 10px;}

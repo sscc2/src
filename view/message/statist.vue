@@ -1,11 +1,12 @@
 <template>
   <div>
+
     <div class='header'>
       <span class='header_txt'>{{pageTxt.lable1[0]}}</span>
     </div>
     
     <div class="statist">
-      <div>
+ 
         <header>
           <div class="statist_herader">
             <span>{{pageTxt.lable1[2]}}</span>
@@ -25,7 +26,7 @@
             <el-radio v-model="timeMethod" label="3" @change="getTimeFn">{{pageTxt.lable1[11]}}</el-radio>
             <el-date-picker class="date_picker" :disabled="timeMethod!=3"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['12:00:00', '08:00:00']" format="yyyy-MM-dd HH:mm:ss" v-model="search" type="datetimerange" :range-separator="pageTxt.lable1[12]" :start-placeholder="pageTxt.lable1[13]" :end-placeholder="pageTxt.lable1[14]">
             </el-date-picker>				
-            <el-button class="searchBtn" type="primary" @click="searchFn">{{pageTxt.lable1[15]}}</el-button>        		
+            <el-button  @click="searchFn" type="primary" class="searchBtn" >{{pageTxt.lable1[15]}}</el-button>        		
             <el-button @click="exportFn" type="primary">{{pageTxt.lable1[16]}}</el-button>
           </div>
         </header>
@@ -40,12 +41,12 @@
           <el-table-column prop="errorInfo" :label="pageTxt.lable1[22]" show-overflow-tooltip></el-table-column>
         </el-table>			
 
-        <div class="_pagination"  v-show="data.totalPage>0">
+        <div class="_pagination">
+           <!-- v-show="data.totalPage>0" -->
           <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="data.totalPage" :page-size="20"></el-pagination>
           <div class="rightTxt">共{{data.totalSize}}条数据</div>
         </div>
 
-      </div>
     </div>
   </div>	
 </template>
@@ -76,11 +77,12 @@ var pageTxt_cn = {
     "操作类型",
     "操作时间",
     "操作错误码",
-    "操作错误描述",
+    "操作错误描述"
   ]
 };
 
-var pageTxt = pageTxt_cn,_this;
+var pageTxt = pageTxt_cn,
+  _this;
 
 export default {
   name: "message_statist",
@@ -100,27 +102,6 @@ export default {
     // 查询
     searchFn() {
       this.render();
-      // utils.post(
-      //   "mx/operationRecording/query",
-      //   {
-      //     cmdID: "600091",
-      //     operator: _this.modeType.user,
-      //     operationType: _this.modeType.userType,
-      //     operationBeginTime: _this.search?_this.search[0]:'',
-      //     operationEndTime: _this.search?_this.search[1]:'',
-      //     sequence: _this.statisticalMethod,
-      //     type: 0,
-      //     pageSize: _this.pageSize,
-      //     currentPage: _this.currentPage
-      //   },
-      //   function(response) {
-      //     if (response.errcode == 0) {
-      //       _this.data = response;
-      //     } else {
-      //       utils.weakTips(response.errinfo);
-      //     }
-      //   }
-      // );
     },
     // 导出报表
     exportFn() {
@@ -130,8 +111,8 @@ export default {
           cmdID: "600091",
           operator: _this.modeType.user,
           operationType: _this.modeType.userType,
-          operationBeginTime: _this.search?_this.search[0]:'',
-          operationEndTime: _this.search?_this.search[1]:'',
+          operationBeginTime: _this.search ? _this.search[0] : "",
+          operationEndTime: _this.search ? _this.search[1] : "",
           sequence: _this.statisticalMethod,
           type: 1,
           pageSize: _this.pageSize,
@@ -151,7 +132,7 @@ export default {
       if (this.timeMethod == 0) {
         var toDate = new Date();
         toDate = this.transferDate(toDate);
-        this.search = [toDate+" 00:00:00", toDate+ " 23:59:59"];
+        this.search = [toDate + " 00:00:00", toDate + " 23:59:59"];
       }
       if (this.timeMethod == 1) {
         var beforeTime = new Date();
@@ -159,7 +140,7 @@ export default {
         var nowTime = new Date();
         nowTime.setDate(nowTime.getDate() - 7);
         nowTime = this.transferDate(nowTime);
-        this.search = [nowTime+" 00:00:00", beforeTime+ " 23:59:59"];
+        this.search = [nowTime + " 00:00:00", beforeTime + " 23:59:59"];
       }
       if (this.timeMethod == 2) {
         var beforeTime = new Date();
@@ -167,24 +148,24 @@ export default {
         var nowTime = new Date();
         nowTime.setDate(nowTime.getDate() - 30);
         nowTime = this.transferDate(nowTime);
-        this.search = [nowTime+" 00:00:00", beforeTime+ " 23:59:59"];
+        this.search = [nowTime + " 00:00:00", beforeTime + " 23:59:59"];
       }
       if (this.timeMethod == 3) {
-         this.search = ""
+        this.search = "";
       }
     },
     // 转换日期格式
     transferDate(beforeTime) {
       var year = beforeTime.getFullYear(),
-          month = beforeTime.getMonth() + 1,
-          date = beforeTime.getDate();
+        month = beforeTime.getMonth() + 1,
+        date = beforeTime.getDate();
       if (month < 10) {
         month = "0" + month;
       }
       if (date < 10) {
         date = "0" + date;
       }
-      return year + "-" + month + "-" + date; 
+      return year + "-" + month + "-" + date;
     },
     // 分页
     handleSizeChange(size) {
@@ -197,19 +178,19 @@ export default {
     // 数据更新
     render() {
       utils.post(
-      "mx/operationRecording/query",
-      {
-        cmdID: "600091",
-        operator: _this.modeType.user,
-        operationType: _this.modeType.userType,
-        operationBeginTime: _this.search?_this.search[0]:'',
-        operationEndTime: _this.search?_this.search[1]:'',
-        sequence: _this.statisticalMethod,
-        type: 0,
-        pageSize: _this.pageSize,
-        currentPage: _this.currentPage
-      },
-      function(response) {
+        "mx/operationRecording/query",
+        {
+          cmdID: "600091",
+          operator: _this.modeType.user,
+          operationType: _this.modeType.userType,
+          operationBeginTime: _this.search ? _this.search[0] : "",
+          operationEndTime: _this.search ? _this.search[1] : "",
+          sequence: _this.statisticalMethod,
+          type: 0,
+          pageSize: _this.pageSize,
+          currentPage: _this.currentPage
+        },
+        function(response) {
           if (response.errcode == 0) {
             if (response.totalPage < _this.currentPage) {
               _this.currentPage = response.totalPage;
@@ -228,28 +209,9 @@ export default {
     this.timeMethod = "0";
     var toDate = new Date();
     toDate = this.transferDate(toDate);
-    this.search = [toDate+" 00:00:00", toDate+" 23:59:59"];
+    this.search = [toDate + " 00:00:00", toDate + " 23:59:59"];
     _this = this;
     _this.render();
-    // utils.post(
-    //   "mx/operationRecording/query",
-    //   {
-    //     cmdID: "600091",
-    //     operator: _this.modeType.user,
-    //     operationType: _this.modeType.userType,
-    //     operationBeginTime: _this.search?_this.search[0]:'',
-    //     operationEndTime: _this.search?_this.search[1]:'',
-    //     sequence: _this.statisticalMethod,
-    //     type: 0,
-    //     pageSize: _this.pageSize,
-    //     currentPage: _this.currentPage
-    //   },
-    //   function(response) {
-    //     if (response.errcode == 0) {
-    //       _this.data = response;
-    //     }
-    //   }
-    // );
   }
 };
 </script>

@@ -187,6 +187,8 @@ var data = {
   online,
 };
 
+var _this;
+
 export default {
   data() {
     return data;
@@ -195,7 +197,7 @@ export default {
     // 立即下发
     sendDown() {
       utils.review({
-        yes:function(){
+        yes:function(info){
           utils.hints({
 						txt: "是否立即下发",
 						yes: function(){
@@ -203,7 +205,7 @@ export default {
                {
                   cmdID: "600007",
                   operator: "admin",
-                  reviewer: "admin2",
+                  reviewer: info.name,
                   userID: _this.$store.state.transferEditID,
                   userName: _this.info.userName,
                   userType: _this.info.userType,
@@ -221,7 +223,7 @@ export default {
                   maxDaysOfTopic: _this.info.maxDaysoftTopic,                                        
                }, 
                function(response){
-                 utils.wheelReq(response.uuid);                
+                 utils.wheelReq(response);                
 							});
 						}
 					});
@@ -230,7 +232,6 @@ export default {
     },
     //修改
     Edit() {
-      var _this = this;
       utils.post(
         "mx/userinfo/modify",
         {
@@ -269,7 +270,7 @@ export default {
   // 初始化数据
   created: function() {
     this.tabv = this.$store.state.tabv;
-    var _this = this;
+    _this = this;
     utils.post(
       "mx/userinfo/query",
       {
