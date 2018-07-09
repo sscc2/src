@@ -161,6 +161,7 @@ import lang      from '@/language/lang.js';
 			verArr1 = [];
 			verArr2 = [];
 			this.info.config = '3';
+			this.info.ver1 = this.info.ver2 ='';
 			_currentPage = 1;
 		}
 	};

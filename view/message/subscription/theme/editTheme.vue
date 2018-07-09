@@ -376,11 +376,14 @@ import lang      from '@/language/lang.js';
 		};
 		utils.post(param, function(data){
 //			console.log('通信关系用户：', data);
-			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			if(data.errcode < 0){
+				_this.list = [];
+				return console.log(data.errinfo);
+			}
 			var arr = data.lists, i, len = arr.length, obj;
 			for (var i = 0; i < len; i++) {
 				obj = arr[i];
-				if(obj.userID){
+				if(obj.userID&&obj.userID != id){
 					obj.key = i;
 					obj.label = obj.userID + obj.userName;
 				} else {
