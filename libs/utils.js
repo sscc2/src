@@ -455,7 +455,7 @@ function utils(){
 				param.lastQueryFlag = 1;
 				hide();
 			}
-			exp.post('mx/batchDispatch/queryBatchDisptachDispatchResponse', param, response);
+			exp.post('mx/batchDispatch/queryBatchDispatchResponse', param, response);
 		}
 		function response(data){
 			if(data.errcode < 0){

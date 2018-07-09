@@ -198,13 +198,13 @@ import lang      from '@/language/lang.js';
 	function blurID(id){
 //		var id = isInput ? _this.idName : _this.info.pubUserID;
 		var param = {
-			url: 'mx/userinfo/queryLists', //mx/userComm/querySpcificUser
-			cmdID: '600001', //600035
+			url: 'mx/userinfo/queryListById', //mx/userComm/querySpcificUser  mx/userinfo/queryLists
+			cmdID: '600035', //600035  600001
 			userID: id,
-			type: 1,
-			pageSize: 500,
-        	currentPage: 1,
-        	userName: ''
+//			type: 1,
+//			pageSize: 500,
+//      	currentPage: 1,
+//      	userName: ''
 		};
 		_this.info.pubUserID = id;
 		utils.post(param, function(data){
@@ -219,6 +219,7 @@ import lang      from '@/language/lang.js';
 				} else {
 					arr.splice(i, 1);
 					--i;
+					len = arr.length;
 				}
 			}
 			_this.keys = [];
