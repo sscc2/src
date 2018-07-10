@@ -25,7 +25,8 @@
 			<el-button class='btn' @click='add' type='text'>
 				<img src="@/img/theme/add_1.png"/>
 				<span class="btnTxt">{{pageTxt.label[9]}}</span>
-			</el-button><el-button class='btn' @click='editTheme' type='text'>
+			</el-button>
+			<!--<el-button class='btn' @click='editTheme' type='text'>
 				<img src="@/img/theme/edit_1.png"/>
 				<span class="btnTxt">{{pageTxt.label[10]}}</span>
 			</el-button><el-button class='btn' @click='delTheme' type='text'>
@@ -34,15 +35,16 @@
 			</el-button><el-button class='btn' @click='detailTheme' type='text'>
 				<img src="@/img/theme/detail_1.png"/>
 				<span class="btnTxt">{{pageTxt.label[12]}}</span>
-			</el-button><el-button class='btn' @click='download' type='text'>
+			</el-button>-->
+			<el-button class='btn' @click='download' type='text'>
 				<img src="@/img/importico.png"/>
 				<span class="btnTxt">{{pageTxt.label[13]}}</span>
 			</el-button>
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow" 
 			highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 1040px">
-			<!--<el-table-column width="50" type="index"></el-table-column>-->
-			<el-table-column type="selection" width="55"></el-table-column>
+			<el-table-column width="50" :label="column" type="index"></el-table-column>
+			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="pubUserID" sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="pubUserName" :label="pageTxt.list[1]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="topicName" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
@@ -53,7 +55,7 @@
 					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
 						<img src="@/img/altericos.png" alt="">
 					</el-button>-->
-					<img @click="add(scope.$index, scope.row, scope)" src="@/img/theme/add_2.png" alt="">
+					<!--<img @click="add(scope.$index, scope.row, scope)" src="@/img/theme/add_2.png" alt="">-->
 					<img @click="edit(scope.$index, scope.row, scope)" src="@/img/theme/edit_2.png" alt="">
 					<img @click="del(scope.$index, scope.row, scope)" src="@/img/theme/del_2.png" alt="">
 					<img @click="detail(scope.$index, scope.row, scope)" src="@/img/theme/detail_2.png" alt="">
@@ -104,6 +106,7 @@ import lang        from '@/language/lang.js';
 	pageTxt = lang.themeRelease;
 	var data = {
 		pageTxt,
+		column: '　',
 		idName: '',
 		info: {
 			pubUserID: '', topicName: '',

@@ -18,14 +18,14 @@
 			<span class="txt">{{max}}</span>
 		</div>
 		<div class="btnBox">
-			<el-button @click='editAll' class='btn' type='text'>
+			<!--<el-button @click='editAll' class='btn' type='text'>
 				<img src="../../../img/theme/edit_1.png"/>
 				<span class="btnTxt">{{pageTxt.label[5]}}</span>
-			</el-button>
+			</el-button>-->
 		</div>
 		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
-			<!--<el-table-column width="50" type="index"></el-table-column>-->
-			<el-table-column type="selection" width="55"></el-table-column>
+			<el-table-column width="50" :label="column" type="index"></el-table-column>
+			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="userID" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="userName" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="maxPubsCount" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
@@ -80,6 +80,7 @@ import lang      from '@/language/lang.js';
 	
 	var data = {
 		pageTxt,
+		column: '　',
 		userID: '',
 		userName: '',
 		idName: '',

@@ -27,13 +27,13 @@
 		</div>
 		<el-table highlight-current-row @row-dblclick="dbl"  @current-change="currenRow" @selection-change="selectionRow"
 			:data="data" tooltip-effect="dark"  style="min-width: 940px">
-			<el-table-column width="50" type="index"></el-table-column>
+			<el-table-column width="50" :label="column" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="typeTxt" :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="version" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="versionPath" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="operationTime" :label="pageTxt.list[3]" show-overflow-tooltip></el-table-column>
-			<el-table-column prop="operation" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="operator" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="reviewer" :label="pageTxt.list[5]" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="send" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
@@ -70,6 +70,7 @@ import lang      from '@/language/lang.js';
 	
 	var data = {
 		pageTxt,
+		column: '　',
 		config: '0',
 		radio: 1,
 		picker: [],

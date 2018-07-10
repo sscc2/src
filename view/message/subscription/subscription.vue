@@ -18,15 +18,15 @@
 			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[4]}}</button>
 		</div>
 		<div class="btnBox">
-			<el-button @click='detail' class='btn' type='text'>
+			<!--<el-button @click='detail' class='btn' type='text'>
 				<img src="../../../img/theme/detail_1.png"/>
 				<span class="btnTxt">{{pageTxt.label[5]}}</span>
-			</el-button>
+			</el-button>-->
 		</div>
 		<el-table @sort-change='sortReq' @current-change="currenRow" @selection-change="selectionRow"
 				highlight-current-row :data="data" tooltip-effect="dark" style="min-width: 1040px">
-			<!--<el-table-column width="50" type="index"></el-table-column>-->
-			<el-table-column type="selection" width="55"></el-table-column>
+			<el-table-column width="50" :label="column" type="index"></el-table-column>
+			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="subUserID"  sortable='custom' :label="pageTxt.list[0]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="subUserName" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="subAppID" :label="pageTxt.list[2]" show-overflow-tooltip></el-table-column>
@@ -64,6 +64,7 @@ import lang        from '@/language/lang.js';
 	
 	var data = {
 		pageTxt,
+		column: '　',
 		idName: '',
 		info: {
 			subUserID:'', topicName: '',

@@ -441,12 +441,13 @@ function utils(){
 		});
 	};
 	//轮偱
-	function WheelReq(uuid){
+	function WheelReq(uuid, special){
 		var begin, over = 30*1000, once;
 		var param = {
 			cmdID: '600073',
 			uuid: uuid,
-			lastQueryFlag: 0 //1最后一次，0不是；
+			lastQueryFlag: 0, //1最后一次，0不是；
+			type: special || 0
 		};
 		
 		function req(){
@@ -466,7 +467,8 @@ function utils(){
 			if(data.endQueryFlag==0) return;
 			clearInterval(once);
 			var list = data.lists, len = list.length, obj, str = '',
-				dom = '<li><i class="l1">{serviceID}</i><i class="l1">{errcode}</i><i class="l1">{errinfo}</i></li>';
+			dom = special == 0 ? '<li><i class="l1">{serviceID}</i><i class="l1">{errcode}</i><i class="l1">{errinfo}</i></li>':
+				'<li><i class="l2">{serviceID}</i><i class="l2">{errcode}</i><i class="l2">{errinfo}</i><i class="l2">{type}</i></li>';
 			for (var i = 0; i < len; i++) {
 				obj = list[i];
 				if(obj.errcode<0){
@@ -474,9 +476,10 @@ function utils(){
 				}
 			}
 			if(str){
-				var err = `<div class="whellError"><div><i class="l1">serviceID</i>
-					<i class="l1">errcode</i><i class="l1">errinfo</i></div><ul>`;
-				err += str + '</ul></div>';
+				var err = '<div class="_whellError"><div class="tit">';
+				err += special == 0 ? '<i class="l1">serviceID</i><i class="l1">errcode</i><i class="l1">errinfo</i>':
+					'<i class="l2">serviceID</i><i class="l2">errcode</i><i class="l2">errinfo</i><i class="l2">type</i>';
+				err += '</div><ul>' + str + '</ul></div>';
 				exp.weakTips(err);
 			}
 			else exp.weakTips(data.errinfo);
@@ -501,7 +504,7 @@ function utils(){
 		<circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg></div></div>`)[0];
 	exp.wheelReq = function(sv){
 		if(sv.endQueryFlag==1||!sv.uuid) return exp.weakTips(sv.errinfo);
-		var w = new WheelReq(sv.uuid);
+		var w = new WheelReq(sv.uuid, sv.type);
 		w.start();
 	};
 	

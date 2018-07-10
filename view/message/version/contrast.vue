@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
-			<el-table-column width="50" type="index"></el-table-column>
+			<el-table-column width="50" :label="column" type="index"></el-table-column>
 			<!--<el-table-column type="selection" width="55"></el-table-column>-->
 			<el-table-column prop="type" :label="pageTxt.list[0]" width='180px'  show-overflow-tooltip></el-table-column>
 			<el-table-column prop="detail" :label="pageTxt.list[1]"  show-overflow-tooltip></el-table-column>
@@ -56,6 +56,7 @@ import lang      from '@/language/lang.js';
 	
 	var data = {
 		pageTxt,
+		column: '　',
 		idName1: '',
 		idName2: '',
 		info: {config:'3', ver1:'', ver2:''},

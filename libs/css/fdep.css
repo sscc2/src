@@ -117,9 +117,12 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 
 /* 轮循 */
 #_wheel{background:rgba(38,38,38,.7);}
-.whellError{border:1px solid #CCC;white-space: nowrap;}
-.whellError li{border-top:1px solid #CCC;}
-.whellError .l1{line-height: 20px;display: inline-block;text-align: center;width: 100px;}
+._whellError{color: #547ab9;}
+._whellError .tit i{font-size: 14px;font-weight: bold;}
+._whellError{border:1px solid #CCC;white-space: nowrap;width: 300px;font-size: 0;}
+._whellError .l1,.whellError .l2{display: inline-block;font-size: 12px;line-height: 20px;}
+._whellError .l2{width: 33.3%;}
+._whellError .l2{width: 25%;}
 /*.whellError .l1+.l1{border-left: 1px solid #CCC;}*/
 /* 标题 */
 .header{height: 44px; border-bottom: 1px solid #EBEFF4;}

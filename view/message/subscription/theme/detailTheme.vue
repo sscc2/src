@@ -33,7 +33,7 @@
 				<div class="rightBox">
 					<!--<p class="txt1">{{pageTxt.label[5]}}</p>-->
 					<div class="transfer">
-						<el-transfer v-model="keys" filterable :titles="[pageTxt.label[9], pageTxt.label[10]]"  @change="handleChange" :data="list"
+						<el-transfer v-model="keys" filterable :titles="[pageTxt.label[5], pageTxt.label[6]]"  @change="handleChange" :data="list"
 							:button-texts="[]" :format="{ noChecked: '${total}',hasChecked: '${checked}/${total}'}">
 							<div slot-scope="{option}">
 								<span class="itemTxt">{{option.userID}}</span>
