@@ -47,26 +47,27 @@
 		<div class="onePage" v-else-if="max>0&&max<=size">
 			已显示全部{{max}}个数据
 		</div>
-	<!--<div id="err">
-		<div class="whellError">
-			<div>
-				<i class="l1">serviceID</i>
-				<i class="l1">errcode</i>
-				<i class="l1">errinfo</i>
+		<!--<div id="err">
+			<div class="_whellError">
+				<div class="tit">
+					<i class="l1">serviceID</i>
+					<i class="l1">errcode</i>
+					<i class="l1">errinfo</i>
+				</div>
+				<ul>
+					<li>
+						<i class="l1">{serviceID}</i>
+						<i class="l1">{errcode}</i>
+						<i class="l1">{errinfo}</i>
+					</li><li>
+						<i class="l2">{serviceID}</i>
+						<i class="l2">{errcode}</i>
+						<i class="l2">{errinfo}</i>
+						<i class="l2">{type}</i>
+					</li>
+				</ul>
 			</div>
-			<ul>
-				<li>
-					<i class="l1">{serviceID}</i>
-					<i class="l1">{errcode}</i>
-					<i class="l1">{errinfo}</i>
-				</li><li>
-					<i class="l1">{serviceID}</i>
-					<i class="l1">{errcode}</i>
-					<i class="l1">{errinfo}</i>
-				</li>
-			</ul>
-		</div>
-	</div>-->
+		</div>-->
 	</div>
 </template>
 
@@ -162,7 +163,7 @@ import lang      from '@/language/lang.js';
 			}
 		},
 		mounted(){
-//			utils.weakTips(document.querySelector('#err').innerHTML);
+//			utils.weakTips(document.querySelector('#err').innerHTML, 0 , '0');
 			_this = this;
 			this.idName = this.userID = '';
 			this.size = 20;

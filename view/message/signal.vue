@@ -31,13 +31,14 @@
 
       <div class="btnBox">
         <div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
-        <div @click="fn"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div>
+        <!-- <div @click="fn"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div> -->
         <div @click="exportSignalInfo"><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
       </div>
 
       <el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="typeStr" label="业务类型" show-overflow-tooltip></el-table-column>
+        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+        <el-table-column width="50" label=" " type="index"></el-table-column>
+        <el-table-column prop="bizType" label="业务类型" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userName1" label="用户名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userID2" label="用户ID" show-overflow-tooltip></el-table-column>
@@ -49,9 +50,14 @@
         </el-table-column>
       </el-table>
 
-      <div class="_pagination"  v-show="list.totalPage>0">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="list.totalPage" :page-size="20"></el-pagination>
-        <div class="rightTxt">共{{list.totalSize}}条数据</div>
+      <div class="_pagination" v-if="list.totalSize>pageSize">
+        <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="list.totalSize"></el-pagination>
+        <div class="rightTxt">
+          共{{list.totalSize}}条数据
+        </div>
+      </div>
+      <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">
+        已显示全部{{list.totalSize}}个数据
       </div> 
       
       <el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
@@ -165,8 +171,8 @@ export default {
       userOption: [],
       otherOption: [],
       selects: [],
-      pageSize: "20",
-      currentPage: "1",
+      pageSize: 20,
+      currentPage: 1,
       dialogAdd: false,
       state1: "",
       row: "",
@@ -277,37 +283,37 @@ export default {
       this.options3 = options5;
     },
     // 刪除通信关系
-    fn() {
-      if (this.selects.length != 1) {
-        utils.weakTips("请在列表中选择一条记录！");
-      } else {
-        utils.hints({
-          txt: "是否确定删除该用户记录",
-          yes: _this.delUser,
-          btn: 2
-        });
-      }
-    },
-    delUser() {
-      utils.post(
-        "mx/userComm/delete",
-        {
-          cmdID: "600033",
-          operator: "admin",
-          bizType: _this.selects[0].bizType,
-          userID1: _this.selects[0].userID1,
-          userID2: _this.selects[0].userID2
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            _this.renderData();
-            utils.weakTips(response.errinfo);
-          } else {
-            utils.weakTips(response.errinfo);
-          }
-        }
-      );
-    },
+    // fn() {
+    //   if (this.selects.length != 1) {
+    //     utils.weakTips("请在列表中选择一条记录！");
+    //   } else {
+    //     utils.hints({
+    //       txt: "是否确定删除该用户记录",
+    //       yes: _this.delUser,
+    //       btn: 2
+    //     });
+    //   }
+    // },
+    // delUser() {
+    //   utils.post(
+    //     "mx/userComm/delete",
+    //     {
+    //       cmdID: "600033",
+    //       operator: "admin",
+    //       bizType: _this.selects[0].bizType,
+    //       userID1: _this.selects[0].userID1,
+    //       userID2: _this.selects[0].userID2
+    //     },
+    //     function(response) {
+    //       if (response.errcode == 0) {
+    //         _this.renderData();
+    //         utils.weakTips(response.errinfo);
+    //       } else {
+    //         utils.weakTips(response.errinfo);
+    //       }
+    //     }
+    //   );
+    // },
     // 导出通信关系
     exportSignalInfo() {
       utils.post(
@@ -467,68 +473,14 @@ export default {
   }
 };
 function as(data) {
-  var arr = data.lists,
-    obj;
-  for (var i = 0; i < arr.length; i++) {
-    obj = arr[i];
-    switch (obj.bizType) {
-      case 0:
-        obj.typeStr = "三方存管";
-        break;
-      case 10:
-        obj.typeStr = "银期转账";
-        break;
-      case 11:
-        obj.typeStr = "银基转账";
-        break;
-      case 12:
-        obj.typeStr = "资金划拨";
-        break;
-      case 13:
-        obj.typeStr = "信证报盘";
-        break;
-      case 14:
-        obj.typeStr = "电子对账";
-        break;
-      case 15:
-        obj.typeStr = "融资融券";
-        break;
-      case 16:
-        obj.typeStr = "基金盘后";
-        break;
-      case 17:
-        obj.typeStr = "转融通";
-        break;
-      case 18:
-        obj.typeStr = "B转H";
-        break;
-      case 19:
-        obj.typeStr = "交叉销售";
-        break;
-      case 20:
-        obj.typeStr = "报价回购";
-        break;
-      case 21:
-        obj.typeStr = "个股期权";
-        break;
-      case 22:
-        obj.typeStr = "FISP";
-        break;
-      case 23:
-        obj.typeStr = "私幕转报";
-        break;
-      case 24:
-        obj.typeStr = "云证通";
-        break;
-      case 26:
-        obj.typeStr = "基金时实业务";
-        break;
-      case 27:
-        obj.typeStr = "基金费用对账";
-        break;
-      default:
+  for(var i=0; i<data.lists.length; i++){
+    for(var x=0; x<_this.optionsCreat.length; x++){
+      if(data.lists[i].bizType==_this.optionsCreat[x].id){
+        data.lists[i].bizType=_this.optionsCreat[x].name
+      }
     }
   }
+  console.log(data)
   return data;
 }
 function autoInput(str, cb) {

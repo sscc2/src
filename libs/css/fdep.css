@@ -20,6 +20,7 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .el-pagination.is-background .el-pager li:not(.disabled):hover{background:#FFF;color:#7388a7;}
 ._pagination .rightTxt{display:inline-block;padding-left:10px;color:#999;vertical-align:middle;font-size:13px;line-height:28px;}
 ._pagination .el-pagination__jump{margin-right:24px;}
+.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 /* 弹窗 */
 ._dialog{font-size: 0;}
 ._dialog li{margin-bottom: 10px;}
@@ -119,9 +120,9 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 #_wheel{background:rgba(38,38,38,.7);}
 ._whellError{color: #547ab9;}
 ._whellError .tit i{font-size: 14px;font-weight: bold;}
-._whellError{border:1px solid #CCC;white-space: nowrap;width: 300px;font-size: 0;}
-._whellError .l1,.whellError .l2{display: inline-block;font-size: 12px;line-height: 20px;}
-._whellError .l2{width: 33.3%;}
+._whellError{white-space: nowrap;width: 320px;font-size: 0;}
+._whellError .l1, ._whellError .l2{display: inline-block;font-size: 13px;line-height: 24px;overflow: hidden;text-overflow: ellipsis;}
+._whellError .l1{width: 33.3%;}
 ._whellError .l2{width: 25%;}
 /*.whellError .l1+.l1{border-left: 1px solid #CCC;}*/
 /* 标题 */
@@ -152,6 +153,6 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .Popup ._messaga_info{margin-left: 60px; margin-top: 20px;}
 .Popup .info_txt{font-size: 14px; color: #999}
 .Popup .info_button{margin-left: 100px; text-align: left; margin-top: 65px;}
-
+/* 日期选择器 */
 .date_picker .el-range__icon{line-height: 20px;}
 .date_picker .el-range-separator{line-height: 20px;}

@@ -26,9 +26,7 @@
 					<div class="ico5"><img class="csor" src="../img/selectdico1.png"></div>	
 				</span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item>黄金糕</el-dropdown-item>
-					<el-dropdown-item>狮子头</el-dropdown-item>
-					<el-dropdown-item>螺蛳粉</el-dropdown-item>
+					<el-dropdown-item>分析系统 </el-dropdown-item>
 				</el-dropdown-menu>
 				</el-dropdown>									
 			</div>

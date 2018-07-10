@@ -23,12 +23,13 @@
 
       <div class="btnBox">
         <div @click="showAdd" id='Add' ><img src="@/img/creatico.png" ><span>{{pageTxt.Ekey[5]}}</span></div>
-        <div @click="fn"><img src="@/img/deletico.png" ><span>{{pageTxt.Ekey[7]}}</span></div>
+        <!-- <div @click="fn"><img src="@/img/deletico.png" ><span>{{pageTxt.Ekey[7]}}</span></div> -->
         <div @click="exportEkeyInfo"><img src="@/img/creatico.png"><span>批量导出Ekey</span></div>
       </div>
     
       <el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
-        <el-table-column type="selection" width="55"></el-table-column>
+        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+        <el-table-column width="50" label=" " type="index"></el-table-column>
         <el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="ekeyName" label="Ekey名称" show-overflow-tooltip></el-table-column>
@@ -42,10 +43,15 @@
         </el-table-column>
       </el-table>
 
-      <div class="_pagination" v-show="EkeyData.totalPage>0">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
-        <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
+      <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
+        <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="EkeyData.totalSize"></el-pagination>
+        <div class="rightTxt">
+          共{{EkeyData.totalSize}}条数据
+        </div>
       </div>
+      <div class="onePage" v-else-if="EkeyData.totalSize>0&&EkeyData.totalSize<=pageSize">
+        已显示全部{{EkeyData.totalSize}}个数据
+      </div> 
 
       <el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
         <ul class="_dialog">
@@ -138,7 +144,7 @@
 
     <div class="Popup" v-show="showExportEkeyInfo">
         <div class="_panle">
-          <div><p id="_title"></p>
+          <div><p id="_title">批量导出Ekey</p>
                 <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
           </div>
           <div class="_messaga">
@@ -229,7 +235,7 @@ export default {
       options: [],
       showExportEkeyInfo:false,
       EkeyInfoSrc:"",
-      EkeyInfoName:""
+      EkeyInfoName:"",
     };
   },
   methods: {
@@ -322,37 +328,37 @@ export default {
       }
     },
     // 删除Ekey
-    fn() {
-      if (this.selects.length != 1) {
-        utils.weakTips("请在列表中选择一条记录！");
-      } else {
-        utils.hints({
-          txt: "是否删除该用户信息",
-          yes: _this.del,
-          now: function(){_this.modifydel(_this.selects[0].userID ? _this.selects[0].userID : "",_this.selects[0].ekeyName)},
-          btn: 3
-        });
-      }
-    },
-    del() {
-      utils.post(
-        "mx/userEkey/delete",
-        {
-          cmdID: 600024,
-          operator: "admin",
-          userID: _this.selects[0].userID ? _this.selects[0].userID : "",
-          ekeyName: _this.selects[0].ekeyName
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            _this.renderDate(_this.search.type);
-            utils.weakTips(response.errinfo);
-          } else {
-            utils.weakTips(response.errinfo);
-          }
-        }
-      );
-    },
+    // fn() {
+    //   if (this.selects.length != 1) {
+    //     utils.weakTips("请在列表中选择一条记录！");
+    //   } else {
+    //     utils.hints({
+    //       txt: "是否删除该用户信息",
+    //       yes: _this.del,
+    //       now: function(){_this.modifydel(_this.selects[0].userID ? _this.selects[0].userID : "",_this.selects[0].ekeyName)},
+    //       btn: 3
+    //     });
+    //   }
+    // },
+    // del() {
+    //   utils.post(
+    //     "mx/userEkey/delete",
+    //     {
+    //       cmdID: 600024,
+    //       operator: "admin",
+    //       userID: _this.selects[0].userID ? _this.selects[0].userID : "",
+    //       ekeyName: _this.selects[0].ekeyName
+    //     },
+    //     function(response) {
+    //       if (response.errcode == 0) {
+    //         _this.renderDate(_this.search.type);
+    //         utils.weakTips(response.errinfo);
+    //       } else {
+    //         utils.weakTips(response.errinfo);
+    //       }
+    //     }
+    //   );
+    // },
     modifydel(id,name){
       utils.review({
         yes:function(info){

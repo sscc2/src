@@ -15,29 +15,34 @@
 
 			<div class="btnBox">
 				<div  @click="createUser"><img src="@/img/creatico.png" ><span>{{pageTxt.userTxt[4]}}</span></div>
-				<div  @click="deleteUser"><img src="@/img/deletico.png" ><span>{{pageTxt.userTxt[5]}}</span></div>
+				<!-- <div  @click="deleteUser"><img src="@/img/deletico.png" ><span>{{pageTxt.userTxt[5]}}</span></div> -->
 				<div  @click="importExtInfo"><img src="@/img/defalutico.png" ><span>{{pageTxt.userTxt[6]}}</span></div>
         <div  @click="exportExtInfo"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[7]}}</span></div>
         <div  @click="exportBasicsInfo"><img src="@/img/importico.png" ><span>{{pageTxt.userTxt[8]}}</span></div>
 			</div>
 
 			<el-table ref="multipleTable" tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" :data="userData.lists">
-				<el-table-column type="selection" width="55"></el-table-column>
+				<el-table-column width="50" label=" " type="index"></el-table-column>
 				<el-table-column prop="userID" :label="pageTxt.userTxt[1]" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="userName" :label="pageTxt.userTxt[2]" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="pageTxt.userTxt[10]" width="120" show-overflow-tooltip>
 					<div slot-scope="scope" class="_zero">
 						<div @click='userEdit'><img src="@/img/altericos.png"></div>
-						<div @click="showPromptBox"><img src="@/img/deleticos.png" ></div>
+						<!-- <div @click="showPromptBox"><img src="@/img/deleticos.png" ></div> -->
 						<div @click="eidtPasswd"><img src="@/img/passwdico.png"></div>
 					</div>
 				</el-table-column>
 			</el-table>
 
-			<div class="_pagination" v-show="userData.totalPage>0">
-        <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="userData.totalPage" :page-size="20"></el-pagination>
-        <div class="rightTxt">共{{userData.totalSize}}条数据</div>
-      </div> 
+    <div class="_pagination" v-if="userData.totalSize>pageSize">
+			<el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="userData.totalSize"></el-pagination>
+			<div class="rightTxt">
+				共{{userData.totalSize}}条数据
+			</div>
+		</div>
+		<div class="onePage" v-else-if="userData.totalSize>0&&userData.totalSize<=pageSize">
+			已显示全部{{userData.totalSize}}个数据
+		</div> 
 
 			<Password></Password>
 
@@ -144,7 +149,7 @@ export default {
       exportCsvSrc: "",
       exportCsvName: "",
       BasicsSrc: "",
-      BasicsName: ""
+      BasicsName: "",
     };
   },
 
@@ -190,36 +195,36 @@ export default {
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
     // 删除用户
-    deleteUser() {
-      if (this.selects.length != 1) {
-        utils.weakTips(pageTxt.userTxt[18]);
-      } else {
-        utils.hints({
-          txt: pageTxt.userTxt[19],
-          yes: _this.delAll,
-          now: function() {_this.deleteSendDown(_this.selects[0].userID)},
-          btn: 3,
-        });
-      }
-    },
-    delAll() {
-      utils.post(
-        "mx/userinfo/delete",
-        {
-          cmdID: "600005",
-          operator: "admin",
-          userID: _this.selects[0].userID
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            _this.renderDate();
-            utils.weakTips(response.errinfo);
-          } else {
-            utils.weakTips(response.errInfo);
-          }
-        }
-      );
-    },
+    // deleteUser() {
+    //   if (this.selects.length != 1) {
+    //     utils.weakTips(pageTxt.userTxt[18]);
+    //   } else {
+    //     utils.hints({
+    //       txt: pageTxt.userTxt[19],
+    //       yes: _this.delAll,
+    //       now: function() {_this.deleteSendDown(_this.selects[0].userID)},
+    //       btn: 3,
+    //     });
+    //   }
+    // },
+    // delAll() {
+    //   utils.post(
+    //     "mx/userinfo/delete",
+    //     {
+    //       cmdID: "600005",
+    //       operator: "admin",
+    //       userID: _this.selects[0].userID
+    //     },
+    //     function(response) {
+    //       if (response.errcode == 0) {
+    //         _this.renderDate();
+    //         utils.weakTips(response.errinfo);
+    //       } else {
+    //         utils.weakTips(response.errInfo);
+    //       }
+    //     }
+    //   );
+    // },
     // 立即下发
     deleteSendDown(id) {
       utils.review({
@@ -366,6 +371,7 @@ export default {
           type: 1
         },
         function(response) {
+            debugger
           if (response.errcode == 0) {
             if (response.totalPage < _this.currentPage) {
               _this.currentPage = response.totalPage;

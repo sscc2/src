@@ -110,6 +110,16 @@
       <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
     </div> 
 
+    <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
+      <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="EkeyData.totalSize"></el-pagination>
+      <div class="rightTxt">
+        共{{EkeyData.totalSize}}条数据
+      </div>
+    </div>
+    <div class="onePage" v-else-if="EkeyData.totalSize>0&&EkeyData.totalSize<=pageSize">
+      已显示全部{{EkeyData.totalSize}}个数据
+    </div> 
+
 	</div>
 </div>	
 </template>

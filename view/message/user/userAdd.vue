@@ -365,11 +365,11 @@ export default {
 
 <style scoped="scoped">
 .component{color: #606266; min-width: 1000px; min-height: 630px;}
-.header{height: 47px; border-bottom: 1px solid #ccc; overflow: hidden;}
+.header{height: 44px; border-bottom: 1px solid #EBEFF4; overflow: hidden;}
 .header_img{float: left; margin-top: 15px; margin-left: 20px;}
-.header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 47px; margin-left: 5px; cursor: pointer;}
-.header_line{border-right: 1px solid #ebeff4; height: 30px; float: left; margin-left: 20px; margin-top: 9px;}
-.header_txt2{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 20px; font-weight: bold;}
+.header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 44px; margin-left: 5px; cursor: pointer;}
+.header_line{border-right: 1px solid #EBEFF4; height: 30px; float: left; margin-left: 20px; margin-top: 9px;}
+.header_txt2{font-size: 16px; color: #656a73; line-height: 44px; margin-left: 20px; font-weight: bold;}
 .el-tabs{padding: 22px;}
 .info{white-space: nowrap;}
 .el-col-6{width: 140px; font-size: 14px; color: #666666;}

@@ -160,8 +160,8 @@ function utils(){
 		weakTips.el.click(function(e){
 			if(e.target == this) weakTips.hide();
 		});
-		this.weakTips = function(txt, type){
-			this.weakEl(txt, type);
+		this.weakTips = function(txt, type, time){
+			this.weakEl(txt, type, time);
 //			weakTips.show(txt);
 		};
 		
@@ -466,10 +466,11 @@ function utils(){
 			}
 			if(data.endQueryFlag==0) return;
 			clearInterval(once);
-			var list = data.lists, len = list.length, obj, str = '',
+			var list = data.lists, len = list.length, obj, str = '', l,
 			dom = special == 0 ? '<li><i class="l1">{serviceID}</i><i class="l1">{errcode}</i><i class="l1">{errinfo}</i></li>':
-				'<li><i class="l2">{serviceID}</i><i class="l2">{errcode}</i><i class="l2">{errinfo}</i><i class="l2">{type}</i></li>';
-			for (var i = 0; i < len; i++) {
+				'<li><i class="l2">{serviceID}</i><i class="l2">{errcode}</i><i class="l2">{errinfo}</i><i class="l2">{operationType}</i></li>';
+			l = len > 3 ? 3 : len;
+			for (var i = 0; i < l; i++) {
 				obj = list[i];
 				if(obj.errcode<0){
 					str += kit.template(obj, dom);
@@ -477,8 +478,13 @@ function utils(){
 			}
 			if(str){
 				var err = '<div class="_whellError"><div class="tit">';
-				err += special == 0 ? '<i class="l1">serviceID</i><i class="l1">errcode</i><i class="l1">errinfo</i>':
-					'<i class="l2">serviceID</i><i class="l2">errcode</i><i class="l2">errinfo</i><i class="l2">type</i>';
+				if(special == 0){
+					err += '<i class="l1">serviceID</i><i class="l1">errcode</i><i class="l1">errinfo</i>';
+					if(len>3) str += '<i class="l1">...</i><i class="l1">...</i><i class="l1">...</i>'
+				} else {
+					err += '<i class="l2">serviceID</i><i class="l2">errcode</i><i class="l2">errinfo</i><i class="l2">operation</i>';
+					if(len>3) str += '<i class="l2">...</i><i class="l2">...</i><i class="l2">...</i><i class="l2">...</i>'
+				}
 				err += '</div><ul>' + str + '</ul></div>';
 				exp.weakTips(err);
 			}

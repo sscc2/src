@@ -46,9 +46,14 @@
 			</el-table-column>
 		</el-table>
 
-		<div class="_pagination"  v-show="list.totalPage>0">
-      <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="list.totalPage" :page-size="20"></el-pagination>
-      <div class="rightTxt">共{{list.totalSize}}条数据</div>
+    <div class="_pagination" v-if="list.totalSize>pageSize">
+      <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="list.totalSize"></el-pagination>
+      <div class="rightTxt">
+        共{{list.totalSize}}条数据
+      </div>
+    </div>
+    <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">
+      已显示全部{{list.totalSize}}个数据
     </div> 
 		
 		<el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
@@ -248,9 +253,9 @@ export default {
 
     // 创建
     showCreate() {
-      this.changeCreatinfo();
       this.dialogAdd = true;
-      this.creatInfo.other = "";
+      this.creatInfo.other = [];
+      this.changeCreatinfo();
     },
     submit() {
       this.dialogAdd = false;

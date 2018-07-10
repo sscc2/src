@@ -294,6 +294,7 @@ export default {
         _this.info.maxDaysOfTopic = response.lists[0].maxDaysOfTopic;
       }
     );
+    // 用户类型
     utils.post(
       "mx/dict/query",
       {
@@ -303,11 +304,10 @@ export default {
       },
       function(response) {
         if (response.errcode == 0) {
-          _this.userType = response.lists;
+          _this.userType = as(response);
         }
       }
     );
-
     utils.post(
       "mx/dict/query",
       {
@@ -324,6 +324,16 @@ export default {
   },
   components: { UserEkey, UserSignal, ExtendInfo }
 };
+function as(data) {
+  for(var i=0; i<data.lists.length; i++){
+    for(var x=0; x<_this.optionsCreat.length; x++){
+      if(data.lists[i].bizType==_this.optionsCreat[x].id){
+        data.lists[i].bizType=_this.optionsCreat[x].name
+      }
+    }
+  }
+  return data;
+}
 </script>
 
 <style scoped="scoped">
@@ -331,13 +341,13 @@ export default {
 .red{color: red;}
 .info li{margin-top: 10px; height: 36px;}
 .info{white-space: nowrap;}
-.header{height: 47px; border-bottom: 1px solid #ccc; overflow: hidden;}
+.header{height: 44px; border-bottom: 1px solid #EBEFF4; overflow: hidden;}
 .header_img{float: left; margin-top: 15px; margin-left: 20px;}
-.header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 47px; margin-left: 5px; cursor: pointer;}
+.header_txt1{font-size: 13px; color: #5c759d; float: left; line-height: 44px; margin-left: 5px; cursor: pointer;}
 .header_line{border-right: 1px solid #ebeff4; height: 30px; float: left; margin-left: 20px; margin-top: 9px;}
-.header_txt2{font-size: 16px; color: #656a73; line-height: 47px; margin-left: 20px; font-weight: bold;}
+.header_txt2{font-size: 16px; color: #656a73; line-height: 44px; margin-left: 20px; font-weight: bold;}
 .el-tabs{padding: 22px; margin: 0 auto;}
-.el-col-6{width: 145px; font-size: 14px; color: #666666;}
+.el-col-6{width: 145px; font-size: 14px; color: #666;}
 .left li{text-align: right; line-height: 40px;}
 .right{margin-left: 15px; line-height: 40px;}
 .right input{font-size: 14px; width: 255px; height: 30px; vertical-align: middle; padding: 0 5px; border: 1px solid #d7d8da; text-indent: 7px;}
@@ -345,7 +355,7 @@ input:focus{border: 2px solid #32ccf9;}
 .el-select{width: 255px;}
 .el-textarea{width: 255px;}
 .el-input{width: 255px;}
-.kbit{font-size: 12px; line-height: 36px; vertical-align: middle; color: #999999; margin-left: 10px;}
+.kbit{font-size: 12px; line-height: 36px; vertical-align: middle; color: #999; margin-left: 10px;}
 .info .txtH{height: 100px;}
 .btn{margin-left: 140px; margin-top: 30px;}
 .red{color: red; font-size: 14px;}
