@@ -179,8 +179,8 @@ var pageTxt = {
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
 var data = {
-  userType: [{ id: "0", name: "tmp" }],
-  cities: [{ id: "BJ", name: "北京" }],
+  userType: [/*{ id: "0", name: "tmp" }*/],
+  cities: [/*{ id: "BJ", name: "北京" }*/],
   info,
   pageTxt,
   connect,
@@ -279,13 +279,8 @@ export default {
         type: "0"
       },
       function(response) {
-        for(var i=0; i<_this.userType.length; i++){
-          if(response.lists[0].userType== _this.userType[i].id){
-            response.lists[0].userType=_this.userType[i].name
-          }
-        }
         _this.info.userName = response.lists[0].userName;
-        _this.info.userType = response.lists[0].userType;
+        _this.info.userType = response.lists[0].userType.toString();
         _this.info.userDistrict = response.lists[0].userDistrict;
         _this.info.speedCtrlKbps = response.lists[0].speedCtrlKbps;
         _this.info.userInfo = response.lists[0].userInfo;

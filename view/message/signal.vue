@@ -12,10 +12,10 @@
         </el-select>
         <span class="txt1">{{pageTxt.signal[1]}}：</span>
 
-      <el-autocomplete  @input='autoInput1' class="input_normal" v-model="searchInfo.userID1" :fetch-suggestions="fetch1" :trigger-on-focus="false" @select="idSelect1">
+        <el-autocomplete  @input='autoInput1' class="input_normal" v-model="searchInfo.userID1" :fetch-suggestions="fetch1" :trigger-on-focus="false" @select="idSelect1">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
-              <span class="addr">({{item.userName}})</span>
+            <span class="addr">({{item.userName}})</span>
           </div>
         </el-autocomplete>
 
@@ -23,9 +23,9 @@
         <el-autocomplete  @input='autoInput2' class="input_normal" v-model="searchInfo.userID2" :fetch-suggestions="fetch2" :trigger-on-focus="false" @select="idSelect2">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
-              <span class="addr">({{item.userName}})</span>
+            <span class="addr">({{item.userName}})</span>
           </div>
-      </el-autocomplete>
+        </el-autocomplete>
         <el-button type="primary"  @click='search' class="btn">{{pageTxt.signal[3]}}</el-button>
       </div>
 
@@ -38,7 +38,7 @@
       <el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
         <!-- <el-table-column type="selection" width="55"></el-table-column> -->
         <el-table-column width="50" label=" " type="index"></el-table-column>
-        <el-table-column prop="bizType" label="业务类型" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="typeStr" label="业务类型" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userName1" label="用户名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userID2" label="用户ID" show-overflow-tooltip></el-table-column>
@@ -52,13 +52,9 @@
 
       <div class="_pagination" v-if="list.totalSize>pageSize">
         <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="list.totalSize"></el-pagination>
-        <div class="rightTxt">
-          共{{list.totalSize}}条数据
-        </div>
+        <div class="rightTxt">共{{list.totalSize}}条数据</div>
       </div>
-      <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">
-        已显示全部{{list.totalSize}}个数据
-      </div> 
+      <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">已显示全部{{list.totalSize}}个数据</div> 
       
       <el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
         <ul class="_dialog">
@@ -68,8 +64,7 @@
             </div>
             <div class="rightBox">
               <el-select  class="input_normal" v-model="creatInfo.bizType" placeholder="请选择">
-                <el-option v-for="item in optionsCreat" :label="item.name" :key="item.id"  :value="item.id">
-                </el-option>
+                <el-option v-for="item in optionsCreat" :label="item.name" :key="item.id"  :value="item.id"></el-option>
               </el-select>
             </div>
           </li>
@@ -79,8 +74,7 @@
             </div>
             <div class="rightBox">
                 <el-select class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changeCreatinfo">
-                  <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID">
-                  </el-option>
+                  <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>
                 </el-select>
             </div>
           </li>
@@ -89,24 +83,25 @@
               <p class="txt">{{pageTxt.dialog[3]}}</p>
             </div>
             <div class="rightBox">
-          <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-                    <el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
-                </el-select>
+              <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
+                <el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
+              </el-select>
               <p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
             </div>
           </li>
         </ul>
         <div class="bottom_btn">
-            <el-button @click="dialogAdd = false">{{pageTxt.dialog[6]}}</el-button>
-            <el-button type="primary" @click="submit">{{pageTxt.dialog[5]}}</el-button>
+          <el-button @click="dialogAdd = false">{{pageTxt.dialog[6]}}</el-button>
+          <el-button type="primary" @click="submit">{{pageTxt.dialog[5]}}</el-button>
         </div>
       </el-dialog>
     </div>
 
     <div class="Popup" v-show="showExportSignalInfo">
       <div class="_panle">
-        <div><p id="_title"></p>
-              <img id="_close" src="@/img/close.png" @click="showExportSignalInfo=false">
+        <div>
+          <p id="_title"></p>
+          <img id="_close" src="@/img/close.png" @click="showExportSignalInfo=false">
         </div>
         <div class="_messaga">
           <span class="txt">文件名：&nbsp;<a :href="signalInfoSrc" style="color:#5C759D">{{signalInfoName}}</a></span>
@@ -240,7 +235,7 @@ export default {
                 }
               );
             } else {
-              _this.list = as(response);
+              _this.list =as(response);
             }
           }
         }
@@ -264,7 +259,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.renderData();
+            _this.renderData(_this.searchInfo.bizType);
             utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
@@ -352,7 +347,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.renderData();
+            _this.renderData(_this.searchInfo.bizType);
             utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
@@ -375,19 +370,19 @@ export default {
     },
     handleSizeChange: function(size) {
       this.pageSize = size;
-      console.log(size)
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage = currentPage;
-      _this.renderData();
+      this.renderData(_this.searchInfo.bizType);
     },
     // 更新数据
-    renderData() {
+    renderData(type) {
       utils.post(
         "mx/userComm/query",
         {
           cmdID: "600031",
-          bizType: _this.searchInfo.bizType,
+          bizType: type,
+          // _this.searchInfo.bizType,
           userID1: isInput1 ? _this.searchInfo.userID1 : _this.userID1,
           userID2: isInput2 ? _this.searchInfo.userID2 : _this.userID2,
           pageSize: _this.pageSize,
@@ -397,9 +392,10 @@ export default {
           if (response.errcode == 0) {
             if (response.totalPage < _this.currentPage) {
               _this.currentPage = response.totalPage;
-              _this.renderData();
+              _this.renderData(type);
             } else {
               _this.list = as(response);
+              console.log(_this.list)
             }
           }
         }
@@ -411,6 +407,7 @@ export default {
     this.searchInfo.bizType = "-1";
     this.creatInfo.bizType = "0";
     _this = this;
+    _this.renderData("-1");
     utils.post(
       "mx/dict/query",
       {
@@ -439,22 +436,6 @@ export default {
       }
     );
     utils.post(
-      "mx/userComm/query",
-      {
-        cmdID: "600031",
-        bizType: "-1",
-        userID1: "",
-        userID2: "",
-        pageSize: _this.pageSize,
-        currentPage: _this.currentPage
-      },
-      function(response) {
-        if (response.errcode == 0) {
-          _this.list = as(response);
-        }
-      }
-    );
-    utils.post(
       "mx/userinfo/queryLists",
       {
         cmdID: "600001",
@@ -474,12 +455,66 @@ export default {
   }
 };
 function as(data) {
-  for(var i=0; i<data.lists.length; i++){
-    for(var x=0; x<_this.optionsCreat.length; x++){
-      if(data.lists[i].bizType==_this.optionsCreat[x].id){
-        data.lists[i].bizType=_this.optionsCreat[x].name;
+  var arr = data.lists,
+    obj;
+  for (var i = 0; i < arr.length; i++) {
+    obj = arr[i];
+    switch (obj.bizType) {
+      case 0:
+        obj.typeStr = "三方存管";
         break;
-      }
+      case 10:
+        obj.typeStr = "银期转账";
+        break;
+      case 11:
+        obj.typeStr = "银基转账";
+        break;
+      case 12:
+        obj.typeStr = "资金划拨";
+        break;
+      case 13:
+        obj.typeStr = "信证报盘";
+        break;
+      case 14:
+        obj.typeStr = "电子对账";
+        break;
+      case 15:
+        obj.typeStr = "融资融券";
+        break;
+      case 16:
+        obj.typeStr = "基金盘后";
+        break;
+      case 17:
+        obj.typeStr = "转融通";
+        break;
+      case 18:
+        obj.typeStr = "B转H";
+        break;
+      case 19:
+        obj.typeStr = "交叉销售";
+        break;
+      case 20:
+        obj.typeStr = "报价回购";
+        break;
+      case 21:
+        obj.typeStr = "个股期权";
+        break;
+      case 22:
+        obj.typeStr = "FISP";
+        break;
+      case 23:
+        obj.typeStr = "私幕转报";
+        break;
+      case 24:
+        obj.typeStr = "云证通";
+        break;
+      case 26:
+        obj.typeStr = "基金时实业务";
+        break;
+      case 27:
+        obj.typeStr = "基金费用对账";
+        break;
+      default:
     }
   }
   return data;

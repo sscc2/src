@@ -122,7 +122,7 @@ export default {
       timeMethod: "",
       statisticalMethod: "",
       modeType: { user: "", userType: "" },
-      data: { lists: [{ operationTime: "2018-01-01" }] },
+      data: {/* lists: [{ operationTime: "2018-01-01" }] */},
       showParticulars: false,
       responseDate: []
     };

@@ -282,7 +282,11 @@ export default {
                   comment: _this.ainfo.comment                                       
                }, 
                function(response){
-                 utils.wheelReq(response);                
+                 if(response.errcode == 0){
+                  _this.addEkey = false;
+                  _this.renderDate(_this.search.type);
+                  utils.wheelReq(response); 
+                 }                
 							});
 						}
 					});
@@ -374,8 +378,10 @@ export default {
                   ekeyName: name                                    
                }, 
                function(response){
-                 utils.wheelReq(response);
-                 _this.renderDate(_this.search.type)                
+                 if(response.errcode == 0){
+                  utils.wheelReq(response);
+                 _this.renderDate(_this.search.type) 
+                 }                                
 							});
 						}
 					});
@@ -411,6 +417,7 @@ export default {
                   comment: _this.binfo.comment                                      
                }, 
                function(response){
+                 _this.renderDate()
                  utils.wheelReq(response);                
 							});
 						}

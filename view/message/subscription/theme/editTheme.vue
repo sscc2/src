@@ -487,7 +487,7 @@ import lang      from '@/language/lang.js';
 	
 	.box{white-space: nowrap;}
 	.box > *{display: inline-block;vertical-align: top;}
-	.table{width: 370px;margin-right: 40px;}
+	.table{width: 370px;margin-right: 40px;height: 411px;overflow: auto;}
 	.h3{font-size: 14px;color: #606266;background: #f5f7fa;line-height: 40px;padding-left: 30px;
 		border: 1px solid #EFEFEF;border-bottom: none;}
 	.appInput{width: 100%;}

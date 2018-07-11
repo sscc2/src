@@ -164,6 +164,7 @@ import lang      from '@/language/lang.js';
 		beforeCreate(){},
 		mounted(){
 			_this = this;
+			this.config = '0';
 			getDay(this.radio = 1);
 			search(_currentPage = 1);
 		},
