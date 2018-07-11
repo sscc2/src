@@ -6,6 +6,7 @@
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{pageTxt.infoTxt[0]}}</span>
 		</div>
+
 		<el-tabs type="card">
 			<el-tab-pane label="基本信息">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
@@ -317,7 +318,7 @@ export default {
     }
   },
   // 初始化数据
-  created: function() {
+  created() {
     _this = this;
     utils.post(
       "mx/dict/query",
@@ -389,3 +390,4 @@ input:focus{border: 2px solid #32ccf9;}
 ._zero > img[data-v-d09b1104]{margin-left: 0 !important;}
 .red{color: red; font-size: 14px;}
 </style>
+393

@@ -220,7 +220,7 @@ export default {
                   allowSendRecvFile: _this.info.allowSendRecvFile,
                   maxPubsCount: _this.info.maxPubsCount,
                   maxSubsCount: _this.info.maxSubsCount,
-                  maxDaysOfTopic: _this.info.maxDaysoftTopic,                                        
+                  maxDaysOfTopic: _this.info.maxDaysOfTopic,                                        
                }, 
                function(response){
                  utils.wheelReq(response);                
@@ -250,7 +250,7 @@ export default {
           allowSendRecvFile: _this.info.allowSendRecvFile,
           maxPubsCount: _this.info.maxPubsCount,
           maxSubsCount: _this.info.maxSubsCount,
-          maxDaysOfTopic: _this.info.maxDaysoftTopic
+          maxDaysOfTopic: _this.info.maxDaysOfTopic
         },
         function(response) {
           if (response.errcode == 0) {

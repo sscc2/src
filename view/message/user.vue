@@ -105,29 +105,30 @@ import Password from "@/view/message/user/password.vue";
 import utils from "@/libs/utils.js";
 
 var pageTxt = {
-  userTxt: [
-    "用户",
-    "用户ID：",
-    "用户名称：",
-    "查询",
-    "创建用户",
-    "删除用户",
-    "批量导入扩展信息",
-    "批量导出扩展信息",
-    "批量导出基础信息",
-    "扩展信息文件名",
-    "操作",
-    "请将扩展信息文件放到服务器路路径：/home/fdep/notice内；",
-    "在输入框中填入扩展信息文件名。",
-    "提交",
-    "返回",
-    "文件名：",
-    "请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。",
-    "关闭",
-    "请在列表中选择一条记录！",
-    "是否确定删除该用户记录"
-  ]
-},_this;
+    userTxt: [
+      "用户",
+      "用户ID：",
+      "用户名称：",
+      "查询",
+      "创建用户",
+      "删除用户",
+      "批量导入扩展信息",
+      "批量导出扩展信息",
+      "批量导出基础信息",
+      "扩展信息文件名",
+      "操作",
+      "请将扩展信息文件放到服务器路路径：/home/fdep/notice内；",
+      "在输入框中填入扩展信息文件名。",
+      "提交",
+      "返回",
+      "文件名：",
+      "请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。",
+      "关闭",
+      "请在列表中选择一条记录！",
+      "是否确定删除该用户记录"
+    ]
+  },
+  _this;
 
 export default {
   data() {
@@ -135,7 +136,7 @@ export default {
       pageTxt,
       userParam: { id: "", name: "" },
       userData: {/* lists: [{ userID: "test01" }] */},
-      // selects: [],
+      selects: [],
       currentPage: 1,
       pageSize: 20,
       showImportExtInfo: false,
@@ -145,7 +146,7 @@ export default {
       exportCsvSrc: "",
       exportCsvName: "",
       BasicsSrc: "",
-      BasicsName: "",
+      BasicsName: ""
     };
   },
   methods: {
@@ -191,26 +192,28 @@ export default {
     //     }
     //   );
     // },
-    // 立即下发
+    // 删除立即下发
     deleteSendDown(id) {
       utils.review({
-        yes:function(info){
+        yes: function(info) {
           utils.hints({
-						txt: "是否立即下发",
-						yes: function(){
-              utils.post('mx/userinfo/deleteImmediately',
-               {
+            txt: "是否立即下发",
+            yes: function() {
+              utils.post(
+                "mx/userinfo/deleteImmediately",
+                {
                   cmdID: "600008",
                   operator: "admin",
                   reviewer: info.name,
-                  userID: id,                                       
-               }, 
-               function(response){
-                 utils.wheelReq(response);
-                 _this.renderDate(1);                
-							});
-						}
-					});
+                  userID: id
+                },
+                function(response) {
+                  utils.wheelReq(response);
+                  _this.renderDate(1);
+                }
+              );
+            }
+          });
         }
       });
     },
@@ -284,7 +287,9 @@ export default {
       utils.hints({
         txt: pageTxt.userTxt[19],
         yes: _this.userDel,
-        now: function() {_this.deleteSendDown(_this.$store.state.transferEditID)},
+        now: function() {
+          _this.deleteSendDown(_this.$store.state.transferEditID);
+        },
         btn: 3
       });
     },
@@ -321,9 +326,9 @@ export default {
     currentRow: function(e) {
       this.$store.state.transferEditID = e.userID;
     },
-    // selectionRow(val) {
-    //   this.selects = val;
-    // },
+    selectionRow(val) {
+      this.selects = val;
+    },
     // 数据更新
     renderDate(type) {
       utils.post(
@@ -378,4 +383,3 @@ export default {
 .Popup_return{margin-left: 40px;}
 .Popup .red{color:#FF6B6B;}
 </style>
-431
