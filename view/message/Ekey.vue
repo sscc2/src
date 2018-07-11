@@ -465,6 +465,7 @@ export default {
             },
             function(response) {
               if (response.errcode == 0) {
+                _this.editEkdy=false;
                 _this.renderDate(_this.search.type);
                 utils.weakTips(response.errinfo);
               } else {
