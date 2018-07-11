@@ -27,19 +27,19 @@
             <el-date-picker class="date_picker" :disabled="timeMethod!=3"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['12:00:00', '08:00:00']" format="yyyy-MM-dd HH:mm:ss" v-model="search" type="datetimerange" :range-separator="pageTxt.lable1[12]" :start-placeholder="pageTxt.lable1[13]" :end-placeholder="pageTxt.lable1[14]">
             </el-date-picker>				
             <el-button  @click="searchFn" type="primary" class="searchBtn" >{{pageTxt.lable1[15]}}</el-button>        		
-            <el-button @click="exportFn" type="primary">{{pageTxt.lable1[16]}}</el-button>
+            <el-button @click="exportFn" type="primary" class="exportFn">{{pageTxt.lable1[16]}}</el-button>
           </div>
         </header>
 
         <el-table highlight-current-row :data="data.lists">
           <el-table-column width="50" label=" " type="index"></el-table-column>
-          <el-table-column prop="operationTime" width="250" :label="pageTxt.lable1[20]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operationType" width="150" :label="pageTxt.lable1[19]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operator" width="150" :label="pageTxt.lable1[17]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operatorRole" width="150" :label="pageTxt.lable1[18]" show-overflow-tooltip></el-table-column>			
-          <el-table-column prop="errorCode" width="150" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operationTime" width="190" :label="pageTxt.lable1[20]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operationType" width="160" :label="pageTxt.lable1[19]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operator" width="120" :label="pageTxt.lable1[17]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operatorRole" width="120" :label="pageTxt.lable1[18]" show-overflow-tooltip></el-table-column>			
+          <el-table-column prop="errorCode" width="120" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
           <el-table-column prop="errorInfo" :label="pageTxt.lable1[22]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="errorInfo" width="100" :label="pageTxt.lable1[23]" show-overflow-tooltip>
+          <el-table-column prop="errorInfo" width="55" :label="pageTxt.lable1[23]" show-overflow-tooltip>
             <div slot-scope="scope" class="_zero">
               <div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div>
             </div>
@@ -49,32 +49,28 @@
         <div class="Popup" v-show="showParticulars">
           <div class="_panle">
             <div><p id="_title">详情</p>
-                <img id="_close" src="@/img/close.png" @click="showParticulars=false">
+              <img id="_close" src="@/img/close.png" @click="showParticulars=false">
             </div>
 
             <div class="_content">
-              <div class="content">
-                <span>serviceID</span>
-                <li :v-for="responseDate.serviceID"></li>
-              </div>
-              <div class="content">
-                <span>errcode</span>
-                <li :v-for="responseDate.errcode"></li>
-              </div>
-              <div class="content">
-                <span>errinfo</span>
-                <li :v-for="responseDate.errinfo"></li>
-              </div>
+              <el-table highlight-current-row :data="responseDate" >
+                <el-table-column prop="serviceID"  label="serviceID" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="errcode"  label="errcode" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="errinfo"  label="errinfo" show-overflow-tooltip></el-table-column>
+              </el-table>	
             </div>
-            <div class="info_button">
-              <!-- <el-button type="default" @click="showParticulars=false">返回</el-button> -->
-            </div>
+
           </div> 
         </div>		
 
-        <div class="_pagination" v-show="data.totalPage>0">
-          <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="data.totalPage" :page-size="20"></el-pagination>
-          <div class="rightTxt">共{{data.totalSize}}条数据</div>
+        <div class="_pagination" v-if="data.totalSize>pageSize">
+          <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="data.totalSize"></el-pagination>
+          <div class="rightTxt">
+            共{{data.totalSize}}条数据
+          </div>
+        </div>
+        <div class="onePage" v-else-if="data.totalSize>0&&data.totalSize<=pageSize">
+          已显示全部{{data.totalSize}}个数据
         </div>
 
     </div>
@@ -126,9 +122,9 @@ export default {
       timeMethod: "",
       statisticalMethod: "",
       modeType: { user: "", userType: "" },
-      data: {lists:[{"operationTime":"2018-01-01"}]},
+      data: { lists: [{ operationTime: "2018-01-01" }] },
       showParticulars: false,
-      responseDate:{}
+      responseDate: []
     };
   },
   methods: {
@@ -162,22 +158,24 @@ export default {
     },
     // 详情
     showParticularsFn(row) {
-      this.showParticulars=true
+      console.log(row.uuid);
+      this.showParticulars = true;
       utils.post(
-        "mx/batckDispatch/queryBatchDispatchResponse",
-      {
-        cmdID:"600073",
-        uuid:row.uuid,
-        lastQueryFlag:1
-      },
-      function(response){
-        if(response.errcode==0){
-          _this.responseDate=response.lists
-        }else{
-          utils.weakTips(response.errinfo)
+        "mx/batchDispatch/queryBatchDispatchResponse",
+        {
+          cmdID: "600073",
+          uuid: row.uuid,
+          lastQueryFlag: 1,
+          type: 0
+        },
+        function(response) {
+          if (response.errcode == 0) {
+            _this.responseDate = response.lists;
+          } else {
+            utils.weakTips(response.errinfo);
+          }
         }
-      }
-      )
+      );
     },
     // 获得指定时间
     getTimeFn() {
@@ -249,11 +247,18 @@ export default {
               _this.renderDate();
             } else {
               _this.data = response;
+              for (var i = 0; i < _this.data.lists.length; i++) {
+                if (_this.data.lists[i].operatorRole == 1) {
+                  _this.data.lists[i].operatorRole = "运维";
+                } else {
+                  _this.data.lists[i].operatorRole = "用户";
+                }
+              }
             }
           }
         }
       );
-    },
+    }
   },
   // 初始化数据
   created() {
@@ -279,7 +284,8 @@ export default {
 .ml{margin-left: 30px;}
 .el-radio+.el-radio{margin-left: 18px;} 
 ._zero{cursor: pointer;}
-.content{display: inline-block;font-size: 14px;margin-right: 40px;}
-._content{margin-top: 20px;}
-.info_button{}
+.content{display: inline-block;font-size: 14px;margin-right: 40px; }
+._content{margin-left: 40px; margin-top: 20px;width: 520px; height: 280px; overflow-y:auto; }
+._panle{width: 600px; height: 410px;}
+.exportFn{float: right;background-color:#fafafa;border:1px solid #ccc; color: #666;}
 </style>

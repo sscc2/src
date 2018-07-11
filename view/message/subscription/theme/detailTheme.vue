@@ -114,9 +114,7 @@ import lang      from '@/language/lang.js';
 			getDetail();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
-		},
-		watch: {},
-		components: {}
+		}
 	};
 	function addTitle(){
 		kit('.detailTheme .el-checkbox-group').each(function(el){

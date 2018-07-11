@@ -190,9 +190,7 @@ import lang      from '@/language/lang.js';
 			kit('.el-autocomplete-suggestion').off().down(function(){
 				isInput = false;
 			}).up(function(){isInput = true;});
-		},
-		watch: {},
-		components: {}
+		}
 	};
 	
 	function blurID(id){

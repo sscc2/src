@@ -171,8 +171,7 @@ import lang      from '@/language/lang.js';
 			radio(cur){
 				getDay(cur);
 			}
-		},
-		components: {}
+		}
 	};
 	function getDay(radio){
 		if(radio > 2) return;
@@ -210,5 +209,4 @@ import lang      from '@/language/lang.js';
 	.blueBtn{margin-left: 35px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
-	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

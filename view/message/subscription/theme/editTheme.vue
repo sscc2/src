@@ -279,8 +279,7 @@ import lang      from '@/language/lang.js';
 //				immediate: true,
 //				deep: true
 //			}
-		},
-		components: {}
+		}
 	};
 	function appidValue(){
 		var sub = _this.info.subsUserList;

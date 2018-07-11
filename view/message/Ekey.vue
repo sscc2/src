@@ -10,9 +10,9 @@
         <el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
         <el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
         <span v-show='search.type==0' id="box" class="txt">{{pageTxt.Ekey[3]}}：</span>
-        <el-input   class='picker' v-show='search.type==0' v-model="search.ekeyName" ></el-input>
+        <el-input   class='input_normal picker' v-show='search.type==0' v-model="search.ekeyName" ></el-input>
         <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
-        <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal" v-model="idName" :fetch-suggestions="fetch" :trigger-on-focus="false" @select="idSelect">
+        <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal picker" v-model="idName" :fetch-suggestions="fetch" :trigger-on-focus="false" @select="idSelect">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
             <span class="addr">({{item.userName}})</span>
@@ -182,7 +182,7 @@ var pageTxt_cn = {
     "按Ekey查询",
     "按用户查询",
     "Ekey名称",
-    "查询",
+    "用户名称",
     "创建Ekey",
     "修改Ekey",
     "删除Ekey",
@@ -219,7 +219,7 @@ export default {
       search: { userID: "", type: "", ekeyName: "" },
       ainfo,
       binfo,
-      EkeyData: {lists:[{"userID":"1"}]},
+      EkeyData: {/*lists:[{"userID":"1"}]*/},
       selects: [],
       oldEkeyName: "",
       EkeyInfoSrc:"",
@@ -229,7 +229,7 @@ export default {
       addEkey: false,
       editEkdy: false,
       row: {},
-      data2: [{ Ekey: "AAA" }],
+      data2: [/*{ Ekey: "test" }*/],
       currentPage1: 1,
       pageSize: 20,
       options: [],
@@ -385,7 +385,7 @@ export default {
     // 修改
     showEdit(row) {
       this.editEkdy = true;
-      this.oldEkeyName = this.row.ekeyName;
+      this.oldEkeyName = row.ekeyName;
       this.binfo.userID = row.userID;
       this.binfo.userName = row.userName;
       this.binfo.ekeyName = row.ekeyName;
@@ -586,7 +586,7 @@ function autoInput(str, cb) {
 .Ekey .eRadio{margin-right: 30px;}
 .Ekey .el-radio__label{font-size: 16px;}
 .picker{width: 200px;}
-._zero div{float: left; margin-left: 14px; cursor: pointer;}
+._zero div{float: left; margin-right: 14px; cursor: pointer;}
 ._zero{overflow: hidden;}
 .el-input{margin-left: 10px;}
 .promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}

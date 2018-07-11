@@ -3,7 +3,7 @@
 	<div class="Ekey">
 		<div class="btnBox">
 			<div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
-			<div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div>
+			<!-- <div @click="fn()"><img src="@/img/deletico.png" > <span>{{pageTxt.Ekey[7]}}</span></div> -->
 			<!-- <div @click=""><img src="@/img/creatico.png" ><span>批量导出Ekey</span></div> -->
 		</div>
 	
@@ -105,10 +105,10 @@
 			</div>
 		</el-dialog>
 
-		<div class="_pagination" v-show="EkeyData.totalPage>0">
+		<!-- <div class="_pagination" v-show="EkeyData.totalPage>0">
       <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
       <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
-    </div> 
+    </div>  -->
 
     <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
       <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="EkeyData.totalSize"></el-pagination>
@@ -152,7 +152,7 @@ var pageTxt_cn = {
     "按Ekey查询",
     "按用户查询",
     "Ekey名称",
-    "查询",
+    "用户名称",
     "创建Ekey",
     "修改Ekey",
     "删除Ekey",
@@ -181,7 +181,7 @@ var pageTxt_cn = {
 
 var pageTxt = pageTxt_cn,
   autoTime,
-  _currentPage = 1;
+  _currentPage = 1,_this;
 
 export default {
   data() {
@@ -251,7 +251,6 @@ export default {
             if (this.ainfo.comment == "") {
               utils.weakTips("Ekey描述不能为空");
             } else {
-              var _this = this;
               utils.post(
                 "mx/userEkey/add",
                 {
@@ -266,10 +265,10 @@ export default {
                   if (response.errcode == 0) {
                     if (_this.$store.state.creatAndEdit) {
                       _this.addEkey = false;
-                      _this.renderDate();
+                      _this.renderDate(1);
                       utils.weakTips(response.errinfo);
                     } else {
-                      _this.renderDate();
+                      _this.renderDate(1);
                       _this.addEkey = false;
                       _this.open6("跳转至通信关系");
                     }
@@ -300,49 +299,48 @@ export default {
     },
 
     // 删除Ekey
-    fn() {
-      if (this.selects.length != 1) {
-        utils.weakTips("请在列表中选择一条记录！");
-      } else {
-        var _this = this;
-        utils.hints({
-          txt: "是否删除该用户信息",
-          yes: _this.del,
-          btn: 2
-        });
-      }
-    },
-    del() {
-      var _this = this;
-      utils.post(
-        "mx/userEkey/delete",
-        {
-          cmdID: 600024,
-          operator: "admin",
-          userID: _this.selects[0].userID ? _this.selects[0].userID : "",
-          ekeyName: _this.selects[0].ekeyName
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            _this.renderDate();
-            utils.weakTips(response.errinfo);
-          } else {
-            utils.weakTips(response.errinfo);
-          }
-        }
-      );
-    },
+    // fn() {
+    //   if (this.selects.length != 1) {
+    //     utils.weakTips("请在列表中选择一条记录！");
+    //   } else {
+    //     var _this = this;
+    //     utils.hints({
+    //       txt: "是否删除该用户信息",
+    //       yes: _this.del,
+    //       btn: 2
+    //     });
+    //   }
+    // },
+    // del() {
+    //   var _this = this;
+    //   utils.post(
+    //     "mx/userEkey/delete",
+    //     {
+    //       cmdID: 600024,
+    //       operator: "admin",
+    //       userID: _this.selects[0].userID ? _this.selects[0].userID : "",
+    //       ekeyName: _this.selects[0].ekeyName
+    //     },
+    //     function(response) {
+    //       if (response.errcode == 0) {
+    //         _this.renderDate();
+    //         utils.weakTips(response.errinfo);
+    //       } else {
+    //         utils.weakTips(response.errinfo);
+    //       }
+    //     }
+    //   );
+    // },
 
     // 修改
     showEdit(row) {
       this.editEkdy = true;
-      this.oldEkeyName = this.row.ekeyName;
-      var _this = this;
-      _this.binfo.userID = row.userID;
-      _this.binfo.userName = row.userName;
-      _this.binfo.ekeyName = row.ekeyName;
-      _this.binfo.ekeyValidDate = row.ekeyValidDate;
-      _this.binfo.comment = row.comment;
+      this.oldEkeyName = row.ekeyName;
+      this.binfo.userID = row.userID;
+      this.binfo.userName = row.userName;
+      this.binfo.ekeyName = row.ekeyName;
+      this.binfo.ekeyValidDate = row.ekeyValidDate;
+      this.binfo.comment = row.comment;
     },
     submitEdit() {
       if (binfo.userID == "") {
@@ -351,7 +349,6 @@ export default {
         if (binfo.ekeyName == "") {
           utils.weakTips("Ekey名不能为空");
         } else {
-          var _this = this;
           utils.post(
             "mx/userEkey/modify",
             {
@@ -365,7 +362,7 @@ export default {
             },
             function(response) {
               if (response.errcode == 0) {
-                _this.renderDate();
+                _this.renderDate(1);
                 utils.weakTips(response.errinfo);
               } else {
                 utils.weakTips(response.errinfo);
@@ -377,7 +374,6 @@ export default {
     },
     //删除(row)
     showDel() {
-      var _this = this;
       utils.hints({
         txt: "是否删除该用户信息",
         yes: _this.ekeyDel,
@@ -385,7 +381,6 @@ export default {
       });
     },
     ekeyDel() {
-      var _this = this;
       utils.post(
         "mx/userEkey/delete",
         {
@@ -396,7 +391,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.renderDate();
+            _this.renderDate(1);
             utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
@@ -422,7 +417,6 @@ export default {
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage1 = currentPage;
-      var _this = this;
       utils.post(
         "mx/userEkey/query",
         {
@@ -458,48 +452,71 @@ export default {
       );
     },
     // 更新数据
-    renderDate() {
-      var _this = this;
+    renderDate(type) {
       utils.post(
         "mx/userEkey/query",
         {
           cmdID: "600021",
           userID: _this.$store.state.transferEditID,
           ekeyName: _this.search.ekeyName,
-          type: 1,
+          type: type,
           pageSize: _this.pageSize,
           currentPage: _this.currentPage1
         },
         function(response) {
-          if(response.errcode == 0){
-            if (response.totalPage < _this.currentPage1) {
-            utils.post(
-              "mx/userEkey/query",
-              {
-                cmdID: "600021",
-                userID: _this.$store.state.transferEditID,
-                ekeyName: _this.search.ekeyName,
-                type: _this.$store.state.creatAndEdit ? _this.search.type : _this.search.type,
-                pageSize: _this.pageSize,
-                currentPage: response.totalPage
-              },
-              function(response) {
-                if(response.errcode == 0){
-                  _this.EkeyData = response;
-                }               
-              }
-            );
-          } else {
-            _this.EkeyData = response;
+          if(response.errcode==0){
+             if (response.totalPage < _this.currentPage1) {
+              _this.currentPage1 = response.totalPage;
+              _this.renderDate(type);
+            } else {
+              _this.EkeyData = response;
+            }
           }
-          }          
         }
       );
-    }
+    },
+    // renderDate() {
+    //   var _this = this;
+    //   utils.post(
+    //     "mx/userEkey/query",
+    //     {
+    //       cmdID: "600021",
+    //       userID: _this.$store.state.transferEditID,
+    //       ekeyName: _this.search.ekeyName,
+    //       type: 1,
+    //       pageSize: _this.pageSize,
+    //       currentPage: _this.currentPage1
+    //     },
+    //     function(response) {
+    //       if(response.errcode == 0){
+    //         if (response.totalPage < _this.currentPage1) {
+    //         utils.post(
+    //           "mx/userEkey/query",
+    //           {
+    //             cmdID: "600021",
+    //             userID: _this.$store.state.transferEditID,
+    //             ekeyName: _this.search.ekeyName,
+    //             type: _this.$store.state.creatAndEdit ? _this.search.type : _this.search.type,
+    //             pageSize: _this.pageSize,
+    //             currentPage: response.totalPage
+    //           },
+    //           function(response) {
+    //             if(response.errcode == 0){
+    //               _this.EkeyData = response;
+    //             }               
+    //           }
+    //         );
+    //       } else {
+    //         _this.EkeyData = response;
+    //       }
+    //       }          
+    //     }
+    //   );
+    // }
   },
   //初始化数据
   created() {
-    var _this = this;
+    _this = this;
     utils.post(
       "mx/userEkey/query",
       {
@@ -547,7 +564,7 @@ export default {
 .Ekey .eRadio{margin-right: 30px;}
 .Ekey .el-radio__label{font-size: 16px;}
 .picker{width: 200px;}
-._zero div{float: left; margin-left: 14px; cursor: pointer;}
+._zero div{float: left; margin-right: 14px; cursor: pointer;}
 ._zero{overflow: hidden;}
 .el-input{margin-left: 10px;}
 .promptBox_content_txt{font-size: 14px; color: #666; text-align: center; display: block; margin-top: 60px;}

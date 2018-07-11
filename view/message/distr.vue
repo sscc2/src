@@ -11,10 +11,13 @@
 						</el-option>
 					</el-select>
 					<span class="txt2" v-if="type==1">
-						({{pageTxt.label[5]}}: userinfo.cfg,userekey.cfg,usercomm.cfg,srvparam.cfg)
-					</span>
-					<span class="txt2" v-else-if="type==2">
-						({{pageTxt.label[6]}}: srv.ini,*_currsrv.ini)
+						({{pageTxt.label[5]}}userinfo.db3, userekey.db3, usercomm.db3, mxdynamic.ini)
+					</span><span class="txt2" v-else-if="type==2">
+						({{pageTxt.label[6]}}mxstatic.ini)
+					</span><span class="txt2" v-else-if="type==3">
+						({{pageTxt.label[10]}}userpasswd.db3)
+					</span><span class="txt2" v-else-if="type==4">
+						({{pageTxt.label[11]}}pscomm.db3)
 					</span>
 				</div>
 			</li><li>

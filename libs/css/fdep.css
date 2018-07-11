@@ -51,6 +51,7 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .el-table td,.el-table th{padding:0;}
 .el-table .cell,.el-table th>.cell{line-height:40px;}
 .el-table .el-table__header-wrapper .has-gutter .cell{height:40px;background:#F6F6F6;}
+.el-tooltip__popper{max-width: 95%;}
 /* 按钮 */
 .el-button--default{padding:0;width:88px;height:30px;border-color:#0DB9EB;background:#FFF;color:#0DB9EB;font-size:12px;line-height:30px;}
 .el-button--default:active{border-color:#66b1ff;background:#66b1ff;opacity:.8!important;}
@@ -156,3 +157,7 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 /* 日期选择器 */
 .date_picker .el-range__icon{line-height: 20px;}
 .date_picker .el-range-separator{line-height: 20px;}
+
+._content .el-table .el-table__header-wrapper .has-gutter .cell{padding-left: 60px;}
+/* 输入框icon图标居中 */
+.el-input__icon{line-height: 30px}

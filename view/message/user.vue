@@ -28,7 +28,7 @@
 				<el-table-column :label="pageTxt.userTxt[10]" width="120" show-overflow-tooltip>
 					<div slot-scope="scope" class="_zero">
 						<div @click='userEdit'><img src="@/img/altericos.png"></div>
-						<!-- <div @click="showPromptBox"><img src="@/img/deleticos.png" ></div> -->
+						<div @click="showPromptBox"><img src="@/img/deleticos.png" ></div>
 						<div @click="eidtPasswd"><img src="@/img/passwdico.png"></div>
 					</div>
 				</el-table-column>
@@ -138,7 +138,7 @@ export default {
     return {
       pageTxt,
       userParam: { id: "", name: "" },
-      userData: { lists: [{ userID: "test01" }] },
+      userData: {/* lists: [{ userID: "test01" }] */},
       selects: [],
       currentPage: 1,
       pageSize: 20,

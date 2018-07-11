@@ -227,6 +227,7 @@ export default {
                   userPasswd: _this.info.isModifyDefaultPasswd ? _this.info.userPasswd : md5.hex_md5("111111").substr(8, 16)
                }, 
                function(response){
+                 response.type=1;
                  utils.wheelReq(response);                
 							});
 						}

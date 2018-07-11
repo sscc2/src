@@ -113,7 +113,7 @@ import lang        from '@/language/lang.js';
 			beginDate: '', endDate: '', sortType: '0'
 		},
 		picker: [],
-		data: [{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}],
+		data: [/*{pubUserID:'发布者ID',pubUserName:'发布者名称',topicName:'主题名',pubTime:'发布时间',subsUserCounts:'订阅个数'}*/],
 		row: '',
 		selects: [],
 		size: 20,
@@ -359,5 +359,4 @@ import lang        from '@/language/lang.js';
 	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	._zero{white-space: nowrap;}
 	._zero img{vertical-align: middle;margin-right: 10px;}
-	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

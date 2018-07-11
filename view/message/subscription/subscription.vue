@@ -199,5 +199,4 @@ import lang        from '@/language/lang.js';
 	.btn{margin-right: 35px;margin-left: 0;padding: 0;}
 	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	.el-button *{vertical-align: middle;}
-	.onePage{font-size: 13px;line-height: 28px;color: #999;text-align: center;margin-top: 23px;}
 </style>

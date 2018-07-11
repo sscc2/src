@@ -37,6 +37,6 @@ import sidebar   from '@/view/sidebar.vue';
 	.router{
 		border: 1px solid  #EBEFF4;overflow-x: auto;overflow-y: hidden;min-height: 100%;
 	    -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
-		box-shadow: 0 6px 7px 7px #e5e9f0;background-color: #FFF;
+		box-shadow: 0 6px 7px 7px rgba(229,233,240,0.18);background-color: #FFF;border: 1px solid #EBEFF4;
 	}
 </style>

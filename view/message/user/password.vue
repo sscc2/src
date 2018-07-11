@@ -4,7 +4,7 @@
         <div class="_panle">
           <div>
             <p id="_title">{{pageTxt.lable[0]}}</p>
-            <img id="_close" src="@/img/close.png" @click="$store.state.passShow = false">
+            <img id="_close" src="@/img/close.png" @click="fanhui">
           </div>
 
           <div class="_messaga">
@@ -22,8 +22,8 @@
                   <p class="txt">{{pageTxt.lable[2]}}</p>
                 </div>                
                 <div class="rightBox">
-                    <el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">重置</el-radio>
-                      <el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">不重置</el-radio>
+                    <el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">默认</el-radio>
+                      <el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">手动</el-radio>
                 </div>
               </li>
               <li>
@@ -48,7 +48,7 @@
           <div class="passwd_btn">
             <el-button type="primary" @click="sendDown">立即下发</el-button>
             <el-button type="primary" @click="verify">提交</el-button>
-            <el-button type="default" @click="$store.state.passShow = false">返回</el-button>
+            <el-button type="default" @click="fanhui">返回</el-button>
           </div>
 
         </div>
@@ -63,7 +63,7 @@ var pageTxt_cn = {
   lable: [
     "修改密码",
     "用户ID：",
-    "重置默认密码：",
+    "重置密码：",
     "新密码：",
     "审核人：",
     "审核pass：",
@@ -86,9 +86,14 @@ export default {
     return data;
   },
   methods: {
+    fanhui(){
+      this.$store.state.passShow = false;
+      this.info.isModifyDefaultPasswd =0 ;
+      this.changeNpasswd();
+    },
     // 提交
     verify(){
-      this.encapsulationVerify(this.submit());
+      this.encapsulationVerify(this.submit);
     },
     encapsulationVerify(fn) {
       var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
@@ -155,11 +160,9 @@ export default {
     // 清空缓存数据
     changeNpasswd() {
       if (this.info.isModifyDefaultPasswd == 0) {
-        this.info.npasswd = 111111;
-        this.info.again = 111111;
+        this.info.npasswd = 111111,this.info.again = 111111;
       } else {
-        this.info.npasswd = "";
-        this.info.again = "";
+        this.info.npasswd = "",this.info.again = "";
       }
     }
   },

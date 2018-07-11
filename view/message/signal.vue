@@ -375,6 +375,7 @@ export default {
     },
     handleSizeChange: function(size) {
       this.pageSize = size;
+      console.log(size)
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage = currentPage;
@@ -415,7 +416,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type: "3"
+        type: 3
       },
       function(response) {
         if (response.errcode == 0) {
@@ -429,7 +430,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type: "3"
+        type:3
       },
       function(response) {
         if (response.errcode == 0) {
@@ -459,7 +460,7 @@ export default {
         cmdID: "600001",
         userID: "",
         userName: "",
-        pageSize: "210000",
+        pageSize: 210000,
         currentPage: "1",
         type: 0
       },
@@ -476,11 +477,11 @@ function as(data) {
   for(var i=0; i<data.lists.length; i++){
     for(var x=0; x<_this.optionsCreat.length; x++){
       if(data.lists[i].bizType==_this.optionsCreat[x].id){
-        data.lists[i].bizType=_this.optionsCreat[x].name
+        data.lists[i].bizType=_this.optionsCreat[x].name;
+        break;
       }
     }
   }
-  console.log(data)
   return data;
 }
 function autoInput(str, cb) {

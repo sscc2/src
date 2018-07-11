@@ -5,7 +5,7 @@
 			<hr class="_hr" />
 			<div>
 				<label class="txt">{{pageTxt.label[1]}}</label>
-				<el-select class='select' v-model="info.config">
+				<el-select class='select' v-model="config">
 					<el-option v-for="obj in pageTxt.option" :key="obj.c" :label="obj.t" :value="obj.c">
 					</el-option>
 				</el-select>
@@ -26,6 +26,8 @@
 					</div>
 				</el-autocomplete>
 				<el-button class='btnS' type='primary' @click='search'>{{pageTxt.label[6]}}</el-button>
+				<label for='autoInput_0' class="el-icon-circle-close clearTXT verClose1"></label>
+				<label for='autoInput_1' class="el-icon-circle-close clearTXT verClose2"></label>
 			</div>
 		</div>
 		<el-table highlight-current-row  @current-change="currenRow" @selection-change="selectionRow" :data="data" tooltip-effect="dark">
@@ -49,9 +51,10 @@
 <script>
 import utils     from '@/libs/utils.js';
 import lang      from '@/language/lang.js';
+import kit       from '@/libs/kit.js';
 
 
-	var pageTxt, _this, _currentPage = 1, autoTime, isVer, verArr1, verArr2;
+	var pageTxt, _this, _currentPage = 1, autoTime, isVer, verArr1, verArr2, clearTXT;
 	pageTxt = lang.versionContrast;
 	
 	var data = {
@@ -59,6 +62,7 @@ import lang      from '@/language/lang.js';
 		column: '　',
 		idName1: '',
 		idName2: '',
+		config: '3',
 		info: {config:'3', ver1:'', ver2:''},
 		data: [/*{type:'verType',detail:'detail'}*/],
 		row: {},
@@ -70,7 +74,7 @@ import lang      from '@/language/lang.js';
 	function search(num, size){
 		var info = _this.info;
 		var param = {
-			cmdID: '600064', type: info.config,
+			cmdID: '600064', type: _this.config,
 			pageSize: size||_this.size,
 			currentPage: num||_currentPage,
 			version1: info.ver1,
@@ -88,7 +92,7 @@ import lang      from '@/language/lang.js';
 		var param = {
 			url: 'mx/version/queryCompare',
 			cmdID: "600062",
-			type: _this.info.config,
+			type: _this.config,
 			pageSize: 200,
 			currentPage: 1
 		};
@@ -126,15 +130,19 @@ import lang      from '@/language/lang.js';
 			},
 			idSelect1(item){
 				this.info.ver1 = item.version;
+				clearTXT[0].style.display = 'block';
 			},
-			autoInput1(){
+			autoInput1(str){
 				isVer = '1';
+				clearTXT[0].style.display = str ? 'block' : 'none';
 			},
 			idSelect2(item){
 				this.info.ver2 = item.version;
+				clearTXT[1].style.display = 'block';
 			},
-			autoInput2(){
+			autoInput2(str){
 				isVer = '2';
+				clearTXT[1].style.display = str ? 'block' : 'none';
 			},
 			search(){
 				var tips = pageTxt.tips, info = this.info;
@@ -161,9 +169,28 @@ import lang      from '@/language/lang.js';
 			_this = this;
 			verArr1 = [];
 			verArr2 = [];
-			this.info.config = '3';
+			this.config = '3';
 			this.info.ver1 = this.info.ver2 ='';
 			_currentPage = 1;
+			kit('.contrast .ver .el-autocomplete input').each((el, i)=>{
+				el.id = 'autoInput_' + i;
+			});
+			clearTXT = kit('.contrast .clearTXT').click((e)=>{
+				if(e.target.getAttribute('for') == 'autoInput_0'){
+					_this.info.ver1 = _this.idName1 = '';
+				} else _this.info.ver2 = _this.idName2 = '';
+				e.target.style.display = 'none';
+			});
+		},
+		watch: {
+			config(cur, old){
+				this.data = [];
+				verArr1 = [];
+				verArr2 = [];
+				this.info.ver1 = this.info.ver2 ='';
+				this.max = 0;
+				clearTXT.hide();
+			}
 		}
 	};
 	
@@ -188,4 +215,7 @@ import lang      from '@/language/lang.js';
 	.btnS{margin-left: 10px;line-height: 30px;padding: 0 14px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
+	.clearTXT{display: none;font-size: 14px;color: #CCC;position: absolute;top: 8px;z-index: 1;}
+	.verClose1{left: 280px;}
+	.verClose2{left: 614px;}
 </style>

@@ -168,13 +168,13 @@ var pageTxt = {
     ]
   },
   connect = [
-    { value: "Group0", label: "Group0" },
-    { value: "Group1", label: "Group1" },
-    { value: "Group2", label: "Group2" },
-    { value: "Group3", label: "Group3" },
-    { value: "Group4", label: "Group4" },
-    { value: "Group5", label: "Group5" },
-    { value: "Group6", label: "Group6" }
+    { value: "0", label: "Group0" },
+    { value: "1", label: "Group1" },
+    { value: "2", label: "Group2" },
+    { value: "3", label: "Group3" },
+    { value: "4", label: "Group4" },
+    { value: "5", label: "Group5" },
+    { value: "6", label: "Group6" }
   ],
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
@@ -279,6 +279,11 @@ export default {
         type: "0"
       },
       function(response) {
+        for(var i=0; i<_this.userType.length; i++){
+          if(response.lists[0].userType== _this.userType[i].id){
+            response.lists[0].userType=_this.userType[i].name
+          }
+        }
         _this.info.userName = response.lists[0].userName;
         _this.info.userType = response.lists[0].userType;
         _this.info.userDistrict = response.lists[0].userDistrict;
@@ -288,7 +293,7 @@ export default {
         _this.info.isAlarmIfOffLine = response.lists[0].isAlarmIfOffLine;
         _this.info.softEncBeginDate = response.lists[0].softEncBeginDate.toString();
         _this.info.softEncEndDate = response.lists[0].softEncEndDate.toString();
-        _this.info.allowSendRecvFile = response.lists[0].allowSendRecvFile;
+        _this.info.allowSendRecvFile = response.lists[0].allowSendRecvFile.toString();
         _this.info.maxPubsCount = response.lists[0].maxPubsCount;
         _this.info.maxSubsCount = response.lists[0].maxSubsCount;
         _this.info.maxDaysOfTopic = response.lists[0].maxDaysOfTopic;
@@ -304,7 +309,7 @@ export default {
       },
       function(response) {
         if (response.errcode == 0) {
-          _this.userType = as(response);
+          _this.userType = response.lists;
         }
       }
     );
@@ -324,16 +329,7 @@ export default {
   },
   components: { UserEkey, UserSignal, ExtendInfo }
 };
-function as(data) {
-  for(var i=0; i<data.lists.length; i++){
-    for(var x=0; x<_this.optionsCreat.length; x++){
-      if(data.lists[i].bizType==_this.optionsCreat[x].id){
-        data.lists[i].bizType=_this.optionsCreat[x].name
-      }
-    }
-  }
-  return data;
-}
+
 </script>
 
 <style scoped="scoped">
