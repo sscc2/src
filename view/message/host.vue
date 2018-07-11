@@ -52,8 +52,7 @@ var hostText_cn = [
     "是否提交当前修改",
     "(全局静态配置文件为：mxstatic.ini，文件仅支持UTF-8格式)",
     "(全局动态配置文件为：mxdynamic.ini，文件仅支持UTF-8格式)"
-  ],
-  _this;
+  ],_this;
 
 export default {
   data() {

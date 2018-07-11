@@ -9,9 +9,9 @@
         <span>{{pageTxt.Ekey[0]}}：</span>
         <el-radio v-model="search.type" :label="0">{{pageTxt.Ekey[1]}}</el-radio>
         <el-radio v-model="search.type" :label="1">{{pageTxt.Ekey[2]}}</el-radio>
-        <span v-show='search.type==0' id="box" class="txt">{{pageTxt.Ekey[3]}}：</span>
+        <span v-show='search.type==0' id="box" class="txt">{{pageTxt.Ekey[8]}}：</span>
         <el-input   class='input_normal picker' v-show='search.type==0' v-model="search.ekeyName" ></el-input>
-        <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[4]}}：</span>
+        <span v-show='search.type==1' class="txt" id="box">{{pageTxt.Ekey[9]}}：</span>
         <el-autocomplete  v-show='search.type==1'  @input='autoInput' class="input_normal picker" v-model="idName" :fetch-suggestions="fetch" :trigger-on-focus="false" @select="idSelect">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
@@ -45,13 +45,9 @@
 
       <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
         <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="EkeyData.totalSize"></el-pagination>
-        <div class="rightTxt">
-          共{{EkeyData.totalSize}}条数据
-        </div>
+        <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
       </div>
-      <div class="onePage" v-else-if="EkeyData.totalSize>0&&EkeyData.totalSize<=pageSize">
-        已显示全部{{EkeyData.totalSize}}个数据
-      </div> 
+      <div class="onePage" v-else-if="EkeyData.totalSize>0&&EkeyData.totalSize<=pageSize">已显示全部{{EkeyData.totalSize}}个数据</div> 
 
       <el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
         <ul class="_dialog">
@@ -140,9 +136,7 @@
         </div>
       </el-dialog>
 
-    </div>
-
-    <div class="Popup" v-show="showExportEkeyInfo">
+      <div class="Popup" v-show="showExportEkeyInfo">
         <div class="_panle">
           <div><p id="_title">批量导出Ekey</p>
                 <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
@@ -158,6 +152,8 @@
           </div>
         </div>
       </div> 
+
+    </div>
   </div>	
 </template>
 
@@ -182,7 +178,7 @@ var pageTxt_cn = {
     "按Ekey查询",
     "按用户查询",
     "Ekey名称",
-    "用户名称",
+    "查询",
     "创建Ekey",
     "修改Ekey",
     "删除Ekey",
@@ -209,7 +205,11 @@ var pageTxt_cn = {
   ]
 };
 
-var pageTxt = pageTxt_cn,autoTime,_currentPage = 1,isInput = false,_this;
+var pageTxt = pageTxt_cn,
+  autoTime,
+  _currentPage = 1,
+  isInput = false,
+  _this;
 
 export default {
   data() {
@@ -219,23 +219,21 @@ export default {
       search: { userID: "", type: "", ekeyName: "" },
       ainfo,
       binfo,
-      EkeyData: {/*lists:[{"userID":"1"}]*/},
+      EkeyData: {
+        /*lists:[{"userID":"1"}]*/
+      },
       selects: [],
       oldEkeyName: "",
-      EkeyInfoSrc:"",
-      EkeyInfoName:"",
+      EkeyInfoSrc: "",
+      EkeyInfoName: "",
       pageTxt: pageTxt,
-      radio: 1,
-      addEkey: false,
-      editEkdy: false,
       row: {},
-      data2: [/*{ Ekey: "test" }*/],
       currentPage1: 1,
       pageSize: 20,
       options: [],
-      showExportEkeyInfo:false,
-      EkeyInfoSrc:"",
-      EkeyInfoName:"",
+      addEkey: false,
+      editEkdy: false,
+      showExportEkeyInfo: false
     };
   },
   methods: {
@@ -253,7 +251,7 @@ export default {
     },
     //查询Ekey
     searchfn() {
-      this.renderDate(_this.search.type)
+      this.renderDate(_this.search.type);
     },
     // 创建Ekey
     showAdd() {
@@ -265,33 +263,51 @@ export default {
     },
     // 立即下发
     sendDown() {
-      this.addEkey = false;
-      utils.review({
-        yes:function(info){
-          utils.hints({
-						txt: "是否立即下发",
-						yes: function(){
-              utils.post('mx/userEkey/addImmediately',
-               {
-                  cmdID: "600025",
-                  operator: "admin",
-                  reviewer: info.name,
-                  userID: _this.ainfo.userID,
-                  ekeyName: _this.ainfo.ekeyName,
-                  ekeyValidDate: _this.ainfo.ekeyValidDate,
-                  comment: _this.ainfo.comment                                       
-               }, 
-               function(response){
-                 if(response.errcode == 0){
-                  _this.addEkey = false;
-                  _this.renderDate(_this.search.type);
-                  utils.wheelReq(response); 
-                 }                
-							});
-						}
-					});
+      if (this.ainfo.userID == "") {
+        utils.weakTips("用户ID不能为空");
+      } else {
+        if (this.ainfo.ekeyName == "") {
+          utils.weakTips("Ekey名称不能为空");
+        } else {
+          if (this.ainfo.ekeyValidDate == "") {
+            utils.weakTips("Ekey有效期不能为空");
+          } else {
+            if (this.ainfo.comment == "") {
+              utils.weakTips("Ekey描述不能为空");
+            } else {
+              this.addEkey = false;
+              utils.review({
+                yes: function(info) {
+                  utils.hints({
+                    txt: "是否立即下发",
+                    yes: function() {
+                      utils.post(
+                        "mx/userEkey/addImmediately",
+                        {
+                          cmdID: "600025",
+                          operator: "admin",
+                          reviewer: info.name,
+                          userID: _this.ainfo.userID,
+                          ekeyName: _this.ainfo.ekeyName,
+                          ekeyValidDate: _this.ainfo.ekeyValidDate,
+                          comment: _this.ainfo.comment
+                        },
+                        function(response) {
+                          if (response.errcode == 0) {
+                            _this.addEkey = false;
+                            _this.renderDate(_this.search.type);
+                            utils.wheelReq(response);
+                          }
+                        }
+                      );
+                    }
+                  });
+                }
+              });
+            }
+          }
         }
-      });
+      }
     },
     submitAdd() {
       if (this.ainfo.userID == "") {
@@ -363,28 +379,30 @@ export default {
     //     }
     //   );
     // },
-    modifydel(id,name){
+    modifydel(id, name) {
       utils.review({
-        yes:function(info){
+        yes: function(info) {
           utils.hints({
-						txt: "是否立即下发",
-						yes: function(){
-              utils.post('mx/userEkey/deleteImmediately',
-               {
+            txt: "是否立即下发",
+            yes: function() {
+              utils.post(
+                "mx/userEkey/deleteImmediately",
+                {
                   cmdID: "600027",
                   operator: "admin",
                   reviewer: info.name,
                   userID: id,
-                  ekeyName: name                                    
-               }, 
-               function(response){
-                 if(response.errcode == 0){
-                  utils.wheelReq(response);
-                 _this.renderDate(_this.search.type) 
-                 }                                
-							});
-						}
-					});
+                  ekeyName: name
+                },
+                function(response) {
+                  if (response.errcode == 0) {
+                    utils.wheelReq(response);
+                    _this.renderDate(_this.search.type);
+                  }
+                }
+              );
+            }
+          });
         }
       });
     },
@@ -401,12 +419,13 @@ export default {
     lijixiafa() {
       this.editEkdy = false;
       utils.review({
-        yes:function(info){
+        yes: function(info) {
           utils.hints({
-						txt: "是否立即下发",
-						yes: function(){
-              utils.post('mx/userEkey/modifyImmediately',
-               {
+            txt: "是否立即下发",
+            yes: function() {
+              utils.post(
+                "mx/userEkey/modifyImmediately",
+                {
                   cmdID: "600026",
                   operator: "admin",
                   reviewer: info.name,
@@ -414,14 +433,15 @@ export default {
                   userID: _this.binfo.userID,
                   ekeyName: _this.binfo.ekeyName,
                   ekeyValidDate: _this.binfo.ekeyValidDate,
-                  comment: _this.binfo.comment                                      
-               }, 
-               function(response){
-                 _this.renderDate()
-                 utils.wheelReq(response);                
-							});
-						}
-					});
+                  comment: _this.binfo.comment
+                },
+                function(response) {
+                  _this.renderDate();
+                  utils.wheelReq(response);
+                }
+              );
+            }
+          });
         }
       });
     },
@@ -456,29 +476,31 @@ export default {
       }
     },
     // 导出Ekey
-    exportEkeyInfo(){
+    exportEkeyInfo() {
       utils.post(
         "mx/userEkey/ExportCsv",
         {
-          cmdID:"600028"
+          cmdID: "600028"
         },
-        function(response){
-          if(response.errcode ==0 ){
-            _this.EkeyInfoSrc=response.errinfo
-            _this.EkeyInfoName=response.errinfo.split("/").pop()
-            _this.showExportEkeyInfo=true;
-          }else{
-            utils.weakTips(response.errinfo)
+        function(response) {
+          if (response.errcode == 0) {
+            _this.EkeyInfoSrc = response.errinfo;
+            _this.EkeyInfoName = response.errinfo.split("/").pop();
+            _this.showExportEkeyInfo = true;
+          } else {
+            utils.weakTips(response.errinfo);
           }
         }
-      )     
+      );
     },
     //删除(row)
     showDel() {
       utils.hints({
         txt: "是否删除该用户信息",
         yes: _this.ekeyDel,
-        now: function(){_this.modifydel( _this.row.userID,_this.row.ekeyName)},
+        now: function() {
+          _this.modifydel(_this.row.userID, _this.row.ekeyName);
+        },
         btn: 3
       });
     },
@@ -531,8 +553,8 @@ export default {
           currentPage: _this.currentPage1
         },
         function(response) {
-          if(response.errcode==0){
-             if (response.totalPage < _this.currentPage1) {
+          if (response.errcode == 0) {
+            if (response.totalPage < _this.currentPage1) {
               _this.currentPage1 = response.totalPage;
               _this.renderDate(type);
             } else {

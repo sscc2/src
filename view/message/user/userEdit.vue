@@ -2,7 +2,7 @@
 	<div class="component">
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
-				<span class="header_txt1" @click="del($event)">返回</span>
+				<span class="header_txt1" @click="back">返回</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{$store.state.headerText}}</span>
 		</div>
@@ -87,8 +87,8 @@
 				</el-row>
 				<div class="btn">
           <el-button type="primary" @click='sendDown'>{{pageTxt.infoTxt[21]}}</el-button>
-					<el-button type="primary" @click="Edit($event)">{{pageTxt.infoTxt[20]}}</el-button>					
-					<el-button type="default" @click='del($event)'>{{pageTxt.infoTxt[22]}}</el-button>
+					<el-button type="primary" @click="Edit">{{pageTxt.infoTxt[20]}}</el-button>					
+					<el-button type="default" @click='back'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
 			</el-tab-pane>
 			
@@ -262,7 +262,7 @@ export default {
       );
     },
     // 删除
-    del: function(e) {
+    back: function() {
       this.$router.replace({ path: this.$store.state.editBack });
     }
   },

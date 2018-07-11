@@ -6,9 +6,9 @@
 
 		<div class="user">
 			<div class="userH">
-				<span class="txt">{{pageTxt.userTxt[1]}}</span>
+				<span class="txt">{{pageTxt.userTxt[1]}}：</span>
 				<el-input class="input_normal" v-model="userParam.id"></el-input>
-				<span class="txt">{{pageTxt.userTxt[2]}}</span>
+				<span class="txt">{{pageTxt.userTxt[2]}}：</span>
 				<el-input class="input_normal" v-model="userParam.name"></el-input>
 				<el-button type="primary" @click='userSearch'>{{pageTxt.userTxt[3]}}</el-button>
 			</div>
@@ -107,8 +107,8 @@ import utils from "@/libs/utils.js";
 var pageTxt = {
     userTxt: [
       "用户",
-      "用户ID：",
-      "用户名称：",
+      "用户ID",
+      "用户名称",
       "查询",
       "创建用户",
       "删除用户",

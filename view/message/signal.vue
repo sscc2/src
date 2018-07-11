@@ -83,7 +83,7 @@
               <p class="txt">{{pageTxt.dialog[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
+              <el-select class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
                 <el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
               </el-select>
               <p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
@@ -259,6 +259,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
+            _this.dialogAdd=false;
             _this.renderData(_this.searchInfo.bizType);
             utils.weakTips(response.errinfo);
           } else {
@@ -382,7 +383,6 @@ export default {
         {
           cmdID: "600031",
           bizType: type,
-          // _this.searchInfo.bizType,
           userID1: isInput1 ? _this.searchInfo.userID1 : _this.userID1,
           userID2: isInput2 ? _this.searchInfo.userID2 : _this.userID2,
           pageSize: _this.pageSize,
@@ -395,7 +395,6 @@ export default {
               _this.renderData(type);
             } else {
               _this.list = as(response);
-              console.log(_this.list)
             }
           }
         }

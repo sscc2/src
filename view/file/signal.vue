@@ -87,11 +87,9 @@
 			};
 		},
 		methods: {
-		    currentRow: function(e){
-		    	console.log(e)
+		    currentRow: function(e){		   
 		    },
 		    currentPage: function(e){
-		    	console.log(e)
 			},
 			
 		}

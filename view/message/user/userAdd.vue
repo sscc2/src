@@ -2,7 +2,7 @@
 	<div class="component">
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
-				<span class="header_txt1" @click="del($event)">返回</span>
+				<span class="header_txt1" @click="back">返回</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{pageTxt.infoTxt[0]}}</span>
 		</div>
@@ -99,7 +99,7 @@
 				<div class="btn">
           <el-button type="primary" @click='submitForm(sendDown)'>{{pageTxt.infoTxt[21]}}</el-button>
 					<el-button type="primary" @click="submitForm(add)">{{pageTxt.infoTxt[20]}}</el-button>					
-					<el-button type="default" @click='del'>{{pageTxt.infoTxt[22]}}</el-button>
+					<el-button type="default" @click='back'>{{pageTxt.infoTxt[22]}}</el-button>
 				</div>
 			</el-tab-pane>			
 			<el-tab-pane label="Ekey" disabled>
@@ -187,8 +187,8 @@ var pageTxt = {
 export default {
   data() {
     return {
-      userType: [{ id: "0", name: "tmp" }],
-      cities: [{ id: "BJ", name: "北京" }],
+      userType: [],
+      cities: [],
       info,
       pageTxt,
       connect,
@@ -264,7 +264,18 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.open6(response.errinfo);
+            utils.hints({
+              txt: response.errinfo,
+              yes: function(){
+                _this.$store.state.tabv = "v2";
+                _this.$router.replace({ path: "/message/userEdit/mess"})
+              },
+              no: function(){
+                _this.$store.state.headerText;
+                _this.$store.state.tabv = "v1";
+                _this.$router.replace({ path: "/message/userEdit/mess" })
+              }
+            });
           } else {
             utils.weakTips(response.errinfo);
           }
@@ -297,23 +308,7 @@ export default {
         this.info.userPasswd = 111111;
       }
     },
-    open6(msg) {
-      this.$confirm(msg, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        center: true
-      })
-        .then(() => {
-          this.$store.state.tabv = "v2";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        })
-        .catch(() => {
-          this.$store.state.headerText;
-          this.$store.state.tabv = "v1";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        });
-    },
-    del() {
+    back() {
       this.$router.replace({ path: "/message/user" });
     }
   },

@@ -8,7 +8,7 @@
 		</div>
 	
 		<el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
-			<el-table-column type="selection" width="55"></el-table-column>
+			<el-table-column width="50" label=" " type="index"></el-table-column>
 			<el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="ekeyName" label="Ekey名称" show-overflow-tooltip></el-table-column>
@@ -104,11 +104,6 @@
 			    <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
 			</div>
 		</el-dialog>
-
-		<!-- <div class="_pagination" v-show="EkeyData.totalPage>0">
-      <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange" background layout="prev, pager, next, jumper" :page-count="EkeyData.totalPage" :page-size="20"></el-pagination>
-      <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
-    </div>  -->
 
     <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
       <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="EkeyData.totalSize"></el-pagination>
@@ -270,7 +265,17 @@ export default {
                     } else {
                       _this.renderDate(1);
                       _this.addEkey = false;
-                      _this.open6("跳转至通信关系");
+                      utils.hints({
+                        txt: response.errinfo+" Whether the jump is added comm ?",
+                        yes: function(){
+                           _this.$store.state.tabv = "v3";
+                           _this.$router.replace({ path: "/message/userEdit/mess" });
+                        },
+                        no: function(){
+                          _this.$store.state.tabv = "v2";
+                          _this.$router.replace({ path: "/message/userEdit/mess" });
+                        }
+                      })
                     }
                   } else {
                     utils.weakTips(response.errinfo);
@@ -282,22 +287,6 @@ export default {
         }
       }
     },
-    open6(msg) {
-      this.$confirm(msg, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        center: true
-      })
-        .then(() => {
-          this.$store.state.tabv = "v3";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        })
-        .catch(() => {
-          this.$store.state.tabv = "v2";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        });
-    },
-
     // 删除Ekey
     // fn() {
     //   if (this.selects.length != 1) {
@@ -417,39 +406,7 @@ export default {
     },
     handleCurrentChange: function(currentPage) {
       this.currentPage1 = currentPage;
-      utils.post(
-        "mx/userEkey/query",
-        {
-          cmdID: "600021",
-          userID: _this.$store.state.creatAndEdit ? "" : _this.$store.state.transferEditID,
-          ekeyName: "",
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage1,
-          type: 1
-        },
-        function(response) {
-          if(response.errcode == 0){
-            if (response.totalPage < _this.currentPage1) {
-            utils.post("mx/userEkey/query", {
-              cmdID: "600021",
-              userID: _this.$store.state.creatAndEdit? "" : _this.$store.state.transferEditID,
-              ekeyName: "",
-              type: 1,
-              pageSize: _this.$store.state.creatAndEdit ? 2 : 1,
-              currentPage: response.totalPage
-            },
-            function(response){
-              if(response.errcode==0){
-                 _this.EkeyData = response;
-              }             
-            }
-            );
-          }else{
-            _this.EkeyData = response;
-          }
-          }                    
-        }
-      );
+      _this.renderDate(0);
     },
     // 更新数据
     renderDate(type) {
@@ -475,64 +432,11 @@ export default {
         }
       );
     },
-    // renderDate() {
-    //   var _this = this;
-    //   utils.post(
-    //     "mx/userEkey/query",
-    //     {
-    //       cmdID: "600021",
-    //       userID: _this.$store.state.transferEditID,
-    //       ekeyName: _this.search.ekeyName,
-    //       type: 1,
-    //       pageSize: _this.pageSize,
-    //       currentPage: _this.currentPage1
-    //     },
-    //     function(response) {
-    //       if(response.errcode == 0){
-    //         if (response.totalPage < _this.currentPage1) {
-    //         utils.post(
-    //           "mx/userEkey/query",
-    //           {
-    //             cmdID: "600021",
-    //             userID: _this.$store.state.transferEditID,
-    //             ekeyName: _this.search.ekeyName,
-    //             type: _this.$store.state.creatAndEdit ? _this.search.type : _this.search.type,
-    //             pageSize: _this.pageSize,
-    //             currentPage: response.totalPage
-    //           },
-    //           function(response) {
-    //             if(response.errcode == 0){
-    //               _this.EkeyData = response;
-    //             }               
-    //           }
-    //         );
-    //       } else {
-    //         _this.EkeyData = response;
-    //       }
-    //       }          
-    //     }
-    //   );
-    // }
   },
   //初始化数据
   created() {
     _this = this;
-    utils.post(
-      "mx/userEkey/query",
-      {
-        cmdID: "600021",
-        userID: _this.$store.state.transferEditID,
-        ekeyName: "",
-        type: 1,
-        pageSize: _this.pageSize,
-        currentPage: _this.currentPage1
-      },
-      function(response) {
-        if(response.errcode == 0){
-          _this.EkeyData = response;
-        }        
-      }
-    );
+    _this.renderDate(1);
     utils.post(
       "mx/userinfo/queryLists",
       {
