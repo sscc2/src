@@ -45,13 +45,13 @@
         <el-table-column prop="userName2" label="用户名称" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" width="70" show-overflow-tooltip>
           <div slot-scope="scope" class="_zero">
-            <img @click="showPromptBox" src="@/img/deleticos.png">
+            <el-tooltip content="删除通信关系" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/deleticos.png"></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
 
       <div class="_pagination" v-if="list.totalSize>pageSize">
-        <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="list.totalSize"></el-pagination>
+        <el-pagination  @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="list.totalSize"></el-pagination>
         <div class="rightTxt">共{{list.totalSize}}条数据</div>
       </div>
       <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">已显示全部{{list.totalSize}}个数据</div> 
@@ -73,8 +73,8 @@
               <p class="txt">{{pageTxt.dialog[2]}}</p>
             </div>
             <div class="rightBox">
-                <el-select class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changeCreatinfo">
-                  <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>
+                <el-select id="statist_input" class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changeCreatinfo" clearable>
+                  <el-option v-for="item in options2" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
                 </el-select>
             </div>
           </li>
@@ -84,9 +84,9 @@
             </div>
             <div class="rightBox">
               <el-select class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-                <el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
+                <el-option  v-for="item in options3" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>  
               </el-select>
-              <p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
+              <span class="cleartxt" @click="clear">{{pageTxt.dialog[4]}}</span>
             </div>
           </li>
         </ul>
@@ -137,7 +137,7 @@ var pageTxt = {
     "业务类型 ：",
     "用户ID ：",
     "用户ID ：",
-    "",
+    "清空用户ID",
     "提交",
     "返回"
   ]
@@ -205,47 +205,17 @@ export default {
     },
     // 查询
     search() {
-      utils.post(
-        "/mx/userComm/query",
-        {
-          cmdID: "600031",
-          bizType: _this.searchInfo.bizType,
-          userID1: isInput1 ? _this.searchInfo.userID1 : _this.userID1,
-          userID2: isInput2 ? _this.searchInfo.userID2 : _this.userID2,
-          pageSize: _this.pageSize,
-          currentPage: _this.currentPage
-        },
-        function(response) {
-          if (response.errcode == 0) {
-            if (response.totalPage < _this.currentPage) {
-              utils.post(
-                "/mx/userComm/query",
-                {
-                  cmdID: "600031",
-                  bizType: _this.searchInfo.bizType,
-                  userID1: isInput1 ? _this.searchInfo.userID1 : _this.userID1,
-                  userID2: isInput2 ? _this.searchInfo.userID2 : _this.userID2,
-                  pageSize: _this.pageSize,
-                  currentPage: response.totalPage
-                },
-                function(response) {
-                  if (response.errcode == 0) {
-                    _this.list = as(response);
-                  }
-                }
-              );
-            } else {
-              _this.list =as(response);
-            }
-          }
-        }
-      );
+      this.renderData(_this.searchInfo.bizType);
     },
     // 创建
     showCreate() {
+      console.log(document.getElementById("statist_input"));
+
       this.dialogAdd = true;
       this.creatInfo.user = "";
       this.creatInfo.other = [];
+      
+
     },
     submit() {
       utils.post(
@@ -269,14 +239,16 @@ export default {
       );
     },
     changeCreatinfo() {
-      var options5 = [].concat(options4);
-      for (var i = 0; i < options5.length; i++) {
-        if (options5[i].userID == this.creatInfo.user) {
-          options5.splice(i, 1);
-          break;
-        }
-      }
-      this.options3 = options5;
+      options4 = [].concat(_this.options2);
+
+          var options5 = [].concat(options4);
+          for (var i = 0; i < options5.length; i++) {
+            if (options5[i].userID == this.creatInfo.user) {
+              options5.splice(i, 1);
+              break;
+            }
+          }
+          this.options3 = options5;    
     },
     // 刪除通信关系
     // fn() {
@@ -401,6 +373,10 @@ export default {
       );
     }
   },
+  
+  mounted(){
+    
+  },
   // 初始化数据
   created() {
     this.searchInfo.bizType = "-1";
@@ -442,7 +418,7 @@ export default {
         userName: "",
         pageSize: 210000,
         currentPage: "1",
-        type: 0
+        type: 2
       },
       function(response) {
         if (response.errcode == 0) {
@@ -537,22 +513,23 @@ function autoInput(str, cb) {
 .signal{margin: 20px;}
 .signal .userH{height: 30px;}
 .input_normal{margin-left: 10px;}
-.txt{font-size: 14px; color: #666666;}
+.txt{font-size: 14px; color: #666;}
 .btn{margin-left: 35px;}
 .btnBox{margin-bottom: 10px; margin-top: 10px; font-size: 14px; color: #5c759d; }
 .btnBox div{display: inline-block; cursor: pointer; margin-right: 35px;}
 .btnBox span{margin-left: 4px;height: 30px; line-height: 30px;}
 ._zero > img{cursor: pointer;}
-.txt1{margin-left: 35px;font-size: 14px; color: #666666;}
+.txt1{margin-left: 35px;font-size: 14px; color: #666;}
 ._dialog .leftBox{height: 30px;}
 .bug{vertical-align:top}
 .sel{width: 350px; line-height: 40px;}
 .leftBox{height: 30px;}
 .sel[data-v-50d0771e]{width: 202px;}
-.txt1{margin-left: 30px;font-size: 13px; color: #666666;}
+.txt1{margin-left: 30px;font-size: 13px; color: #666;}
 .input_normal{height: auto;}
+.cleartxt{margin-left: 20px;font-size:14px;color:#666;cursor: pointer;}
 </style>
 
 <style>
 .signal .input_normal span {white-space: normal; word-break: keep-all; display: inline-block;}
-</style>602
+</style>

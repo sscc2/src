@@ -39,7 +39,7 @@
           <el-table-column prop="errorInfo" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
           <el-table-column prop="errorInfo" width="55" :label="pageTxt.lable1[22]" show-overflow-tooltip>
             <div slot-scope="scope" class="_zero">
-              <div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div>
+              <el-tooltip content="详情" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div></el-tooltip>
             </div>
           </el-table-column>
         </el-table>	
@@ -120,11 +120,11 @@ export default {
     };
   },
   methods: {
-    // 查询
+    //查询
     searchFn() {
       this.render();
     },
-    // 导出报表
+    //导出报表
     exportFn() {
       utils.post(
         "mx/operationRecording/query",
@@ -148,7 +148,7 @@ export default {
         }
       );
     },
-    // 详情
+    //详情
     showParticularsFn(row) {
       this.showParticulars = true;
       utils.post(
@@ -168,7 +168,7 @@ export default {
         }
       );
     },
-    // 获得指定时间
+    //获得指定时间
     getTimeFn() {
       if (this.timeMethod == 0) {
         var toDate = new Date();
@@ -195,7 +195,7 @@ export default {
         this.search = "";
       }
     },
-    // 转换日期格式
+    //转换日期格式
     transferDate(beforeTime) {
       var year = beforeTime.getFullYear(),
         month = beforeTime.getMonth() + 1,
@@ -208,7 +208,7 @@ export default {
       }
       return year + "-" + month + "-" + date;
     },
-    // 分页
+    //分页
     handleSizeChange(size) {
       this.pageSize = size;
     },
@@ -216,7 +216,7 @@ export default {
       this.currentPage = current;
       this.render();
     },
-    // 数据更新
+    //数据更新
     render() {
       utils.post(
         "mx/operationRecording/query",
@@ -251,7 +251,7 @@ export default {
       );
     }
   },
-  // 初始化数据
+  //初始化数据
   created() {
     this.statisticalMethod = "0";
     this.timeMethod = "0";

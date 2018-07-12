@@ -131,7 +131,7 @@ import lang      from '@/language/lang.js';
 	function autoInput(str, cb){
 		if(!str) return;
 //		console.time('请求用户ID...');
-		utils.getUserid(str, function(data){
+		utils.getUserid({id:str, type:2}, function(data){
 			var i,len = data.length,tem=[];
 			for (i = 0; i < len; i++) {
 				if(data[i].label.indexOf(str)!=-1) tem.push(data[i]);

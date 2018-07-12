@@ -33,7 +33,9 @@
 			<el-table-column prop="maxDaysOfTopic" :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<img @click="edit(scope.row)" src="@/img/theme/edit_2.png" alt="">
+					<el-tooltip :content="pageTxt.label[5]" placement="bottom" effect="light">
+						<img @click="edit(scope.row)" src="@/img/theme/edit_2.png" alt="">
+					</el-tooltip>
 				</div>
 			</el-table-column>
 		</el-table>

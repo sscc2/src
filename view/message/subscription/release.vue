@@ -52,13 +52,16 @@
 			<el-table-column prop="subsUserCounts" sortable='custom' :label="pageTxt.list[4]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[5]" width='120'>
 				<div slot-scope="scope" class="_zero">
-					<!--<el-button class='_iBtn' type='primary' plain @click="edit">
-						<img src="@/img/altericos.png" alt="">
-					</el-button>-->
 					<!--<img @click="add(scope.$index, scope.row, scope)" src="@/img/theme/add_2.png" alt="">-->
-					<img @click="edit(scope.$index, scope.row, scope)" src="@/img/theme/edit_2.png" alt="">
-					<img @click="del(scope.$index, scope.row, scope)" src="@/img/theme/del_2.png" alt="">
-					<img @click="detail(scope.$index, scope.row, scope)" src="@/img/theme/detail_2.png" alt="">
+					<el-tooltip :content="pageTxt.label[10]" placement="bottom" effect="light">
+						<img @click="edit(scope.$index, scope.row, scope)" src="@/img/theme/edit_2.png" alt="">
+					</el-tooltip>
+					<el-tooltip :content="pageTxt.label[11]" placement="bottom" effect="light">
+						<img @click="del(scope.$index, scope.row, scope)" src="@/img/theme/del_2.png" alt="">
+					</el-tooltip>
+					<el-tooltip :content="pageTxt.label[12]" placement="bottom" effect="light">
+						<img @click="detail(scope.$index, scope.row, scope)" src="@/img/theme/detail_2.png" alt="">
+					</el-tooltip>
 				</div>
 			</el-table-column>
 		</el-table>

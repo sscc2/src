@@ -25,11 +25,13 @@
 				<el-table-column width="50" label=" " type="index" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="userID" :label="pageTxt.userTxt[1]" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="userName" :label="pageTxt.userTxt[2]" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="pageTxt.userTxt[10]" width="120" show-overflow-tooltip>
+				<el-table-column :label="pageTxt.userTxt[10]" width="180" show-overflow-tooltip>
 					<div slot-scope="scope" class="_zero">
-						<div @click='userEdit'><img src="@/img/altericos.png"></div>
-						<div @click="showPromptBox"><img src="@/img/deleticos.png" ></div>
-						<div @click="eidtPasswd"><img src="@/img/passwdico.png"></div>
+            <el-tooltip content="修改基本信息" placement="bottom" effect="light"><div @click='userEdit'><img src="@/img/altericos.png"></div></el-tooltip>
+            <el-tooltip content="修改Ekey" placement="bottom" effect="light"><div @click='userEkey'><img src="@/img/altericos.png"></div></el-tooltip>
+            <el-tooltip content="创建通信关系" placement="bottom" effect="light"><div @click='userComm'><img src="@/img/altericos.png"></div></el-tooltip>
+						<el-tooltip content="删除用户" placement="bottom" effect="light"><div @click="showPromptBox"><img src="@/img/deleticos.png" ></div></el-tooltip>
+						<el-tooltip content="修改密码" placement="bottom" effect="light"><div @click="eidtPasswd"><img src="@/img/passwdico.png"></div></el-tooltip>
 					</div>
 				</el-table-column>
 			</el-table>
@@ -277,6 +279,20 @@ export default {
     // 修改用户(row)
     userEdit() {
       this.$store.state.tabv = "v1";
+      this.$store.state.headerText = "修改用户";
+      this.$store.state.creatAndEdit = true;
+      this.$store.state.editBack = "/message/user";
+      this.$router.replace({ path: "/message/userEdit/mess" });
+    },
+    userEkey() {
+      this.$store.state.tabv = "v2";
+      this.$store.state.headerText = "修改用户";
+      this.$store.state.creatAndEdit = true;
+      this.$store.state.editBack = "/message/user";
+      this.$router.replace({ path: "/message/userEdit/mess" });
+    },
+    userComm(){
+      this.$store.state.tabv = "v3";
       this.$store.state.headerText = "修改用户";
       this.$store.state.creatAndEdit = true;
       this.$store.state.editBack = "/message/user";

@@ -417,6 +417,12 @@ function utils(){
 	exp.route = function(){return app.$route.params;};
 	
 	exp.getUserid = function(str, call){
+		var rep, type;
+		if(typeof(str)=="object"){
+			rep = str;
+			str = rep.id;
+			type = rep.type;
+		}
 		var param = {
 			url: 'mx/userinfo/queryLists',
 			cmdID: "600001",
@@ -424,7 +430,7 @@ function utils(){
 			userName: str,
 			pageSize: 200,
 			currentPage: 1,
-			type: 1
+			type: type || 1
 		};
 		exp.post(param, function(data){
 //			console.log('getUserid：',data);

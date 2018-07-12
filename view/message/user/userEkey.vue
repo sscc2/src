@@ -16,8 +16,8 @@
 			<el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
 			<el-table-column label="操作" width="110">
 				<div slot-scope="scope" class="_zero">
-					<div  id='Edit'  @click="showEdit(scope.row)"><img src="@/img/altericos.png"> </div>
-					<div @click="showDel"><img src="@/img/deleticos.png" ></div>
+					<el-tooltip content="修改Ekey信息" placement="bottom" effect="light"><div @click="showEdit(scope.row)" id='Edit'><img src="@/img/altericos.png"></div></el-tooltip>
+					<el-tooltip content="删除Ekey信息" placement="bottom" effect="light"><div @click="showDel"><img src="@/img/deleticos.png" ></div></el-tooltip>
 				</div>
 			</el-table-column>
 		</el-table>

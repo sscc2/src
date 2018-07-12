@@ -36,7 +36,9 @@
 			<el-table-column prop="pubTime" sortable='custom' :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<img @click="see(scope.$index, scope.row, scope)" src="@/img/theme/detail_2.png" alt="">
+					<el-tooltip :content="pageTxt.label[5]" placement="bottom" effect="light">
+						<img @click="see(scope.$index, scope.row, scope)" src="@/img/theme/detail_2.png" alt="">
+					</el-tooltip>
 				</div>
 			</el-table-column>
 		</el-table>

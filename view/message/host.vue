@@ -16,7 +16,7 @@
 							<div class="content">
 								<el-input id="textarea1" type="textarea" rows="18" v-model="textareaValue1" :readonly="!switchValue1"></el-input>
 							</div>
-							<button class="blueBtn" id="button1" type="primary" @click="edit">{{hostText_cn[3]}}</button>
+							<button class="blueBtn" id="button1" type="primary" @click="showReview=true">{{hostText_cn[3]}}</button>
 						</el-tab-pane>		
 
 						<el-tab-pane :label="hostText_cn[4]" name="second">
@@ -28,8 +28,31 @@
 							<div class="content">
 								<el-input id="textarea2" type="textarea" rows="18" v-model="textareaValue2" :readonly="!switchValue2"></el-input>
 							</div>
-							<button class="blueBtn" id="button2" @click="edit">{{hostText_cn[3]}}</button>
-						</el-tab-pane>	
+							<button class="blueBtn" id="button2" @click="showReview=true">{{hostText_cn[3]}}</button>
+						</el-tab-pane>
+
+            <div id="_review" v-show="showReview">
+              <div class="_panle">
+			          <div>
+                  <p id="_title">复核操作</p>
+                  <img id="_close" src="@/img/close.png" @click="showReview=false" />
+			          </div>
+                <ul class="_messaga">
+                  <li>
+                    <label class="lab">复核操作员：</label>
+                    <input id="_name" class="inp" type="text" />
+                  </li>
+			            <li>
+                    <label class="lab">复核员密码：</label>
+                    <input id="_pass" class="inp" type="password" />
+                  </li>
+                </ul>
+			          <div>
+                  <button id="_yes" class="blueBtn" @click="showReviewFn">提 交</button>
+                  <button id="_no" class="defBtn" @click="showReview=false">返 回</button>
+                </div>
+              </div>
+            </div>
 
 				</el-tabs>
 			</div>				
@@ -58,6 +81,7 @@ export default {
   data() {
     return {
       hostText_cn,
+      showReview:false,
       switchValue1: false,
       switchValue2: false,
       textareaValue1: "",
@@ -68,6 +92,10 @@ export default {
   },
   methods: {
     //编辑
+    showReviewFn() {
+      this.showReview=false;
+      this.edit();
+    },
     edit() {
       var configinfo = _this.hostType ? _this.switchValue2 : _this.switchValue1;
       if (!configinfo) {
@@ -89,8 +117,10 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.renderDate();
             utils.weakTips(response.errinfo);
+            _this.renderDate();
+            _this.switchValue1 = _this.switchValue2 = false;
+            _this.changeTextarea();
           }
         }
       );
@@ -112,7 +142,7 @@ export default {
       afn("textarea1", "button1", this.switchValue1);
       afn("textarea2", "button2", this.switchValue2);
     },
-    // 更新数据
+    //更新数据
     renderDate() {
       utils.post(
         "mx/suConfig/query",

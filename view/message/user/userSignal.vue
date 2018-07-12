@@ -40,7 +40,7 @@
         <el-table-column prop="userName2" label="用户名称" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" width="70" show-overflow-tooltip>
           <div slot-scope="scope" class="_zero">
-            <img @click="showPromptBox" src="@/img/deleticos.png">
+            <el-tooltip content="删除通信关系" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/deleticos.png"></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
@@ -413,7 +413,7 @@ export default {
         userName: "",
         pageSize: "210000",
         currentPage: "1",
-        type: "0"
+        type: "2"
       },
       function(response) {
         if(response.errcode == 0){

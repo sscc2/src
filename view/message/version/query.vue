@@ -38,7 +38,9 @@
 			<el-table-column prop="send" :label="pageTxt.list[6]" show-overflow-tooltip></el-table-column>
 			<el-table-column :label="pageTxt.list[7]" width='60'>
 				<div slot-scope="scope" class="_zero">
-					<img @click="roolback(scope.row, scope.$index, scope)" src="@/img/theme/version.png" alt="">
+					<el-tooltip :content="pageTxt.label[12]" placement="bottom" effect="light">
+						<img @click="roolback(scope.row, scope.$index, scope)" src="@/img/theme/version.png" alt="">
+					</el-tooltip>
 				</div>
 			</el-table-column>
 		</el-table>
