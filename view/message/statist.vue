@@ -279,5 +279,5 @@ export default {
 .content{display: inline-block;font-size: 14px;margin-right: 40px; }
 ._content{margin-left: 40px; margin-top: 20px;width: 520px; height: 280px; overflow-y:auto; }
 ._panle{width: 600px; height: 410px;}
-.exportFn{float: right;background-color:#fafafa;border:1px solid #ccc; color: #666; overflow-wrap: normal;}
+.exportFn{float: right;}
 </style>

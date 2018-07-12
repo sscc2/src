@@ -440,12 +440,14 @@ import lang      from '@/language/lang.js';
 					break;
 				}
 			}
-			if(k==len2){
-				arr.push(can[i].userID);
-				len2 = arr.length;
-				key.push(k);
-			}
+//			if(k==len2){
+//				arr.push(can[i]);
+//				len2 = arr.length;
+//				key.push(k);
+//				console.log(can[i],arr[k-1])
+//			}
 		}
+//		_this.list = arr;
 		_this.keys = key;
 	}
 	
@@ -458,6 +460,7 @@ import lang      from '@/language/lang.js';
 </script>
 
 <style scoped="scoped">
+	.editTheme{color: #666;}
 	.el-tabs {min-width: 1000px;}
 	.h2{width: 1020px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.h2 *{vertical-align: middle;}
@@ -496,4 +499,5 @@ import lang      from '@/language/lang.js';
 	.editTheme .el-tabs__item{color: #5a6e93;}
 	.editTheme .el-tabs__header{margin-left: 40px;}
 	.editTheme .el-tabs__item.is-active{color: #32ccf9;}
+	.editTheme .el-transfer-panel .el-transfer-panel__header .el-checkbox .el-checkbox__label{color: #666;}
 </style>

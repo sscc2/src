@@ -13,11 +13,11 @@ vars.loadTime = 2;
 }());
 
 vars.urlIP = 'http://192.168.22.212:8081/fdep/';  // vdi外网
-//vars.urlIP = 'http://192.168.218.35:8081/fdep/';  // 小焕
-//vars.urlIP = 'http://192.168.22.22:8081/fdep/';   // 曼萍
+// vars.urlIP = 'http://192.168.218.35:8081/fdep/';  // 小焕
+// vars.urlIP = 'http://192.168.22.22:8081/fdep/';   // 曼萍
 //vars.urlIP = 'http://120.78.209.133:8080/fdep/';  // 外网
 //vars.urlIP = 'http://127.0.0.1:8081/fdep/';	    // 本机
-//vars.urlIP = 'http://10.10.27.160:8081/fdep/';    // vdi内网
+// vars.urlIP = 'http://10.10.27.160:8081/fdep/';    // vdi内网
 
 
 

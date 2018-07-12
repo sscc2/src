@@ -1,5 +1,5 @@
 <template>
-	<el-dialog class='upload' :title="pageTxt.lable[0]" width='600px' :visible.sync="$store.state.showImportExtInfo">
+	<el-dialog class='upload' :title="pageTxt.lable[0]" width='600px' :visible.sync="">
 		<el-upload class="uploadFile" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1" :on-exceed="handleLimit"
 			:on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
 			<el-button slot="trigger" size="small" type="primary">{{pageTxt.lable[1]}}</el-button>
@@ -8,7 +8,7 @@
 		<p class="t2">{{pageTxt.lable[6]}}</p>
 		<p class="t2">{{pageTxt.lable[5]}}</p>
 		<div slot="footer" class="dialog-footer">
-		    <el-button @click="$store.state.showImportExtInfo = false">{{pageTxt.lable[3]}}</el-button>
+		    <el-button @click="">{{pageTxt.lable[3]}}</el-button>
 		</div>
 	</el-dialog>
 </template>

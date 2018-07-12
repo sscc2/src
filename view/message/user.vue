@@ -156,8 +156,8 @@ export default {
     },
     // 创建用户
     createUser() {
+      this.$store.state.headerText = "创建用户";
       this.$store.state.creatAndEdit = false;
-      this.$store.state.headerText = this.pageTxt.userTxt[4];
       this.$store.state.editBack = "/message/user";
       this.$router.replace({ path: "/message/userAdd/mess" });
     },

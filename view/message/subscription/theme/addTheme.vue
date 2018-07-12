@@ -294,7 +294,7 @@ import lang      from '@/language/lang.js';
 </script>
 
 <style scoped="scoped">
-	.addTheme{min-width: 1016px;}
+	.addTheme{min-width: 1016px; color: #666}
 	.h2{border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.h2 *{vertical-align: middle;}
 	.h2 em{cursor: pointer;}

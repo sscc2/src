@@ -4,7 +4,7 @@
 				<img  class="header_img" src="@/img/ico.png">
 				<span class="header_txt1" @click="back">返回</span>
 				<div class="header_line"></div>
-				<span class='header_txt2'>{{$store.state.headerText}}</span>
+				<span class='header_txt2'>{{headerText}}</span>
 		</div>
 		<el-tabs type="card" v-model="$store.state.tabv">
 			<el-tab-pane label="基本信息" name="v1">
@@ -185,6 +185,7 @@ var data = {
   pageTxt,
   connect,
   online,
+  headerText:""
 };
 
 var _this;
@@ -261,14 +262,19 @@ export default {
         }
       );
     },
-    // 删除
-    back: function() {
+    // 返回
+    back() {
       this.$router.replace({ path: this.$store.state.editBack });
     }
   },
 
   // 初始化数据
-  created: function() {
+  created() {
+    if(this.$store.state.editBack == "/message/userSet"){
+      this.headerText="修改用户";
+    }else{
+      this.headerText= this.$store.state.headerText;
+    }
     this.tabv = this.$store.state.tabv;
     _this = this;
     utils.post(

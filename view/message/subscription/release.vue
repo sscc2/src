@@ -346,7 +346,7 @@ import lang        from '@/language/lang.js';
 </script>
 
 <style scoped="scoped">
-	.release{padding:0 20px;white-space: nowrap;color: #333;}
+	.release{padding:0 20px;white-space: nowrap;color: #666;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
 	._hr{min-width: 1080px;}
 	.searchBox *{vertical-align: middle;}
@@ -357,6 +357,5 @@ import lang        from '@/language/lang.js';
 	.btnBox{padding: 10px 0;}
 	.btn{margin-right: 35px;margin-left: 0;padding: 0;}
 	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
-	._zero{white-space: nowrap;}
-	._zero img{vertical-align: middle;margin-right: 10px;}
+	._zero img{margin-right: 15px;}
 </style>

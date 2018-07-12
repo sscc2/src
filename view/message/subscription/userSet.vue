@@ -153,14 +153,15 @@ import lang      from '@/language/lang.js';
 				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row[0].userID;
 				this.$store.state.editBack = "/message/userSet";
-				this.$store.state.HeaderText = "修改用户";
+				// this.$store.state.HeaderText = "修改用户";
 				utils.goto('/message/userEdit/mess_userSet');
 			},
 			edit(row){
+				
 				this.$store.state.tabv = 'v1';
 				this.$store.state.transferEditID = row.userID;
 				this.$store.state.editBack = "/message/userSet";
-				this.$store.state.HeaderText = "修改用户";
+				// this.$store.state.HeaderText = "修改用户";
 				utils.goto('/message/userEdit/mess_userSet');
 			}
 		},
@@ -189,7 +190,7 @@ import lang      from '@/language/lang.js';
 </script>
 
 <style scoped="scoped">
-	.userSet{padding: 0 20px;white-space: nowrap;color: #333;}
+	.userSet{padding: 0 20px;white-space: nowrap;color: #666;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
 	.searchBox *{vertical-align: middle;}
 	.txt{font-size: 14px;line-height: 30px;padding-right: 10px;}
@@ -199,4 +200,5 @@ import lang      from '@/language/lang.js';
 	.btn{margin-right: 35px;margin-left: 0;padding: 0;}
 	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	.el-button *{vertical-align: middle;}
+	._zero img{margin-right: 15px;}
 </style>

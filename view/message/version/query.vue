@@ -199,7 +199,7 @@ import lang      from '@/language/lang.js';
 </script>
 
 <style scoped="scoped">
-	.query{padding: 0 20px;white-space: nowrap;color: #333;min-width: 912px;}
+	.query{padding: 0 20px;white-space: nowrap;color: #666;min-width: 912px;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
 	._hr{min-width: 980px;}
 	.searchBox *{vertical-align: middle;}
@@ -210,4 +210,5 @@ import lang      from '@/language/lang.js';
 	.blueBtn{margin-left: 35px;}
 	.btnTxt{color: #5a769e;}
 	.el-button *{vertical-align: middle;}
+	._zero img{margin-right: 15px;}
 </style>

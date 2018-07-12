@@ -9,10 +9,9 @@ const store=new Vuex.Store({
         transferEditID:"",  //点击row ID
         passShow: false,     //修改密码的显示
         dateListsUserID:{},
-        HeaderText:"",
+        HeaderText:"",      //修改创建标题
         creatAndEdit:'' ,     
-        showImportExtInfo:false,
-        editBack:""
+        editBack:""   //修改返回路径
     } 
 })
 

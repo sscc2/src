@@ -98,11 +98,11 @@ export default {
     encapsulationVerify(fn) {
       var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^\w\s]).{8,}|(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
       if (this.info.isModifyDefaultPasswd == 0) {
-        this.fn;
+        fn();
       } else {
         if (reg.test(this.info.npasswd)) {
           if (this.info.npasswd == this.info.again) {
-            this.fn;
+          fn();
           } else {
             utils.weakTips("两次输入的应该一致");
           }

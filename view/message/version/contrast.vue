@@ -204,7 +204,7 @@ import kit       from '@/libs/kit.js';
 </script>
 
 <style scoped="scoped">
-	.contrast{padding: 0 20px;white-space: nowrap;color: #333;}
+	.contrast{padding: 0 20px;white-space: nowrap;color: #666;}
 	.h2{font-size: 16px;line-height: 44px;color: #666;font-weight: bold;}
 	.searchBox *{vertical-align: middle;}
 	.select{width: 180px;}

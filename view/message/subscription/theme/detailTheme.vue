@@ -174,6 +174,7 @@ import lang      from '@/language/lang.js';
 </script>
 
 <style scoped="scoped">
+	.detailTheme{color: #666;}
 	.h2{width: 1020px;border-bottom: 1px solid #D8D8D8;margin-bottom: 40px;padding-left: 20px;}
 	.h2 *{vertical-align: middle;}
 	.h2 em{cursor: pointer;}
