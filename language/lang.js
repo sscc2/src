@@ -6,4 +6,13 @@ import en        from '@/language/en.js';
 //console.log(navigator);
 globalVar.set('lang', navigator.language);
 
+/*
+ * 0: "zh-CN"
+1: "zh"
+2: "zh-TW"
+3: "zh-HK"
+4: "en-US"
+5: "en"
+ */
+
 export default globalVar.get('lang')=='en' ? en : zhcn;
