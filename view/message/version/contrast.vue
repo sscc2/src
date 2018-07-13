@@ -167,11 +167,7 @@ import kit       from '@/libs/kit.js';
 		},
 		mounted(){
 			_this = this;
-			verArr1 = [];
-			verArr2 = [];
-			this.config = '3';
-			this.info.ver1 = this.info.ver2 ='';
-			_currentPage = 1;
+			init();
 			kit('.contrast .ver .el-autocomplete input').each((el, i)=>{
 				el.id = 'autoInput_' + i;
 			});
@@ -184,11 +180,7 @@ import kit       from '@/libs/kit.js';
 		},
 		watch: {
 			config(cur, old){
-				this.data = [];
-				verArr1 = [];
-				verArr2 = [];
-				this.info.ver1 = this.info.ver2 ='';
-				this.max = 0;
+				init();
 				clearTXT.hide();
 			}
 		}
@@ -200,6 +192,15 @@ import kit       from '@/libs/kit.js';
 			if(arr[i].version == str) return true;
 		}
 		return false;
+	}
+	function init(){
+		_this.data = [];
+		verArr1 = [];
+		verArr2 = [];
+		_this.config = '3';
+		_this.info.ver1 = _this.info.ver2 ='';
+		_this.max = 0;
+		_currentPage = 1;
 	}
 </script>
 
