@@ -39,7 +39,7 @@
           <el-table-column prop="errorInfo" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
           <el-table-column prop="errorInfo" width="55" :label="pageTxt.lable1[22]" show-overflow-tooltip>
             <div slot-scope="scope" class="_zero">
-              <el-tooltip content="详情" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div></el-tooltip>
+              <el-tooltip content="应答详情" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div></el-tooltip>
             </div>
           </el-table-column>
         </el-table>	

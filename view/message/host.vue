@@ -16,7 +16,7 @@
 							<div class="content">
 								<el-input id="textarea1" type="textarea" rows="18" v-model="textareaValue1" :readonly="!switchValue1"></el-input>
 							</div>
-							<button class="blueBtn" id="button1" type="primary" @click="showReview=true">{{hostText_cn[3]}}</button>
+							<button class="blueBtn" id="button1" type="primary" @click="showReviewFn">{{hostText_cn[3]}}</button>
 						</el-tab-pane>		
 
 						<el-tab-pane :label="hostText_cn[4]" name="second">
@@ -28,7 +28,7 @@
 							<div class="content">
 								<el-input id="textarea2" type="textarea" rows="18" v-model="textareaValue2" :readonly="!switchValue2"></el-input>
 							</div>
-							<button class="blueBtn" id="button2" @click="showReview=true">{{hostText_cn[3]}}</button>
+							<button class="blueBtn" id="button2" @click="showReviewFn">{{hostText_cn[3]}}</button>
 						</el-tab-pane>
 
             <div id="_review" v-show="showReview">
@@ -40,15 +40,15 @@
                 <ul class="_messaga">
                   <li>
                     <label class="lab">复核操作员：</label>
-                    <input id="_name" class="inp" type="text" />
+                    <input id="_name" v-model="userName" class="inp" type="text" />
                   </li>
 			            <li>
                     <label class="lab">复核员密码：</label>
-                    <input id="_pass" class="inp" type="password" />
+                    <input id="_pass" v-model="passwd" class="inp" type="password" />
                   </li>
                 </ul>
 			          <div>
-                  <button id="_yes" class="blueBtn" @click="showReviewFn">提 交</button>
+                  <button id="_yes" class="blueBtn" @click="subitHints">提 交</button>
                   <button id="_no" class="defBtn" @click="showReview=false">返 回</button>
                 </div>
               </div>
@@ -81,6 +81,8 @@ export default {
   data() {
     return {
       hostText_cn,
+      userName:"",
+      passwd:"",
       showReview:false,
       switchValue1: false,
       switchValue2: false,
@@ -93,17 +95,22 @@ export default {
   methods: {
     //编辑
     showReviewFn() {
-      this.showReview=false;
-      this.edit();
-    },
-    edit() {
       var configinfo = _this.hostType ? _this.switchValue2 : _this.switchValue1;
       if (!configinfo) {
         return;
       }
+      this.userName="",
+      this.passwd="",
+      this.showReview=true;
+    },
+    subitHints(){
+      this.showReview=false;
+      this.edit();
+    },
+    edit() {
       utils.hints({
         txt: hostText_cn[8],
-        yes: this.editSubmit,
+        yes: _this.editSubmit,
         btn: 2
       });
     },

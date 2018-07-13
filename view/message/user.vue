@@ -99,6 +99,7 @@
       </div> 
 
 		</div>	
+    
   </div>
 </template>
 
@@ -148,7 +149,8 @@ export default {
       exportCsvSrc: "",
       exportCsvName: "",
       BasicsSrc: "",
-      BasicsName: ""
+      BasicsName: "",
+      tabHTML:""
     };
   },
   methods: {
@@ -225,6 +227,7 @@ export default {
       this.showImportExtInfo = true;
     },
     importExtInfoSubmit() {
+      _this.tabHTML='';
       utils.post(
         "mx/userinfoExt/ImportCsv",
         {
@@ -232,10 +235,15 @@ export default {
           csvFileName: _this.csvFileName
         },
         function(response) {
-          if (response.errcode == 0) {
+          _this.showImportExtInfo = false;
+          if (response.errcode == "0") {
+            
             utils.weakTips(response.errinfo);
           } else {
-            utils.weakTips(response.errinfo);
+            for(var i=0; i<3; i++){
+              _this.tabHTML+="<tr >"+"<td class='l1'>"+response.lists[i].line+"</td>"+"<td class='l1'>"+response.lists[i].userID +"</td>"+"<td class='l1'>"+response.lists[i].errInfo+"</td>"+"</tr>"
+            }
+              utils.weakTips("<table class='_whellError'>"+"<tr id='table_header'>"+"<td class='l1'>"+"line"+"</td>"+"<td class='l1'>"+"user"+"ID"+"</td>"+"<td class='l1'>"+"errinfo"+"</td>"+"</tr>"+ _this.tabHTML +"<tr>"+"<td class='l1'>"+"..."+"</td>"+"<td class='l1'>"+"..."+"</td>"+"<td class='l1'>"+"..."+"</td>"+"</tr>"+"</table>")
           }
         }
       );
@@ -398,4 +406,7 @@ export default {
 .Popup .info_button1{text-align: left;margin-left: 165px;margin-top: 40px;}
 .Popup_return{margin-left: 40px;}
 .Popup .red{color:#FF6B6B;}
+</style>
+<style>
+._whellError #table_header .l1{font-size: 14px;font-weight: bold} 
 </style>

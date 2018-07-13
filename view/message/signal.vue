@@ -73,8 +73,8 @@
               <p class="txt">{{pageTxt.dialog[2]}}</p>
             </div>
             <div class="rightBox">
-                <el-select id="statist_input" class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changeCreatinfo" clearable>
-                  <el-option v-for="item in options2" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
+                <el-select id="statist_input" class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changevalue" clearable>
+                  <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>
                 </el-select>
             </div>
           </li>
@@ -83,8 +83,8 @@
               <p class="txt">{{pageTxt.dialog[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-select class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-                <el-option  v-for="item in options3" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>  
+              <el-select id="statist_select" class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
+                <el-option  v-for="item in options5" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
               </el-select>
               <span class="cleartxt" @click="clear">{{pageTxt.dialog[4]}}</span>
             </div>
@@ -143,24 +143,30 @@ var pageTxt = {
   ]
 };
 
-var autoTime1,isInput1 = false,autoTime2,isInput2 = false,options4,_this;
+var autoTime1,
+  isInput1 = false,
+  autoTime2,
+  isInput2 = false,
+  _this,
+  t;
 
 export default {
   name: "mess_signal",
   data() {
     return {
       searchInfo: { bizType: "", userID1: "", userID2: "" },
-      options1: [{ name: "全部", id: "-1" }],  
+      options1: [{ name: "全部", id: "-1" }],
       userID1: "",
       userID2: "",
-      
+
       creatInfo: { bizType: "", user: "", other: [] },
-      
+
       options2: [
         { userID: "0", userID: "1aaa" },
         { userID: "1", userID: "2aaa" }
       ],
       options3: [],
+      options5: [],
       optionsCreat: [],
       restaurants: [],
       userOption: [],
@@ -209,13 +215,51 @@ export default {
     },
     // 创建
     showCreate() {
-      console.log(document.getElementById("statist_input"));
+      this.getDate("statist_input", this.options2);
+
+      setTimeout(function() {
+        document.getElementsByClassName("el-select__input is-big")[0].addEventListener("input", function(e) {
+            clearTimeout(t);
+            t = setTimeout(function() {
+              utils.post(
+                "mx/userinfo/queryLists",
+                {
+                  cmdID: "600001",
+                  userID: e.target.value,
+                  userName: e.target.value,
+                  pageSize: 200,
+                  currentPage: "1",
+                  type: 2
+                },
+                function(response) {
+                  if (response.errcode == 0) {
+                    _this.options3 = response.lists;
+                    for (var i = 0; i < _this.options3.length; i++) {
+                      _this.options3[i].userName =
+                        _this.options3[i].userID +
+                        "(" +
+                        _this.options3[i].userName +
+                        ")";
+                    }
+                    _this.options5 = [].concat(_this.options3);
+
+                    for (var i = 0; i < _this.options5.length; i++) {
+                      if (_this.options5[i].userID == _this.creatInfo.user) {
+                        _this.options5.splice(i, 1);
+
+                        break;
+                      }
+                    }
+                  }
+                }
+              );
+            }, 300);
+          });
+      }, 0);
 
       this.dialogAdd = true;
       this.creatInfo.user = "";
       this.creatInfo.other = [];
-      
-
     },
     submit() {
       utils.post(
@@ -229,7 +273,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            _this.dialogAdd=false;
+            _this.dialogAdd = false;
             _this.renderData(_this.searchInfo.bizType);
             utils.weakTips(response.errinfo);
           } else {
@@ -238,18 +282,7 @@ export default {
         }
       );
     },
-    changeCreatinfo() {
-      options4 = [].concat(_this.options2);
 
-          var options5 = [].concat(options4);
-          for (var i = 0; i < options5.length; i++) {
-            if (options5[i].userID == this.creatInfo.user) {
-              options5.splice(i, 1);
-              break;
-            }
-          }
-          this.options3 = options5;    
-    },
     // 刪除通信关系
     // fn() {
     //   if (this.selects.length != 1) {
@@ -328,7 +361,7 @@ export default {
         }
       );
     },
-    clear(e) {
+    clear() {
       this.creatInfo.other = [];
     },
     currentRow: function(e) {
@@ -371,11 +404,49 @@ export default {
           }
         }
       );
+    },
+
+    getDate(id, options) {
+      setTimeout(function() {
+        document.getElementById(id).addEventListener("input", function(e) {
+          clearTimeout(t);
+          t = setTimeout(function() {
+            utils.post(
+              "mx/userinfo/queryLists",
+              {
+                cmdID: "600001",
+                userID: e.target.value,
+                userName: e.target.value,
+                pageSize: 200,
+                currentPage: "1",
+                type: 2
+              },
+              function(response) {
+                if (response.errcode == 0) {
+                  _this.options = response.lists;
+                  for (var i = 0; i < _this.options.length; i++) {
+                    _this.options[i].userName =
+                      _this.options[i].userID +
+                      "(" +
+                      _this.options[i].userName +
+                      ")";
+                  }
+                }
+              }
+            );
+          }, 300);
+        });
+      }, 1);
+    },
+    changevalue(){
+      for (var i = 0; i < _this.options5.length; i++) {
+            if (_this.options5[i].userID == _this.creatInfo.user) {
+              _this.options5.splice(i, 1);
+              console.log(1)
+              break;
+            }
+          }
     }
-  },
-  
-  mounted(){
-    
   },
   // 初始化数据
   created() {
@@ -402,7 +473,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type:3
+        type: 3
       },
       function(response) {
         if (response.errcode == 0) {
@@ -416,14 +487,39 @@ export default {
         cmdID: "600001",
         userID: "",
         userName: "",
-        pageSize: 210000,
+        pageSize: 200,
         currentPage: "1",
         type: 2
       },
       function(response) {
         if (response.errcode == 0) {
           _this.options2 = response.lists;
-          options4 = [].concat(_this.options2);
+
+          for (var i = 0; i < _this.options2.length; i++) {
+            _this.options2[i].userName =
+              _this.options2[i].userID + "(" + _this.options2[i].userName + ")";
+          }
+        }
+      }
+    );
+    utils.post(
+      "mx/userinfo/queryLists",
+      {
+        cmdID: "600001",
+        userID: "",
+        userName: "",
+        pageSize: 200,
+        currentPage: "1",
+        type: 2
+      },
+      function(response) {
+        if (response.errcode == 0) {
+          _this.options5 = response.lists;
+          for (var i = 0; i < _this.options5.length; i++) {
+            _this.options5[i].userName =
+              _this.options5[i].userID + "(" + _this.options5[i].userName + ")";
+          }
+          
         }
       }
     );
@@ -494,6 +590,13 @@ function as(data) {
   }
   return data;
 }
+function copyArr(arr) {
+  var res = [];
+  for (var i = 0; i < arr.length; i++) {
+    res.push(arr[i]);
+  }
+  return res;
+}
 function autoInput(str, cb) {
   if (!str) return;
   utils.getUserid(str, function(data) {
@@ -533,3 +636,4 @@ function autoInput(str, cb) {
 <style>
 .signal .input_normal span {white-space: normal; word-break: keep-all; display: inline-block;}
 </style>
+

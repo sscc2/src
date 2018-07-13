@@ -80,9 +80,9 @@
             </div>
             <div class="rightBox">
                 <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
-                  <el-option  v-for="item in options3" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
+                  <el-option  v-for="item in options" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
                 </el-select>
-              <p class="txt" @click="clear">{{pageTxt.dialog[4]}}</p>
+              <span class="cleartxt" @click="clear">清空用户</span>
             </div>
           </li>
         </ul>
@@ -126,7 +126,7 @@ var pageTxt = {
   ]
 };
 
-var autoTime1,isInput1 = false,autoTime2,isInput2 = false,options4,_this;
+var autoTime1,isInput1 = false,autoTime2,isInput2 = false,options4,_this,t;
 
 function autoInput(str, cb) {
   if (!str) return;
@@ -145,6 +145,7 @@ export default {
   name: "mess_signal",
   data() {
     return {
+      options:"",
       userID1: "",
       idName2: "",
       userID2: "",
@@ -209,7 +210,45 @@ export default {
     showCreate() {
       this.dialogAdd = true;
       this.creatInfo.other = [];
-      this.changeCreatinfo();
+      
+      setTimeout(function() {
+        document.getElementsByClassName("el-select__input is-big")[0].addEventListener("input", function(e) {
+            clearTimeout(t);
+            t = setTimeout(function() {
+              utils.post(
+                "mx/userinfo/queryLists",
+                {
+                  cmdID: "600001",
+                  userID: e.target.value,
+                  userName: e.target.value,
+                  pageSize: 200,
+                  currentPage: "1",
+                  type: 2
+                },
+                function(response) {
+                  if (response.errcode == 0) {
+                    _this.options = response.lists;
+                    for (var i = 0; i < _this.options.length; i++) {
+                      _this.options[i].userName =
+                        _this.options[i].userID +
+                        "(" +
+                        _this.options[i].userName +
+                        ")";
+                    }
+       
+
+                    for (var i = 0; i < _this.options.length; i++) {
+                      if (_this.options[i].userID == _this.$store.state.transferEditID) {
+                        _this.options.splice(i, 1);
+                        break;
+                      }
+                    }
+                  }
+                }
+              );
+            }, 300);
+          });
+      }, 0);
     },
     submit() {
       this.dialogAdd = false;
@@ -236,16 +275,6 @@ export default {
           }
         }
       );
-    },
-    changeCreatinfo() {
-      var options5 = [].concat(options4);
-      for (var i = 0; i < options5.length; i++) {
-        if (options5[i].userID == this.$store.state.transferEditID) {
-          options5.splice(i, 1);
-          break;
-        }
-      }
-      this.options3 = options5;
     },
     open6(msg) {
       this.$confirm(msg, "提示", {
@@ -323,7 +352,7 @@ export default {
         }
       );
     },
-    clear(e) {
+    clear() {
       this.creatInfo.other = [];
     },
     currentRow: function(e) {
@@ -411,15 +440,24 @@ export default {
         cmdID: "600001",
         userID: "",
         userName: "",
-        pageSize: "210000",
+        pageSize: "200",
         currentPage: "1",
         type: "2"
       },
       function(response) {
         if(response.errcode == 0){
-           _this.options2 = response.lists;
-          options4 = [].concat(_this.options2);
+           _this.options = response.lists;
+           for (var i = 0; i < _this.options.length; i++) {
+                      _this.options[i].userName =_this.options[i].userID +"(" + _this.options[i].userName + ")";
+                    }
         }
+        for (var i = 0; i < _this.options.length; i++) {
+                      if (_this.options[i].userID == _this.$store.state.transferEditID) {
+                        _this.options.splice(i, 1);
+
+                        break;
+                      }
+                    }
        
       }
     );
@@ -512,9 +550,9 @@ function as(data) {
 .sel[data-v-50d0771e]{width: 202px;}
 .txt1{margin-left: 30px;font-size: 13px; color: #666666;}
 .input_normal{width: 250px;height: auto;}
+.cleartxt{margin-left: 20px;font-size:14px;color:#666;cursor: pointer;}
 </style>
 
 <style>
 	.signal .input_normal span{white-space: normal;word-break: keep-all;display: inline-block;}
 </style>
-598

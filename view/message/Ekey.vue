@@ -56,8 +56,8 @@
               <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
             </div>
             <div class="rightBox" id="rightBox1">
-              <el-select filterable v-model="ainfo.userID" placeholder="请选择">
-                <el-option  v-for="item in options" :key="item.userID" :label="item.userID" :value="item.userID"></el-option>
+              <el-select id="Ekye_input" filterable v-model="ainfo.userID" placeholder="请选择">
+                <el-option  v-for="item in options" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>
               </el-select>
             </div>
           </li>
@@ -209,7 +209,7 @@ var pageTxt = pageTxt_cn,
   autoTime,
   _currentPage = 1,
   isInput = false,
-  _this;
+  _this,t;
 
 export default {
   data() {
@@ -260,6 +260,32 @@ export default {
       this.ainfo.ekeyName = "";
       this.ainfo.ekeyValidDate = "";
       this.ainfo.comment = "";
+      setTimeout(function() {
+        document.getElementById("Ekye_input").addEventListener("input", function(e) {
+            clearTimeout(t);
+            t = setTimeout(function() {
+              utils.post(
+                "mx/userinfo/queryLists",
+                {
+                  cmdID: "600001",
+                  userID: e.target.value,
+                  userName: e.target.value,
+                  pageSize: 200,
+                  currentPage: "1",
+                  type: 2
+                },
+                function(response) {
+                  if (response.errcode == 0) {
+                    _this.options = response.lists;
+                    for (var i = 0; i < _this.options.length; i++) {
+                      _this.options[i].userName =_this.options[i].userID +"(" + _this.options[i].userName + ")";
+                    }
+                  }
+                }
+              );
+            }, 300);
+          });
+      }, 1);
     },
     // 立即下发
     sendDown() {
@@ -578,13 +604,16 @@ export default {
         cmdID: "600001",
         userID: "",
         userName: "",
-        pageSize: "210000",
+        pageSize: "200",
         currentPage: "1",
         type: "2"
       },
       function(response) {
         if (response.errcode == 0) {
           _this.options = response.lists;
+          for (var i = 0; i < _this.options.length; i++) {
+                      _this.options[i].userName =_this.options[i].userID +"(" + _this.options[i].userName + ")";
+                    }
         }
       }
     );
