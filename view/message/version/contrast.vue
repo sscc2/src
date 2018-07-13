@@ -168,6 +168,7 @@ import kit       from '@/libs/kit.js';
 		mounted(){
 			_this = this;
 			init();
+			_this.config = '3';
 			kit('.contrast .ver .el-autocomplete input').each((el, i)=>{
 				el.id = 'autoInput_' + i;
 			});
@@ -197,7 +198,6 @@ import kit       from '@/libs/kit.js';
 		_this.data = [];
 		verArr1 = [];
 		verArr2 = [];
-		_this.config = '3';
 		_this.info.ver1 = _this.info.ver2 ='';
 		_this.max = 0;
 		_currentPage = 1;
