@@ -20,6 +20,7 @@
 				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
 			</el-date-picker>
 			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[8]}}</button>
+			<label class="el-icon-circle-close clearTXT"></label>;
 		</div>
 		<div class="btnBox">
 			<el-button class='btn' @click='add' type='text'>
@@ -297,6 +298,14 @@ import lang        from '@/language/lang.js';
 			this.downCSV = false;
 			getDay(7);
 			search();
+			var btn = utils.clearInput({
+				pos: '.release',
+				id: '#el-auto',
+				clas: '.clearTXT',
+			});
+			btn.clear(e => {
+				_this.info.pubUserID = _this.idName = '';
+			});
 		},
 //		components: {AddTheme, EditTheme, DetailTheme}
 	};
@@ -361,4 +370,5 @@ import lang        from '@/language/lang.js';
 	.btn{margin-right: 35px;margin-left: 0;padding: 0;}
 	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	._zero img{margin-right: 15px;}
+	.clearTXT{display: none;position: absolute;bottom: 8px;left:244px;font-size: 14px;color: #CCC;z-index: 1;}
 </style>

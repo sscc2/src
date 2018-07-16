@@ -183,7 +183,6 @@ import lang     from '@/language/lang.js';
 			btn.clear(e => {
 				_this.userID = _this.idName = '';
 			});
-			
 		}
 	};
 	function search(num, size){
