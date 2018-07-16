@@ -271,7 +271,7 @@ export default {
       utils.post(
         "mx/userinfo/delete",
         {
-          cmdID: 600005,
+          cmdID: "600005",
           operator: "admin",
           userID: _this.$store.state.transferEditID
         },

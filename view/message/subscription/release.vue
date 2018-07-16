@@ -53,7 +53,7 @@
 			<el-table-column :label="pageTxt.list[5]" width='120'>
 				<div slot-scope="scope" class="_zero">
 					<!--<img @click="add(scope.$index, scope.row, scope)" src="@/img/theme/add_2.png" alt="">-->
-					<el-tooltip :content="pageTxt.label[10]" placement="bottom" effect="light">
+					<el-tooltip v-if="scope.row.userIDEnable!=0" :content="pageTxt.label[10]" placement="bottom" effect="light">
 						<img @click="edit(scope.$index, scope.row, scope)" src="@/img/theme/edit_2.png" alt="">
 					</el-tooltip>
 					<el-tooltip :content="pageTxt.label[11]" placement="bottom" effect="light">

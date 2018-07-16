@@ -199,7 +199,7 @@ import lang      from '@/language/lang.js';
 		var param = {
 			url: 'mx/userinfo/queryLists', //mx/userComm/querySpcificUser  mx/userinfo/queryLists
 			cmdID: '600001', //600035  600001
-			userID: id,
+			userID: '',
 			type: 2,
 			pageSize: 10000,
         	currentPage: 1,

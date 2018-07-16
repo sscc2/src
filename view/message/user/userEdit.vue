@@ -279,7 +279,7 @@ export default {
       {
         cmdID: "600002",
         userID: _this.$store.state.transferEditID,
-        type: "0"
+        type: 0
       },
       function(response) {
         _this.info.userName = response.lists[0].userName;
@@ -302,7 +302,7 @@ export default {
       "mx/dict/query",
       {
         cmdID: "600000",
-        language: "0",
+        language: 0,
         type: 1
       },
       function(response) {
@@ -315,7 +315,7 @@ export default {
       "mx/dict/query",
       {
         cmdID: "600000",
-        language: "0",
+        language: 0,
         type: 2
       },
       function(response) {

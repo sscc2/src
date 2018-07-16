@@ -318,7 +318,7 @@ export default {
       "mx/dict/query",
       {
         cmdID: "600000",
-        language: "0",
+        language: 0,
         type: 1
       },
       function(response) {
@@ -331,7 +331,7 @@ export default {
       "mx/dict/query",
       {
         cmdID: "600000",
-        language: "0",
+        language: 0,
         type: 2
       },
       function(response) {

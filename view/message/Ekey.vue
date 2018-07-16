@@ -306,7 +306,7 @@ export default {
               utils.post(
                 "mx/userEkey/add",
                 {
-                  cmdID: 600022,
+                  cmdID: "600022",
                   operator: "admin",
                   userID: _this.ainfo.userID,
                   ekeyName: _this.ainfo.ekeyName,
@@ -458,7 +458,7 @@ export default {
       utils.post(
         "mx/userEkey/delete",
         {
-          cmdID: 600024,
+          cmdID: "600024",
           operator: "admin",
           userID: _this.row.userID,
           ekeyName: _this.row.ekeyName
@@ -521,9 +521,9 @@ export default {
         cmdID: "600001",
         userID: "",
         userName: "",
-        pageSize: "200",
-        currentPage: "1",
-        type: "2"
+        pageSize: 200,
+        currentPage: 1,
+        type: 2
       },
       function(response) {
         if (response.errcode == 0) {

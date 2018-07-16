@@ -145,11 +145,11 @@ export default {
     };
   },
   methods: {
-    // 查询
+    //查询
     search() {
       this.renderData(_this.searchInfo.bizType);
     },
-    // 创建
+    //创建
     showCreate() {
       this.getDate("statist_input", this.options2);
       setTimeout(function() {
@@ -193,7 +193,7 @@ export default {
       utils.post(
         "/mx/userComm/add",
         {
-          cmdID: 600032,
+          cmdID: "600032",
           operator: "admin",
           bizType: _this.creatInfo.bizType,
           userID1: _this.creatInfo.user,
@@ -240,7 +240,7 @@ export default {
       utils.post(
         "mx/userComm/delete",
         {
-          cmdID: 600033,
+          cmdID: "600033",
           operator: "admin",
           bizType: _this.row.bizType,
           userID1: _this.row.userID1,
@@ -311,7 +311,7 @@ export default {
                 userID: e.target.value,
                 userName: e.target.value,
                 pageSize: 200,
-                currentPage: "1",
+                currentPage: 1,
                 type: 2
               },
               function(response) {
@@ -370,7 +370,7 @@ export default {
       "mx/dict/query",
       {
         cmdID: "600000",
-        language: "0",
+        language: 0,
         type: 3
       },
       function(response) {
@@ -380,11 +380,12 @@ export default {
         }
       }
     );
+    //业务类型
     utils.post(
       "mx/dict/query",
       {
         cmdID: "600000",
-        language: "0",
+        language: 0,
         type: 3
       },
       function(response) {
@@ -436,66 +437,13 @@ export default {
   }
 };
 function as(data) {
-  var arr = data.lists,
-    obj;
+  var arr = data.lists,obj;
   for (var i = 0; i < arr.length; i++) {
-    obj = arr[i];
-    switch (obj.bizType) {
-      case 0:
-        obj.typeStr = "三方存管";
-        break;
-      case 10:
-        obj.typeStr = "银期转账";
-        break;
-      case 11:
-        obj.typeStr = "银基转账";
-        break;
-      case 12:
-        obj.typeStr = "资金划拨";
-        break;
-      case 13:
-        obj.typeStr = "信证报盘";
-        break;
-      case 14:
-        obj.typeStr = "电子对账";
-        break;
-      case 15:
-        obj.typeStr = "融资融券";
-        break;
-      case 16:
-        obj.typeStr = "基金盘后";
-        break;
-      case 17:
-        obj.typeStr = "转融通";
-        break;
-      case 18:
-        obj.typeStr = "B转H";
-        break;
-      case 19:
-        obj.typeStr = "交叉销售";
-        break;
-      case 20:
-        obj.typeStr = "报价回购";
-        break;
-      case 21:
-        obj.typeStr = "个股期权";
-        break;
-      case 22:
-        obj.typeStr = "FISP";
-        break;
-      case 23:
-        obj.typeStr = "私幕转报";
-        break;
-      case 24:
-        obj.typeStr = "云证通";
-        break;
-      case 26:
-        obj.typeStr = "基金时实业务";
-        break;
-      case 27:
-        obj.typeStr = "基金费用对账";
-        break;
-      default:
+     obj = arr[i];
+    for (var x = 0; x < _this.optionsCreat.length; x++) {
+      if (obj.bizType == _this.optionsCreat[x].id) {
+        obj.typeStr = _this.optionsCreat[x].name
+      }
     }
   }
   return data;
