@@ -520,6 +520,39 @@ function utils(){
 		w.start();
 	};
 	
+	/***
+	 * 
+	 * @param {Object} obj 所有的参必填{pos, id, clas, parent}
+	 * pos：输入框的选择器；
+	 * id：为清除按钮和输入框绑一个id选择器；
+	 * clas：清除按钮的选择器；
+	 * parent：清除按钮的父层选择器；
+	 */
+	function ClearInput(obj) {
+		var btn, inFn, input, clear;
+	
+		input = kit(`${obj.pos} .el-autocomplete input`).setAttr('id', obj.id).input(e => {
+			e.target.value ? btn.show() : btn.hide();
+			if(typeof(inFn) == "function") inFn(e);
+		});
+		btn = kit(`${obj.pos} ${obj.clas}`).setAttr('for', obj.id).click(e => {
+			input[0].value = '';
+			btn.hide();
+			kit.defaultEvent(e, true, 2);
+			if(typeof(clear) == "function") clear(e);
+		});
+	
+//		kit(obj.parent).append(btn);
+	
+		this.input = fn => {
+			inFn = fn;
+		};
+		this.clear = fn => {
+			clear = fn;
+		};
+	}
+	exp.clearInput = option => { return new ClearInput(option); };
+	
 	return exp;
 }
 
