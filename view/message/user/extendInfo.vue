@@ -41,27 +41,15 @@
 	</div>
 </template>
 
-
 <script>
 import utils from "@/libs/utils.js";
 
 var pageTxt_cn = {
   tips: [
-    "短信报警号码：",
-    "负责人座机号码：",
-    "负责人手机号码：",
-    "运维传真：",
-    "运维电话：",
-    "邮箱：",
-    "SSCC客户经理："
+    "短信报警号码：","负责人座机号码：","负责人手机号码：","运维传真：","运维电话：","邮箱：","SSCC客户经理："
   ],
   lable: [
-    '只能输入数字"-" ";"',
-    '只能输入数字"-" ";"',
-    '只能输入数字和";"',
-    '只能输入数字"-" ";"',
-    '只能输入数字"-" ";"',
-    "只能输入英文字符、数字"
+    '只能输入数字"-" ";"','只能输入数字"-" ";"','只能输入数字和";"','只能输入数字"-" ";"','只能输入数字"-" ";"',"只能输入英文字符、数字"
   ]
 };
 
@@ -73,9 +61,7 @@ var inputValue = {
   operationFax: "",
   email: "",
   ssccManager: ""
-};
-
-var pageTxt = pageTxt_cn;
+},pageTxt = pageTxt_cn,_this;
 
 export default {
   name: "extendifo",
@@ -87,7 +73,6 @@ export default {
   },
   methods: {
     submit() {
-      var _this = this;
       utils.post(
         "mx/userinfoExt/modify",
         {
@@ -116,10 +101,10 @@ export default {
     }
   },
   created() {
+    _this = this
     for (var i in this.inputValue) {
       this.inputValue[i] = "";
     }
-    var _this = this;
     utils.post(
       "mx/userinfoExt/query",
       {

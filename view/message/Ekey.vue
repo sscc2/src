@@ -3,7 +3,6 @@
     <div class='header'>
         <span class='header_txt'>Ekey</span>
     </div>	
-
     <div class="Ekey">     
       <div class="user">
         <span>{{pageTxt.Ekey[0]}}：</span>
@@ -20,15 +19,11 @@
         </el-autocomplete>
         <el-button type="primary" @click='searchfn'>{{pageTxt.Ekey[4]}}</el-button>
       </div>
-
       <div class="btnBox">
         <div @click="showAdd" id='Add' ><img src="@/img/creatico.png" ><span>{{pageTxt.Ekey[5]}}</span></div>
-        <!-- <div @click="fn"><img src="@/img/deletico.png" ><span>{{pageTxt.Ekey[7]}}</span></div> -->
         <div @click="exportEkeyInfo"><img src="@/img/creatico.png"><span>批量导出Ekey</span></div>
       </div>
-    
-      <el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow"  @selection-change="selectionRow" highlight-current-row >
-        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+      <el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row >
         <el-table-column width="50" label=" " type="index"></el-table-column>
         <el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
@@ -42,13 +37,11 @@
           </div>
         </el-table-column>
       </el-table>
-
       <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
         <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="EkeyData.totalSize"></el-pagination>
         <div class="rightTxt">共{{EkeyData.totalSize}}条数据</div>
       </div>
       <div class="onePage" v-else-if="EkeyData.totalSize>0&&EkeyData.totalSize<=pageSize">已显示全部{{EkeyData.totalSize}}个数据</div> 
-
       <el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
         <ul class="_dialog">
           <li>
@@ -86,14 +79,12 @@
             </div>
           </li>				
         </ul>
-
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="sendDown">立即下发</el-button>
             <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>            
             <el-button @click="addEkey = false">{{pageTxt.dialog[12]}}</el-button>
         </div>
       </el-dialog>
-      
       <el-dialog :title="pageTxt.dialog[1]" :visible.sync="editEkdy" width='620px'>
         <ul class="_dialog">
           <li>
@@ -135,11 +126,10 @@
             <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
         </div>
       </el-dialog>
-
       <div class="Popup" v-show="showExportEkeyInfo">
         <div class="_panle">
           <div><p id="_title">批量导出Ekey</p>
-                <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
+            <img id="_close" src="@/img/close.png" @click="showExportEkeyInfo=false">
           </div>
           <div class="_messaga">
             <span class="txt">文件名：&nbsp;<a :href="EkeyInfoSrc" style="color:#5C759D">{{EkeyInfoName}}</a></span>
@@ -152,7 +142,6 @@
           </div>
         </div>
       </div> 
-
     </div>
   </div>	
 </template>
@@ -160,56 +149,25 @@
 <script>
 import utils from "@/libs/utils.js";
 
-var ainfo = {},
-  def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
+var ainfo = {},def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
 for (var i = 0; i < def.length; i++) {
   ainfo[def[i]] = "";
 }
 
-var binfo = {},
-  det = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
+var binfo = {},det = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
 for (var i = 0; i < det.length; i++) {
   binfo[det[i]] = "";
 }
 
 var pageTxt_cn = {
   Ekey: [
-    "查询方式 ",
-    "按Ekey查询",
-    "按用户查询",
-    "Ekey名称",
-    "查询",
-    "创建Ekey",
-    "修改Ekey",
-    "删除Ekey",
-    "Ekey名",
-    "用户ID",
-    "用户名",
-    "操作"
+    "查询方式 ","按Ekey查询","按用户查询","Ekey名称","查询","创建Ekey","修改Ekey","删除Ekey","Ekey名","用户ID","用户名","操作"
   ],
   dialog: [
-    "创建Ekey",
-    "修改Ekey",
-    "用户ID：",
-    "Ekey名称：",
-    "软加密密码：",
-    "Ekey描述：",
-    "Ekey有效期：",
-    "启用软加密：",
-    "软加密开始时间：",
-    "软加密结束时间：",
-    "修改软加密密码",
-    "提 交",
-    "返 回",
-    "必填项..."
+    "创建Ekey","修改Ekey","用户ID：","Ekey名称：","软加密密码：","Ekey描述：","Ekey有效期：","启用软加密：","软加密开始时间：",
+    "软加密结束时间：","修改软加密密码","提 交","返 回","必填项..."
   ]
-};
-
-var pageTxt = pageTxt_cn,
-  autoTime,
-  _currentPage = 1,
-  isInput = false,
-  _this,t;
+},pageTxt = pageTxt_cn,autoTime,_currentPage = 1,isInput = false,_this,t;
 
 export default {
   data() {
@@ -219,10 +177,7 @@ export default {
       search: { userID: "", type: "", ekeyName: "" },
       ainfo,
       binfo,
-      EkeyData: {
-        /*lists:[{"userID":"1"}]*/
-      },
-      selects: [],
+      EkeyData: {},
       oldEkeyName: "",
       EkeyInfoSrc: "",
       EkeyInfoName: "",
@@ -271,7 +226,7 @@ export default {
                   userID: e.target.value,
                   userName: e.target.value,
                   pageSize: 200,
-                  currentPage: "1",
+                  currentPage: 1,
                   type: 2
                 },
                 function(response) {
@@ -373,38 +328,6 @@ export default {
         }
       }
     },
-    // 删除Ekey
-    // fn() {
-    //   if (this.selects.length != 1) {
-    //     utils.weakTips("请在列表中选择一条记录！");
-    //   } else {
-    //     utils.hints({
-    //       txt: "是否删除该用户信息",
-    //       yes: _this.del,
-    //       now: function(){_this.modifydel(_this.selects[0].userID ? _this.selects[0].userID : "",_this.selects[0].ekeyName)},
-    //       btn: 3
-    //     });
-    //   }
-    // },
-    // del() {
-    //   utils.post(
-    //     "mx/userEkey/delete",
-    //     {
-    //       cmdID: 600024,
-    //       operator: "admin",
-    //       userID: _this.selects[0].userID ? _this.selects[0].userID : "",
-    //       ekeyName: _this.selects[0].ekeyName
-    //     },
-    //     function(response) {
-    //       if (response.errcode == 0) {
-    //         _this.renderDate(_this.search.type);
-    //         utils.weakTips(response.errinfo);
-    //       } else {
-    //         utils.weakTips(response.errinfo);
-    //       }
-    //     }
-    //   );
-    // },
     modifydel(id, name) {
       utils.review({
         yes: function(info) {
@@ -502,7 +425,7 @@ export default {
         }
       }
     },
-    // 导出Ekey
+    //导出Ekey
     exportEkeyInfo() {
       utils.post(
         "mx/userEkey/ExportCsv",
@@ -550,16 +473,10 @@ export default {
         }
       );
     },
-    selectionRow(val) {
-      this.selects = val;
-    },
     currentRow: function(e) {
       this.row = e;
     },
-    // 分页
-    currentPage: function(e) {
-      this.currentPage = e;
-    },
+    //分页
     handleSizeChange: function(size) {
       this.pageSize = size;
     },
@@ -567,7 +484,7 @@ export default {
       this.currentPage1 = currentPage;
       this.renderDate(_this.search.type);
     },
-    // 更新数据
+    //更新数据
     renderDate(type) {
       utils.post(
         "mx/userEkey/query",
@@ -594,9 +511,9 @@ export default {
   },
   //初始化数据
   created() {
+    _this = this;
     this.search.type = 0;
     this.ainfo.type = 0;
-    _this = this;
     this.renderDate(3);
     utils.post(
       "mx/userinfo/queryLists",
@@ -612,8 +529,8 @@ export default {
         if (response.errcode == 0) {
           _this.options = response.lists;
           for (var i = 0; i < _this.options.length; i++) {
-                      _this.options[i].userName =_this.options[i].userID +"(" + _this.options[i].userName + ")";
-                    }
+            _this.options[i].userName =_this.options[i].userID +"(" + _this.options[i].userName + ")";
+          }
         }
       }
     );

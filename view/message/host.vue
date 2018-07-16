@@ -10,13 +10,13 @@
 						<el-tab-pane :label="hostText_cn[1]" name="first">
 							<div class="switch_box">
 								<span class='title_txt'><span class="red">*&nbsp;</span>{{hostText_cn[2]}}</span>
-								<el-switch v-model="switchValue1" @change="changeTextarea" :active-text="hostText_cn[7]"  active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
+								<el-switch v-model="switchValue1" @change="changeTextarea" :active-text="hostText_cn[7]" active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
                 <span class='prompt_txt'>{{hostText_cn[9]}}</span>
 							</div>
 							<div class="content">
 								<el-input id="textarea1" type="textarea" rows="18" v-model="textareaValue1" :readonly="!switchValue1"></el-input>
 							</div>
-							<button class="blueBtn" id="button1" type="primary" @click="showReviewFn">{{hostText_cn[3]}}</button>
+							<button class="blueBtn" id="button1" @click="showReviewFn">{{hostText_cn[3]}}</button>
 						</el-tab-pane>		
 
 						<el-tab-pane :label="hostText_cn[4]" name="second">
@@ -53,10 +53,8 @@
                 </div>
               </div>
             </div>
-
 				</el-tabs>
 			</div>				
-
 	</div>
 </template>
 
@@ -64,15 +62,7 @@
 import utils from "@/libs/utils.js";
 
 var hostText_cn = [
-    "主机配置",
-    "全局静态配置",
-    "静态配置文件：",
-    "提交",
-    "全局动态配置",
-    "动态配置文件：",
-    "只读",
-    "编辑",
-    "是否提交当前修改",
+    "主机配置","全局静态配置","静态配置文件：","提交","全局动态配置","动态配置文件：","只读","编辑","是否提交当前修改",
     "(全局静态配置文件为：mxstatic.ini，文件仅支持UTF-8格式)",
     "(全局动态配置文件为：mxdynamic.ini，文件仅支持UTF-8格式)"
   ],_this;
@@ -202,4 +192,3 @@ function afn(textareaID, buttonID, i) {
 .content{margin-top: 20px; width: 75%; margin-left: 120px;}
 .red{font-size:14px; color:#FF6B6B;}
 </style>
-

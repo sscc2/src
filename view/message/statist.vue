@@ -24,18 +24,18 @@
             <el-radio v-model="timeMethod" label="3" @change="getTimeFn">{{pageTxt.lable1[10]}}</el-radio>
             <el-date-picker class="date_picker" :disabled="timeMethod!=3"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['12:00:00', '08:00:00']" format="yyyy-MM-dd HH:mm:ss" v-model="search" type="datetimerange" :range-separator="pageTxt.lable1[11]" :start-placeholder="pageTxt.lable1[12]" :end-placeholder="pageTxt.lable1[13]">
             </el-date-picker>				
-            <el-button  @click="searchFn" type="primary" class="searchBtn" >{{pageTxt.lable1[14]}}</el-button>        		
+            <el-button @click="searchFn" type="primary" class="searchBtn" >{{pageTxt.lable1[14]}}</el-button>        		
             <el-button @click="exportFn" type="primary" class="exportFn">{{pageTxt.lable1[15]}}</el-button>
           </div>
         </header>
 
         <el-table highlight-current-row :data="data.lists">
           <el-table-column width="50" label=" " type="index"></el-table-column>
-          <el-table-column prop="operationTime" width="190" :label="pageTxt.lable1[19]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operationType" width="160" :label="pageTxt.lable1[18]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operator" width="120" :label="pageTxt.lable1[16]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operatorRole" width="120" :label="pageTxt.lable1[17]" show-overflow-tooltip></el-table-column>			
-          <el-table-column prop="errorCode" width="120" :label="pageTxt.lable1[20]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operationTime" width="170" :label="pageTxt.lable1[19]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operationType" width="180" :label="pageTxt.lable1[18]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operator" width="100" :label="pageTxt.lable1[16]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operatorRole" width="100" :label="pageTxt.lable1[17]" show-overflow-tooltip></el-table-column>			
+          <el-table-column prop="errorCode" width="100" :label="pageTxt.lable1[20]" show-overflow-tooltip></el-table-column>
           <el-table-column prop="errorInfo" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
           <el-table-column prop="errorInfo" width="55" :label="pageTxt.lable1[22]" show-overflow-tooltip>
             <div slot-scope="scope" class="_zero">
@@ -75,30 +75,9 @@ import utils from "@/libs/utils.js";
 
 var pageTxt_cn = {
   lable1: [
-    "稽核",
-    "操作员：",
-    "操作类型：",
-    "排序方式：",
-    "最近",
-    "最早",
-    "时间段：",
-    "今天",
-    "本周",
-    "本月",
-    "其他",
-    "至",
-    "开始时间",
-    "结束时间",
-    "查询",
-    "导出报表",
-    "操作员",
-    "操作员角色",
-    "操作类型",
-    "操作时间",
-    "操作错误码",
-    "操作错误描述",
-    "详情"
-  ]
+      "稽核","操作员：","操作类型：","排序方式：","最近","最早","时间段：","今天","本周","本月","其他","至","开始时间","结束时间",
+      "查询","导出报表","操作员","操作员角色","操作类型","操作时间","操作错误码","操作错误描述","详情"
+    ]
 };
 
 var pageTxt = pageTxt_cn,_this;
@@ -122,7 +101,7 @@ export default {
   methods: {
     //查询
     searchFn() {
-      this.render();
+      this.renderDate();
     },
     //导出报表
     exportFn() {
@@ -198,8 +177,8 @@ export default {
     //转换日期格式
     transferDate(beforeTime) {
       var year = beforeTime.getFullYear(),
-        month = beforeTime.getMonth() + 1,
-        date = beforeTime.getDate();
+          month = beforeTime.getMonth() + 1,
+          date = beforeTime.getDate();
       if (month < 10) {
         month = "0" + month;
       }
@@ -214,10 +193,10 @@ export default {
     },
     handleCurrentChange(current) {
       this.currentPage = current;
-      this.render();
+      this.renderDate();
     },
     //数据更新
-    render() {
+    renderDate() {
       utils.post(
         "mx/operationRecording/query",
         {
@@ -259,7 +238,7 @@ export default {
     toDate = this.transferDate(toDate);
     this.search = [toDate + " 00:00:00", toDate + " 23:59:59"];
     _this = this;
-    _this.render();
+    _this.renderDate();
   }
 };
 </script>

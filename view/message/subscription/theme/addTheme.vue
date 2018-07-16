@@ -195,14 +195,15 @@ import lang      from '@/language/lang.js';
 	
 	function blurID(id){
 //		var id = isInput ? _this.idName : _this.info.pubUserID;
+		if(!id) return;
 		var param = {
-			url: 'mx/userinfo/queryListById', //mx/userComm/querySpcificUser  mx/userinfo/queryLists
-			cmdID: '600035', //600035  600001
+			url: 'mx/userinfo/queryLists', //mx/userComm/querySpcificUser  mx/userinfo/queryLists
+			cmdID: '600001', //600035  600001
 			userID: id,
-//			type: 1,
-//			pageSize: 500,
-//      	currentPage: 1,
-//      	userName: ''
+			type: 2,
+			pageSize: 10000,
+        	currentPage: 1,
+        	userName: ''
 		};
 		_this.info.pubUserID = id;
 		utils.post(param, function(data){

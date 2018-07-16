@@ -6,7 +6,6 @@
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{pageTxt.infoTxt[0]}}</span>
 		</div>
-
 		<el-tabs type="card">
 			<el-tab-pane label="基本信息">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
@@ -40,7 +39,7 @@
 							</li>
 							<li class="default_radio">
 								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">启用</el-radio>
-  								<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="judge">不启用</el-radio>
+  							<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="judge">不启用</el-radio>
 							</li>
 							<li>
 									<el-input  v-model="info.userPasswd"  :disabled="info.isModifyDefaultPasswd==0"></el-input>					              
@@ -236,7 +235,7 @@ export default {
         }
       });
     },
-    // 创建
+    //创建
     add() {
       this.$store.state.transferEditID = this.info.userID;
       utils.post(
@@ -385,4 +384,3 @@ input:focus{border: 2px solid #32ccf9;}
 ._zero > img[data-v-d09b1104]{margin-left: 0 !important;}
 .red{color: red; font-size: 14px;}
 </style>
-393

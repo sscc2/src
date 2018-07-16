@@ -131,7 +131,7 @@ import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
 
 
-	var pageTxt, slotTitle, all = false, _this,
+	var pageTxt, slotTitle, all = false, _this,junk,
 	pageTxt = lang.themeEditTheme;
 	
 	var list = [];
@@ -264,6 +264,7 @@ import lang      from '@/language/lang.js';
 			for (var k in info) info[k] = '';
 			info.canSubsUserList = [];
 			info.subsUserList = [];
+			junk = [];
 			getDetail();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();
@@ -364,14 +365,15 @@ import lang      from '@/language/lang.js';
 	
 	function getAllUser(){
 		var id = globalVar.get('userid').pubUserID;
+		if(!id) return;
 		var param = {
-			url: 'mx/userinfo/queryListById', //mx/userComm/querySpcificUser  mx/userinfo/queryLists
-			cmdID: '600035', //600035  600001
+			url: 'mx/userinfo/queryLists', //mx/userinfo/queryListById  mx/userinfo/queryLists
+			cmdID: '600001', //600035  600001/
 			userID: id,
-//			type: 1,
-//			pageSize: 500,
-//      	currentPage: 1,
-//      	userName: ''
+			type: 2,
+			pageSize: 10000,
+        	currentPage: 1,
+        	userName: ''
 		};
 		utils.post(param, function(data){
 //			console.log('通信关系用户：', data);
@@ -432,6 +434,7 @@ import lang      from '@/language/lang.js';
 	function getKey(arr){
 		var i, k, len2 = arr.length, key=[],
 			can = _this.info.canSubsUserList, len1 = can.length;
+		junk = [];
 		for (i = 0; i < len1; i++) {
 			var id1 = can[i].userID;
 			for (k = 0; k < len2; k++) {
@@ -440,12 +443,15 @@ import lang      from '@/language/lang.js';
 					break;
 				}
 			}
-//			if(k==len2){
-//				arr.push(can[i]);
-//				len2 = arr.length;
-//				key.push(k);
-//				console.log(can[i],arr[k-1])
-//			}
+			if(k==len2){
+				var obj = can[i];
+				junk.push(obj);
+				obj.key = i;
+				obj.label = obj.userID + obj.userName;
+				arr.push(obj);
+				len2 = arr.length;
+				key.push(k);
+			}
 		}
 //		_this.list = arr;
 		_this.keys = key;

@@ -3,7 +3,6 @@
     <div class='header'>
         <span class='header_txt'>通信关系</span>
     </div>
-
     <div class="signal">
       <div class="userH">
         <span class="txt">{{pageTxt.signal[0]}}：</span>
@@ -18,7 +17,6 @@
             <span class="addr">({{item.userName}})</span>
           </div>
         </el-autocomplete>
-
         <span class="txt1">{{pageTxt.signal[2]}}：</span>
         <el-autocomplete  @input='autoInput2' class="input_normal" v-model="searchInfo.userID2" :fetch-suggestions="fetch2" :trigger-on-focus="false" @select="idSelect2">
           <div slot-scope="{item}">
@@ -28,15 +26,11 @@
         </el-autocomplete>
         <el-button type="primary"  @click='search' class="btn">{{pageTxt.signal[3]}}</el-button>
       </div>
-
       <div class="btnBox">
         <div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
-        <!-- <div @click="fn"><img src="@/img/deletico.png"><span>{{pageTxt.signal[5]}}</span></div> -->
         <div @click="exportSignalInfo"><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
       </div>
-
-      <el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" @selection-change="selectionRow" highlight-current-row>
-        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+      <el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row>
         <el-table-column width="50" label=" " type="index"></el-table-column>
         <el-table-column prop="typeStr" label="业务类型" show-overflow-tooltip></el-table-column>
         <el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
@@ -49,13 +43,11 @@
           </div>
         </el-table-column>
       </el-table>
-
       <div class="_pagination" v-if="list.totalSize>pageSize">
         <el-pagination  @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="list.totalSize"></el-pagination>
         <div class="rightTxt">共{{list.totalSize}}条数据</div>
       </div>
       <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">已显示全部{{list.totalSize}}个数据</div> 
-      
       <el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
         <ul class="_dialog">
           <li>
@@ -83,7 +75,7 @@
               <p class="txt">{{pageTxt.dialog[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-select id="statist_select" class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable allow-create default-first-option placeholder="请选择">
+              <el-select id="statist_select" class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable default-first-option placeholder="请选择">
                 <el-option  v-for="item in options5" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
               </el-select>
               <span class="cleartxt" @click="clear">{{pageTxt.dialog[4]}}</span>
@@ -96,7 +88,6 @@
         </div>
       </el-dialog>
     </div>
-
     <div class="Popup" v-show="showExportSignalInfo">
       <div class="_panle">
         <div>
@@ -114,7 +105,6 @@
         </div>
       </div>
     </div> 
-    
   </div>	
 </template>
 
@@ -123,32 +113,12 @@ import utils from "@/libs/utils.js";
 
 var pageTxt = {
   signal: [
-    "业务类型 ",
-    "用户ID",
-    "用户ID",
-    "查询",
-    "创建通信关系",
-    "删除通信关系",
-    "业务类型",
-    "操作"
+    "业务类型 ","用户ID","用户ID","查询","创建通信关系","删除通信关系","业务类型","操作"
   ],
   dialog: [
-    "创建通信关系",
-    "业务类型 ：",
-    "用户ID ：",
-    "用户ID ：",
-    "清空用户ID",
-    "提交",
-    "返回"
+    "创建通信关系","业务类型 ：","用户ID ：","用户ID ：","清空用户ID","提交","返回"
   ]
-};
-
-var autoTime1,
-  isInput1 = false,
-  autoTime2,
-  isInput2 = false,
-  _this,
-  t;
+},autoTime1,isInput1 = false,autoTime2,isInput2 = false,_this,t;
 
 export default {
   name: "mess_signal",
@@ -158,24 +128,14 @@ export default {
       options1: [{ name: "全部", id: "-1" }],
       userID1: "",
       userID2: "",
-
       creatInfo: { bizType: "", user: "", other: [] },
-
-      options2: [
-        { userID: "0", userID: "1aaa" },
-        { userID: "1", userID: "2aaa" }
-      ],
+      options2: [],
       options3: [],
       options5: [],
       optionsCreat: [],
-      restaurants: [],
-      userOption: [],
-      otherOption: [],
-      selects: [],
       pageSize: 20,
       currentPage: 1,
       dialogAdd: false,
-      state1: "",
       row: "",
       pageTxt,
       list: [],
@@ -185,30 +145,6 @@ export default {
     };
   },
   methods: {
-    fetch1(str, cb) {
-      clearTimeout(autoTime1);
-      autoTime1 = setTimeout(autoInput, 300, str, cb);
-    },
-    idSelect1(item) {
-      isInput1 = false;
-      this.userID1 = item.userID;
-      this.searchInfo.userID1 = item.userID + "(" + item.userName + ")";
-    },
-    autoInput1() {
-      isInput1 = true;
-    },
-    fetch2(str, cb) {
-      clearTimeout(autoTime2);
-      autoTime2 = setTimeout(autoInput, 300, str, cb);
-    },
-    idSelect2(item) {
-      isInput2 = false;
-      this.userID2 = item.userID;
-      this.searchInfo.userID2 = item.userID + "(" + item.userName + ")";
-    },
-    autoInput2() {
-      isInput2 = true;
-    },
     // 查询
     search() {
       this.renderData(_this.searchInfo.bizType);
@@ -216,7 +152,6 @@ export default {
     // 创建
     showCreate() {
       this.getDate("statist_input", this.options2);
-
       setTimeout(function() {
         document.getElementsByClassName("el-select__input is-big")[0].addEventListener("input", function(e) {
             clearTimeout(t);
@@ -228,25 +163,19 @@ export default {
                   userID: e.target.value,
                   userName: e.target.value,
                   pageSize: 200,
-                  currentPage: "1",
+                  currentPage: 1,
                   type: 2
                 },
                 function(response) {
                   if (response.errcode == 0) {
                     _this.options3 = response.lists;
                     for (var i = 0; i < _this.options3.length; i++) {
-                      _this.options3[i].userName =
-                        _this.options3[i].userID +
-                        "(" +
-                        _this.options3[i].userName +
-                        ")";
+                      _this.options3[i].userName = _this.options3[i].userID + "(" + _this.options3[i].userName + ")";
                     }
                     _this.options5 = [].concat(_this.options3);
-
                     for (var i = 0; i < _this.options5.length; i++) {
                       if (_this.options5[i].userID == _this.creatInfo.user) {
                         _this.options5.splice(i, 1);
-
                         break;
                       }
                     }
@@ -256,7 +185,6 @@ export default {
             }, 300);
           });
       }, 0);
-
       this.dialogAdd = true;
       this.creatInfo.user = "";
       this.creatInfo.other = [];
@@ -282,39 +210,6 @@ export default {
         }
       );
     },
-
-    // 刪除通信关系
-    // fn() {
-    //   if (this.selects.length != 1) {
-    //     utils.weakTips("请在列表中选择一条记录！");
-    //   } else {
-    //     utils.hints({
-    //       txt: "是否确定删除该用户记录",
-    //       yes: _this.delUser,
-    //       btn: 2
-    //     });
-    //   }
-    // },
-    // delUser() {
-    //   utils.post(
-    //     "mx/userComm/delete",
-    //     {
-    //       cmdID: "600033",
-    //       operator: "admin",
-    //       bizType: _this.selects[0].bizType,
-    //       userID1: _this.selects[0].userID1,
-    //       userID2: _this.selects[0].userID2
-    //     },
-    //     function(response) {
-    //       if (response.errcode == 0) {
-    //         _this.renderData();
-    //         utils.weakTips(response.errinfo);
-    //       } else {
-    //         utils.weakTips(response.errinfo);
-    //       }
-    //     }
-    //   );
-    // },
     // 导出通信关系
     exportSignalInfo() {
       utils.post(
@@ -341,7 +236,7 @@ export default {
         btn: 2
       });
     },
-    delUser1(index, rows) {
+    delUser1() {
       utils.post(
         "mx/userComm/delete",
         {
@@ -361,16 +256,14 @@ export default {
         }
       );
     },
+    //清空用戶ID
     clear() {
       this.creatInfo.other = [];
     },
     currentRow: function(e) {
       this.row = e;
     },
-    selectionRow(val) {
-      this.selects = val;
-    },
-    // 分页
+    //分页
     currentPagefn: function(e) {
       this.currentPage = e;
     },
@@ -381,7 +274,7 @@ export default {
       this.currentPage = currentPage;
       this.renderData(_this.searchInfo.bizType);
     },
-    // 更新数据
+    //更新数据
     renderData(type) {
       utils.post(
         "mx/userComm/query",
@@ -425,11 +318,7 @@ export default {
                 if (response.errcode == 0) {
                   _this.options = response.lists;
                   for (var i = 0; i < _this.options.length; i++) {
-                    _this.options[i].userName =
-                      _this.options[i].userID +
-                      "(" +
-                      _this.options[i].userName +
-                      ")";
+                    _this.options[i].userName = _this.options[i].userID + "(" + _this.options[i].userName + ")";                                                                                       
                   }
                 }
               }
@@ -440,15 +329,38 @@ export default {
     },
     changevalue(){
       for (var i = 0; i < _this.options5.length; i++) {
-            if (_this.options5[i].userID == _this.creatInfo.user) {
-              _this.options5.splice(i, 1);
-              console.log(1)
-              break;
-            }
-          }
-    }
+        if (_this.options5[i].userID == _this.creatInfo.user) {
+          _this.options5.splice(i, 1);
+          break;
+        }
+      }
+    },
+    fetch1(str, cb) {
+      clearTimeout(autoTime1);
+      autoTime1 = setTimeout(autoInput, 300, str, cb);
+    },
+    idSelect1(item) {
+      isInput1 = false;
+      this.userID1 = item.userID;
+      this.searchInfo.userID1 = item.userID + "(" + item.userName + ")";
+    },
+    autoInput1() {
+      isInput1 = true;
+    },
+    fetch2(str, cb) {
+      clearTimeout(autoTime2);
+      autoTime2 = setTimeout(autoInput, 300, str, cb);
+    },
+    idSelect2(item) {
+      isInput2 = false;
+      this.userID2 = item.userID;
+      this.searchInfo.userID2 = item.userID + "(" + item.userName + ")";
+    },
+    autoInput2() {
+      isInput2 = true;
+    },
   },
-  // 初始化数据
+  //初始化数据
   created() {
     this.searchInfo.bizType = "-1";
     this.creatInfo.bizType = "0";
@@ -488,7 +400,7 @@ export default {
         userID: "",
         userName: "",
         pageSize: 200,
-        currentPage: "1",
+        currentPage: 1,
         type: 2
       },
       function(response) {
@@ -516,10 +428,8 @@ export default {
         if (response.errcode == 0) {
           _this.options5 = response.lists;
           for (var i = 0; i < _this.options5.length; i++) {
-            _this.options5[i].userName =
-              _this.options5[i].userID + "(" + _this.options5[i].userName + ")";
-          }
-          
+            _this.options5[i].userName = _this.options5[i].userID + "(" + _this.options5[i].userName + ")";             
+          }          
         }
       }
     );
@@ -590,13 +500,6 @@ function as(data) {
   }
   return data;
 }
-function copyArr(arr) {
-  var res = [];
-  for (var i = 0; i < arr.length; i++) {
-    res.push(arr[i]);
-  }
-  return res;
-}
 function autoInput(str, cb) {
   if (!str) return;
   utils.getUserid(str, function(data) {
@@ -636,4 +539,3 @@ function autoInput(str, cb) {
 <style>
 .signal .input_normal span {white-space: normal; word-break: keep-all; display: inline-block;}
 </style>
-

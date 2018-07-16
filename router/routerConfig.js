@@ -45,11 +45,6 @@ export default new Router({
                 path: '/message/userAdd/:id',
                 component: resolve => require(['../view/message/user/userAdd.vue'], resolve)
             },
-
-            {
-                path: '/message/EkeyAdd',
-                component: resolve => require(['../view/message/user/EkeyAdd.vue'], resolve)
-            },
             
             
 

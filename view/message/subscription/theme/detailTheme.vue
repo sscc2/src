@@ -111,6 +111,8 @@ import lang      from '@/language/lang.js';
 			backPage = this.$route.params.id;
 		},
 		mounted(){
+			this.list = [];
+			this.keys = [];
 			getDetail();
 			slotTitle = kit('#slotTitle').html();
 			addTitle();

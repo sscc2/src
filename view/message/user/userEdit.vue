@@ -179,16 +179,14 @@ var pageTxt = {
   online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
 
 var data = {
-  userType: [/*{ id: "0", name: "tmp" }*/],
-  cities: [/*{ id: "BJ", name: "北京" }*/],
+  userType: [],
+  cities: [],
   info,
   pageTxt,
   connect,
   online,
   headerText:""
-};
-
-var _this;
+},_this;
 
 export default {
   data() {
@@ -262,21 +260,20 @@ export default {
         }
       );
     },
-    // 返回
+    //返回
     back() {
       this.$router.replace({ path: this.$store.state.editBack });
     }
   },
-
-  // 初始化数据
+  //初始化数据
   created() {
+    _this = this;
     if(this.$store.state.editBack == "/message/userSet"){
       this.headerText="修改用户";
     }else{
       this.headerText= this.$store.state.headerText;
     }
     this.tabv = this.$store.state.tabv;
-    _this = this;
     utils.post(
       "mx/userinfo/query",
       {
@@ -306,7 +303,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type: "1"
+        type: 1
       },
       function(response) {
         if (response.errcode == 0) {
@@ -319,7 +316,7 @@ export default {
       {
         cmdID: "600000",
         language: "0",
-        type: "2"
+        type: 2
       },
       function(response) {
         if (response.errcode == 0) {
@@ -330,7 +327,6 @@ export default {
   },
   components: { UserEkey, UserSignal, ExtendInfo }
 };
-
 </script>
 
 <style scoped="scoped">

@@ -17,7 +17,6 @@ import observer  from '@/libs/observer.js';
 	
 	var data = {
 		pageTxt,
-		
 	};
 	
 	export default {
