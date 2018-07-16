@@ -16,7 +16,7 @@
 			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[3]}}</button>
 			<!--<label class="txt">{{pageTxt.label[4]}}</label>
 			<span class="txt">{{max}}</span>-->
-			<label class="el-icon-circle-close clearTXT"></label>;
+			<label class="el-icon-circle-close clearInput"></label>;
 		</div>
 		<div class="btnBox">
 			<!--<el-button @click='editAll' class='btn' type='text'>
@@ -177,7 +177,7 @@ import lang     from '@/language/lang.js';
 			var btn = utils.clearInput({
 				pos: '.userSet',
 				id: '#el-auto',
-				clas: '.clearTXT',
+				clas: '.clearInput',
 //				parent: '.userSet .searchBox'
 			});
 			btn.clear(e => {
@@ -213,5 +213,5 @@ import lang     from '@/language/lang.js';
 	.btnTxt{vertical-align: middle;color: #5a769e;line-height: 30px;height: 30px;}
 	.el-button *{vertical-align: middle;}
 	._zero img{margin-right: 15px;}
-	.clearTXT{display: none;position: absolute;bottom: 8px;left:270px;font-size: 14px;color: #CCC;z-index: 1;}
+	.clearInput{bottom: 8px;left:270px;}
 </style>

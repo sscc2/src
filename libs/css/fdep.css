@@ -38,6 +38,7 @@ input[type=text]:focus,input[type=password]:focus,input[type=number]:focus{borde
 .el-icon-date{line-height: 30px !important;}
 .el-select span{display: inline;}
 .el-input__suffix{line-height: 30px;}
+.clearInput{display: none;position: absolute;font-size: 14px;color: #CCC;z-index: 1;}
 /* 原dialog弹窗 */
 .el-dialog__body{border-top: 1px solid #D8D8D8;}
 .el-textarea__inner{border-radius: 0;}
