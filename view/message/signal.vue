@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class='header'>
-        <span class='header_txt'>通信关系</span>
+        <span class='header_txt'>{{pageTxt.label[0]}}</span>
     </div>
     <div class="signal">
       <div class="userH">
-        <span class="txt">{{pageTxt.signal[0]}}：</span>
-        <el-select class="input_normal" v-model="searchInfo.bizType" placeholder="请选择">
+        <span class="txt">{{pageTxt.label[1]}}：</span>
+        <el-select class="input_normal" v-model="searchInfo.bizType" placeholder="">
           <el-option v-for="item in options1" :label="item.name" :key="item.id" :value="item.id"></el-option>
         </el-select>
-        <span class="txt1">{{pageTxt.signal[1]}}：</span>
+        <span class="txt1">{{pageTxt.label[2]}}：</span>
 
         <el-autocomplete  @input='autoInput1' class="input_normal" v-model="searchInfo.userID1" :fetch-suggestions="fetch1" :trigger-on-focus="false" @select="idSelect1">
           <div slot-scope="{item}">
@@ -17,29 +17,29 @@
             <span class="addr">({{item.userName}})</span>
           </div>
         </el-autocomplete>
-        <span class="txt1">{{pageTxt.signal[2]}}：</span>
+        <span class="txt1">{{pageTxt.label[3]}}：</span>
         <el-autocomplete  @input='autoInput2' class="input_normal" v-model="searchInfo.userID2" :fetch-suggestions="fetch2" :trigger-on-focus="false" @select="idSelect2">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
             <span class="addr">({{item.userName}})</span>
           </div>
         </el-autocomplete>
-        <el-button type="primary"  @click='search' class="btn">{{pageTxt.signal[3]}}</el-button>
+        <el-button type="primary"  @click='search' class="btn">{{pageTxt.label[4]}}</el-button>
       </div>
       <div class="btnBox">
-        <div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
-        <div @click="exportSignalInfo"><img src="@/img/creatico.png"><span>批量导出通信关系</span></div>
+        <div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.label[5]}}</span></div>
+        <div @click="exportSignalInfo"><img src="@/img/creatico.png"><span>{{pageTxt.label[6]}}</span></div>
       </div>
       <el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row>
         <el-table-column width="50" label=" " type="index"></el-table-column>
-        <el-table-column prop="typeStr" label="业务类型" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userName1" label="用户名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userID2" label="用户ID" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userName2" label="用户名称" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" width="70" show-overflow-tooltip>
+        <el-table-column prop="typeStr" :label="pageTxt.table[0]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userID1" :label="pageTxt.table[1]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userName1" :label="pageTxt.table[2]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userID2" :label="pageTxt.table[3]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userName2" :label="pageTxt.table[4]" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="pageTxt.table[5]" width="70" show-overflow-tooltip>
           <div slot-scope="scope" class="_zero">
-            <el-tooltip content="删除通信关系" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/deleticos.png"></el-tooltip>
+            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/deleticos.png"></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
@@ -48,60 +48,60 @@
         <div class="rightTxt">共{{list.totalSize}}条数据</div>
       </div>
       <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">已显示全部{{list.totalSize}}个数据</div> 
-      <el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
+      <el-dialog width='620px' :title="pageTxt.popup[0]" :visible.sync="dialogAdd">
         <ul class="_dialog">
           <li>
             <div class="leftBox">
-              <p class="txt">{{pageTxt.dialog[1]}}</p>
+              <p class="txt">{{pageTxt.popup[1]}}</p>
             </div>
             <div class="rightBox">
-              <el-select  class="input_normal" v-model="creatInfo.bizType" placeholder="请选择">
+              <el-select  class="input_normal" v-model="creatInfo.bizType" placeholder="">
                 <el-option v-for="item in optionsCreat" :label="item.name" :key="item.id"  :value="item.id"></el-option>
               </el-select>
             </div>
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt">{{pageTxt.dialog[2]}}</p>
+              <p class="txt">{{pageTxt.popup[2]}}</p>
             </div>
             <div class="rightBox">
-                <el-select id="statist_input" class="input_normal" v-model="creatInfo.user" filterable placeholder="请选择" @change="changevalue" clearable>
+                <el-select id="statist_input" class="input_normal" v-model="creatInfo.user" filterable placeholder="" @change="changevalue" clearable>
                   <el-option v-for="item in options2" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>
                 </el-select>
             </div>
           </li>
           <li>
             <div class="leftBox bug">
-              <p class="txt">{{pageTxt.dialog[3]}}</p>
+              <p class="txt">{{pageTxt.popup[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-select id="statist_select" class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable default-first-option placeholder="请选择">
+              <el-select id="statist_select" class="input_normal" :disabled="creatInfo.user?false:true"  v-model="creatInfo.other" multiple filterable default-first-option placeholder="">
                 <el-option  v-for="item in options5" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
               </el-select>
-              <span class="cleartxt" @click="clear">{{pageTxt.dialog[4]}}</span>
+              <span class="cleartxt" @click="clear">{{pageTxt.popup[4]}}</span>
             </div>
           </li>
         </ul>
         <div class="bottom_btn">
-          <el-button @click="dialogAdd = false">{{pageTxt.dialog[6]}}</el-button>
-          <el-button type="primary" @click="submit">{{pageTxt.dialog[5]}}</el-button>
+          <el-button @click="dialogAdd = false">{{pageTxt.popup[6]}}</el-button>
+          <el-button type="primary" @click="submit">{{pageTxt.popup[5]}}</el-button>
         </div>
       </el-dialog>
     </div>
     <div class="Popup" v-show="showExportSignalInfo">
       <div class="_panle">
         <div>
-          <p id="_title"></p>
+          <p id="_title">{{pageTxt.popup[7]}}</p>
           <img id="_close" src="@/img/close.png" @click="showExportSignalInfo=false">
         </div>
         <div class="_messaga">
-          <span class="txt">文件名：&nbsp;<a :href="signalInfoSrc" style="color:#5C759D">{{signalInfoName}}</a></span>
+          <span class="txt">&nbsp;{{pageTxt.popup[8]}}<a :href="signalInfoSrc" style="color:#5C759D">{{signalInfoName}}</a></span>
           <div class="_messaga_info">
-            <span class="info_txt">请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。</span>
+            <span class="info_txt">{{pageTxt.popup[9]}}</span>
           </div>
         </div>
         <div class="info_button">
-          <el-button type="default" @click="showExportSignalInfo=false">关闭</el-button>
+          <el-button type="default" @click="showExportSignalInfo=false">{{pageTxt.popup[10]}}</el-button>
         </div>
       </div>
     </div> 
@@ -110,22 +110,16 @@
 
 <script>
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
 
-var pageTxt = {
-  signal: [
-    "业务类型 ","用户ID","用户ID","查询","创建通信关系","删除通信关系","业务类型","操作"
-  ],
-  dialog: [
-    "创建通信关系","业务类型 ：","用户ID ：","用户ID ：","清空用户ID","提交","返回"
-  ]
-},autoTime1,isInput1 = false,autoTime2,isInput2 = false,_this,t;
+var pageTxt = lang.signal,autoTime1,isInput1 = false,autoTime2,isInput2 = false,_this,t;
 
 export default {
   name: "mess_signal",
   data() {
     return {
       searchInfo: { bizType: "", userID1: "", userID2: "" },
-      options1: [{ name: "全部", id: "-1" }],
+      options1: [],
       userID1: "",
       userID2: "",
       creatInfo: { bizType: "", user: "", other: [] },
@@ -210,7 +204,7 @@ export default {
         }
       );
     },
-    // 导出通信关系
+    //导出通信关系
     exportSignalInfo() {
       utils.post(
         "mx/userComm/ExportCsv",
@@ -228,10 +222,10 @@ export default {
         }
       );
     },
-    // 刪除通信关系(row)
+    //刪除通信关系(row)
     showPromptBox() {
       utils.hints({
-        txt: "是否确定删除该用户记录",
+        txt: _this.pageTxt.tips[0],
         yes: _this.delUser1,
         btn: 2
       });
@@ -264,9 +258,6 @@ export default {
       this.row = e;
     },
     //分页
-    currentPagefn: function(e) {
-      this.currentPage = e;
-    },
     handleSizeChange: function(size) {
       this.pageSize = size;
     },
@@ -298,7 +289,6 @@ export default {
         }
       );
     },
-
     getDate(id, options) {
       setTimeout(function() {
         document.getElementById(id).addEventListener("input", function(e) {
@@ -376,7 +366,7 @@ export default {
       function(response) {
         if (response.errcode == 0) {
           _this.options1 = response.lists;
-          _this.options1.unshift({ id: "-1", name: "全部" });
+          _this.options1.unshift({ id: "-1", name: _this.pageTxt.tips[1] });
         }
       }
     );

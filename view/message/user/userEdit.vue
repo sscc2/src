@@ -2,30 +2,30 @@
 	<div class="component">
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
-				<span class="header_txt1" @click="back">返回</span>
+				<span class="header_txt1" @click="back">{{pageTxt.label[0]}}</span>
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{headerText}}</span>
 		</div>
 		<el-tabs type="card" v-model="$store.state.tabv">
-			<el-tab-pane label="基本信息" name="v1">
+			<el-tab-pane name="v1">
 				<span slot="label">{{pageTxt.tab[0]}}</span>
 				<el-row class='info'>
 					<el-col :span="6">			
 						<ul class="left">
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[2]}}：</p></li>
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[3]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[7]}}：</p></li>
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[8]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[10]}}：</p></li>							
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[11]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[12]}}：</p></li>							
-							<li><p>{{pageTxt.infoTxt[13]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[14]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[15]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[16]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[17]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[1]}}</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[2]}}</p></li>
+							<li><p>{{pageTxt.label[3]}}</p></li>
+							<li><p>{{pageTxt.label[4]}}</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[5]}}</p></li>
+							<li><p>{{pageTxt.label[7]}}</p></li>							
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[8]}}</p></li>
+							<li><p>{{pageTxt.label[9]}}</p></li>							
+							<li><p>{{pageTxt.label[10]}}</p></li>
+							<li><p>{{pageTxt.label[11]}}</p></li>
+							<li><p>{{pageTxt.label[12]}}</p></li>
+							<li><p>{{pageTxt.label[13]}}</p></li>
+							<li><p>{{pageTxt.label[14]}}</p></li>
+							<li><p>{{pageTxt.label[15]}}</p></li>
 						</ul>
 					</el-col><el-col :span="18">		
 						<ul class="right">
@@ -47,30 +47,30 @@
 							</li>
 							<li>
 								<el-input v-model="info.speedCtrlKbps" placeholder=""></el-input>
-								<span class="kbit">{{pageTxt.infoTxt[19]}}</span>
+								<span class="kbit">{{pageTxt.label[6]}}</span>
 							</li>
 							<li>
 								<el-input v-model="info.userInfo" placeholder=""></el-input>
 							</li>														
 							<li>
 								<el-select v-model="info.connSuGroupName" placeholder="">
-									<el-option v-for="item in connect" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in pageTxt.connect" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
 								<el-select v-model="info.isAlarmIfOffLine" placeholder="">
-									<el-option v-for="item in online" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in pageTxt.online" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
-								<el-date-picker v-model="info.softEncBeginDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+								<el-date-picker v-model="info.softEncBeginDate" type="datetime" :placeholder="pageTxt.label[24]"></el-date-picker>
 							</li>
 							<li>
-								<el-date-picker v-model="info.softEncEndDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+								<el-date-picker v-model="info.softEncEndDate" type="datetime" :placeholder="pageTxt.label[24]"></el-date-picker>
 							</li>
 							<li>
 								<el-select v-model="info.allowSendRecvFile" placeholder="">
-									<el-option v-for="item in online" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in pageTxt.online" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -86,21 +86,21 @@
 					</el-col>
 				</el-row>
 				<div class="btn">
-          <el-button type="primary" @click='sendDown'>{{pageTxt.infoTxt[21]}}</el-button>
-					<el-button type="primary" @click="Edit">{{pageTxt.infoTxt[20]}}</el-button>					
-					<el-button type="default" @click='back'>{{pageTxt.infoTxt[22]}}</el-button>
+          <el-button type="primary" @click='sendDown'>{{pageTxt.label[16]}}</el-button>
+					<el-button type="primary" @click="Edit">{{pageTxt.label[17]}}</el-button>					
+					<el-button type="default" @click='back'>{{pageTxt.label[18]}}</el-button>
 				</div>
 			</el-tab-pane>
 			
-			<el-tab-pane label="Ekey" name="v2">
+			<el-tab-pane name="v2">
 				<span slot="label">{{pageTxt.tab[1]}}</span>
 				<UserEkey></UserEkey>
 			</el-tab-pane>			
-			<el-tab-pane label="通信关系" name="v3">
+			<el-tab-pane name="v3">
 				<span slot="label">{{pageTxt.tab[2]}}</span>
 				<UserSignal></UserSignal>
 			</el-tab-pane>			
-			<el-tab-pane label="扩展信息" name="v4">
+			<el-tab-pane name="v4">
 				<span slot="label">{{pageTxt.tab[3]}}</span>
 				<ExtendInfo></ExtendInfo>
 			</el-tab-pane>
@@ -114,6 +114,7 @@ import md5 from "@/libs/md5.js";
 import UserEkey from "@/view/message/user/userEkey.vue";
 import UserSignal from "@/view/message/user/userSignal.vue";
 import ExtendInfo from "@/view/message/user/extendInfo.vue";
+import lang from '@/language/lang.js';
 
 var info = {},
   def = [
@@ -139,52 +140,13 @@ for (var i = 0; i < def.length; i++) {
   info[def[i]] = "";
 }
 
-var pageTxt = {
-    tab: ["基本信息", "Ekey", "通信关系", "扩展信息"],
-    infoTxt: [
-      "用户",
-      "操作员",
-      "用户ID",
-      "用户名称",
-      "使用默认密码",
-      "密码",
-      "用户类型",
-      "所属地区",
-      "速度",
-      "配置时间",
-      "用户联系方式信息",
-      "用户组",
-      "离线是否告警",
-      "软加密开始时间",
-      "软加密结束时间",
-      "是否允许收发文件",
-      "发布主题个数上限",
-      "订阅主题个数上限",
-      "最大主题过期天数",
-      "(Kbit/s)-1或0:不限速",
-      "修改",
-      "立即下发",
-      "返回"
-    ]
-  },
-  connect = [
-    { value: "0", label: "Group0" },
-    { value: "1", label: "Group1" },
-    { value: "2", label: "Group2" },
-    { value: "3", label: "Group3" },
-    { value: "4", label: "Group4" },
-    { value: "5", label: "Group5" },
-    { value: "6", label: "Group6" }
-  ],
-  online = [{ value: "1", label: "是" }, { value: "0", label: "否" }];
+var pageTxt = lang.userEdit; 
 
 var data = {
   userType: [],
   cities: [],
   info,
   pageTxt,
-  connect,
-  online,
   headerText:""
 },_this;
 
@@ -193,12 +155,12 @@ export default {
     return data;
   },
   methods: {
-    // 立即下发
+    //立即下发
     sendDown() {
       utils.review({
         yes:function(info){
           utils.hints({
-						txt: "是否立即下发",
+						txt: _this.pageTxt.tips[0],
 						yes: function(){
               utils.post('mx/userinfo/modifyImmediately',
                {
@@ -269,9 +231,9 @@ export default {
   created() {
     _this = this;
     if(this.$store.state.editBack == "/message/userSet"){
-      this.headerText="修改用户";
+      this.headerText = _this.pageTxt.tips[3];
     }else{
-      this.headerText= this.$store.state.headerText;
+      this.headerText = this.$store.state.headerText;
     }
     this.tabv = this.$store.state.tabv;
     utils.post(
@@ -327,6 +289,7 @@ export default {
   },
   components: { UserEkey, UserSignal, ExtendInfo }
 };
+    
 </script>
 
 <style scoped="scoped">

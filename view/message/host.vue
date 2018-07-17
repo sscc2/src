@@ -1,55 +1,51 @@
 <template>
 	<div>
 		<div class='header'>
-			<span class='header_txt'>{{hostText_cn[0]}}</span>
+			<span class='header_txt'>{{pageTxt.label[0]}}</span>
 		</div>
-
 			<div class='host_btn'>
 				<el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-			
-						<el-tab-pane :label="hostText_cn[1]" name="first">
+						<el-tab-pane :label="pageTxt.label[1]" name="first">
 							<div class="switch_box">
-								<span class='title_txt'><span class="red">*&nbsp;</span>{{hostText_cn[2]}}</span>
-								<el-switch v-model="switchValue1" @change="changeTextarea" :active-text="hostText_cn[7]" active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
-                <span class='prompt_txt'>{{hostText_cn[9]}}</span>
+								<span class='title_txt'><span class="red">*&nbsp;</span>{{pageTxt.label[2]}}</span>
+								<el-switch v-model="switchValue1" @change="changeTextarea" :active-text="pageTxt.label[7]" active-color='#0DB9EB' :inactive-text="pageTxt.label[6]" inactive-color='#D7D8DA'></el-switch>
+                <span class='prompt_txt'>{{pageTxt.label[9]}}</span>
 							</div>
 							<div class="content">
 								<el-input id="textarea1" type="textarea" rows="18" v-model="textareaValue1" :readonly="!switchValue1"></el-input>
 							</div>
-							<button class="blueBtn" id="button1" @click="showReviewFn">{{hostText_cn[3]}}</button>
+							<button class="blueBtn" id="button1" @click="showReviewFn">{{pageTxt.label[3]}}</button>
 						</el-tab-pane>		
-
-						<el-tab-pane :label="hostText_cn[4]" name="second">
+						<el-tab-pane :label="pageTxt.label[4]" name="second">
 							<div class="switch_box">
-								<span class='title_txt'><span class="red">*&nbsp;</span>{{hostText_cn[5]}}</span>
-								<el-switch v-model="switchValue2"  @change="changeTextarea" :active-text="hostText_cn[7]"  active-color='#0DB9EB' :inactive-text="hostText_cn[6]" inactive-color='#D7D8DA'></el-switch>
-                <span class='prompt_txt'>{{hostText_cn[10]}}</span>
+								<span class='title_txt'><span class="red">*&nbsp;</span>{{pageTxt.label[5]}}</span>
+								<el-switch v-model="switchValue2"  @change="changeTextarea" :active-text="pageTxt.label[7]"  active-color='#0DB9EB' :inactive-text="pageTxt.label[6]" inactive-color='#D7D8DA'></el-switch>
+                <span class='prompt_txt'>{{pageTxt.label[10]}}</span>
 							</div>
 							<div class="content">
 								<el-input id="textarea2" type="textarea" rows="18" v-model="textareaValue2" :readonly="!switchValue2"></el-input>
 							</div>
-							<button class="blueBtn" id="button2" @click="showReviewFn">{{hostText_cn[3]}}</button>
+							<button class="blueBtn" id="button2" @click="showReviewFn">{{pageTxt.label[3]}}</button>
 						</el-tab-pane>
-
             <div id="_review" v-show="showReview">
               <div class="_panle">
 			          <div>
-                  <p id="_title">复核操作</p>
+                  <p id="_title">{{pageTxt.popup[0]}}</p>
                   <img id="_close" src="@/img/close.png" @click="showReview=false" />
 			          </div>
                 <ul class="_messaga">
                   <li>
-                    <label class="lab">复核操作员：</label>
+                    <label class="lab">{{pageTxt.popup[1]}}：</label>
                     <input id="_name" v-model="userName" class="inp" type="text" />
                   </li>
 			            <li>
-                    <label class="lab">复核员密码：</label>
+                    <label class="lab">{{pageTxt.popup[2]}}：</label>
                     <input id="_pass" v-model="passwd" class="inp" type="password" />
                   </li>
                 </ul>
 			          <div>
-                  <button id="_yes" class="blueBtn" @click="subitHints">提 交</button>
-                  <button id="_no" class="defBtn" @click="showReview=false">返 回</button>
+                  <button id="_yes" class="blueBtn" @click="subitHints">{{pageTxt.popup[3]}}</button>
+                  <button id="_no" class="defBtn" @click="showReview=false">{{pageTxt.popup[4]}}</button>
                 </div>
               </div>
             </div>
@@ -60,17 +56,14 @@
 
 <script>
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
 
-var hostText_cn = [
-    "主机配置","全局静态配置","静态配置文件：","提交","全局动态配置","动态配置文件：","只读","编辑","是否提交当前修改",
-    "(全局静态配置文件为：mxstatic.ini，文件仅支持UTF-8格式)",
-    "(全局动态配置文件为：mxdynamic.ini，文件仅支持UTF-8格式)"
-  ],_this;
+var pageTxt = lang.host,_this;
 
 export default {
   data() {
     return {
-      hostText_cn,
+      pageTxt,
       userName:"",
       passwd:"",
       showReview:false,
@@ -99,7 +92,7 @@ export default {
     },
     edit() {
       utils.hints({
-        txt: hostText_cn[8],
+        txt: pageTxt.label[8],
         yes: _this.editSubmit,
         btn: 2
       });

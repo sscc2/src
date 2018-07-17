@@ -1,102 +1,94 @@
 <template>
   <div>
 		<div class='header'>
-				<span class='header_txt'>{{pageTxt.userTxt[0]}}</span>
+				<span class='header_txt'>{{pageTxt.label[0]}}</span>
 		</div>
-
 		<div class="user">
 			<div class="userH">
-				<span class="txt">{{pageTxt.userTxt[1]}}：</span>
+				<span class="txt">{{pageTxt.label[1]}}</span>
 				<el-input class="input_normal" v-model="userParam.id"></el-input>
-				<span class="txt">{{pageTxt.userTxt[2]}}：</span>
+				<span class="txt">{{pageTxt.label[2]}}</span>
 				<el-input class="input_normal" v-model="userParam.name"></el-input>
-				<el-button type="primary" @click='userSearch'>{{pageTxt.userTxt[3]}}</el-button>
+				<el-button type="primary" @click='userSearch'>{{pageTxt.label[3]}}</el-button>
 			</div>
-
 			<div class="btnBox">
-				<div @click="createUser"><img src="@/img/creatico.png" ><span>{{pageTxt.userTxt[4]}}</span></div>
-				<div @click="importExtInfo"><img src="@/img/defalutico.png"><span>{{pageTxt.userTxt[6]}}</span></div>
-        <div @click="exportExtInfo"><img src="@/img/importico.png"><span>{{pageTxt.userTxt[7]}}</span></div>
-        <div @click="exportBasicsInfo"><img src="@/img/importico.png"><span>{{pageTxt.userTxt[8]}}</span></div>
+				<div @click="createUser"><img src="@/img/creatico.png" ><span>{{pageTxt.label[4]}}</span></div>
+				<div @click="importExtInfo"><img src="@/img/defalutico.png"><span>{{pageTxt.label[5]}}</span></div>
+        <div @click="exportExtInfo"><img src="@/img/importico.png"><span>{{pageTxt.label[6]}}</span></div>
+        <div @click="exportBasicsInfo"><img src="@/img/importico.png"><span>{{pageTxt.label[7]}}</span></div>
 			</div>
-
 			<el-table ref="multipleTable" tooltip-effect="dark" @current-change="currentRow" :data="userData.lists">
 				<el-table-column width="50" label=" " type="index" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="userID" :label="pageTxt.userTxt[1]" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="userName" :label="pageTxt.userTxt[2]" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="pageTxt.userTxt[10]" width="180" show-overflow-tooltip>
+				<el-table-column prop="userID" :label="pageTxt.table[0]" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="userName" :label="pageTxt.table[1]" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="pageTxt.table[2]" width="180" show-overflow-tooltip>
 					<div slot-scope="scope" class="_zero">
-            <el-tooltip content="修改基本信息" placement="bottom" effect="light"><div @click='userEdit'><img src="@/img/altericos.png"></div></el-tooltip>
-            <el-tooltip content="修改Ekey" placement="bottom" effect="light"><div @click='userEkey'><img src="@/img/altericos.png"></div></el-tooltip>
-            <el-tooltip content="创建通信关系" placement="bottom" effect="light"><div @click='userComm'><img src="@/img/altericos.png"></div></el-tooltip>
-						<el-tooltip content="删除用户" placement="bottom" effect="light"><div @click="showPromptBox"><img src="@/img/deleticos.png" ></div></el-tooltip>
-						<el-tooltip content="修改密码" placement="bottom" effect="light"><div @click="eidtPasswd"><img src="@/img/passwdico.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[3]" placement="bottom" effect="light"><div @click='userEdit'><img src="@/img/altericos.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[4]" placement="bottom" effect="light"><div @click='userEkey'><img src="@/img/altericos.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[5]" placement="bottom" effect="light"><div @click='userComm'><img src="@/img/altericos.png"></div></el-tooltip>
+						<el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><div @click="showPromptBox"><img src="@/img/deleticos.png" ></div></el-tooltip>
+						<el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click="eidtPasswd"><img src="@/img/passwdico.png"></div></el-tooltip>
 					</div>
 				</el-table-column>
 			</el-table>
-
       <div class="_pagination" v-if="userData.totalSize>pageSize">
         <el-pagination @current-change='handleCurrentChange' @size-change="handleSizeChange" :page-size="pageSize" :total="userData.totalSize" background layout="prev, pager, next, jumper"></el-pagination>
         <div class="rightTxt">共{{userData.totalSize}}条数据</div>
       </div>
       <div class="onePage" v-else-if="userData.totalSize>0&&userData.totalSize<=pageSize">已显示全部{{userData.totalSize}}个数据</div> 
-
 			<Password></Password>
-
+      
       <div class="Popup" v-show="showImportExtInfo">
         <div class="_panle">
-          <div><p id="_title">{{pageTxt.userTxt[6]}}</p>
+          <div><p id="_title">{{pageTxt.popup[0]}}</p>
                <img @click="showImportExtInfo=false" id="_close" src="@/img/close.png">
           </div>
           <div class="_messaga1">
-            <span class="txt"><span class="red">*&nbsp;</span>{{pageTxt.userTxt[9]}}</span>
+            <span class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[1]}}</span>
             <el-input class="Popup_input" v-model="csvFileName"></el-input>
             <div class="_messaga1_info">
-              <span class="info_txt">{{pageTxt.userTxt[11]}}</span><br/>
-              <span class="info_txt">{{pageTxt.userTxt[12]}}</span>
+              <span class="info_txt">{{pageTxt.popup[2]}}</span><br/>
+              <span class="info_txt">{{pageTxt.popup[3]}}</span>
             </div>
           </div>
           <div class="info_button1">
-            <el-button type="primary" @click="importExtInfoSubmit">{{pageTxt.userTxt[13]}}</el-button>
-            <el-button type="default" @click="showImportExtInfo=false" class="Popup_return">{{pageTxt.userTxt[14]}}</el-button>
+            <el-button type="primary" @click="importExtInfoSubmit">{{pageTxt.popup[4]}}</el-button>
+            <el-button type="default" @click="showImportExtInfo=false" class="Popup_return">{{pageTxt.popup[5]}}</el-button>
           </div>
         </div>
       </div>
-
       <div class="Popup" v-show="showExportExtInfo">
         <div class="_panle">
-          <div><p id="_title">{{pageTxt.userTxt[7]}}</p>
+          <div><p id="_title">{{pageTxt.popup[6]}}</p>
             <img @click="showExportExtInfo=false" id="_close" src="@/img/close.png">
           </div>
           <div class="_messaga">
-            <span class="txt">{{pageTxt.userTxt[15]}}<a :href="exportCsvSrc" style="color:#5C759D">{{exportCsvName}}</a></span>
+            <span class="txt">{{pageTxt.popup[7]}}<a :href="exportCsvSrc" style="color:#5C759D">{{exportCsvName}}</a></span>
             <div class="_messaga_info">
-              <span class="info_txt">{{pageTxt.userTxt[16]}}</span>
+              <span class="info_txt">{{pageTxt.popup[8]}}</span>
             </div>
           </div>
           <div class="info_button">
-            <el-button type="default" @click="showExportExtInfo=false">{{pageTxt.userTxt[17]}}</el-button>
+            <el-button type="default" @click="showExportExtInfo=false">{{pageTxt.popup[9]}}</el-button>
           </div>
         </div>
       </div>
-
       <div class="Popup" v-show="showExportBasicsInfo">
         <div class="_panle">
-          <div><p id="_title">{{pageTxt.userTxt[8]}}</p>
+          <div><p id="_title">{{pageTxt.popup[10]}}</p>
             <img id="_close" src="@/img/close.png" @click="showExportBasicsInfo=false">
           </div>
           <div class="_messaga">
-            <span class="txt">{{pageTxt.userTxt[15]}}&nbsp;<a :href="BasicsSrc" style="color:#5C759D">{{BasicsName}}</a></span>
+            <span class="txt">{{pageTxt.popup[7]}}&nbsp;<a :href="BasicsSrc" style="color:#5C759D">{{BasicsName}}</a></span>
             <div class="_messaga_info">
-              <span class="info_txt">{{pageTxt.userTxt[16]}}</span>
+              <span class="info_txt">{{pageTxt.popup[8]}}</span>
             </div>
           </div>
           <div class="info_button">
-            <el-button type="default" @click="showExportBasicsInfo=false">{{pageTxt.userTxt[17]}}</el-button>
+            <el-button type="default" @click="showExportBasicsInfo=false">{{pageTxt.popup[9]}}</el-button>
           </div>
         </div>
       </div> 
-
 		</div>	
   </div>
 </template>
@@ -104,21 +96,18 @@
 <script>
 import Password from "@/view/message/user/password.vue";
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
 
-var pageTxt = {
-    userTxt: [
-      "用户","用户ID","用户名称","查询","创建用户","删除用户","批量导入扩展信息","批量导出扩展信息","批量导出基础信息","扩展信息文件名","操作",
-      "请将扩展信息文件放到服务器路路径：/home/fdep/notice内；","在输入框中填入扩展信息文件名。","提交","返回","文件名：",
-      "请在文件名上点击右键，选择“将链接另存为...”菜单保存文件。","关闭","请在列表中选择一条记录！","是否确定删除该用户记录"
-    ]
-  },_this;
+var pageTxt = lang.user,_this;
 
 export default {
   data() {
     return {
       pageTxt,
       userParam: { id: "", name: "" },
-      userData: {/* lists: [{ userID: "test01" }] */},
+      userData: {
+        lists: [{ userID: "test01" }] 
+        },
       currentPage: 1,
       pageSize: 20,
       csvFileName: "",
@@ -133,23 +122,23 @@ export default {
     };
   },
   methods: {
-    // 查询用户
+    //查询用户
     userSearch() {
       this.renderDate(1);
     },
-    // 创建用户
+    //创建用户
     createUser() {
-      this.$store.state.headerText = "创建用户";
+      this.$store.state.headerText = this.pageTxt.tips[0];
       this.$store.state.creatAndEdit = false;
       this.$store.state.editBack = "/message/user";
       this.$router.replace({ path: "/message/userAdd/mess" });
     },
-    // 删除立即下发
+    //删除立即下发
     deleteSendDown(id) {
       utils.review({
         yes: function(info) {
           utils.hints({
-            txt: "是否立即下发",
+            txt: _this.pageTxt.tips[1],
             yes: function() {
               utils.post(
                 "mx/userinfo/deleteImmediately",
@@ -171,7 +160,7 @@ export default {
         }
       });
     },
-    // 导入扩展信息
+    //导入扩展信息
     importExtInfo() {
       this.csvFileName = "";
       this.showImportExtInfo = true;
@@ -197,7 +186,7 @@ export default {
         }
       );
     },
-    // 导出扩展信息
+    //导出扩展信息
     exportExtInfo() {
       utils.post(
         "mx/userinfoExt/ExportCsv",
@@ -215,7 +204,7 @@ export default {
         }
       );
     },
-    // 导出基本信息
+    //导出基本信息
     exportBasicsInfo() {
       utils.post(
         "mx/userinfo/ExportCsv",
@@ -233,32 +222,32 @@ export default {
         }
       );
     },
-    // 修改用户(row)
+    //修改用户(row)
     userEdit() {
       this.$store.state.tabv = "v1";
-      this.$store.state.headerText = "修改用户";
+      this.$store.state.headerText = this.pageTxt.tips[2];
       this.$store.state.creatAndEdit = true;
       this.$store.state.editBack = "/message/user";
       this.$router.replace({ path: "/message/userEdit/mess" });
     },
     userEkey() {
       this.$store.state.tabv = "v2";
-      this.$store.state.headerText = "修改用户";
+      this.$store.state.headerText = this.pageTxt.tips[2];
       this.$store.state.creatAndEdit = true;
       this.$store.state.editBack = "/message/user";
       this.$router.replace({ path: "/message/userEdit/mess" });
     },
     userComm(){
       this.$store.state.tabv = "v3";
-      this.$store.state.headerText = "修改用户";
+      this.$store.state.headerText = this.pageTxt.tips[2];
       this.$store.state.creatAndEdit = true;
       this.$store.state.editBack = "/message/user";
       this.$router.replace({ path: "/message/userEdit/mess" });
     },
-    // 删除用户(row)
+    //删除用户(row)
     showPromptBox() {
       utils.hints({
-        txt: pageTxt.userTxt[19],
+        txt: pageTxt.tips[3],
         yes: _this.userDel,
         now: function() {
           _this.deleteSendDown(_this.$store.state.transferEditID);
@@ -284,11 +273,11 @@ export default {
         }
       );
     },
-    // 修改密码(row)
+    //修改密码(row)
     eidtPasswd() {
       this.$store.state.passShow = true;
     },
-    // 分页
+    //分页
     handleSizeChange: function(size) {
       this.pageSize = size;
     },
@@ -299,7 +288,7 @@ export default {
     currentRow: function(e) {
       this.$store.state.transferEditID = e.userID;
     },
-    // 数据更新
+    //数据更新
     renderDate(type) {
       utils.post(
         "mx/userinfo/queryLists",

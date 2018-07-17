@@ -1,55 +1,50 @@
 <template>
   <div>
     <div class='header'>
-      <span class='header_txt'>{{pageTxt.lable1[0]}}</span>
-    </div>
-    
+      <span class='header_txt'>{{pageTxt.label[0]}}</span>
+    </div>    
     <div class="statist">
         <header>
           <div class="statist_herader">
-            <span>{{pageTxt.lable1[1]}}</span>
+            <span>{{pageTxt.label[1]}}</span>
             <el-input class='input_normal' v-model="modeType.user"></el-input>
-            <span class="txt ml" >{{pageTxt.lable1[2]}}</span>
+            <span class="txt ml" >{{pageTxt.label[2]}}</span>
             <el-input class='input_normal' v-model="modeType.userType"></el-input>
-            <span class="txt ml">{{pageTxt.lable1[3]}}</span>
-            <el-radio v-model="statisticalMethod" label="0">{{pageTxt.lable1[4]}}</el-radio>
-            <el-radio v-model="statisticalMethod" label="1">{{pageTxt.lable1[5]}}</el-radio>					
+            <span class="txt ml">{{pageTxt.label[3]}}</span>
+            <el-radio v-model="statisticalMethod" label="0">{{pageTxt.label[4]}}</el-radio>
+            <el-radio v-model="statisticalMethod" label="1">{{pageTxt.label[5]}}</el-radio>					
           </div>
-
           <div class="lined">
-            <span class="txt">{{pageTxt.lable1[6]}}</span>
-            <el-radio v-model="timeMethod" label="0" @change="getTimeFn">{{pageTxt.lable1[7]}}</el-radio>
-            <el-radio v-model="timeMethod" label="1" @change="getTimeFn">{{pageTxt.lable1[8]}}</el-radio>
-            <el-radio v-model="timeMethod" label="2" @change="getTimeFn">{{pageTxt.lable1[9]}}</el-radio>
-            <el-radio v-model="timeMethod" label="3" @change="getTimeFn">{{pageTxt.lable1[10]}}</el-radio>
-            <el-date-picker class="date_picker" :disabled="timeMethod!=3"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['12:00:00', '08:00:00']" format="yyyy-MM-dd HH:mm:ss" v-model="search" type="datetimerange" :range-separator="pageTxt.lable1[11]" :start-placeholder="pageTxt.lable1[12]" :end-placeholder="pageTxt.lable1[13]">
+            <span class="txt">{{pageTxt.label[6]}}</span>
+            <el-radio v-model="timeMethod" label="0" @change="getTimeFn">{{pageTxt.label[7]}}</el-radio>
+            <el-radio v-model="timeMethod" label="1" @change="getTimeFn">{{pageTxt.label[8]}}</el-radio>
+            <el-radio v-model="timeMethod" label="2" @change="getTimeFn">{{pageTxt.label[9]}}</el-radio>
+            <el-radio v-model="timeMethod" label="3" @change="getTimeFn">{{pageTxt.label[10]}}</el-radio>
+            <el-date-picker class="date_picker" :disabled="timeMethod!=3"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['12:00:00', '08:00:00']" format="yyyy-MM-dd HH:mm:ss" v-model="search" type="datetimerange" :range-separator="pageTxt.label[11]" :start-placeholder="pageTxt.label[12]" :end-placeholder="pageTxt.label[13]">
             </el-date-picker>				
-            <el-button @click="searchFn" type="primary" class="searchBtn" >{{pageTxt.lable1[14]}}</el-button>        		
-            <el-button @click="exportFn" type="primary" class="exportFn">{{pageTxt.lable1[15]}}</el-button>
+            <el-button @click="searchFn" type="primary" class="searchBtn" >{{pageTxt.label[14]}}</el-button>        		
+            <el-button @click="exportFn" type="primary" class="exportFn">{{pageTxt.label[15]}}</el-button>
           </div>
         </header>
-
         <el-table highlight-current-row :data="data.lists">
           <el-table-column width="50" label=" " type="index"></el-table-column>
-          <el-table-column prop="operationTime" width="170" :label="pageTxt.lable1[19]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operationType" width="180" :label="pageTxt.lable1[18]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operator" width="100" :label="pageTxt.lable1[16]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="operatorRole" width="100" :label="pageTxt.lable1[17]" show-overflow-tooltip></el-table-column>			
-          <el-table-column prop="errorCode" width="100" :label="pageTxt.lable1[20]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="errorInfo" :label="pageTxt.lable1[21]" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="errorInfo" width="55" :label="pageTxt.lable1[22]" show-overflow-tooltip>
+          <el-table-column prop="operationTime" width="170" :label="pageTxt.table[0]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operationType" width="180" :label="pageTxt.table[1]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operator" width="100" :label="pageTxt.table[2]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="operatorRole" width="100" :label="pageTxt.table[3]" show-overflow-tooltip></el-table-column>			
+          <el-table-column prop="errorCode" width="100" :label="pageTxt.table[4]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="errorInfo" :label="pageTxt.table[5]" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="errorInfo" width="55" :label="pageTxt.table[6]" show-overflow-tooltip>
             <div slot-scope="scope" class="_zero">
-              <el-tooltip content="应答详情" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div></el-tooltip>
+              <el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div></el-tooltip>
             </div>
           </el-table-column>
         </el-table>	
-
         <div class="Popup" v-show="showParticulars">
           <div class="_panle">
-            <div><p id="_title">详情</p>
+            <div><p id="_title">{{pageTxt.table[6]}}</p>
               <img id="_close" src="@/img/close.png" @click="showParticulars=false">
             </div>
-
             <div class="_content">
               <el-table highlight-current-row :data="responseDate" >
                 <el-table-column prop="serviceID"  label="serviceID" show-overflow-tooltip></el-table-column>
@@ -57,30 +52,21 @@
                 <el-table-column prop="errinfo"  label="errinfo" show-overflow-tooltip></el-table-column>
               </el-table>	
             </div>
-
           </div> 
         </div>		
-
         <div class="_pagination" v-if="data.totalSize>pageSize">
           <el-pagination @current-change='handleCurrentChange' background layout="prev, pager, next, jumper" @size-change="handleSizeChange" :page-size="pageSize" :total="data.totalSize"></el-pagination>
           <div class="rightTxt">共{{data.totalSize}}条数据</div>
         </div>
         <div class="onePage" v-else-if="data.totalSize>0&&data.totalSize<=pageSize">已显示全部{{data.totalSize}}个数据</div>
-
     </div>
   </div>	
 </template>
 <script>
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
 
-var pageTxt_cn = {
-  lable1: [
-      "稽核","操作员：","操作类型：","排序方式：","最近","最早","时间段：","今天","本周","本月","其他","至","开始时间","结束时间",
-      "查询","导出报表","操作员","操作员角色","操作类型","操作时间","操作错误码","操作错误描述","详情"
-    ]
-};
-
-var pageTxt = pageTxt_cn,_this;
+var pageTxt = lang.statist,_this;
 
 export default {
   name: "message_statist",
@@ -219,9 +205,9 @@ export default {
               _this.data = response;
               for (var i = 0; i < _this.data.lists.length; i++) {
                 if (_this.data.lists[i].operatorRole == 1) {
-                  _this.data.lists[i].operatorRole = "运维";
+                  _this.data.lists[i].operatorRole = _this.pageTxt.tips[0];
                 } else {
-                  _this.data.lists[i].operatorRole = "用户";
+                  _this.data.lists[i].operatorRole = _this.pageTxt.tips[1];
                 }
               }
             }

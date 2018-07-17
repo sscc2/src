@@ -2,27 +2,27 @@
   <div>
     <div class="Ekey">
       <div class="btnBox">
-        <div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.Ekey[5]}}</span></div>
+        <div id='Add'  @click="showAdd" ><img src="@/img/creatico.png" ><span> {{pageTxt.label[7]}}</span></div>
       </div>
       <el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row >
         <el-table-column width="50" label=" " type="index"></el-table-column>
-        <el-table-column prop="userID" label="用户ID" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userName" label="用户名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="ekeyName" label="Ekey名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="ekeyValidDate" label="Ekey有效期" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="comment" label="Ekey描述" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" width="110">
+        <el-table-column prop="userID" :label="pageTxt.table[0]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userName" :label="pageTxt.table[1]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ekeyName" :label="pageTxt.table[2]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ekeyValidDate" :label="pageTxt.table[3]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="comment" :label="pageTxt.table[4]" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="pageTxt.table[5]" width="110">
           <div slot-scope="scope" class="_zero">
-            <el-tooltip content="修改Ekey信息" placement="bottom" effect="light"><div @click="showEdit(scope.row)" id='Edit'><img src="@/img/altericos.png"></div></el-tooltip>
-            <el-tooltip content="删除Ekey信息" placement="bottom" effect="light"><div @click="showDel"><img src="@/img/deleticos.png" ></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><div @click="showEdit(scope.row)" id='Edit'><img src="@/img/altericos.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click="showDel"><img src="@/img/deleticos.png" ></div></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
-      <el-dialog :title="pageTxt.dialog[0]" :visible.sync="addEkey" width='620px'>
+      <el-dialog :title="pageTxt.popup[0]" :visible.sync="addEkey" width='620px'>
         <ul class="_dialog">
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[1]}}</p>
             </div>
             <div class="rightBox">     					
               <el-input type="text" v-model="ainfo.userID" disabled class='picker'></el-input>
@@ -30,71 +30,71 @@
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[2]}}</p>
             </div>
             <div class="rightBox">
-              <el-input   class='picker' v-model="ainfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
+              <el-input   class='picker' v-model="ainfo.ekeyName" placeholder=""></el-input>
             </div>
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-date-picker class='picker' v-model="ainfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
+              <el-date-picker class='picker' v-model="ainfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder=""></el-date-picker>
             </div>
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[4]}}</p>
             </div>
             <div class="rightBox">
-              <el-input class='picker' v-model="ainfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
+              <el-input class='picker' v-model="ainfo.comment" placeholder=""></el-input>
             </div>
           </li>				
         </ul>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="addEkey = false">{{pageTxt.dialog[12]}}</el-button>
-            <el-button type="primary" @click="submitAdd">{{pageTxt.dialog[11]}}</el-button>
+          <el-button type="primary" @click="submitAdd">{{pageTxt.popup[6]}}</el-button>
+          <el-button @click="addEkey = false">{{pageTxt.popup[7]}}</el-button>
         </div>
       </el-dialog>
-      <el-dialog :title="pageTxt.dialog[1]" :visible.sync="editEkdy" width='620px'>
+      <el-dialog :title="pageTxt.popup[1]" :visible.sync="editEkdy" width='620px'>
         <ul class="_dialog">
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[2]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[2]}}</p>
             </div>
             <div class="rightBox">
-              <el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.dialog[13]" disabled></el-input>
+              <el-input   class='picker' v-model="binfo.userID" :placeholder="pageTxt.popup[13]" disabled></el-input>
             </div>
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[3]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-input  class='picker' v-model="binfo.ekeyName" :placeholder="pageTxt.dialog[13]"></el-input>
+              <el-input  class='picker' v-model="binfo.ekeyName" :placeholder="pageTxt.popup[13]"></el-input>
             </div>
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[6]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[6]}}</p>
             </div><div class="rightBox">
-              <el-date-picker class='picker' v-model="binfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.dialog[13]"></el-date-picker>
+              <el-date-picker class='picker' v-model="binfo.ekeyValidDate" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" :placeholder="pageTxt.popup[13]"></el-date-picker>
             </div>
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.dialog[5]}}</p>
+              <p class="txt"><span class="red">*&nbsp;</span>{{pageTxt.popup[5]}}</p>
             </div>
             <div class="rightBox">
-              <el-input class='picker' v-model="binfo.comment" :placeholder="pageTxt.dialog[13]"></el-input>
+              <el-input class='picker' v-model="binfo.comment" :placeholder="pageTxt.popup[13]"></el-input>
             </div>
           </li>
         </ul>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="editEkdy = false">{{pageTxt.dialog[12]}}</el-button>
-            <el-button type="primary" @click="submitEdit">{{pageTxt.dialog[11]}}</el-button>
+            <el-button @click="editEkdy = false" type="primary">{{pageTxt.popup[12]}}</el-button>
+            <el-button @click="submitEdit">{{pageTxt.popup[11]}}</el-button>
         </div>
       </el-dialog>
       <div class="_pagination" v-if="EkeyData.totalSize>pageSize">
@@ -108,6 +108,9 @@
 
 <script>
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
+
+var pageTxt = lang.Ekey,autoTime,_currentPage = 1,_this;
 
 var ainfo = {},def = ["operator", "userID", "ekeyName", "type", "ekeyValidDate", "comment"];
 for (var i = 0; i < def.length; i++) {
@@ -119,16 +122,6 @@ for (var i = 0; i < det.length; i++) {
   binfo[det[i]] = "";
 }
 
-var pageTxt_cn = {
-  Ekey: [
-    "查询方式 ","按Ekey查询","按用户查询","Ekey名称","用户名称","创建Ekey","修改Ekey","删除Ekey","Ekey名","用户ID","用户名","操作"
-  ],
-  dialog: [
-    "创建Ekey","修改Ekey","用户ID：","Ekey名称：","软加密密码：","Ekey描述：","Ekey有效期：","启用软加密：","软加密开始时间：","软加密结束时间：",
-    "修改软加密密码","提 交","返 回","必填项..."
-  ]
-},pageTxt = pageTxt_cn,autoTime,_currentPage = 1,_this;
-
 export default {
   data() {
     return {
@@ -139,13 +132,12 @@ export default {
       binfo,
       EkeyData: [],
       oldEkeyName: "",
-
-      pageTxt: pageTxt,
+      pageTxt,
       radio: 1,
       addEkey: false,
       editEkdy: false,
       row: {},
-      data2: [{ Ekey: "AAA" }],
+      data2: [],
       currentPage1: 1,
       pageSize: 20,
       options: []

@@ -3,55 +3,49 @@
 		<div class='extendInfo'>
 			<div class='left_list'>
 				<ul>
+					<li>{{this.pageTxt.label[0]}}</li>
+					<li>{{this.pageTxt.label[1]}}</li>
+					<li>{{this.pageTxt.label[2]}}</li>
+					<li>{{this.pageTxt.label[3]}}</li>
+					<li>{{this.pageTxt.label[4]}}</li>
+					<li>{{this.pageTxt.label[5]}}</li>
+					<li>{{this.pageTxt.label[6]}}</li>
+				</ul>
+			</div>
+			<div class='center_list'>
+				<ul>
+					<li><el-input class="input_normal" v-model="inputValue.userAlarmSmsNum" placeholder=""></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.userTelNum" placeholder=""></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.userMobileNum" placeholder=""></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.operationPhoneNum" placeholder=""></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.operationFax" placeholder=""></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.email" placeholder=""></el-input></li>
+					<li><el-input class="input_normal" v-model="inputValue.ssccManager" placeholder=""></el-input></li>
+				</ul>
+			</div>
+			<div class='right_list'>
+				<ul>
 					<li>{{this.pageTxt.tips[0]}}</li>
 					<li>{{this.pageTxt.tips[1]}}</li>
 					<li>{{this.pageTxt.tips[2]}}</li>
 					<li>{{this.pageTxt.tips[3]}}</li>
 					<li>{{this.pageTxt.tips[4]}}</li>
 					<li>{{this.pageTxt.tips[5]}}</li>
-					<li>{{this.pageTxt.tips[6]}}</li>
-				</ul>
-			</div>
-			<div class='center_list'>
-				<ul>
-					<li><el-input class="input_normal" v-model="inputValue.userAlarmSmsNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input class="input_normal" v-model="inputValue.userTelNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input class="input_normal" v-model="inputValue.userMobileNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input class="input_normal" v-model="inputValue.operationPhoneNum" placeholder="请输入内容"></el-input></li>
-					<li><el-input class="input_normal" v-model="inputValue.operationFax" placeholder="请输入内容"></el-input></li>
-					<li><el-input class="input_normal" v-model="inputValue.email" placeholder="请输入内容"></el-input></li>
-					<li><el-input class="input_normal" v-model="inputValue.ssccManager" placeholder="请输入内容"></el-input></li>
-				</ul>
-			</div>
-			<div class='right_list'>
-				<ul>
-					<li>{{this.pageTxt.lable[0]}}</li>
-					<li>{{this.pageTxt.lable[1]}}</li>
-					<li>{{this.pageTxt.lable[2]}}</li>
-					<li>{{this.pageTxt.lable[3]}}</li>
-					<li>{{this.pageTxt.lable[4]}}</li>
-					<li>{{this.pageTxt.lable[5]}}</li>
 				</ul>
 			</div>	
 		</div>
 		<div class='bottom_btn'>
-			<el-button type="primary" @click='submit'>提交</el-button>
-			<el-button type="default" @click='goBack'>返回</el-button>
+			<el-button type="primary" @click='submit'>{{this.pageTxt.tips[6]}}</el-button>
+			<el-button type="default" @click='goBack'>{{this.pageTxt.tips[7]}}</el-button>
 		</div>
 	</div>
 </template>
 
 <script>
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
 
-var pageTxt_cn = {
-  tips: [
-    "短信报警号码：","负责人座机号码：","负责人手机号码：","运维传真：","运维电话：","邮箱：","SSCC客户经理："
-  ],
-  lable: [
-    '只能输入数字"-" ";"','只能输入数字"-" ";"','只能输入数字和";"','只能输入数字"-" ";"','只能输入数字"-" ";"',"只能输入英文字符、数字"
-  ]
-};
+var pageTxt= lang.extendInfo
 
 var inputValue = {
   userAlarmSmsNum: "",
@@ -61,7 +55,7 @@ var inputValue = {
   operationFax: "",
   email: "",
   ssccManager: ""
-},pageTxt = pageTxt_cn,_this;
+},_this;
 
 export default {
   name: "extendifo",

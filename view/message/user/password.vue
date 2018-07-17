@@ -1,9 +1,8 @@
 <template>
     <div class="Popup" v-show="$store.state.passShow">
-
         <div class="_panle">
           <div>
-            <p id="_title">{{pageTxt.lable[0]}}</p>
+            <p id="_title">{{pageTxt.label[0]}}</p>
             <img id="_close" src="@/img/close.png" @click="fanhui">
           </div>
 
@@ -11,44 +10,44 @@
             <ul class="_dialog">
               <li>
                 <div class="leftBox">
-                  <p class="txt">{{pageTxt.lable[1]}}</p>
+                  <p class="txt">{{pageTxt.label[1]}}</p>
                 </div>
                 <div class="rightBox">
-                  <el-input  v-model="this.$store.state.transferEditID"  :placeholder="pageTxt.lable[8]" disabled></el-input>
+                  <el-input  v-model="this.$store.state.transferEditID" placeholder="" disabled></el-input>
                 </div>
               </li>
               <li>
                 <div class="leftBox">
-                  <p class="txt">{{pageTxt.lable[2]}}</p>
+                  <p class="txt">{{pageTxt.label[2]}}</p>
                 </div>                
                 <div class="rightBox">
-                    <el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">默认</el-radio>
-                      <el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">手动</el-radio>
+                    <el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">{{pageTxt.label[3]}}</el-radio>
+                    <el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">{{pageTxt.label[4]}}</el-radio>
                 </div>
               </li>
               <li>
                 <div class="leftBox">
-                  <p class="txt">{{pageTxt.lable[3]}}</p>
+                  <p class="txt">{{pageTxt.label[5]}}</p>
                 </div>                
                 <div class="rightBox">
-                  <el-input  v-model="info.npasswd"  :placeholder="info.isModifyDefaultPasswd?pageTxt.lable[8]:'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
+                  <el-input  v-model="info.npasswd"  :placeholder="info.isModifyDefaultPasswd?'':'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
                 </div>
               </li>
               <li>
                 <div class="leftBox">
-                  <p class="txt">{{pageTxt.lable[10]}}</p>
+                  <p class="txt">{{pageTxt.label[6]}}</p>
                 </div>
                 <div class="rightBox">
-                  <el-input v-model="info.again"  name='again' :placeholder="info.isModifyDefaultPasswd?pageTxt.lable[8]:'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
+                  <el-input v-model="info.again"  name='again' :placeholder="info.isModifyDefaultPasswd?'':'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
                 </div>
               </li>
             </ul>
           </div>
 
           <div class="passwd_btn">
-            <el-button type="primary" @click="sendDown">立即下发</el-button>
-            <el-button type="primary" @click="verify">提交</el-button>
-            <el-button type="default" @click="fanhui">返回</el-button>
+            <el-button type="primary" @click="sendDown">{{pageTxt.label[7]}}</el-button>
+            <el-button type="primary" @click="verify">{{pageTxt.label[8]}}</el-button>
+            <el-button type="default" @click="fanhui">{{pageTxt.label[9]}}</el-button>
           </div>
 
         </div>
@@ -58,28 +57,14 @@
 <script>
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
+import lang from '@/language/lang.js';
 
-var pageTxt_cn = {
-  lable: [
-    "修改密码",
-    "用户ID：",
-    "重置密码：",
-    "新密码：",
-    "审核人：",
-    "审核pass：",
-    "提交",
-    "返回",
-    "必填项...",
-    "选择日期",
-    "确认："
-  ]
-},pageTxt = pageTxt_cn,_this;
-
+var pageTxt = lang.password,_this;
 var data = {
   pageTxt,
   msg: "",
   info: { id: "", npasswd: "", isModifyDefaultPasswd: 0 },
-};
+}
 
 export default {
   data() {
@@ -104,12 +89,10 @@ export default {
           if (this.info.npasswd == this.info.again) {
           fn();
           } else {
-            utils.weakTips("两次输入的应该一致");
+            utils.weakTips(_this.pageTxt.tips[0]);
           }
         } else {
-          utils.weakTips(
-            "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
-          );
+          utils.weakTips(_this.pageTxt.tips[1]);
         }
       }
     },
@@ -138,7 +121,7 @@ export default {
       utils.review({
         yes:function(info){
           utils.hints({
-						txt: "是否立即下发",
+						txt: _this.pageTxt.tips[2],
 						yes: function(){
               utils.post('mx/userpasswd/modifyImmediately',
                {

@@ -2,32 +2,32 @@
 	<div class="component">
 		<div class='header'>
 				<img  class="header_img" src="@/img/ico.png">
-				<span class="header_txt1" @click="back">返回</span>
+				<span class="header_txt1" @click="back">{{pageTxt.label[0]}}</span>
 				<div class="header_line"></div>
-				<span class='header_txt2'>{{pageTxt.infoTxt[0]}}</span>
+				<span class='header_txt2'>{{pageTxt.label[19]}}</span>
 		</div>
 		<el-tabs type="card">
-			<el-tab-pane label="基本信息">
+			<el-tab-pane>
 				<span slot="label">{{pageTxt.tab[0]}}</span>
 				<el-row class='info'>
 					<el-col :span="6">
 						<ul class="left">
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[2]}}：</p></li>
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[3]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[4]}}：</p></li>
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[5]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[6]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[7]}}：</p></li>
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[8]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[10]}}：</p></li>							
-							<li><p><span class="red">*&nbsp;</span>{{pageTxt.infoTxt[11]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[12]}}：</p></li>							
-							<li><p>{{pageTxt.infoTxt[13]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[14]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[15]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[16]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[17]}}：</p></li>
-							<li><p>{{pageTxt.infoTxt[18]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[1]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[2]}}：</p></li>
+							<li><p>{{pageTxt.label[20]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[23]}}：</p></li>
+							<li><p>{{pageTxt.label[3]}}：</p></li>
+							<li><p>{{pageTxt.label[4]}}：</p></li>
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[5]}}：</p></li>
+							<li><p>{{pageTxt.label[7]}}：</p></li>							
+							<li><p><span class="red">*&nbsp;</span>{{pageTxt.label[8]}}：</p></li>
+							<li><p>{{pageTxt.label[9]}}：</p></li>							
+							<li><p>{{pageTxt.label[10]}}：</p></li>
+							<li><p>{{pageTxt.label[11]}}：</p></li>
+							<li><p>{{pageTxt.label[12]}}：</p></li>
+							<li><p>{{pageTxt.label[13]}}：</p></li>
+							<li><p>{{pageTxt.label[14]}}：</p></li>
+							<li><p>{{pageTxt.label[15]}}：</p></li>
 						</ul>
 					</el-col><el-col :span="18">
 						<ul class="right">
@@ -38,8 +38,8 @@
 									<el-input v-model="info.userName"></el-input>
 							</li>
 							<li class="default_radio">
-								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">启用</el-radio>
-  							<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="judge">不启用</el-radio>
+								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">{{pageTxt.label[21]}}</el-radio>
+  							<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="judge">{{pageTxt.label[22]}}</el-radio>
 							</li>
 							<li>
 									<el-input  v-model="info.userPasswd"  :disabled="info.isModifyDefaultPasswd==0"></el-input>					              
@@ -56,31 +56,31 @@
 							</li>
 							<li>
 								<input type="text" v-model="info.speedCtrlKbps" placeholder="">
-								<span class="kbit">{{pageTxt.infoTxt[19]}}</span>
+								<span class="kbit">{{pageTxt.label[6]}}</span>
 							</li>
 							<li>
 								<input type="text" v-model="info.userInfo" placeholder="">
 							</li>							
 							<li>
 								<el-select v-model="info.connSuGroupName" placeholder="">
-									<el-option v-for="item in connect" :key="item.id" :label="item.name" :value="item.id"></el-option>
+									<el-option v-for="item in pageTxt.connect" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
 								<el-select v-model="info.isAlarmIfOffLine" placeholder="">
-									<el-option v-for="item in online" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in pageTxt.online" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
-								<el-date-picker v-model="info.softEncBeginDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+								<el-date-picker v-model="info.softEncBeginDate" type="datetime" :placeholder="pageTxt.label[24]"></el-date-picker>
 							</li>
               
               <li>
-								  <el-date-picker v-model="info.softEncEndDate" type="datetime" placeholder="选择日期时间"></el-date-picker>
+								  <el-date-picker v-model="info.softEncEndDate" type="datetime" :placeholder="pageTxt.label[24]"></el-date-picker>
 							</li>
 							<li>
 								<el-select v-model="info.allowSendRecvFile" placeholder="">
-									<el-option v-for="item in online" :key="item.value" :label="item.label" :value="item.value"></el-option>
+									<el-option v-for="item in pageTxt.online" :key="item.value" :label="item.label" :value="item.value"></el-option>
 								</el-select>
 							</li>
 							<li>
@@ -96,18 +96,18 @@
 					</el-col>
 				</el-row>
 				<div class="btn">
-          <el-button type="primary" @click='submitForm(sendDown)'>{{pageTxt.infoTxt[21]}}</el-button>
-					<el-button type="primary" @click="submitForm(add)">{{pageTxt.infoTxt[20]}}</el-button>					
-					<el-button type="default" @click='back'>{{pageTxt.infoTxt[22]}}</el-button>
+          <el-button type="primary" @click='submitForm(sendDown)'>{{pageTxt.label[16]}}</el-button>
+					<el-button type="primary" @click="submitForm(add)">{{pageTxt.label[17]}}</el-button>					
+					<el-button type="default" @click='back'>{{pageTxt.label[18]}}</el-button>
 				</div>
 			</el-tab-pane>			
-			<el-tab-pane label="Ekey" disabled>
+			<el-tab-pane disabled>
 				<span slot="label">{{pageTxt.tab[1]}}</span>
 			</el-tab-pane>			
-			<el-tab-pane label="通信关系" disabled>
+			<el-tab-pane disabled>
 				<span slot="label">{{pageTxt.tab[2]}}</span>
 			</el-tab-pane>
-			<el-tab-pane label="扩展信息" disabled>
+			<el-tab-pane disabled>
 				<span slot="label">{{pageTxt.tab[3]}}</span>				
 			</el-tab-pane>
 		</el-tabs>
@@ -117,6 +117,9 @@
 <script>
 import utils from "@/libs/utils.js";
 import md5 from "@/libs/md5.js";
+import lang from '@/language/lang.js';
+
+var pageTxt = lang.userEdit,_this;
 
 var info = {},
   def = [
@@ -138,50 +141,11 @@ var info = {},
     "maxDaysOfTopic",
     "isModifyDefaultPasswd",
     "userPasswd"
-  ];
+  ],_this;
 
 for (var i = 0; i < def.length; i++) {
   info[def[i]] = "";
 }
-
-var pageTxt = {
-    tab: ["基本信息", "Ekey", "通信关系", "扩展信息"],
-    infoTxt: [
-      "创建用户",
-      "操作员",
-      "用户ID",
-      "用户名称",
-      "使用默认密码",
-      "密码",
-      "用户类型",
-      "所属地区",
-      "速度",
-      "配置时间",
-      "用户联系方式信息",
-      "用户组",
-      "离线是否告警",
-      "软加密开始时间",
-      "软加密结束时间",
-      "是否允许收发文件",
-      "发布主题个数上限",
-      "订阅主题个数上限",
-      "最大主题过期天数",
-      "(Kbit/s)-1或0:不限速",
-      "创建",
-      "立即下发",
-      "返回"
-    ]
-  },
-  connect = [
-    { id: "0", name: "Group0" },
-    { id: "1", name: "Group1" },
-    { id: "2", name: "Group2" },
-    { id: "3", name: "Group3" },
-    { id: "4", name: "Group4" },
-    { id: "5", name: "Group5" },
-    { id: "6", name: "Group6" }
-  ],
-  online = [{ value: "1", label: "是" }, { value: "0", label: "否" }],_this;
 
 export default {
   data() {
@@ -190,8 +154,6 @@ export default {
       cities: [],
       info,
       pageTxt,
-      connect,
-      online,
       judgment: []
     };
   },
@@ -201,7 +163,7 @@ export default {
       utils.review({
         yes:function(info){
           utils.hints({
-						txt: "是否立即下发",
+						txt: _this.pageTxt.tips[0],
 						yes: function(){
               utils.post('mx/userinfo/addImmediately',
                {
@@ -291,13 +253,11 @@ export default {
           if (reg.test(this.info.userPasswd)) {
             fn();
           } else {
-            utils.weakTips(
-              "密码必须包含大小写字母、数字、特殊字符中两项且大于8位"
-            );
+            utils.weakTips(_this.pageTxt.tips[1]);
           }
         }
       } else {
-        utils.weakTips("用户ID或用户名不能为空");
+        utils.weakTips(_this.pageTxt.tips[2]);
       }
     },
     judge() {
