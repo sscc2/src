@@ -186,8 +186,7 @@ export default {
         },
         function(response) {
           _this.showImportExtInfo = false;
-          if (response.errcode == "0") {
-            
+          if (response.errcode != -1) {
             utils.weakTips(response.errinfo);
           } else {
             for(var i=0; i<3; i++){

@@ -144,5 +144,5 @@ import lang   from '@/language/lang.js';
 	.el-select{width: 200px;margin-right: 10px;}
 	.blueBtn{margin-right: 40px;}
 	.jg{padding-bottom: 30px;}
-	.distr .suList{max-height: 400px;overflow: auto;width: 710px;}
+	.distr .suList{max-height: 411px;overflow: auto;width: 710px;}
 </style>
