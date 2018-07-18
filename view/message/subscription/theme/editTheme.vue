@@ -83,7 +83,7 @@
 								<el-table highlight-current-row :data="info.canSubsUserList" tooltip-effect="dark">
 									<el-table-column width="40">
 										<div slot-scope="scope" class="_zero">
-											<img @click="addAppid(scope.row)" src="@/img/theme/add_1.png" alt="">
+											<img v-if="scope.row.hide!='hide'" @click="addAppid(scope.row)" src="@/img/theme/add_1.png" alt="">
 										</div>
 									</el-table-column>
 									<el-table-column prop="userID" :label="pageTxt.list[0]" show-overflow-tooltip></el-table-column>
@@ -131,7 +131,7 @@ import globalVar from '@/libs/globalVar.js';
 import lang      from '@/language/lang.js';
 
 
-	var pageTxt, slotTitle, all = false, _this,junk,
+	var pageTxt, slotTitle, all = false, _this,junk=[],
 	pageTxt = lang.themeEditTheme;
 	
 	var list = [];
@@ -384,6 +384,7 @@ import lang      from '@/language/lang.js';
 			var arr = data.lists, i, len = arr.length, obj;
 			for (var i = 0; i < len; i++) {
 				obj = arr[i];
+				obj.hide = 'show';
 				if(obj.userID&&obj.userID != id){
 					obj.key = i;
 					obj.label = obj.userID + obj.userName;
@@ -446,7 +447,8 @@ import lang      from '@/language/lang.js';
 			if(k==len2){
 				var obj = can[i];
 				junk.push(obj);
-				obj.key = i;
+				obj.key = k;
+				obj.hide = 'hide';
 				obj.label = obj.userID + obj.userName;
 				arr.push(obj);
 				len2 = arr.length;
