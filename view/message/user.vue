@@ -12,22 +12,22 @@
 				<el-button type="primary" @click='userSearch'>{{pageTxt.label[3]}}</el-button>
 			</div>
 			<div class="btnBox">
-				<div @click="createUser"><img src="@/img/creatico.png" ><span>{{pageTxt.label[4]}}</span></div>
-				<div @click="importExtInfo"><img src="@/img/defalutico.png"><span>{{pageTxt.label[5]}}</span></div>
-        <div @click="exportExtInfo"><img src="@/img/importico.png"><span>{{pageTxt.label[6]}}</span></div>
-        <div @click="exportBasicsInfo"><img src="@/img/importico.png"><span>{{pageTxt.label[7]}}</span></div>
+				<div @click="createUser"><img src="@/img/user/creatico.png" ><span>{{pageTxt.label[4]}}</span></div>
+				<div @click="importExtInfo"><img src="@/img/user/defalutico.png"><span>{{pageTxt.label[5]}}</span></div>
+        <div @click="exportExtInfo"><img src="@/img/user/importico.png"><span>{{pageTxt.label[6]}}</span></div>
+        <div @click="exportBasicsInfo"><img src="@/img/user/importico1.png"><span>{{pageTxt.label[7]}}</span></div>
 			</div>
 			<el-table ref="multipleTable" tooltip-effect="dark" @current-change="currentRow" :data="userData.lists">
 				<el-table-column width="50" label=" " type="index" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="userID" :label="pageTxt.table[0]" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="userName" :label="pageTxt.table[1]" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="pageTxt.table[2]" width="180" show-overflow-tooltip>
+				<el-table-column :label="pageTxt.table[2]" width="200" show-overflow-tooltip>
 					<div slot-scope="scope" class="_zero">
-            <el-tooltip :content="pageTxt.table[3]" placement="bottom" effect="light"><div @click='userEdit'><img src="@/img/altericos.png"></div></el-tooltip>
-            <el-tooltip :content="pageTxt.table[4]" placement="bottom" effect="light"><div @click='userEkey'><img src="@/img/altericos.png"></div></el-tooltip>
-            <el-tooltip :content="pageTxt.table[5]" placement="bottom" effect="light"><div @click='userComm'><img src="@/img/altericos.png"></div></el-tooltip>
-						<el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><div @click="showPromptBox"><img src="@/img/deleticos.png" ></div></el-tooltip>
-						<el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click="eidtPasswd"><img src="@/img/passwdico.png"></div></el-tooltip>
+            <el-tooltip value :content="pageTxt.table[3]" placement="bottom" effect="light"><div @click='userEdit'><img src="@/img/user/altericos.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[4]" placement="bottom" effect="light"><div @click='userEkey'><img src="@/img/user/editEkey.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[5]" placement="bottom" effect="light"><div @click='userComm'><img src="@/img/user/signal.png"></div></el-tooltip>
+						<el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><div @click="showPromptBox"><img src="@/img/user/deleticos.png" ></div></el-tooltip>
+						<el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click="eidtPasswd"><img src="@/img/user/passwdico.png"></div></el-tooltip>
 					</div>
 				</el-table-column>
 			</el-table>

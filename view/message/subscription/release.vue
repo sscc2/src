@@ -24,7 +24,7 @@
 		</div>
 		<div class="btnBox">
 			<el-button class='btn' @click='add' type='text'>
-				<img src="@/img/theme/add_1.png"/>
+				<img src="@/img/theme/add_2.png"/>
 				<span class="btnTxt">{{pageTxt.label[9]}}</span>
 			</el-button>
 			<!--<el-button class='btn' @click='editTheme' type='text'>
@@ -38,7 +38,7 @@
 				<span class="btnTxt">{{pageTxt.label[12]}}</span>
 			</el-button>-->
 			<el-button class='btn' @click='download' type='text'>
-				<img src="@/img/importico.png"/>
+				<img src="@/img/theme/download.png"/>
 				<span class="btnTxt">{{pageTxt.label[13]}}</span>
 			</el-button>
 		</div>

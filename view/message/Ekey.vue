@@ -20,8 +20,8 @@
         <el-button type="primary" @click='searchfn'>{{pageTxt.label[6]}}</el-button>
       </div>
       <div class="btnBox">
-        <div @click="showAdd" id='Add' ><img src="@/img/creatico.png" ><span>{{pageTxt.label[7]}}</span></div>
-        <div @click="exportEkeyInfo"><img src="@/img/creatico.png"><span>{{pageTxt.label[8]}}</span></div>
+        <div @click="showAdd" id='Add' ><img src="@/img/user/addEkey.png" ><span>{{pageTxt.label[7]}}</span></div>
+        <div @click="exportEkeyInfo"><img src="@/img/user/importico1.png"><span>{{pageTxt.label[8]}}</span></div>
       </div>
       <el-table  :data="EkeyData.lists"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row >
         <el-table-column width="50" label=" " type="index"></el-table-column>
@@ -32,8 +32,8 @@
         <el-table-column prop="comment" :label="pageTxt.table[4]" show-overflow-tooltip></el-table-column>
         <el-table-column :label="pageTxt.table[5]" width="110">
           <div slot-scope="scope" class="_zero">
-            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><div @click="showEdit(scope.row)" id='Edit'><img src="@/img/altericos.png"></div></el-tooltip>
-            <el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click="showDel"><img src="@/img/deleticos.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><div @click="showEdit(scope.row)" id='Edit'><img src="@/img/user/altericos.png"></div></el-tooltip>
+            <el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click="showDel"><img src="@/img/user/deleticos.png"></div></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
@@ -240,22 +240,22 @@ export default {
     //立即下发
     sendDown() {
       if (this.ainfo.userID == "") {
-        utils.weakTips("用户ID不能为空");
+        utils.weakTips(_this.pageTxt.tips[0]);
       } else {
         if (this.ainfo.ekeyName == "") {
-          utils.weakTips("Ekey名称不能为空");
+          utils.weakTips(_this.pageTxt.tips[1]);
         } else {
           if (this.ainfo.ekeyValidDate == "") {
-            utils.weakTips("Ekey有效期不能为空");
+            utils.weakTips(_this.pageTxt.tips[2]);
           } else {
             if (this.ainfo.comment == "") {
-              utils.weakTips("Ekey描述不能为空");
+              utils.weakTips(_this.pageTxt.tips[3]);
             } else {
               this.addEkey = false;
               utils.review({
                 yes: function(info) {
                   utils.hints({
-                    txt: "是否立即下发",
+                    txt: _this.pageTxt.tips[7],
                     yes: function() {
                       utils.post(
                         "mx/userEkey/addImmediately",
@@ -287,16 +287,16 @@ export default {
     },
     submitAdd() {
       if (this.ainfo.userID == "") {
-        utils.weakTips("用户ID不能为空");
+        utils.weakTips(_this.pageTxt.tips[0]);
       } else {
         if (this.ainfo.ekeyName == "") {
-          utils.weakTips("Ekey名称不能为空");
+          utils.weakTips(_this.pageTxt.tips[1]);
         } else {
           if (this.ainfo.ekeyValidDate == "") {
-            utils.weakTips("Ekey有效期不能为空");
+            utils.weakTips(_this.pageTxt.tips[2]);
           } else {
             if (this.ainfo.comment == "") {
-              utils.weakTips("Ekey描述不能为空");
+              utils.weakTips(_this.pageTxt.tips[3]);
             } else {
               utils.post(
                 "mx/userEkey/add",
@@ -327,7 +327,7 @@ export default {
       utils.review({
         yes: function(info) {
           utils.hints({
-            txt: "是否立即下发",
+            txt: _this.pageTxt.tips[7],
             yes: function() {
               utils.post(
                 "mx/userEkey/deleteImmediately",
@@ -365,7 +365,7 @@ export default {
       utils.review({
         yes: function(info) {
           utils.hints({
-            txt: "是否立即下发",
+            txt: _this.pageTxt.tips[7],
             yes: function() {
               utils.post(
                 "mx/userEkey/modifyImmediately",
@@ -391,10 +391,10 @@ export default {
     },
     submitEdit() {
       if (binfo.userID == "") {
-        utils.weakTips("用户名不能为空");
+        utils.weakTips(_this.pageTxt.tips[4]);
       } else {
         if (binfo.ekeyName == "") {
-          utils.weakTips("Ekey名不能为空");
+          utils.weakTips(_this.pageTxt.tips[5]);
         } else {
           utils.post(
             "mx/userEkey/modify",
@@ -441,7 +441,7 @@ export default {
     //删除(row)
     showDel() {
       utils.hints({
-        txt: "是否删除该用户信息",
+        txt: _this.pageTxt.tips[6],
         yes: _this.ekeyDel,
         now: function() {
           _this.modifydel(_this.row.userID, _this.row.ekeyName);

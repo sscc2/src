@@ -36,7 +36,7 @@
           <el-table-column prop="errorInfo" :label="pageTxt.table[5]" show-overflow-tooltip></el-table-column>
           <el-table-column prop="errorInfo" width="55" :label="pageTxt.table[6]" show-overflow-tooltip>
             <div slot-scope="scope" class="_zero">
-              <el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-show="data.lists[scope.$index].uuid != null"><img src="@/img/theme/detail_2.png"></div></el-tooltip>
+              <el-tooltip :content="pageTxt.table[7]" placement="bottom" effect="light"><div @click='showParticularsFn(scope.row)' v-if="data.lists[scope.$index].uuid != null"><img src="@/img/user/examine.png"></div></el-tooltip>
             </div>
           </el-table-column>
         </el-table>	
@@ -183,6 +183,7 @@ export default {
     },
     //数据更新
     renderDate() {
+      console.log( _this.currentPage)
       utils.post(
         "mx/operationRecording/query",
         {
@@ -198,7 +199,7 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            if (response.totalPage < _this.currentPage) {
+            if (response.totalPage < _this.currentPage ) {
               _this.currentPage = response.totalPage;
               _this.renderDate();
             } else {

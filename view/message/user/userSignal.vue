@@ -2,40 +2,40 @@
   <div>
     <div class="signal">
       <div class="userH">
-        <span class="txt">{{pageTxt.signal[0]}}：</span>
-        <el-select class="input_normal" v-model="searchInfo.bizType" placeholder="请选择">
+        <span class="txt">{{pageTxt.label[0]}}：</span>
+        <el-select class="input_normal" v-model="searchInfo.bizType" placeholder="">
           <el-option v-for="item in options1" :label="item.name" :key="item.id"  :value="item.id"></el-option>
         </el-select>
-        <span class="txt1">{{pageTxt.signal[1]}}：</span>
+        <span class="txt1">{{pageTxt.label[1]}}：</span>
         <el-autocomplete  disabled  @input='autoInput1' class="input_normal" v-model="$store.state.transferEditID" :fetch-suggestions="fetch1" :trigger-on-focus="false" @select="idSelect1">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
             <span class="addr">({{item.userName}})</span>
           </div>
         </el-autocomplete>
-        <span class="txt1">{{pageTxt.signal[2]}}：</span>
+        <span class="txt1">{{pageTxt.label[2]}}：</span>
         <el-autocomplete  @input='autoInput2' class="input_normal" v-model="idName2" :fetch-suggestions="fetch2" :trigger-on-focus="false" @select="idSelect2">
           <div slot-scope="{item}">
             <span class="name">{{item.userID}}</span>
             <span class="addr">({{item.userName}})</span>
           </div>
         </el-autocomplete>
-        <el-button type="primary"  @click='search' class="btn">{{pageTxt.signal[3]}}</el-button>
+        <el-button type="primary"  @click='search' class="btn">{{pageTxt.label[4]}}</el-button>
       </div>
 
       <div class="btnBox">
-        <div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.signal[4]}}</span></div>
+        <div @click="showCreate"><img src="@/img/user/creatsignal.png"><span>{{pageTxt.label[5]}}</span></div>
       </div>
       <el-table :data="list.lists" tooltip-effect="dark" @current-change="currentRow" highlight-current-row>
         <el-table-column width="50" label=" " type="index"></el-table-column>
-        <el-table-column prop="typeStr" label="业务类型" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userID1" label="用户ID" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userName1" label="用户名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userID2" label="用户ID" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="userName2" label="用户名称" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" width="70" show-overflow-tooltip>
+        <el-table-column prop="typeStr" :label="pageTxt.table[0]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userID1" :label="pageTxt.table[1]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userName1" :label="pageTxt.table[2]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userID2" :label="pageTxt.table[3]" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="userName2" :label="pageTxt.table[4]" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="pageTxt.table[5]" width="70" show-overflow-tooltip>
           <div slot-scope="scope" class="_zero">
-            <el-tooltip content="删除通信关系" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/deleticos.png"></el-tooltip>
+            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/user/deleticos.png"></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
@@ -46,14 +46,14 @@
       </div>
       <div class="onePage" v-else-if="list.totalSize>0&&list.totalSize<=pageSize">已显示全部{{list.totalSize}}个数据</div> 
       
-      <el-dialog width='620px' :title="pageTxt.dialog[0]" :visible.sync="dialogAdd">
+      <el-dialog width='620px' :title="pageTxt.popup[0]" :visible.sync="dialogAdd">
         <ul class="_dialog">
           <li>
             <div class="leftBox">
-              <p class="txt">{{pageTxt.dialog[1]}}</p>
+              <p class="txt">{{pageTxt.popup[1]}}</p>
             </div>
             <div class="rightBox">
-              <el-select  class="input_normal" v-model="creatInfo.bizType" placeholder="请选择">
+              <el-select  class="input_normal" v-model="creatInfo.bizType" placeholder="">
                 <el-option v-for="item in optionsCreat" :label="item.name" :key="item.id" :value="item.id">
                 </el-option>
               </el-select>
@@ -61,7 +61,7 @@
           </li>
           <li>
             <div class="leftBox">
-              <p class="txt">{{pageTxt.dialog[2]}}</p>
+              <p class="txt">{{pageTxt.popup[2]}}</p>
             </div>
             <div class="rightBox">
               <el-input  class="input_normal" v-model="$store.state.transferEditID" disabled></el-input>
@@ -69,19 +69,19 @@
           </li>
           <li>
             <div class="leftBox bug">
-              <p class="txt">{{pageTxt.dialog[3]}}</p>
+              <p class="txt">{{pageTxt.popup[3]}}</p>
             </div>
             <div class="rightBox">
-              <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable default-first-option placeholder="请选择">
+              <el-select class="input_normal"  v-model="creatInfo.other" multiple filterable default-first-option placeholder="">
                 <el-option  v-for="item in options" :key="item.userID" :label="item.userName" :value="item.userID"></el-option>  
               </el-select>
-              <span class="cleartxt" @click="clear">清空用户</span>
+              <span class="cleartxt" @click="clear">{{pageTxt.popup[4]}}</span>
             </div>
           </li>
         </ul>
         <div class="bottom_btn">
-          <el-button @click="dialogAdd = false">{{pageTxt.dialog[6]}}</el-button>
-          <el-button type="primary" @click="submit">{{pageTxt.dialog[5]}}</el-button>
+          <el-button type="primary" @click="submit">{{pageTxt.popup[5]}}</el-button>
+          <el-button @click="dialogAdd = false">{{pageTxt.popup[6]}}</el-button>
         </div>
       </el-dialog>
     </div>
@@ -90,15 +90,9 @@
 
 <script>
 import utils from "@/libs/utils.js";
+import lang from '@/language/lang.js';
 
-var pageTxt = {
-  signal: [
-    "业务类型 ","用户ID","用户ID","查询","创建通信关系","删除通信关系","业务类型","操作"
-  ],
-  dialog: [
-    "创建通信关系","业务类型 ：","用户ID ：","用户ID ：","","提交","返回"
-  ]
-},autoTime1,isInput1 = false,autoTime2,isInput2 = false,options4,_this,t;
+var pageTxt = lang.signal,autoTime1,isInput1 = false,autoTime2,isInput2 = false,options4,_this,t;
 
 export default {
   name: "mess_signal",
@@ -199,7 +193,6 @@ export default {
       }, 0);
     },
     submit() {
-      this.dialogAdd = false;
       utils.post(
         "/mx/userComm/add",
         {
@@ -211,38 +204,19 @@ export default {
         },
         function(response) {
           if (response.errcode == 0) {
-            if (_this.$store.state.creatAndEdit) {
-              _this.renderData();
-              utils.weakTips(response.errinfo);
-            } else {
-              _this.renderData();
-              _this.open6(response.errinfo);
-            }
+            _this.dialogAdd = false;
+            _this.renderData();
+            utils.weakTips(response.errinfo);
           } else {
             utils.weakTips(response.errinfo);
           }
         }
       );
     },
-    open6(msg) {
-      this.$confirm(msg, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        center: true
-      })
-        .then(() => {
-          this.$store.state.tabv = "v4";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        })
-        .catch(() => {
-          this.$store.state.tabv = "v3";
-          this.$router.replace({ path: "/message/userEdit/mess" });
-        });
-    },
     // 刪除通信关系(row)
     showPromptBox() {
       utils.hints({
-        txt: "是否确定删除该用户记录",
+        txt: _this.pageTxt.tips[0],
         yes: _this.delUser1,
         btn: 2
       });
@@ -322,7 +296,7 @@ export default {
       function(response) {
         if (response.errcode == 0) {
           _this.options1 = response.lists;
-          _this.options1.unshift({ id: "-1", name: "全部" });
+          _this.options1.unshift({ id: "-1", name: _this.pageTxt.tips[1] });
         } else {
           utils.weakTips(response.errinfo);
         }

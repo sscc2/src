@@ -1,8 +1,7 @@
 <template>
 	<div>
 		<div class='extendInfo'>
-			<div class='left_list'>
-				<ul>
+				<ul class='left_list'>
 					<li>{{this.pageTxt.label[0]}}</li>
 					<li>{{this.pageTxt.label[1]}}</li>
 					<li>{{this.pageTxt.label[2]}}</li>
@@ -11,9 +10,7 @@
 					<li>{{this.pageTxt.label[5]}}</li>
 					<li>{{this.pageTxt.label[6]}}</li>
 				</ul>
-			</div>
-			<div class='center_list'>
-				<ul>
+			  <ul class='center_list'>
 					<li><el-input class="input_normal" v-model="inputValue.userAlarmSmsNum" placeholder=""></el-input></li>
 					<li><el-input class="input_normal" v-model="inputValue.userTelNum" placeholder=""></el-input></li>
 					<li><el-input class="input_normal" v-model="inputValue.userMobileNum" placeholder=""></el-input></li>
@@ -21,22 +18,19 @@
 					<li><el-input class="input_normal" v-model="inputValue.operationFax" placeholder=""></el-input></li>
 					<li><el-input class="input_normal" v-model="inputValue.email" placeholder=""></el-input></li>
 					<li><el-input class="input_normal" v-model="inputValue.ssccManager" placeholder=""></el-input></li>
+          <div class="center_button">
+            <el-button type="primary" @click='submit'>{{this.pageTxt.tips[6]}}</el-button>
+			      <el-button type="default" @click='goBack'>{{this.pageTxt.tips[7]}}</el-button>
+          </div>			    
 				</ul>
-			</div>
-			<div class='right_list'>
-				<ul>
+			  <ul class='right_list'>
 					<li>{{this.pageTxt.tips[0]}}</li>
 					<li>{{this.pageTxt.tips[1]}}</li>
 					<li>{{this.pageTxt.tips[2]}}</li>
 					<li>{{this.pageTxt.tips[3]}}</li>
 					<li>{{this.pageTxt.tips[4]}}</li>
 					<li>{{this.pageTxt.tips[5]}}</li>
-				</ul>
-			</div>	
-		</div>
-		<div class='bottom_btn'>
-			<el-button type="primary" @click='submit'>{{this.pageTxt.tips[6]}}</el-button>
-			<el-button type="default" @click='goBack'>{{this.pageTxt.tips[7]}}</el-button>
+				</ul>  
 		</div>
 	</div>
 </template>
@@ -44,8 +38,6 @@
 <script>
 import utils from "@/libs/utils.js";
 import lang from '@/language/lang.js';
-
-var pageTxt= lang.extendInfo
 
 var inputValue = {
   userAlarmSmsNum: "",
@@ -55,7 +47,7 @@ var inputValue = {
   operationFax: "",
   email: "",
   ssccManager: ""
-},_this;
+},_this,pageTxt = lang.extendIfo;
 
 export default {
   name: "extendifo",
@@ -126,12 +118,12 @@ export default {
 </script>
 
 <style  scoped="scoped">
-.extendInfo{overflow: hidden; margin-top: 10px; font-size: 14px; color: #666666;}
-.left_list{float: left; width: 145px; margin-left: 5px;}
+.extendInfo{overflow: hidden; font-size: 14px; color: #666666;}
+.left_list{width: 145px; float: left;}
 .left_list li{line-height: 30px; text-align: right; margin-top: 10px;}
-.center_list{float: left; margin-left: 10px;}
+.center_list{margin-left: 10px; float: left;}
 .center_list li{margin-top: 10px;}
+.center_button{margin-top: 35px;}
 .right_list{color: #999; font-size: 12px; float: left; margin-left: 10px;}
-.right_list li{line-height: 30px; text-align: left; margin-left: 5px; margin-top: 10px;}
-.bottom_btn{margin-left: 160px;}
+.right_list li{line-height: 30px; text-align: left;margin-top: 10px;}
 </style>

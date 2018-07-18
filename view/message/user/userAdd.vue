@@ -6,6 +6,7 @@
 				<div class="header_line"></div>
 				<span class='header_txt2'>{{pageTxt.label[19]}}</span>
 		</div>
+
 		<el-tabs type="card">
 			<el-tab-pane>
 				<span slot="label">{{pageTxt.tab[0]}}</span>
@@ -29,23 +30,19 @@
 							<li><p>{{pageTxt.label[14]}}：</p></li>
 							<li><p>{{pageTxt.label[15]}}：</p></li>
 						</ul>
-					</el-col><el-col :span="18">
+					</el-col>
+          
+          <el-col :span="18">
 						<ul class="right">
-							<li>	
-									<el-input v-model="info.userID"></el-input>
-							</li>
-							<li>
-									<el-input v-model="info.userName"></el-input>
-							</li>
+							<li><el-input v-model="info.userID"></el-input></li>
+							<li><el-input v-model="info.userName"></el-input></li>
 							<li class="default_radio">
 								<el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="judge">{{pageTxt.label[21]}}</el-radio>
   							<el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="judge">{{pageTxt.label[22]}}</el-radio>
 							</li>
+							<li><el-input  v-model="info.userPasswd"  :disabled="info.isModifyDefaultPasswd==0"></el-input></li>
 							<li>
-									<el-input  v-model="info.userPasswd"  :disabled="info.isModifyDefaultPasswd==0"></el-input>					              
-							</li>
-							<li>
-								<el-select v-model="info.userType" placeholder="">
+                <el-select v-model="info.userType" placeholder="">
 									<el-option v-for="item in userType" :label="item.name" :key="item.id"  :value="item.id"></el-option>
 								</el-select>
 							</li>
@@ -97,10 +94,11 @@
 				</el-row>
 				<div class="btn">
           <el-button type="primary" @click='submitForm(sendDown)'>{{pageTxt.label[16]}}</el-button>
-					<el-button type="primary" @click="submitForm(add)">{{pageTxt.label[17]}}</el-button>					
+					<el-button type="primary" @click="submitForm(add)">{{pageTxt.label[25]}}</el-button>					
 					<el-button type="default" @click='back'>{{pageTxt.label[18]}}</el-button>
 				</div>
-			</el-tab-pane>			
+			</el-tab-pane>	
+      	
 			<el-tab-pane disabled>
 				<span slot="label">{{pageTxt.tab[1]}}</span>
 			</el-tab-pane>			

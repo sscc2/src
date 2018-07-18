@@ -172,7 +172,7 @@ function utils(){
 			'ZsLcEFZBaPO1iBgjdC5IKdnAJH8AYzUI5EnByxc6LAi2tjkUTJKWgtb1JkLSL67yQc/pFpw4pDnYhEIuKVaU3VmB0fKEXECHkjZT2BWy1H3CRSbvRh67ntT+Bvg4EYVPzmXk'+
 			'xS8n38DZBcCznl0b0ROyI3jI4sdEDL+sJ0pHIRCswH5KGPykV6EYkpcA2QZSQVkRsFMvAIkHWEnO1XgAEAy8ZNZzb9vqAAAAAASUVORK5CYII=" />'+
 			'</div><div class="_messaga"><p id="_ctxt"></p></div>'+
-			'<div><button id="_yes" class="blueBtn">确定</button><button id="_now" class="blueBtn">立即下发</button>'+
+			'<div><button id="_now" class="blueBtn">立即下发</button><button id="_yes" class="blueBtn">确定</button>'+
 			'<button id="_no" class="defBtn">取消</button></div></div></div>';
 		var $hints = kit(hintHtml);
 		var hintsObj = {

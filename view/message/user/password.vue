@@ -1,57 +1,43 @@
 <template>
-    <div class="Popup" v-show="$store.state.passShow">
-        <div class="_panle">
-          <div>
-            <p id="_title">{{pageTxt.label[0]}}</p>
-            <img id="_close" src="@/img/close.png" @click="fanhui">
-          </div>
-
-          <div class="_messaga">
-            <ul class="_dialog">
-              <li>
-                <div class="leftBox">
-                  <p class="txt">{{pageTxt.label[1]}}</p>
-                </div>
-                <div class="rightBox">
-                  <el-input  v-model="this.$store.state.transferEditID" placeholder="" disabled></el-input>
-                </div>
-              </li>
-              <li>
-                <div class="leftBox">
-                  <p class="txt">{{pageTxt.label[2]}}</p>
-                </div>                
-                <div class="rightBox">
-                    <el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">{{pageTxt.label[3]}}</el-radio>
-                    <el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">{{pageTxt.label[4]}}</el-radio>
-                </div>
-              </li>
-              <li>
-                <div class="leftBox">
-                  <p class="txt">{{pageTxt.label[5]}}</p>
-                </div>                
-                <div class="rightBox">
-                  <el-input  v-model="info.npasswd"  :placeholder="info.isModifyDefaultPasswd?'':'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
-                </div>
-              </li>
-              <li>
-                <div class="leftBox">
-                  <p class="txt">{{pageTxt.label[6]}}</p>
-                </div>
-                <div class="rightBox">
-                  <el-input v-model="info.again"  name='again' :placeholder="info.isModifyDefaultPasswd?'':'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div class="passwd_btn">
-            <el-button type="primary" @click="sendDown">{{pageTxt.label[7]}}</el-button>
-            <el-button type="primary" @click="verify">{{pageTxt.label[8]}}</el-button>
-            <el-button type="default" @click="fanhui">{{pageTxt.label[9]}}</el-button>
-          </div>
-
-        </div>
-      </div> 
+  <div class="Popup" v-show="$store.state.passShow">
+    <div class="_panle">
+      <div>
+        <p id="_title">{{pageTxt.label[0]}}</p><img id="_close" src="@/img/close.png" @click="fanhui">
+      </div>
+      <div class="_messaga">
+        <ul class="_dialog">
+          <li>
+            <div class="leftBox"><p class="txt">{{pageTxt.label[1]}}</p></div>
+            <div class="rightBox"><el-input  v-model="this.$store.state.transferEditID" placeholder="" disabled></el-input></div>
+          </li>
+          <li>
+            <div class="leftBox"><p class="txt">{{pageTxt.label[2]}}</p></div>                
+            <div class="rightBox">
+                <el-radio v-model="info.isModifyDefaultPasswd" :label="0" @change="changeNpasswd">{{pageTxt.label[3]}}</el-radio>
+                <el-radio v-model="info.isModifyDefaultPasswd" :label="1" @change="changeNpasswd">{{pageTxt.label[4]}}</el-radio>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox"><p class="txt">{{pageTxt.label[5]}}</p></div>                
+            <div class="rightBox">
+              <el-input  v-model="info.npasswd"  :placeholder="info.isModifyDefaultPasswd?'':'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
+            </div>
+          </li>
+          <li>
+            <div class="leftBox"><p class="txt">{{pageTxt.label[6]}}</p></div>
+            <div class="rightBox">
+              <el-input v-model="info.again"  name='again' :placeholder="info.isModifyDefaultPasswd?'':'111111'"  :disabled="info.isModifyDefaultPasswd==0"></el-input>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="passwd_btn">
+        <el-button type="primary" @click="sendDown">{{pageTxt.label[7]}}</el-button>
+        <el-button type="primary" @click="verify">{{pageTxt.label[8]}}</el-button>
+        <el-button type="default" @click="fanhui">{{pageTxt.label[9]}}</el-button>
+      </div>
+    </div>
+  </div> 
 </template>
 
 <script>
@@ -158,9 +144,9 @@ export default {
 </script>
 
 <style scoped="scoped">
-.txt{font-size: 16px; line-height: 30px; height: 30px;}
+.txt{font-size: 14px; line-height: 30px; height: 30px;}
 .userPass{width: 600px; margin: 0 auto; border: 1px solid #dcdfe6;}
 .rightBox > .el-radio{line-height: 30px}
 .Popup ._panle{height: 360px;}
-.passwd_btn{margin-top: 45px;}
+.passwd_btn{margin-top: 40px;}
 </style>

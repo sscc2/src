@@ -27,8 +27,8 @@
         <el-button type="primary"  @click='search' class="btn">{{pageTxt.label[4]}}</el-button>
       </div>
       <div class="btnBox">
-        <div @click="showCreate"><img src="@/img/creatico.png"><span>{{pageTxt.label[5]}}</span></div>
-        <div @click="exportSignalInfo"><img src="@/img/creatico.png"><span>{{pageTxt.label[6]}}</span></div>
+        <div @click="showCreate"><img src="@/img/user/creatsignal.png"><span>{{pageTxt.label[5]}}</span></div>
+        <div @click="exportSignalInfo"><img src="@/img/user/exportsignal.png"><span>{{pageTxt.label[6]}}</span></div>
       </div>
       <el-table :data="list.lists"  tooltip-effect="dark" @current-change="currentRow" highlight-current-row>
         <el-table-column width="50" label=" " type="index"></el-table-column>
@@ -39,7 +39,7 @@
         <el-table-column prop="userName2" :label="pageTxt.table[4]" show-overflow-tooltip></el-table-column>
         <el-table-column :label="pageTxt.table[5]" width="70" show-overflow-tooltip>
           <div slot-scope="scope" class="_zero">
-            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/deleticos.png"></el-tooltip>
+            <el-tooltip :content="pageTxt.table[6]" placement="bottom" effect="light"><img @click="showPromptBox" src="@/img/user/deleticos.png"></el-tooltip>
           </div>
         </el-table-column>
       </el-table>
@@ -83,8 +83,8 @@
           </li>
         </ul>
         <div class="bottom_btn">
-          <el-button @click="dialogAdd = false">{{pageTxt.popup[6]}}</el-button>
           <el-button type="primary" @click="submit">{{pageTxt.popup[5]}}</el-button>
+          <el-button @click="dialogAdd = false">{{pageTxt.popup[6]}}</el-button>
         </div>
       </el-dialog>
     </div>
