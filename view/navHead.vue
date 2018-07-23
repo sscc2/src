@@ -63,8 +63,10 @@ export default {
 			swc(){
 				if(this.swc_txt=="消息系统"){
 					this.swc_txt="文件系统"
+					this.$router.replace({ path: "/file/home" });
 				}else{
-				    this.swc_txt="消息系统"
+					this.swc_txt="消息系统"
+					this.$router.replace({ path: "/message/userAdd/mess" });
 				}
 			}
 		}

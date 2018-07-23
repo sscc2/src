@@ -11,7 +11,7 @@
 					<em>{{pageTxt.tabs[1]}}</em>
 				</el-menu-item>
 				<el-menu-item name='signal' index="message/signal" @click='message'>
-					<img class="icon" src="../img/sidebar/user.png" />
+					<img class="icon" src="../img/sidebar/signal.png" />
 					<em>{{pageTxt.tabs[2]}}</em>
 				</el-menu-item>
 				<!--<el-menu-item type='不做' name='config' index="message/config" @click='message'>{{pageTxt.tabs[3]}}</el-menu-item>-->

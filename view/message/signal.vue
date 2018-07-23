@@ -119,7 +119,7 @@ export default {
   data() {
     return {
       searchInfo: { bizType: "", userID1: "", userID2: "" },
-      options1: [],
+      options1: [ {id:"-1",name:"全部"}],
       userID1: "",
       userID2: "",
       creatInfo: { bizType: "", user: "", other: [] },

@@ -183,7 +183,6 @@ export default {
     },
     //数据更新
     renderDate() {
-      console.log( _this.currentPage)
       utils.post(
         "mx/operationRecording/query",
         {

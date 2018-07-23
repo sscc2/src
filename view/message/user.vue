@@ -106,7 +106,7 @@ export default {
       pageTxt,
       userParam: { id: "", name: "" },
       userData: {
-        lists: [{ userID: "test01" }] 
+        // lists: [{ userID: "test01" }] 
         },
       currentPage: 1,
       pageSize: 20,
@@ -175,9 +175,9 @@ export default {
         },
         function(response) {
           _this.showImportExtInfo = false;
-          if (response.errcode != -1) {
+          if(response.lists == null){
             utils.weakTips(response.errinfo);
-          } else {
+          }else{
             for(var i=0; i<3; i++){
               _this.tabHTML+="<tr >"+"<td class='l1'>"+response.lists[i].line+"</td>"+"<td class='l1'>"+response.lists[i].userID +"</td>"+"<td class='l1'>"+response.lists[i].errInfo+"</td>"+"</tr>"
             }
