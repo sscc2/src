@@ -11,13 +11,13 @@
 			<li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[1]}}</label>
 				<div class="rightBox">
-					<el-input :placeholder="pageTxt.must" v-model="info.topicName" ></el-input>
+					<el-input :placeholder="pageTxt.must" v-model="info.topicName" maxlength="16"></el-input>
 				</div>
 			</li><li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
 					<!--<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>-->
-					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" 
+					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" maxlength="32" 
 						:fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false" :placeholder="pageTxt.must">
 						<div slot-scope="{item}">
 							<span class="name">{{item.userID}}</span>
@@ -35,17 +35,17 @@
 			<li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[4]}}</label>
 				<div class="rightBox">
-					<el-input :placeholder="pageTxt.must" v-model="info.topicDescr" ></el-input>
+					<el-input :placeholder="pageTxt.must" v-model="info.topicDescr" maxlength="512"></el-input>
 				</div>
 			</li><li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[5]}}</label>
 				<div class="rightBox">
-					<el-input :placeholder="pageTxt.must" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+					<el-input :placeholder="pageTxt.must" type='textarea' v-model="info.topicInfo" maxlength="2048" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
 				</div>
 			</li><li>
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[6]}}</label>
 				<div class="rightBox">
-					<el-input @input='number($event)' :placeholder="pageTxt.must" v-model="info.effectiveDays" ></el-input>
+					<el-input @input='number($event)' :placeholder="pageTxt.must" v-model="info.effectiveDays" maxlength="3"></el-input>
 				</div>
 			</li><li>
 				<label class="txt">{{pageTxt.label[7]}}</label>
@@ -233,9 +233,11 @@ import lang      from '@/language/lang.js';
 		var must = ['topicName', 'topicDescr', 'topicInfo', 'effectiveDays'],
 			tips = pageTxt.tips;
 		var i, ind, tem = [], info = _this.info;
+		_this.idName = trim(_this.idName);
 		if(!_this.idName) return utils.weakTips(tips.pubUserID);
 		for (i = 0; i < must.length; i++) {
 			var str = must[i];
+			info[str] = trim(info[str]);
 			if(!info[str]) return utils.weakTips(tips[str]);
 		}
 		//[{"userID":"24","userName":"2"},{"userID":"4","userName":"4"}]
@@ -278,6 +280,10 @@ import lang      from '@/language/lang.js';
 				}
 			});
 		}
+	}
+	
+	function trim(str){
+		return str.replace(/(^\s*)|(\s*$)/g, '');
 	}
 	
 	function addTitle(){

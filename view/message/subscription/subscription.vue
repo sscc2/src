@@ -14,7 +14,7 @@
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="info.subUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
-			<el-input class='elInput' placeholder="" v-model="info.topicName"></el-input>
+			<el-input class='elInput' placeholder="" v-model="info.topicName" clearable></el-input>
 			<button class='blueBtn' type='primary' @click='search'>{{pageTxt.label[4]}}</button>
 			<label class="el-icon-circle-close clearInput"></label>;
 		</div>

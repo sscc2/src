@@ -28,12 +28,12 @@
 					</li><li>
 						<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[5]}}</label>
 						<div class="rightBox">
-							<el-input :placeholder="pageTxt.must" v-model="info.topicDescr" clearable></el-input>
+							<el-input :placeholder="pageTxt.must" v-model="info.topicDescr" maxlength="512" clearable></el-input>
 						</div>
 					</li><li>
 						<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[6]}}</label>
 						<div class="rightBox">
-							<el-input :placeholder="pageTxt.must" type='textarea' v-model="info.topicInfo" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
+							<el-input :placeholder="pageTxt.must" type='textarea' v-model="info.topicInfo" maxlength="2048" :autosize="{ minRows: 4, maxRows: 40}"></el-input>
 						</div>
 					</li><li>
 						<label class="txt">{{pageTxt.label[7]}}</label>
@@ -355,12 +355,17 @@ import lang      from '@/language/lang.js';
 		var i, info = _this.info;
 		for (i = 0; i < must.length; i++) {
 			var str = must[i];
+			info[str] = trim(info[str]);
 			if(!info[str]){
 				utils.weakTips(tips[str]);
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	function trim(str){
+		return str.replace(/(^\s*)|(\s*$)/g, '');
 	}
 	
 	function getAllUser(){

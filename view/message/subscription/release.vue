@@ -14,7 +14,7 @@
 			<!--<label class="txt">{{pageTxt.label[2]}}</label>
 			<el-input placeholder="" v-model="info.pubUserName"></el-input>-->
 			<label class="txt">{{pageTxt.label[3]}}</label>
-			<el-input class='elInput' placeholder="" v-model="info.topicName"></el-input>
+			<el-input class='elInput' placeholder="" v-model="info.topicName" clearable></el-input>
 			<label class="txt">{{pageTxt.label[4]}}</label>
 			<el-date-picker class='daterange' v-model="picker" value-format="yyyy-MM-dd" :range-separator="pageTxt.label[6]" 
 				type="daterange" :start-placeholder="pageTxt.label[5]" :end-placeholder="pageTxt.label[7]">
