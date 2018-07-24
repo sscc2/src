@@ -133,7 +133,7 @@ export default {
         }
       );
     },
-    //获得指定时间
+    // 获得指定时间
     getTimeFn() {
       if (this.timeMethod == 0) {
         var toDate = new Date();
