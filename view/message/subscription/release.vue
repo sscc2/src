@@ -322,8 +322,8 @@ import lang        from '@/language/lang.js';
 		info.pageSize = size||_this.size;
 		utils.post('mx/pubTopic/queryLists', info, function(data){
 //			console.log('已发布主题：',data);
-			if(data.errcode < 0) return utils.weakTips(data.errinfo);
-			if(_currentPage>data.totalPage){
+			if(data.errcode != 0) return utils.weakTips(data.errinfo);
+			if(_currentPage>data.totalPage&&data.totalPage>0){
 				return search(_currentPage=data.totalPage);
 			}
 			_this.data = data.lists;

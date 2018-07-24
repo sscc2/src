@@ -190,7 +190,7 @@ import lang        from '@/language/lang.js';
 		info.subUserID = userID;
 		utils.post('mx/subTopic/queryLists', info, function(data){
 //			console.log('已订阅主题：',data);
-			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			if(data.errcode != 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});

@@ -94,7 +94,7 @@ import lang      from '@/language/lang.js';
 		param.endDate = _this.picker[1] + ' 23:59:59';
 		utils.post('mx/version/queryLists', param, function(data){
 //			console.log('版本信息列表：', data);
-			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			if(data.errcode != 0) return utils.weakTips(data.errinfo);
 			_this.data = verType(data.lists);
 			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});

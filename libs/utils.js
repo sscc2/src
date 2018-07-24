@@ -333,7 +333,7 @@ function utils(){
 //			console.log(response);
 			if(response.status!==200) return console.log(response);
 			var data = response.data;
-			if(!data.errinfo) data.errinfo = data.errcode < 0 ? '操作失败！' : '操作成功！';
+//			if(!data.errinfo) data.errinfo = data.errcode != 0 ? '操作失败！' : '操作成功！';
 			if(fn instanceof Function) fn.call(that, data, args);
 			exp.loadClose();
 		}
@@ -434,7 +434,7 @@ function utils(){
 		};
 		exp.post(param, function(data){
 //			console.log('getUserid：',data);
-			if(data.errcode < 0) return console.log(data.errinfo);
+			if(data.errcode != 0) return console.log(data.errinfo);
 			var obj, i;
 			for (i = 0; i < data.lists.length; i++) {
 				obj = data.lists[i];

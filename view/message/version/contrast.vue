@@ -82,7 +82,7 @@ import kit       from '@/libs/kit.js';
 		};
 		utils.post('mx/version/compare', param, function(data){
 //			console.log('版本对比：', data);
-			if(data.errcode < 0) return utils.weakTips(data.errinfo);
+			if(data.errcode != 0) return utils.weakTips(data.errinfo);
 			_this.data = data.lists;
 			_this.max = parseInt(data.totalSize)||_this.data.length;
 		});

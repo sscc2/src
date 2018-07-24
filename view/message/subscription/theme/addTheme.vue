@@ -17,7 +17,7 @@
 				<label class="txt"><b class="red">*&nbsp;</b>{{pageTxt.label[2]}}</label>
 				<div class="rightBox">
 					<!--<el-input placeholder="" v-model="info.pubUserID" clearable></el-input>-->
-					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" maxlength="32" 
+					<el-autocomplete @blur='blur' @input='autoInput' class="autocomplete" v-model="idName" :maxlength="parseInt(32)"
 						:fetch-suggestions="fetch" @select="idSelect" :trigger-on-focus="false" :placeholder="pageTxt.must">
 						<div slot-scope="{item}">
 							<span class="name">{{item.userID}}</span>
